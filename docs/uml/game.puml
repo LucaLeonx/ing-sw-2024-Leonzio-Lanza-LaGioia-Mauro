@@ -1,27 +1,128 @@
 @startuml
-'https://plantuml.com/class-diagram
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
 
-List <|-- AbstractList
-Collection <|-- AbstractCollection
+'They can be useful in future
 
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
+enum CartType {
+    NORMAL,
+    GOLDEN
+}
+/'
+enum CardColor {
+    RED,
+    SKYBLUE,
+    PURPLE,
+    GREEN
+}'/
 
-class ArrayList {
-    Object[] elementData
-    size()
+enum Symbol{
+    PLANT,
+    ANIMAL,
+    INSECT,
+    FUNGI,
+    QUILL,
+    INKWELL,
+    MANUSCRIPT
+
+    + toString()
 }
 
-enum TimeUnit {
-    DAYS
-    HOURS
-    MINUTES
+class Deck {
+
+    - cards : List<Card>
+    - isEmpty() : bool
+    - leftCards() : int
+    + Deck(cards: List<Card>)
+    + shuffle()
+    + draw() : Optional<Card>
+    + showTopCard() : Optional<Card>
 }
+
+class Card {
+/'
+    front : CardSide
+    rear : CardSide
+'/
+}
+
+class CardSide {
+    - centerSymbol : List<Symbol>
+    - PointFunction
+    + getSymbolFromAngle(angleSide: Angle)
+    + getSymbolsList : List<Symbol>
+}
+
+class GameField {
+
+}
+
+enum PlayerColor {
+    RED,
+    BLUE,
+    GREEN,
+    YELLOW,
+}
+
+
+
+
+
+
+class Player {
+    - nickname : String {readOnly}
+    - score : unsigned int {readOnly}
+    - secretObjective : CardObjecive
+    - cardsInHand : List<Card>
+    - color : PlayerColor
+
+    + Player(nickname : String, color : Color)
+    + getNickname() : String
+    + getColor() : PlayerColor
+    + getCardList() : List<Card>
+    + addCard(newCard : Card)
+    + removeCard(position : unsigned int) : Card throw InvalidCardException
+
+    Invariant: getCardList() returns card in the same position used by
+    removeCard()
+
+}
+
+class InitialCard {
+
+}
+
+
+
+interface PointFunction {
+    int getPointsFromMap(GameField field)
+}
+
+interface RequirementFunction {
+    bool isRequirementSatisfied(GameField field)
+}
+
+class Game {
+
+    player: List<Player> // In ordine di gioco
+    - goldenCardsDeck : Deck
+    - resourceCardsDeck: Deck
+    - visibleResourceCards : List<Card>
+    - visibleGoldenCards : List<Card>
+    - commonOjectiveCards : List<CardObjecive>
+
+    - currentPlayer : Player
+
+    setup()
+
+}
+
+class DeckFactory {
+    +createGoldenDeck()
+}
+
+
+
+
+
 
 @enduml
