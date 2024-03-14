@@ -1,0 +1,66 @@
+@startuml
+!startsub MODEL
+!includesub card.puml!CARDS
+
+enum PlayerColor {
+    RED,
+    BLUE,
+    GREEN,
+    YELLOW,
+}
+
+class Player {
+    - nickname : String {readOnly}
+    - score : unsigned int {readOnly}
+
+    + Player(nickname : String, color : Color)
+    + getNickname() : String
+    + getColor() : PlayerColor
+    + getCardList() : List<Card>
+    + addCard(newCard : Card)
+    + removeCard(position : unsigned int) : Card throw InvalidCardException
+
+
+
+}
+note top: getCardList() returns card in the same position used by removeCard()
+
+
+
+class Game {
+    /'
+    - players: List<Player> // In ordine di gioco
+    - goldenCardsDeck : Deck
+    - resourceCardsDeck: Deck
+    - visibleResourceCards : List<Card>
+    - visibleGoldenCards : List<Card>
+    - commonObjectiveCards : List<ObjeciveCard>
+    '/
+    - currentPlayer : Player
+
+    + setup()
+
+}
+
+Player --> PlayerColor : - color
+Player --> ObjectiveCard : - secretObjective
+Player --> "3" Card : - cardsInHand : List
+Player --- PlayerInvariants
+
+Game --* "2..4" Player : - players : List<Player>
+Game --* "2" Deck : - visibleGoldenCardsDeck, visibleResourceCardsDeck
+Game --o "2" ObjectiveCard : - commonObjectiveCards : List<ObjeciveCard>
+
+
+
+
+
+!endsub
+
+
+
+
+
+
+
+@enduml

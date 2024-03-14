@@ -1,0 +1,110 @@
+@startuml
+!startsub CARDS
+'They can be useful in future
+/'
+enum CartType {
+    NORMAL,
+    GOLDEN,
+    INITIAL
+}
+'/
+
+
+enum CardColor {
+    RED,
+    SKYBLUE,
+    PURPLE,
+    GREEN,
+    NONE
+}
+
+enum Symbol{
+    PLANT,
+    ANIMAL,
+    INSECT,
+    FUNGI,
+    QUILL,
+    INKWELL,
+    MANUSCRIPT
+    + toString()
+}
+
+class Card {
+/'
+    color: CardColor
+    front : CardSide
+    rear : CardSide
+'/
+}
+
+class CardSide {
+    - centerSymbols : Set<Symbol>
+    /'
+    - playingRequirements : RequirementFunction
+    - pointsRewarded: PointFunction
+    + getSymbolFromAngle(angleSide: Angle)
+    '/
+    + getDisplayedSymbols : Set<Symbol>
+}
+
+class Deck {
+    /'
+    - cards : List<Card>
+    '/
+    - isEmpty() : bool
+    - leftCards() : int
+    + Deck(cards: List<Card>)
+    + shuffle()
+    + draw() : Optional<Card>
+    + showTopCard() : Optional<Card>
+}
+
+/' Consider renaming the Deck class as
+RandomPicker<T> and make it generic,
+so it can be used with ObjectiveCards as well
+
+class RandomPicker<T>
+        - elements : Set<T>
+        - selectedElement : Optional<T>
+        - isEmpty() : bool
+        - getElementsNumber() : int
+        - selectRandomElement() : Optional<T>
+
+        + RandomPicker(Collection<T> elements)
+        + extractSelectedElement() : Optional<Card>
+        + showSelectedElement() : Optional<Card> // This method doesn't remove the element from the set
+    }
+
+'/
+
+
+class InitialCard {
+
+}
+
+/'It doesn't Implement point function just
+because it may have some other attribute in future'/
+class ObjectiveCard {
+    - rewardFunction : PointFunction
+    +ObjectiveCard(rewardFunction : PointFunction)
+    +getRewardFunction() : PointFunction
+}
+
+/'Consider renaming RewardFunction'/
+interface PointFunction {
+    int getPointsFromMap(GameField field)
+}
+
+interface RequirementFunction {
+    bool isRequirementSatisfied(GameField field)
+}
+
+Deck "1" --* "*" Card : - cards
+(Deck, Card) .. List
+Card  --* "2" CardSide : - front, back {readOnly}
+Card  --> CardColor : - color {readOnly}
+CardSide --> RequirementFunction : - playingRequirements
+CardSide --> PointFunction : - pointsRewarded
+CardSide -- Symbol : -centerSymbols : List
+!endsub
+@enduml

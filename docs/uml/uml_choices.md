@@ -5,7 +5,13 @@
 - Every card can be played front or back, bacause that changes its funtionality. <br> 
 The played side is managed by the class that uses the card
 - Class Player has a cardsInHand attribute(3 elements array).
+
 ### To do
 - Game field set-up
 - 
 
+### Possible improvements
+
+- It may be necessary to rewrite the interfaces _PointFunction_ and _RequirementsFunction_
+as abstract classes, in order to attach extra data to represent 
+them in the TUI or GUI (es. symbols they require, number of points they reward)
