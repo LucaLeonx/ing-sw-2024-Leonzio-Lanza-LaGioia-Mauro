@@ -11,14 +11,17 @@ enum PlayerColor {
 
 class Player {
     - nickname : String {readOnly}
-    - score : unsigned int {readOnly}
+    - field : GameField
+    - score : int
 
     + Player(nickname : String, color : Color)
     + getNickname() : String
     + getColor() : PlayerColor
     + getCardList() : List<Card>
+    + getScore() : int
     + addCard(newCard : Card)
     + removeCard(position : unsigned int) : Card throw InvalidCardException
+    + getScore() : int
 
 
 

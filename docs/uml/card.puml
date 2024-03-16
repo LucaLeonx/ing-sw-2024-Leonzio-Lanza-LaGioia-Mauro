@@ -15,7 +15,6 @@ enum CardColor {
     SKYBLUE,
     PURPLE,
     GREEN,
-    NONE
 }
 
 enum Symbol{
@@ -25,8 +24,17 @@ enum Symbol{
     FUNGI,
     QUILL,
     INKWELL,
-    MANUSCRIPT
+    MANUSCRIPT,
+    BLANK,
+    HIDDEN
     + toString()
+}
+
+enum AnglePosition {
+    UP_LEFT,
+    UP_RIGHT,
+    DOWN_LEFT,
+    DOWN_RIGHT,
 }
 
 class Card {
@@ -35,11 +43,29 @@ class Card {
     front : CardSide
     rear : CardSide
 '/
+    - angles : HashMap<AnglePosition, Symbol>
+    +getColor() : CardColor
+    +getFront() : CardSide
+    +getAngle(position : AnglePosition)
+
 }
 
+class ResourceCard {
+
+}
+
+class GoldCard {
+
+}
+
+class InitialCard {
+
+}
+
+
 class CardSide {
-    - centerSymbols : Set<Symbol>
     /'
+    - centerSymbols : Set<Symbol>
     - playingRequirements : RequirementFunction
     - pointsRewarded: PointFunction
     + getSymbolFromAngle(angleSide: Angle)
@@ -47,35 +73,30 @@ class CardSide {
     + getDisplayedSymbols : Set<Symbol>
 }
 
-class Deck {
-    /'
-    - cards : List<Card>
-    '/
-    - isEmpty() : bool
-    - leftCards() : int
-    + Deck(cards: List<Card>)
-    + shuffle()
-    + draw() : Optional<Card>
-    + showTopCard() : Optional<Card>
-}
 
-/' Consider renaming the Deck class as
-RandomPicker<T> and make it generic,
-so it can be used with ObjectiveCards as well
 
-class RandomPicker<T>
+
+class RandomPicker <T>{
         - elements : Set<T>
-        - selectedElement : Optional<T>
-        - isEmpty() : bool
-        - getElementsNumber() : int
-        - selectRandomElement() : Optional<T>
 
         + RandomPicker(Collection<T> elements)
-        + extractSelectedElement() : Optional<Card>
-        + showSelectedElement() : Optional<Card> // This method doesn't remove the element from the set
-    }
+        + isEmpty() : bool
+        '+ getElementsNumber() : int
+        + extractRandomElement() : Optional<T>
+}
 
-'/
+
+class Deck{
+        '- picker : RandomPicker<Card>
+        - topCard : Optional<Card>
+
+        Deck(cards : Collection<Card>)
+        + isEmpty() : bool
+        + leftCards() : int
+        + showTopCard() : Optional<Card>
+        + draw() : Optional<Card>
+
+}
 
 
 class InitialCard {
@@ -90,19 +111,16 @@ class ObjectiveCard {
     +getRewardFunction() : PointFunction
 }
 
-/'Consider renaming RewardFunction'/
-interface PointFunction {
-    int getPointsFromMap(GameField field)
-}
 
-interface RequirementFunction {
-    bool isRequirementSatisfied(GameField field)
-}
 
-Deck "1" --* "*" Card : - cards
-(Deck, Card) .. List
+Deck "1" --* "*" Card : - cardPicker
+(Deck, Card) .. RandomPicker
 Card  --* "2" CardSide : - front, back {readOnly}
 Card  --> CardColor : - color {readOnly}
+InitialCard --|> Card
+ResourceCard --|> Card
+GoldCard --|> Card
+
 CardSide --> RequirementFunction : - playingRequirements
 CardSide --> PointFunction : - pointsRewarded
 CardSide -- Symbol : -centerSymbols : List

@@ -6,6 +6,7 @@ in una matrice. In questo modo, risulta semplice determinare la posizione
 di carte ed angoli e muoversi tra di essi.
 
 
+
 |   |    |   |    |   |
 |---|----|---|----|---|
 | a |    | b |    |   |
@@ -33,6 +34,7 @@ indicate da valori interi relativi.
 
 Da questa classe ereditano due classi, che sono quelle che utilizzeremo
 principalmente:
+
 __CardCell__: rappresenta una cella occupata da una carta. 
 Le informazioni aggiuntive che contiene sono: 
 - Il riferimento alla Card che sta occupando tale cella
@@ -74,17 +76,24 @@ sono le seguenti:
 
 - Di conseguenza, è immediato muoversi tra le carte 
   che si trovano ai diversi angoli (sommando/sottraendo 2 alle coordinate)
+- Dato un angolo in alto a destra libero, una nuova carta si può attaccare 
+  solo con l'angolo in basso a sinistra
 
 ## La mappa
 
 A questo punto, gli elementi principali della nostra classe saranno
 i seguenti 3 Set:
 
-Set<CardCell> cards: lista di tutte le carte nel campo di gioco
-Set<AngleCell> angles: lista degli angoli delle carte, sia liberi,
+- Set<CardCell> cards: lista di tutte le carte nel campo di gioco
+- Set<AngleCell> angles: lista degli angoli delle carte, sia liberi,
 cioé a cui è possibile attaccare delle carte, sia già collegati da due carte
-Set<CardCell> availableCells: lista di tutte le celle in cui è possibile
-inserire una nuova carta (attaccandola a quelle già presenti sul campo)
+- Set<Cell> availableCells: lista di tutte le celle in cui è possibile
+inserire una nuova carta (attaccandola a quelle già presenti sul campo).
+Avere le posizioni libere disponibili è comodo per poterle mostrare al giocatore.
+
+HashMap<(x, y), Card>
+HashMap<(x, y), Symbol>
+
 
 Tutte le celle sono contraddistinte (ai fini dei metodi equals() e hashCode())
 utilizzando le coordinate. Introduciamo quindi il vincolo che, 
@@ -110,16 +119,18 @@ e che tutti i suoi angoli siano liberi.
 
   Le azioni da fare sono:
   1. Controllare che la carta sia effettivamente inserita in una delle 
-    posizioni libere di availableCells.
+     posizioni libere di availableCells. (oppure sfruttare le
+     proprietà della mappa per fare un controllo a runtime).
+     In realtà, il controllo può essere delegato al chiamante. 
+     Il controller farà scegliere solo posizioni valide. 
+     Questo richiede un metodo per restituire availableCells
   2. Aggiungere i quattro angoli della carta ad angles.
     Se un angolo è già presente nella stessa posizione (è di un'altra carta),
     si aggiorna il simbolo mostrato e la carta cui si riferisce.
   3. Si aggiungono in availableCells le nuove posizioni disponibili per attaccare le carte.
     Si tratta delle posizioni nella forma (2i ± 2, 2j ± 2), che non sono già occupate
     da altre carte e il cui angolo corrispondente non è nascosto. 
-    In effetti, availableCells serve solo per il controllo al punto 1,
-    forse si può sostituire con un opportuno controllo a runtime; ma avere le posizioni
-    libere disponibili è comodo per poterle mostrare al giocatore.
+
 
   Complessità temporale: O(1)
 
@@ -130,6 +141,8 @@ e che tutti i suoi angoli siano liberi.
     Complessità temporale: O(n)
     Si può rendere O(1) se si salvano in memoria dei contatori per ogni tipo di simbolo,
     aggiornati ogni volta che si aggiungono delle carte
+  
+Soluzione preferita: contatori aggiornati all'aggiunta delle carte
 
 - Controllare i pattern formati da carte del colore:
    - Si controlla il pattern a partire da una carta (es. quella più a sinistra) 
