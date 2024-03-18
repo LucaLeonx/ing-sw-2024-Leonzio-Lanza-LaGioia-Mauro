@@ -66,7 +66,7 @@ class ObjectiveCard {
     +getRewardFunction() : RewardFunction
 }
 
-abstract class "<<utility>> CardFactory"{
+abstract class CardFactory <<utility>>{
     + getCardsList() List<Card> {static}
     + getResourceCardsDeck() : Deck {static}
     + getGoldenCardsDeck() : Deck {static}
@@ -77,8 +77,8 @@ abstract class "<<utility>> CardFactory"{
 Deck "1 " --* "* " Card : - cardPicker {readOnly}
 (Deck, Card) .. RandomPicker
 
-"<<utility>> CardFactory" -l-> Deck
-"<<utility>> CardFactory" -r..> ObjectiveCard
+CardFactory -l-> Deck
+CardFactory -r..> ObjectiveCard
 
 
 Card  -r-* "2" CardSide : - front, back {readOnly}
@@ -92,7 +92,7 @@ CardSide -u-* "4" AnglePosition : - angles<AnglePosition, Symbol>
 !endsub
 !startsub FUNCTIONS
 'Consider making Map<Symbol, int> an object with Stream interface
-abstract class "<<utility>> GameFunctionFactory" {
+abstract class GameFunctionFactory <<utility>> {
     + createPointsRewardFunction(points : int) : RewardFunction {static}
     + createCountSymbolsGroupFunction(symbolOccurrences : Map<Symbol, int> {static}
     + createCountSymbolsFunction(symbol : Symbol) : RewardFunction {static}
@@ -109,7 +109,7 @@ interface RequirementFunction {
     bool isSatisfied(GameField field)
 }
 
-"<<utility>> GameFunctionFactory" -u--> RewardFunction
-"<<utility>> GameFunctionFactory" -u--> RequirementFunction
+GameFunctionFactory -u--> RewardFunction
+GameFunctionFactory -u--> RequirementFunction
 !endsub
 @enduml

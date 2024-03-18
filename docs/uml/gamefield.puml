@@ -3,9 +3,9 @@
 
 'https://www.baeldung.com/java-record-keyword
 'https://howtodoinjava.com/java/java-record-type/
-
-class Point{
-    // Java record
+!startsub GAMEFIELD
+class Point
+{
     - int x {readOnly}
     - int y {readOnly}
     + Point(x : int, y : int)
@@ -17,6 +17,9 @@ class Point{
     + sum(Point...) : Point
 }
 
+note "Java record with extra sum() method" as N1
+N1 .. Point
+
 class GameField{
     - cards: HashMap<Point, Card>
     - angles: HashMap<Point, Symbol>
@@ -25,63 +28,10 @@ class GameField{
 
     + GameField(initialCard : Card)
     + getCounter(symbol : Symbol) : int
-    + setCounter(symbol : Symbol) : int
-    + checkIfPlayable(cardSide : CardSide) : bool // Uses RequirementsFunction
     + addCard(cardSide : CardSide, position : Point)
     + getAvailablePositions() : Set<Point>
-    - getRewardPoints(cardSide : CardSide) : int // Uses PointFunction
 }
-
-/'
-Player is playing
-cardSide = selectCardSide(card, side front/back)
-
-if(cardSide.playingRequirements.isSatisfied(field)){
-    addCard(to field)
-    score += cardSide.rewardFunction.getPointsFromMap(field)
-}
-'/
-
-
-/'Consider renaming RewardFunction'/
-
-
-
-
-/' classe che conta un di simboli
-
-class PointFunctionFactory {
-
-    + simplePointFunction(points : int) : PointFunction
-    + countSymbolFunction(symbol : Symbol) : PointFunction
-    + countCoveredAnglesFunction() : PointFunction
-    + findPatternFunction(pattern??) : PointFunction
-}
-
-class RequirementChecker implements RequirementFunction {
-    - HashMap<Symbol, int> requiredNumberOfSymbol
-}
-
-
-class CountSymbol implements PointFunction{
-
-    List<Symbol> symbolsToCount;
-
-    CountSymbol(Symbol symbols...)
-    /' funzione variadic, accetta
-    un numero variabile di simboli
-
-
-    getPointsFromMap(GameField field)){
-        return symbolToCount.stream()
-            .map((a) -> field.getCounter(a))
-            .sum();
-    }
-}
-
-PointFunction countSymbolAnimal = new PointFunction(field) {
-
-}'/
+!endsub
 
 
 @enduml
