@@ -1,20 +1,11 @@
 @startuml
 !startsub CARDS
-'They can be useful in future
-/'
-enum CartType {
-    NORMAL,
-    GOLDEN,
-    INITIAL
-}
-'/
-
 
 enum CardColor {
     RED,
     SKYBLUE,
     PURPLE,
-    GREEN,
+    GREEN
 }
 
 enum Symbol{
@@ -34,95 +25,91 @@ enum AnglePosition {
     UP_LEFT,
     UP_RIGHT,
     DOWN_LEFT,
-    DOWN_RIGHT,
+    DOWN_RIGHT
+}
+
+enum Side{
+    FRONT,
+    BACK
 }
 
 class Card {
-/'
-    color: CardColor
-    front : CardSide
-    rear : CardSide
-'/
-    - angles : HashMap<AnglePosition, Symbol>
     +getColor() : CardColor
-    +getFront() : CardSide
-    +getAngle(position : AnglePosition)
-
+    +getSide(side: Side) : CardSide
 }
-
-class ResourceCard {
-
-}
-
-class GoldCard {
-
-}
-
-class InitialCard {
-
-}
-
 
 class CardSide {
-    /'
-    - centerSymbols : Set<Symbol>
-    - playingRequirements : RequirementFunction
-    - pointsRewarded: PointFunction
-    + getSymbolFromAngle(angleSide: Angle)
-    '/
     + getDisplayedSymbols : Set<Symbol>
+    + getSymbolFromAngle(position : AnglePosition) : Symbol
 }
-
-
-
 
 class RandomPicker <T>{
-        - elements : Set<T>
-
-        + RandomPicker(Collection<T> elements)
-        + isEmpty() : bool
-        '+ getElementsNumber() : int
-        + extractRandomElement() : Optional<T>
+    - elements : Set<T>
+    + RandomPicker(Collection<T> elements)
+    + isEmpty() : bool
+    + extractRandomElement() : Optional<T>
 }
-
 
 class Deck{
-        '- picker : RandomPicker<Card>
-        - topCard : Optional<Card>
-
-        Deck(cards : Collection<Card>)
-        + isEmpty() : bool
-        + leftCards() : int
-        + showTopCard() : Optional<Card>
-        + draw() : Optional<Card>
-
+    - topCard : Optional<Card>
+    + Deck(cards : Collection<Card>)
+    + isEmpty() : bool
+    + leftCards() : int
+    + showTopCard() : Optional<Card>
+    + draw() : Optional<Card>
 }
 
 
-class InitialCard {
-
-}
-
-/'It doesn't Implement point function just
-because it may have some other attribute in future'/
 class ObjectiveCard {
-    - rewardFunction : PointFunction
-    +ObjectiveCard(rewardFunction : PointFunction)
-    +getRewardFunction() : PointFunction
+    - rewardFunction : RewardFunction
+    +ObjectiveCard(rewardFunction : RewardFunction)
+    +getRewardFunction() : RewardFunction
 }
 
+abstract class "<<utility>> CardFactory"{
+    + getCardsList() List<Card> {static}
+    + getResourceCardsDeck() : Deck {static}
+    + getGoldenCardsDeck() : Deck {static}
+    + getObjectiveCardPicker() : RandomPicker<ObjectiveCard> {static}
+    + getInitialCardPicker() : RandomPicker<Card> {static}
+}
 
-
-Deck "1" --* "*" Card : - cardPicker
+Deck "1 " --* "* " Card : - cardPicker {readOnly}
 (Deck, Card) .. RandomPicker
-Card  --* "2" CardSide : - front, back {readOnly}
-Card  --> CardColor : - color {readOnly}
-InitialCard --|> Card
-ResourceCard --|> Card
-GoldCard --|> Card
 
-CardSide --> RequirementFunction : - playingRequirements
-CardSide --> PointFunction : - pointsRewarded
-CardSide -- Symbol : -centerSymbols : List
+"<<utility>> CardFactory" -l-> Deck
+"<<utility>> CardFactory" -r..> ObjectiveCard
+
+
+Card  -r-* "2" CardSide : - front, back {readOnly}
+Card  -l-> CardColor : - color {readOnly}
+Card  -d..> Side
+
+CardSide --> RequirementFunction : - playingRequirements {readOnly}
+CardSide --> RewardFunction : - playingReward {readOnly}
+CardSide -r- Symbol : -centerSymbols : List
+CardSide -u-* "4" AnglePosition : - angles<AnglePosition, Symbol>
+!endsub
+!startsub FUNCTIONS
+'Consider making Map<Symbol, int> an object with Stream interface
+abstract class "<<utility>> GameFunctionFactory" {
+    + createPointsRewardFunction(points : int) : RewardFunction {static}
+    + createCountSymbolsGroupFunction(symbolOccurrences : Map<Symbol, int> {static}
+    + createCountSymbolsFunction(symbol : Symbol) : RewardFunction {static}
+    + createCoveredAnglesFunction() : RewardFunction {static}
+    + createPatternMatchFunction(pattern : Pattern) : RewardFunction {static}
+    + createRequiredSymbolsFunction(requiredSymbols : Map<Symbol, int>) : RequirementFunction {static}
+}
+
+interface RewardFunction {
+    int getPoints(GameField field)
+}
+
+interface RequirementFunction {
+    bool isSatisfied(GameField field)
+}
+
+"<<utility>> GameFunctionFactory" -u--> RewardFunction
+"<<utility>> GameFunctionFactory" -u--> RequirementFunction
 !endsub
 @enduml
