@@ -1,6 +1,9 @@
 @startuml
 !startsub MODEL
 !includesub card.puml!CARDS
+!includesub card.puml!FUNCTIONS
+!includesub gamefield.puml!GAMEFIELD
+
 
 enum PlayerColor {
     RED,
@@ -9,10 +12,15 @@ enum PlayerColor {
     YELLOW,
 }
 
+class Game {
+    - currentPlayer : Player
+    + setup()
+}
+
 class Player {
     - nickname : String {readOnly}
-    - field : GameField
     - score : int
+
 
     + Player(nickname : String, color : Color)
     + getNickname() : String
@@ -22,48 +30,20 @@ class Player {
     + addCard(newCard : Card)
     + removeCard(position : unsigned int) : Card throw InvalidCardException
     + getScore() : int
-
-
-
 }
-note top: getCardList() returns card in the same position used by removeCard()
+'note top: getCardList() returns card in the same position used by removeCard()
 
-
-
-class Game {
-    /'
-    - players: List<Player> // In ordine di gioco
-    - goldenCardsDeck : Deck
-    - resourceCardsDeck: Deck
-    - visibleResourceCards : List<Card>
-    - visibleGoldenCards : List<Card>
-    - commonObjectiveCards : List<ObjeciveCard>
-    '/
-    - currentPlayer : Player
-
-    + setup()
-
-}
-
-Player --> PlayerColor : - color
-Player --> ObjectiveCard : - secretObjective
-Player --> "3" Card : - cardsInHand : List
-Player --- PlayerInvariants
+Player -u-> PlayerColor : - color
+Player -l-> ObjectiveCard : - secretObjective
+Player -d-> "3" Card : - cardsInHand : List
+Player -r-> GameField : -field
 
 Game --* "2..4" Player : - players : List<Player>
 Game --* "2" Deck : - visibleGoldenCardsDeck, visibleResourceCardsDeck
-Game --o "2" ObjectiveCard : - commonObjectiveCards : List<ObjeciveCard>
+Game -u-o "2" ObjectiveCard : - commonObjectiveCards : List<ObjeciveCard>
 
-
-
-
+hide RandomPicker
 
 !endsub
-
-
-
-
-
-
 
 @enduml

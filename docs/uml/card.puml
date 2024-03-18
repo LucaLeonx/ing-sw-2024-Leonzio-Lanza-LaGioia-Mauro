@@ -1,4 +1,7 @@
 @startuml
+skinparam nodesep 40
+skinparam ranksep 15
+skinparam linetype polyline
 !startsub CARDS
 
 enum CardColor {
@@ -50,6 +53,12 @@ class RandomPicker <T>{
     + extractRandomElement() : Optional<T>
 }
 
+class ObjectiveCard {
+    - rewardFunction : RewardFunction
+    +ObjectiveCard(rewardFunction : RewardFunction)
+    +getRewardFunction() : RewardFunction
+}
+
 class Deck{
     - topCard : Optional<Card>
     + Deck(cards : Collection<Card>)
@@ -57,13 +66,6 @@ class Deck{
     + leftCards() : int
     + showTopCard() : Optional<Card>
     + draw() : Optional<Card>
-}
-
-
-class ObjectiveCard {
-    - rewardFunction : RewardFunction
-    +ObjectiveCard(rewardFunction : RewardFunction)
-    +getRewardFunction() : RewardFunction
 }
 
 abstract class CardFactory <<utility>>{
@@ -77,8 +79,6 @@ abstract class CardFactory <<utility>>{
 Deck "1 " --* "* " Card : - cardPicker {readOnly}
 (Deck, Card) .. RandomPicker
 
-CardFactory -l-> Deck
-CardFactory -r..> ObjectiveCard
 
 
 Card  -r-* "2" CardSide : - front, back {readOnly}
@@ -111,5 +111,9 @@ interface RequirementFunction {
 
 GameFunctionFactory -u--> RewardFunction
 GameFunctionFactory -u--> RequirementFunction
+
 !endsub
+CardFactory -l-> Deck
+CardFactory -r..> ObjectiveCard
+
 @enduml

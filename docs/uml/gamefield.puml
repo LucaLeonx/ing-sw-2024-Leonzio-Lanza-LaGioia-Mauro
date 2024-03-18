@@ -1,8 +1,6 @@
 @startuml
-
-
-'https://www.baeldung.com/java-record-keyword
-'https://howtodoinjava.com/java/java-record-type/
+skinparam nodesep 40
+skinparam ranksep 30
 !startsub GAMEFIELD
 class Point
 {
@@ -31,7 +29,9 @@ class GameField{
     + addCard(cardSide : CardSide, position : Point)
     + getAvailablePositions() : Set<Point>
 }
+GameField .r..> Point
 !endsub
+
 
 
 @enduml
