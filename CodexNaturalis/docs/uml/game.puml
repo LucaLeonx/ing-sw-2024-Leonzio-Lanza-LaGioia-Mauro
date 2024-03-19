@@ -24,6 +24,7 @@ class Player {
     + getColor() : PlayerColor
     + getCardList() : List<Card>
     + getScore() : int
+    + getField() : GameField
     + addCard(newCard : Card)
     + removeCard(position : unsigned int) : Card throw InvalidCardException
     + getScore() : int

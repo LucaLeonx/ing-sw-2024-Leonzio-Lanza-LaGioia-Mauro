@@ -37,9 +37,13 @@ enum Side{
 }
 
 class Card {
+    -id: int
     +Card(color: CardColor, front: CardSide, back: CardSide)
+    +getId() : int
     +getColor() : CardColor
     +getSide(side: Side) : CardSide
+
+
 }
 
 class CardSide {

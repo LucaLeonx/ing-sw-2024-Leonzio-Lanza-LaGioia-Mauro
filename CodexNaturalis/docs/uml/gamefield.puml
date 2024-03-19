@@ -25,6 +25,8 @@ class GameField{
     - symbolCounters: <Symbol, int>
 
     + GameField(initialCard : Card)
+    + getCards() : HashMap<Point, Card>
+    + getAngles(): HashMap<Point, Symbol>
     + getCounter(symbol : Symbol) : int
     + addCard(cardSide : CardSide, position : Point)
     + getAvailablePositions() : Set<Point>
