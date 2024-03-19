@@ -1,14 +1,15 @@
 @startuml
-skinparam nodesep 40
-skinparam ranksep 15
-skinparam linetype polyline
+skinparam linetype ortho
+skinparam nodesep 250
+skinparam ranksep 100
 !startsub CARDS
 
 enum CardColor {
     RED,
     SKYBLUE,
     PURPLE,
-    GREEN
+    GREEN,
+    WHITE
 }
 
 enum Symbol{
@@ -31,7 +32,7 @@ enum AnglePosition {
     DOWN_RIGHT
 }
 
-enum Side{
+enum CardOrientation{
     FRONT,
     BACK
 }
@@ -47,9 +48,9 @@ class Card {
 }
 
 class CardSide {
-    + CardSide(centerSymbols: Set<Symbol>, angleSymbols: Map<AnglePosition, Symbol>)
-    + getDisplayedSymbols : Set<Symbol>
-    + getCenterSymbols() : Set<Symbol>
+    + CardSide(centerSymbols: Symbol[0..3], angleSymbols: [AnglePosition, Symbol])
+    + getDisplayedSymbols : Symbol[0..*]
+    + getCenterSymbols() : Symbol[0..*]
     + getSymbolFromAngle(position : AnglePosition) : Symbol
 }
 
@@ -67,28 +68,26 @@ class ObjectiveCard {
 }
 
 class Deck{
-    - topCard : Optional<Card>
-    + Deck(cards : Collection<Card>)
+    - topCard : Card[0..1]
+    + Deck(cards : Card[])
     + isEmpty() : bool
     + leftCards() : int
-    + showTopCard() : Optional<Card>
-    + draw() : Optional<Card>
+    + showTopCard() : Card[0..1]
+    + draw() : Card[0..1]
 }
 
 
 
-Deck "1 " --* "* " Card : - cardPicker {readOnly}
+Deck "1 " --* "*" Card : - cardPicker {readOnly}
 (Deck, Card) .. RandomPicker
-
-
 
 Card  -r-* "2" CardSide : - front, back {readOnly}
 Card  -l-> CardColor : - color {readOnly}
-Card  -d..> Side
+Card  -d.. CardOrientation : <<dependent>>
 
 CardSide --> RequirementFunction : - playingRequirements {readOnly}
 CardSide --> RewardFunction : - playingReward {readOnly}
-CardSide -r- Symbol : -centerSymbols : List
+CardSide -r- "0..3" Symbol : -centerSymbols
 CardSide -u-* "4" AnglePosition : - angles<AnglePosition, Symbol>
 !endsub
 !startsub FUNCTIONS
@@ -121,7 +120,7 @@ abstract class CardFactory <<utility>>{
 }
 
 !endsub
-CardFactory -l-> Deck
-CardFactory -r..> ObjectiveCard
+CardFactory -l-> Deck : <<creates>>
+CardFactory -r..> ObjectiveCard : <<creates>>
 
 @enduml

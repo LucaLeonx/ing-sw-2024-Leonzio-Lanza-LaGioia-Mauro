@@ -1,6 +1,9 @@
 @startuml
 
 !startsub GAME
+skinparam linetype ortho
+skinparam nodesep 250
+skinparam ranksep 60
 
 enum PlayerColor {
     RED,
@@ -17,12 +20,10 @@ class Game {
 class Player {
     - nickname : String {readOnly}
     - score : int
-
-
     + Player(nickname : String, color : Color)
     + getNickname() : String
     + getColor() : PlayerColor
-    + getCardList() : List<Card>
+    + getCardList() : Card[3]
     + getScore() : int
     + getField() : GameField
     + addCard(newCard : Card)
@@ -33,12 +34,14 @@ class Player {
 
 Player -l-> PlayerColor : - color
 Player -u-> ObjectiveCard : - secretObjective
-Player --> "3" Card : - cardsInHand : List
+Player --> "3" Card : - cardsInHand
 Player -r-> GameField : -field
 
-Game -d-* "2..4" Player : - players : List<Player>
-Game -l-* "2" Deck : - visibleGoldenCardsDeck, visibleResourceCardsDeck
-Game -r-o "2" ObjectiveCard : - commonObjectiveCards : List<ObjeciveCard>
+Game -d-* "2..4" Player : - players
+Game -l-* "2" Deck : - goldenCardsDeck, resourceCardsDeck
+Game --* "2" Card : - visibleGoldenCard
+Game --* "2" Card : - visibleResourceCard
+Game -r-o "2" ObjectiveCard : - commonObjectiveCards
 
 !endsub
 

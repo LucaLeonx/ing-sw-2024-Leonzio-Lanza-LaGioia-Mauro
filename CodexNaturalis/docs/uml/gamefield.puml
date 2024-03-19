@@ -1,6 +1,7 @@
 @startuml
-skinparam nodesep 40
-skinparam ranksep 30
+skinparam linetype ortho
+skinparam nodesep 150
+skinparam ranksep 100
 !startsub GAMEFIELD
 class Point
 {
@@ -12,26 +13,26 @@ class Point
     + toString() : String
     + equals(Object other) : bool
     + hashCode() : int
-    + sum(Point...) : Point
+    + sum(Point[0..*]) : Point
 }
 
 note "Java record with extra sum() method" as N1
 N1 .. Point
 
 class GameField{
-    - cards: HashMap<Point, Card>
-    - angles: HashMap<Point, Symbol>
-    - availableCells: HashSet<Point>
-    - symbolCounters: <Symbol, int>
+    - cards: Map<Point, Card>
+    - angles: Map<Point, Symbol>
+    - availableCells: Point[1..n]
+    - symbolCounters: Map<Symbol, int>
 
     + GameField(initialCard : Card)
     + getCards() : HashMap<Point, Card>
     + getAngles(): HashMap<Point, Symbol>
     + getCounter(symbol : Symbol) : int
     + addCard(cardSide : CardSide, position : Point)
-    + getAvailablePositions() : Set<Point>
+    + getAvailablePositions() : Point[1..n]
 }
-GameField .r..> Point
+GameField .r..> Point : <<uses>>
 !endsub
 
 
