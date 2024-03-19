@@ -1,4 +1,4 @@
-enum side {
+public enum Side {
     [FRONT ,BACK]
 
 }
