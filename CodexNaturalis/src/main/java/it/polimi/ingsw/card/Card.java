@@ -1,13 +1,13 @@
 class Card{
 
-    private Color CardColor;
+    private CardColor color;
     private CardSide front;
     private CardSide back;
 
-    public Card(Color c,CardSide f,CardColor b){
-        this.CardColor = c;
-        this.CardSide = b;
-        this.CardSide = f;
+    public Card(CardColor color,CardSide front,CardColor back){
+        this.color = color;
+        this.front = back;
+        this.back = front;
     }
 
     public Color getCardColor() {

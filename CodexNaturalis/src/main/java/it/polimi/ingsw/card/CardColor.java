@@ -1,4 +1,4 @@
-enum Color{
+enum CardColor{
     [   RED,
         SKYBLUE,
         PURPLE,
