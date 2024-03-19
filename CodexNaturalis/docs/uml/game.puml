@@ -27,8 +27,8 @@ class Player {
     + getScore() : int
     + getField() : GameField
     + addCard(newCard : Card)
-    + removeCard(position : unsigned int) : Card throw InvalidCardException
-    + getScore() : int
+    + removeCard(idCard : int) : Card throw InvalidCardException
+    + setScore(newScore : int) : int
 }
 'note top: getCardList() returns card in the same position used by removeCard()
 

@@ -30,11 +30,11 @@ public class Player {
        this.cardsInHand.add(newCard);
     }
 
-    public void removeCard(int IdCard) throws InvalidCardException {
+    public void removeCard(int idCard) throws InvalidCardException {
         int position=-1;
         for(int i=0; i<3; i++)
         {
-            if(cardsInHand.get(i).getId()==IdCard)
+            if(cardsInHand.get(i).getId()==idCard)
                 position=i;
         }
         if (position=-1) {
@@ -48,6 +48,10 @@ public class Player {
 
     public int getScore() {
         return score;
+    }
+
+    public int setScore(int newScore) {
+        this.score=newScore;
     }
 
     public GameField getField() {
