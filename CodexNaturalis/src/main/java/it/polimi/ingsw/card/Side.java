@@ -1,4 +1,4 @@
-enum CardSide {
+public enum Side {
     [FRONT ,BACK]
 
 }

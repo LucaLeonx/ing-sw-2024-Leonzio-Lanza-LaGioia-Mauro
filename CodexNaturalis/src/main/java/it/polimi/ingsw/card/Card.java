@@ -1,8 +1,8 @@
-class Card{
+public class Card{
 
-    private CardColor color;
-    private CardSide front;
-    private CardSide back;
+    private static CardColor color;
+    private static Side front;
+    private static Side back;
 
     public Card(CardColor color,CardSide front,CardColor back){
         this.color = color;
