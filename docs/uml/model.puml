@@ -1,49 +1,11 @@
 @startuml
+'skinparam linetype polyline
+
 !startsub MODEL
 !includesub card.puml!CARDS
 !includesub card.puml!FUNCTIONS
 !includesub gamefield.puml!GAMEFIELD
-
-
-enum PlayerColor {
-    RED,
-    BLUE,
-    GREEN,
-    YELLOW,
-}
-
-class Game {
-    - currentPlayer : Player
-    + setup()
-}
-
-class Player {
-    - nickname : String {readOnly}
-    - score : int
-
-
-    + Player(nickname : String, color : Color)
-    + getNickname() : String
-    + getColor() : PlayerColor
-    + getCardList() : List<Card>
-    + getScore() : int
-    + addCard(newCard : Card)
-    + removeCard(position : unsigned int) : Card throw InvalidCardException
-    + getScore() : int
-}
-'note top: getCardList() returns card in the same position used by removeCard()
-
-Player -u-> PlayerColor : - color
-Player -l-> ObjectiveCard : - secretObjective
-Player -d-> "3" Card : - cardsInHand : List
-Player -r-> GameField : -field
-
-Game --* "2..4" Player : - players : List<Player>
-Game --* "2" Deck : - visibleGoldenCardsDeck, visibleResourceCardsDeck
-Game -u-o "2" ObjectiveCard : - commonObjectiveCards : List<ObjeciveCard>
-
-hide RandomPicker
-
+!includesub game.puml!GAME
+Card <-[hidden]l- CardFactory
 !endsub
-
 @enduml

@@ -1,0 +1,44 @@
+@startuml
+
+!startsub GAME
+
+enum PlayerColor {
+    RED,
+    BLUE,
+    GREEN,
+    YELLOW,
+}
+
+class Game {
+    - currentPlayer : Player
+    + setup()
+}
+
+class Player {
+    - nickname : String {readOnly}
+    - score : int
+
+
+    + Player(nickname : String, color : Color)
+    + getNickname() : String
+    + getColor() : PlayerColor
+    + getCardList() : List<Card>
+    + getScore() : int
+    + addCard(newCard : Card)
+    + removeCard(position : unsigned int) : Card throw InvalidCardException
+    + getScore() : int
+}
+'note top: getCardList() returns card in the same position used by removeCard()
+
+Player -l-> PlayerColor : - color
+Player -u-> ObjectiveCard : - secretObjective
+Player --> "3" Card : - cardsInHand : List
+Player -r-> GameField : -field
+
+Game -d-* "2..4" Player : - players : List<Player>
+Game -l-* "2" Deck : - visibleGoldenCardsDeck, visibleResourceCardsDeck
+Game -r-o "2" ObjectiveCard : - commonObjectiveCards : List<ObjeciveCard>
+
+!endsub
+
+@enduml

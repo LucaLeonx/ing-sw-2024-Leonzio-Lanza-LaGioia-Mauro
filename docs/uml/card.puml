@@ -37,12 +37,15 @@ enum Side{
 }
 
 class Card {
+    +Card(color: CardColor, front: CardSide, back: CardSide)
     +getColor() : CardColor
     +getSide(side: Side) : CardSide
 }
 
 class CardSide {
+    + CardSide(centerSymbols: Set<Symbol>, angleSymbols: Map<AnglePosition, Symbol>)
     + getDisplayedSymbols : Set<Symbol>
+    + getCenterSymbols() : Set<Symbol>
     + getSymbolFromAngle(position : AnglePosition) : Symbol
 }
 
@@ -68,13 +71,7 @@ class Deck{
     + draw() : Optional<Card>
 }
 
-abstract class CardFactory <<utility>>{
-    + getCardsList() List<Card> {static}
-    + getResourceCardsDeck() : Deck {static}
-    + getGoldenCardsDeck() : Deck {static}
-    + getObjectiveCardPicker() : RandomPicker<ObjectiveCard> {static}
-    + getInitialCardPicker() : RandomPicker<Card> {static}
-}
+
 
 Deck "1 " --* "* " Card : - cardPicker {readOnly}
 (Deck, Card) .. RandomPicker
@@ -111,6 +108,13 @@ interface RequirementFunction {
 
 GameFunctionFactory -u--> RewardFunction
 GameFunctionFactory -u--> RequirementFunction
+abstract class CardFactory <<utility>>{
+    + getCardsList() List<Card> {static}
+    + getResourceCardsDeck() : Deck {static}
+    + getGoldenCardsDeck() : Deck {static}
+    + getObjectiveCardPicker() : RandomPicker<ObjectiveCard> {static}
+    + getInitialCardPicker() : RandomPicker<Card> {static}
+}
 
 !endsub
 CardFactory -l-> Deck
