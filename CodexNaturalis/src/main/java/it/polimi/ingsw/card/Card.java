@@ -1,10 +1,12 @@
 public class Card{
 
-    private static CardColor color;
-    private static Side front;
-    private static Side back;
+    private final CardColor color;
+    private final Side front;
+    private final Side back;
+    private final int id;
 
-    public Card(CardColor color,CardSide front,CardColor back){
+    public Card(CardColor color,CardSide front,CardColor back, int id){
+        this.id = id;   
         this.color = color;
         this.front = back;
         this.back = front;
