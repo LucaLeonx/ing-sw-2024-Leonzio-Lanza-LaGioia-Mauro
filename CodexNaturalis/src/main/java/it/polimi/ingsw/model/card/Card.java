@@ -5,11 +5,15 @@ public class Card{
     private final Side back;
     private final int id;
 
-    public Card(CardColor color,CardSide front,CardColor back, int id){
+    public Card(CardColor color, CardSide front, CardColor back, int id){
         this.id = id;   
         this.color = color;
-        this.front = back;
-        this.back = front;
+        this.front = front;
+        this.back = back;
+    }
+
+    public int getId(){
+        return id;
     }
 
     public Color getCardColor() {
