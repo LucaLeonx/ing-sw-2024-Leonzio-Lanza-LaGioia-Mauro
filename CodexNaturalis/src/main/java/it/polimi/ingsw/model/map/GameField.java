@@ -36,6 +36,13 @@ public class GameField{
     {
         cards.put(position, card);
 
+        Point[] surroundingPositions = {
+                new Point(position.getX() - 1, position.getY() + 1),  // up left
+                new Point(position.getX() + 1, position.getY() + 1),  // up right
+                new Point(position.getX() - 1, position.getY() - 1),  // down left
+                new Point(position.getX() + 1, position.getY() - 1)   // down right
+        };
+
         // Verifica delle posizioni circostanti e aggiunta alle celle disponibili
         for (Point surroundingPosition : surroundingPositions) {
             if (!angles.containsKey(surroundingPosition) && cardOrientation.getSymbolFromAngle() != HIDDEN) {
