@@ -43,14 +43,12 @@ class Card {
     +getId() : int
     +getColor() : CardColor
     +getSide(side: Side) : CardSide
-
-
 }
 
 class CardSide {
-    + CardSide(centerSymbols: Symbol[0..3], angleSymbols: [AnglePosition, Symbol])
-    + getDisplayedSymbols : Symbol[0..*]
-    + getCenterSymbols() : Symbol[0..*]
+    + CardSide(centerSymbols: Collection<Symbol>, angleSymbols: Map<AnglePosition, Symbol>)
+    + getDisplayedSymbols : Set<Symbol>
+    + getCenterSymbols() : Set<Symbol
     + getSymbolFromAngle(position : AnglePosition) : Symbol
 }
 
@@ -68,12 +66,12 @@ class ObjectiveCard {
 }
 
 class Deck{
-    - topCard : Card[0..1]
-    + Deck(cards : Card[])
+    - topCard : Optional<Card>
+    + Deck(cards : Collection<Card>)
     + isEmpty() : bool
     + leftCards() : int
-    + showTopCard() : Card[0..1]
-    + draw() : Card[0..1]
+    + showTopCard() : Optional<Card>
+    + draw() : Optional<Card>
 }
 
 

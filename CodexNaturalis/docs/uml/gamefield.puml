@@ -13,7 +13,7 @@ class Point
     + toString() : String
     + equals(Object other) : bool
     + hashCode() : int
-    + sum(Point[0..*]) : Point
+    + sum(points : Point...) : Point
 }
 
 note "Java record with extra sum() method" as N1
@@ -22,15 +22,15 @@ N1 .. Point
 class GameField{
     - cards: Map<Point, Card>
     - angles: Map<Point, Symbol>
-    - availableCells: Point[1..n]
+    - availableCells: Set<Point>
     - symbolCounters: Map<Symbol, int>
 
     + GameField(initialCard : Card)
-    + getCards() : HashMap<Point, Card>
-    + getAngles(): HashMap<Point, Symbol>
+    + getCards() : Map<Point, Card>
+    + getAngles(): Map<Point, Symbol>
     + getCounter(symbol : Symbol) : int
-    + addCard(cardSide : CardSide, position : Point)
-    + getAvailablePositions() : Point[1..n]
+    + addCard(card : Card, orientation : CardOrientation, position : Point)
+    + getAvailablePositions() : Set<Point>
 }
 GameField .r..> Point : <<uses>>
 !endsub
