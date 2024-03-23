@@ -10,7 +10,7 @@ public class Player {
     private int score;
     private final GameField field;
     private final PlayerColor color;
-    private ArrayList<Card> cardsInHand;
+    private List<Card> cardsInHand;
     public Player(String nickname, PlayerColor color) {
         this.nickname = nickname;
         this.color = color;

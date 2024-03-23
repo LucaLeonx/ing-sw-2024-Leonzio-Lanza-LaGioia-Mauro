@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.card;
 import java.util.*;
 
 public class Deck {
+
     private Optional<Card> topCard;
     private int numberOfCards;
     private final RandomPicker<Card> cardPicker;
