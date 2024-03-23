@@ -23,7 +23,7 @@ class Player {
     + Player(nickname : String, color : Color)
     + getNickname() : String
     + getColor() : PlayerColor
-    + getCardList() : Card[3]
+    + getCardList() : List<Card>
     + getScore() : int
     + getField() : GameField
     + addCard(newCard : Card)

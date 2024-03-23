@@ -1,11 +1,13 @@
+package it.polimi.ingsw.model.card;
+
 public class Card{
 
-    private final CardColor color;
-    private final Side front;
-    private final Side back;
     private final int id;
+    private final CardColor color;
+    private final CardSide front;
+    private final CardSide back;
 
-    public Card(CardColor color, CardSide front, CardColor back, int id){
+    public Card(int id, CardColor color, CardSide front, CardSide back){
         this.id = id;   
         this.color = color;
         this.front = front;
@@ -16,15 +18,16 @@ public class Card{
         return id;
     }
 
-    public Color getCardColor() {
-        return CardColor;
+    public CardColor getCardColor() {
+        return color;
     }
 
-    public CardSide getBack() {
-        return back;
+    public CardSide getSide(CardOrientation side) {
+        return switch(side){
+            case FRONT -> front;
+            case BACK ->  back;
+        };
     }
 
-    public CardSide getFront() {
-        return front;
-    }
+
 }

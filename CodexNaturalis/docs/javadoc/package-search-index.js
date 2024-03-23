@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"it.polimi.ingsw"},{"l":"it.polimi.ingsw.model.card"},{"l":"it.polimi.ingsw.model.map"},{"l":"it.polimi.ingsw.model.player"},{"l":"it.polimi.ingsw.test.card.model"}];updateSearchResults();
