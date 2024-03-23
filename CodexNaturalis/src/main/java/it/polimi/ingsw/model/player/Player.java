@@ -1,17 +1,22 @@
+package it.polimi.ingsw.model.player;
+
 import java.util.*;
+import it.polimi.ingsw.model.map.*;
+import it.polimi.ingsw.model.card.*;
+
 
 public class Player {
     private final String nickname;  // readOnly attribute
     private int score;
-    private GameField field;
-    private PlayerColor color;
+    private final GameField field;
+    private final PlayerColor color;
     private ArrayList<Card> cardsInHand;
     public Player(String nickname, PlayerColor color) {
         this.nickname = nickname;
         this.color = color;
         this.score = 0;  // initial score is 0
         this.field = new GameField();
-        this.cardsInHand = new Arraylist<>();
+        this.cardsInHand = new ArrayList<>();
     }
 
     public String getNickname() {
@@ -23,7 +28,7 @@ public class Player {
     }
 
     public List<Card> getCardList() {
-        return new ArrayList(cardsInHand);
+        return new ArrayList<>(cardsInHand);
     }
 
     public void addCard(Card newCard) {
@@ -31,27 +36,26 @@ public class Player {
     }
 
     public void removeCard(int idCard) throws InvalidCardException {
-        int position=-1;
+        int position = -1;
         for(int i=0; i<3; i++)
         {
-            if(cardsInHand.get(i).getId()==idCard)
-                position=i;
+            if(cardsInHand.get(i).getId() == idCard)
+                position = i;
         }
-        if (position=-1) {
+        if (position == -1) {
             throw new InvalidCardException("Card not in your hand");
         }
-        else{
-           cardsInHand.remove(position);
+        else {
+            cardsInHand.remove(position);
         }
-        return;
     }
 
     public int getScore() {
         return score;
     }
 
-    public int setScore(int newScore) {
-        this.score=newScore;
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public GameField getField() {

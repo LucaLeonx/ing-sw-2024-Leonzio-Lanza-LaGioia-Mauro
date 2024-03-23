@@ -1,7 +1,8 @@
+package it.polimi.ingsw.model.card;
+
 public enum CardColor{
-    [   RED,
+        RED,
         SKYBLUE,
         PURPLE,
         GREEN
-            ]
 }

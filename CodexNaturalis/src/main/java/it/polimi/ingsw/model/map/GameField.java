@@ -1,18 +1,26 @@
-import java.util.Map;
-import java.util.HashMap;
+package it.polimi.ingsw.model.map;
+
+import java.util.*;
 import java.awt.Point;
+import java.lang.Math;
+
+
+import it.polimi.ingsw.model.card.Card;
+import it.polimi.ingsw.model.card.CardOrientation;
+import it.polimi.ingsw.model.card.Symbol;
+
 
 public class GameField{
-    private Map<Point,Card> cards;
-    private Map<Point,Symbol> angles;
-    private Map<Symbol,int> symbolCounters;
+    private Map<Point, Card> cards;
+    private Map<Point, Symbol> angles;
+    private Map<Symbol, Integer> symbolCounters;
     private HashSet<Point> availableCells;
 
-    public GameField(initialCard Card){ //constructor of the Field with initial card
-        this.cards = new HashMap<>;
-        this.angles= new HashMap<>;
-        this.symbolCounters=new HashMap<>;
-        this.availableCells= new HashSet<>;
+    public GameField(){ //constructor of the Field with initial card
+        this.cards = new HashMap<>();
+        this.angles= new HashMap<>();
+        this.symbolCounters = new HashMap<>();
+        this.availableCells = new HashSet<>();
     }
 
     public Map<Point, Card> getCards() {
@@ -28,34 +36,36 @@ public class GameField{
         return symbolCounters.get(symbol);
     }
 
-    public Point[] getAvailablePositions() {
+    public Set<Point> getAvailablePositions() {
         return availableCells;
     }
 
-    public addCard(Card card, CardOrientation cardOrientation, Point position)  //Passo card o cardside nel metodo??
-    {
+    public void addCard(Card card, CardOrientation cardOrientation, Point position)  //Passo card o cardside nel metodo??
+    {   /*
         cards.put(position, card);
 
-        Point[] surroundingPositions = {
-                new Point(position.getX() - 1, position.getY() + 1),  // up left
-                new Point(position.getX() + 1, position.getY() + 1),  // up right
-                new Point(position.getX() - 1, position.getY() - 1),  // down left
-                new Point(position.getX() + 1, position.getY() - 1)   // down right
-        };
+        List<Point> surroundingPositions;
+        surroundingPositions = new ArrayList.of(
+                new Point((int) (position.getX() - 1), (int) (position.getY() + 1)),  // up left
+                new Point((int) (position.getX() + 1), (int) (position.getY() + 1)),  // up right
+                new Point((int) position.getX() - 1, (int) position.getY() - 1),  // down left
+                new Point((int) position.getX() + 1, (int) position.getY() - 1)   // down right
+        );
 
         // Verifica delle posizioni circostanti e aggiunta alle celle disponibili
         for (Point surroundingPosition : surroundingPositions) {
-            if (!angles.containsKey(surroundingPosition) && cardOrientation.getSymbolFromAngle() != HIDDEN) {
+            if (!angles.containsKey(surroundingPosition) && card.getSide(cardOrientation).get != HIDDEN) {
                 availableCells.add(surroundingPosition);
             }
         }
 
         // Inserimento degli angoli alla mappa degli angoli
 
-        angles.put(new Point(position.getX() - 1, position.getY() + 1), cardOrientation.getSymbolFromAngle(UP_LEFT));
-        angles.put(new Point(position.getX() + 1, position.getY() + 1), cardOrientation.getSymbolFromAngle(UP_RIGHT));
-        angles.put(new Point(position.getX() - 1, position.getY() - 1), cardOrientation.getSymbolFromAngle(DOWN_LEFT));
-        angles.put(new Point(position.getX() + 1, position.getY() - 1), cardOrientation.getSymbolFromAngle(DOWN_RIGHT));
+        angles.put(new Point((int) position.getX() - 1, (int)position.getY() + 1), cardOrientation.getClass(UP_LEFT));
+        angles.put(new Point((int) position.getX() + 1, (int) position.getY() + 1), cardOrientation.getClass(UP_RIGHT));
+        angles.put(new Point((int) position.getX() - 1, (int) position.getY() - 1), cardOrientation.getClass(DOWN_LEFT));
+        angles.put(new Point((int) position.getX() + 1, (int) position.getY() - 1), cardOrientation.getClass(DOWN_RIGHT));
+    */
     }
 
     //manca metodo che salva in SymbolCounters il numero di Symbol sul field (?)
