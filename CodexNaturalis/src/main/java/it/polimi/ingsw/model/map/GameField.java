@@ -41,7 +41,7 @@ public class GameField{
     }
 
     public void addCard(Card card, CardOrientation cardOrientation, Point position)  //Passo card o cardside nel metodo??
-    {   /*
+    {
         cards.put(position, card);
 
         List<Point> surroundingPositions;
@@ -54,18 +54,18 @@ public class GameField{
 
         // Verifica delle posizioni circostanti e aggiunta alle celle disponibili
         for (Point surroundingPosition : surroundingPositions) {
-            if (!angles.containsKey(surroundingPosition) && card.getSide(cardOrientation).get != HIDDEN) {
+            if (!angles.containsKey(surroundingPosition) && card.getSide(cardOrientation).getA != HIDDEN) {
                 availableCells.add(surroundingPosition);
             }
         }
 
         // Inserimento degli angoli alla mappa degli angoli
 
-        angles.put(new Point((int) position.getX() - 1, (int)position.getY() + 1), cardOrientation.getClass(UP_LEFT));
+        angles.put(new Point((int) position.getX() - 1, (int) position.getY() + 1), cardOrientation.getClass(UP_LEFT));
         angles.put(new Point((int) position.getX() + 1, (int) position.getY() + 1), cardOrientation.getClass(UP_RIGHT));
         angles.put(new Point((int) position.getX() - 1, (int) position.getY() - 1), cardOrientation.getClass(DOWN_LEFT));
         angles.put(new Point((int) position.getX() + 1, (int) position.getY() - 1), cardOrientation.getClass(DOWN_RIGHT));
-    */
+
     }
 
     //manca metodo che salva in SymbolCounters il numero di Symbol sul field (?)

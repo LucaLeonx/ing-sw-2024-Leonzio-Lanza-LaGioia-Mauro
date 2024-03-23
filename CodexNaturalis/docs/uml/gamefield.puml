@@ -5,14 +5,14 @@ skinparam ranksep 100
 !startsub GAMEFIELD
 class Point
 {
-    - int x {readOnly}
-    - int y {readOnly}
+    - x : int {readOnly}
+    - y : int {readOnly}
     + Point(x : int, y : int)
     + getX() : int
     + getY() : int
     + toString() : String
     + equals(Object other) : bool
-    + hashCode() : int
+    + hashCode() : long
     + sum(points : Point...) : Point
 }
 
