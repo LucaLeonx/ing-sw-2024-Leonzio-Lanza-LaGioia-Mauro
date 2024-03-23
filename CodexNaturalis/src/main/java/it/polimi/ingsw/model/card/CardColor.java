@@ -1,8 +1,13 @@
 package it.polimi.ingsw.model.card;
 
-public enum CardColor{
-        RED,
-        SKYBLUE,
-        PURPLE,
-        GREEN
+/**
+ * This enumeration represents the possible colors of the cards
+ */
+public enum CardColor {
+    GREEN,
+    PURPLE,
+    RED,
+    SKYBLUE,
+    WHITE
+
 }

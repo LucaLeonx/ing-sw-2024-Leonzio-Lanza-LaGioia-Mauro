@@ -7,7 +7,6 @@ public class Card{
     private final CardSide front;
     private final CardSide back;
 
-
     public Card(int id, CardColor color, CardSide front, CardSide back){
         this.id = id;   
         this.color = color;
