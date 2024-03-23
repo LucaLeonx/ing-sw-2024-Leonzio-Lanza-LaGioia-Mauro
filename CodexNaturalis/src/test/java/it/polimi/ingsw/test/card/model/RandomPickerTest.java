@@ -11,7 +11,6 @@ public class RandomPickerTest extends TestCase {
     private RandomPicker<Integer> pickerA;
     private RandomPicker<Integer> pickerB;
     private RandomPicker<Integer> pickerEmpty;
-
     private List<Integer> initialList;
 
     public void setUp(){
