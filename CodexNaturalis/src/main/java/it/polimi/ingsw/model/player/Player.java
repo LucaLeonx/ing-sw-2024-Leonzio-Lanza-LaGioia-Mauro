@@ -36,7 +36,8 @@ public class Player {
     }
 
     /**
-     * Remove a card from the hand. It is called when player plays a card
+     * Remove a card from the hand. It is called when player plays a card.
+     * It Requires that there are 3 cards in player's hand.
      * @param idCard
      * @throws InvalidCardException called when the player doesn't have the card he was supposed to play
      */
