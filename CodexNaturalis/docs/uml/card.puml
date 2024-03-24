@@ -42,7 +42,7 @@ class Card {
     +Card(color: CardColor, front: CardSide, back: CardSide)
     +getId() : int
     +getColor() : CardColor
-    +getSide(side: Side) : CardSide
+    +getSide(orientation: CardOrientation) : CardSide
 }
 
 class CardSide {
