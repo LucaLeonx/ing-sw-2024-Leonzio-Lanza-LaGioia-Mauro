@@ -7,6 +7,7 @@ public class CardSide {
     private final Set<Symbol> centerSymbol;
     private final Map<AnglePosition,Symbol> angles;
     // Modificare metodo costruttore, le strutture dati non le deve prendere in input ma le deve creare lui!!!!
+    // Come passiamo le stutture dati al costruttore? Chi le crea?
 
     /**
      * Class constructor
@@ -14,8 +15,8 @@ public class CardSide {
      * @param angles -
      */
     public CardSide(Set<Symbol> centerSymbol, Map<AnglePosition,Symbol> angles){
-        this.centerSymbol = centerSymbol;
-        this.angles = angles;
+        this.centerSymbol = new HashSet<Symbol>(centerSymbol);
+        this.angles = new HashMap<AnglePosition,Symbol>(angles);
     }
 
     /**
