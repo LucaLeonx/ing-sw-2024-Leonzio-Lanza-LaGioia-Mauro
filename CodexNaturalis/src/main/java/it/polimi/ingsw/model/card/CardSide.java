@@ -5,7 +5,7 @@ import java.util.*;
 public class CardSide {
 
     private final Set<Symbol> centerSymbol;
-    private final Map<AnglePosition,Symbol> angles;
+    private final   Map<AnglePosition,Symbol> angles;
 
     public CardSide(Set<Symbol> centerSymbol, Map<AnglePosition,Symbol> angles){
         this.centerSymbol = centerSymbol;
