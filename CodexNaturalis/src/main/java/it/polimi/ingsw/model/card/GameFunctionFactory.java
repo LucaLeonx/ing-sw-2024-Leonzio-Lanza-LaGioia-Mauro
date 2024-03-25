@@ -24,6 +24,8 @@ public abstract class GameFunctionFactory {
         };
     }
 
+    public static RewardFunction
+
 
 
 }

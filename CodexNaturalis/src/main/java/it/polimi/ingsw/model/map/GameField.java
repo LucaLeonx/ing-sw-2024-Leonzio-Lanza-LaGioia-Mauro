@@ -7,6 +7,7 @@ import java.lang.Math;
 
 import it.polimi.ingsw.model.card.Card;
 import it.polimi.ingsw.model.card.CardOrientation;
+import it.polimi.ingsw.model.card.CardSide;
 import it.polimi.ingsw.model.card.Symbol;
 
 
@@ -71,3 +72,5 @@ public class GameField{
     //manca metodo che salva in SymbolCounters il numero di Symbol sul field (?)
 
 }
+
+private class AngleCell

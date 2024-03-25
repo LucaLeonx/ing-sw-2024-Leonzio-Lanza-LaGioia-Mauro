@@ -32,11 +32,9 @@ public class Deck {
         topCard = cardPicker.extractRandomElement();
 
         if(numberOfCards > 0){
-            numberOfCards -= 1;
-        } else {
-            numberOfCards = 0;
+            numberOfCards--;
         }
 
-        return  returnedCard;
+        return returnedCard;
     }
 }
