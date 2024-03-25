@@ -1,4 +1,4 @@
-package it.polimi.ingsw.test.card.model;
+package it.polimi.ingsw.test.model.card;
 
 import it.polimi.ingsw.model.card.RandomPicker;
 import junit.framework.*;

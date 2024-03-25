@@ -10,11 +10,26 @@ public class CardSide {
     public CardSide(Set<Symbol> centerSymbol, Map<AnglePosition,Symbol> angles){
         this.centerSymbol = centerSymbol;
         this.angles = angles;
-
     }
 
-    public Set<Symbol> getCenterSymbols(){ return centerSymbol;}
+    public Set<Symbol> getCenterSymbols(){
+        return centerSymbol;
+    }
 
-    public Symbol getSymbolFromAngle(AnglePosition pos){ return angles.get(pos); }
+    public Symbol getSymbolFromAngle(AnglePosition position){
+        return angles.get(position);
+    }
+
+    public Set<Symbol> getDisplayedSymbols(){
+        Set<Symbol> displayedSymbols = new HashSet<>(getDisplayedSymbols());
+
+        for(AnglePosition position : AnglePosition.values()){
+            displayedSymbols.add(getSymbolFromAngle(position));
+        }
+
+        return displayedSymbols;
+    }
+
+
 
 }

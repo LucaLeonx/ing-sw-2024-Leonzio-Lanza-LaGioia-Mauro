@@ -1,14 +1,9 @@
 package it.polimi.ingsw.model.map;
 
-
 import java.util.*;
 import java.util.stream.*;
 
 public record Point(int x, int y) {
-    /**
-     * The class points represent
-     */
-
     /**
      * This method performs the component sum of the points passed
      * as parameters.

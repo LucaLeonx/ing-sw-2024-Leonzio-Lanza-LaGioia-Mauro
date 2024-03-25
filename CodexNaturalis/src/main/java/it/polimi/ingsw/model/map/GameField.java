@@ -28,7 +28,6 @@ public class GameField{
     }
 
     public Map<Point, Symbol> getAngles() {
-
         return angles;
     }
 
@@ -45,6 +44,7 @@ public class GameField{
         cards.put(position, card);
 
         List<Point> surroundingPositions;
+        /*
         surroundingPositions = new ArrayList.of(
                 new Point((int) (position.getX() - 1), (int) (position.getY() + 1)),  // up left
                 new Point((int) (position.getX() + 1), (int) (position.getY() + 1)),  // up right
@@ -65,7 +65,7 @@ public class GameField{
         angles.put(new Point((int) position.getX() + 1, (int) position.getY() + 1), cardOrientation.getClass(UP_RIGHT));
         angles.put(new Point((int) position.getX() - 1, (int) position.getY() - 1), cardOrientation.getClass(DOWN_LEFT));
         angles.put(new Point((int) position.getX() + 1, (int) position.getY() - 1), cardOrientation.getClass(DOWN_RIGHT));
-
+    */
     }
 
     //manca metodo che salva in SymbolCounters il numero di Symbol sul field (?)
