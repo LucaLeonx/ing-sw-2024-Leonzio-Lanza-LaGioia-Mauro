@@ -8,12 +8,16 @@ class Point
     - x : int {readOnly}
     - y : int {readOnly}
     + Point(x : int, y : int)
-    + getX() : int
-    + getY() : int
+    + x() : int
+    + y() : int
     + toString() : String
-    + equals(Object other) : bool
+    + equals(Object other) : boolean
     + hashCode() : long
-    + sum(points : Point...) : Point
+    + sum(other : Point) : Point
+    + sum(points : Point...) : Point {static}
+    + sum(points : Collection<Point>) : Point {static}
+
+
 }
 
 note "Java record with extra sum() method" as N1

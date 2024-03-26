@@ -46,10 +46,12 @@ class Card {
 }
 
 class CardSide {
-    + CardSide(centerSymbols: Collection<Symbol>, angleSymbols: Map<AnglePosition, Symbol>)
+    + CardSide(centerSymbols: Collection<Symbol>, angleSymbols: Map<AnglePosition, Symbol>, requirements : RequirementFunction, reward : RewardFunction)
     + getDisplayedSymbols() : Set<Symbol>
     + getCenterSymbols() : Set<Symbol
     + getSymbolFromAngle(position : AnglePosition) : Symbol
+    + getPlayingRequirements() : RequirementFunction
+    + getReward() : RewardFunction
 }
 
 class RandomPicker <T>{

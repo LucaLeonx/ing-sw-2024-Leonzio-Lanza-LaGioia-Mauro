@@ -7,12 +7,15 @@ import java.lang.Math;
 
 import it.polimi.ingsw.model.card.Card;
 import it.polimi.ingsw.model.card.CardOrientation;
+import it.polimi.ingsw.model.card.CardSide;
 import it.polimi.ingsw.model.card.Symbol;
+
+import javax.swing.plaf.synth.SynthUI;
 
 
 public class GameField{
     private Map<Point, Card> cards;
-    private Map<Point, Symbol> angles;
+    private Map<Point, AngleCell> angles;
     private Map<Symbol, Integer> symbolCounters;
     private HashSet<Point> availableCells;
 
@@ -70,4 +73,32 @@ public class GameField{
 
     //manca metodo che salva in SymbolCounters il numero di Symbol sul field (?)
 
+    private class AngleCell{
+        private final Stack<Point> attachedCardsPosition;
+        private Symbol topSymbol;
+
+        AngleCell(Point topCardPosition, Symbol topSymbol) {
+            this.attachedCardsPosition = new Stack<>();
+            attachedCardsPosition.add(topCardPosition);
+            this.topSymbol = topSymbol;
+        }
+
+        Symbol getTopSymbol(){
+            return topSymbol;
+        }
+
+        Point getTopCardPosition(){
+            return attachedCardsPosition.getLast();
+        }
+
+        void attachNewCard(Point position, Symbol topSymbol){
+            attachedCardsPosition.add(position);
+            this.topSymbol = topSymbol;
+        }
+    }
+
+
+
 }
+
+
