@@ -47,7 +47,7 @@ class Card {
 
 class CardSide {
     + CardSide(centerSymbols: Collection<Symbol>, angleSymbols: Map<AnglePosition, Symbol>)
-    + getDisplayedSymbols : Set<Symbol>
+    + getDisplayedSymbols() : Set<Symbol>
     + getCenterSymbols() : Set<Symbol
     + getSymbolFromAngle(position : AnglePosition) : Symbol
 }
