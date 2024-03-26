@@ -62,9 +62,11 @@ class RandomPicker <T>{
 }
 
 class ObjectiveCard {
+    - id : int
     - rewardFunction : RewardFunction
-    +ObjectiveCard(rewardFunction : RewardFunction)
-    +getRewardFunction() : RewardFunction
+    + ObjectiveCard(id : int, rewardFunction : RewardFunction)
+    + getId() : int
+    + getRewardFunction() : RewardFunction
 }
 
 class Deck{
