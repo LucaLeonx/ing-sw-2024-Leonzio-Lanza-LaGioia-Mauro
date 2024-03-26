@@ -14,14 +14,27 @@ public class Card{
         this.back = back;
     }
 
+    /**
+     *
+     * @return The card identifier
+     */
     public int getId(){
         return id;
     }
 
+    /**
+     *
+     * @return The color, note that the color is the same on both faces of the card
+     */
     public CardColor getCardColor() {
         return color;
     }
 
+    /**
+     *
+     * @param side - enum that has only front and back as values
+     * @return The side (CardSide type) of the face given in input
+     */
     public CardSide getSide(CardOrientation side) {
         return switch(side){
             case FRONT -> front;
