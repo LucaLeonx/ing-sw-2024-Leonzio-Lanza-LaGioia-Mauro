@@ -27,4 +27,13 @@ public record Point(int x, int y) {
     private static Point sumPointStream(Stream<Point> pointStream){
         return pointStream.reduce(new Point(0, 0), (a, b) -> new Point(a.x + b.x, a.y + b.y));
     }
+
+    /**
+     * This method performs the component sum of 2 points.
+     * @param other The Point istance to be summed
+     * @return The sum of the 2 points inside a new istance of Class Point
+     */
+    public Point sum(Point other){
+        return new Point(this.x() + other.y(), this.y() + other.y());
+    }
 }
