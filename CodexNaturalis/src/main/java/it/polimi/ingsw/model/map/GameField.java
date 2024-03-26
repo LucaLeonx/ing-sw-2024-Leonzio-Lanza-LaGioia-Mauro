@@ -1,14 +1,11 @@
 package it.polimi.ingsw.model.map;
 
 import java.util.*;
-import java.awt.Point;
+//import java.awt.Point;
 import java.lang.Math;
 
 
-import it.polimi.ingsw.model.card.Card;
-import it.polimi.ingsw.model.card.CardOrientation;
-import it.polimi.ingsw.model.card.CardSide;
-import it.polimi.ingsw.model.card.Symbol;
+import it.polimi.ingsw.model.card.*;
 
 import javax.swing.plaf.synth.SynthUI;
 
@@ -30,7 +27,7 @@ public class GameField{
         return cards;
     }
 
-    public Map<Point, Symbol> getAngles() {
+    public Map<Point, AngleCell> getAngles() {
         return angles;
     }
 
@@ -42,23 +39,26 @@ public class GameField{
         return availableCells;
     }
 
-    public void addCard(Card card, CardOrientation cardOrientation, Point position)  //Passo card o cardside nel metodo??
+    public void placeCard(Card card, CardOrientation cardOrientation, Point position)  //Passo card o cardside nel metodo??
     {
-        cards.put(position, card);
+        addCard(card, cardOrientation, position);
 
-        List<Point> surroundingPositions;
-        /*
-        surroundingPositions = new ArrayList.of(
-                new Point((int) (position.getX() - 1), (int) (position.getY() + 1)),  // up left
-                new Point((int) (position.getX() + 1), (int) (position.getY() + 1)),  // up right
-                new Point((int) position.getX() - 1, (int) position.getY() - 1),  // down left
-                new Point((int) position.getX() + 1, (int) position.getY() - 1)   // down right
+    /*    addFreePositions(card, cardOrientation, position){
+            if()
+        }*/
+
+
+  /*     surroundingPositions = new ArrayList.of(
+                new Point( (), (position.getY() + 1)),  // up left
+                new Point( (position.getX() + 1), (position.getY() + 1)),  // up right
+                new Point( position.getX() - 1,  (position.getY() - 1)),  // down left
+                new Point((int) position.getX() + 1, (position.getY() - 1))   // down right
         );
 
         // Verifica delle posizioni circostanti e aggiunta alle celle disponibili
-        for (Point surroundingPosition : surroundingPositions) {
-            if (!angles.containsKey(surroundingPosition) && card.getSide(cardOrientation).getA != HIDDEN) {
-                availableCells.add(surroundingPosition);
+        for (AnglePosition angle : AnglePosition.values()) {
+            if(currentSide.getSymbolFromAngle(angle) != Symbol.HIDDEN){
+                angles.put(position.sum(angle.getRelativePosition()), AngleCell(position))
             }
         }
 
@@ -68,9 +68,28 @@ public class GameField{
         angles.put(new Point((int) position.getX() + 1, (int) position.getY() + 1), cardOrientation.getClass(UP_RIGHT));
         angles.put(new Point((int) position.getX() - 1, (int) position.getY() - 1), cardOrientation.getClass(DOWN_LEFT));
         angles.put(new Point((int) position.getX() + 1, (int) position.getY() - 1), cardOrientation.getClass(DOWN_RIGHT));
-    */
+*/
     }
 
+    private void addCard(Card card, CardOrientation orientation, Point position){
+
+        CardSide currentSide = card.getSide(orientation);
+
+        this.cards.put(position, card);
+
+        for (AnglePosition angle : AnglePosition.values()) {
+            if(currentSide.getSymbolFromAngle(angle) != Symbol.HIDDEN){
+                AngleCell newCell = new AngleCell(position, currentSide.getSymbolFromAngle(angle));
+                angles.put(position.sum(angle.getRelativePosition()), newCell);
+            }
+        }
+    }
+
+    private void addFreePositions(Card card, CardOrientation orientation, Point position){
+
+    }
+
+   // private void updateCounters(CardSide currentSide, card.getSide(cardOrientation);
     //manca metodo che salva in SymbolCounters il numero di Symbol sul field (?)
 
     private class AngleCell{
