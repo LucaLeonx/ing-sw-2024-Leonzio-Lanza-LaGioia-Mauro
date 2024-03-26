@@ -4,6 +4,8 @@ import java.util.*;
 
 public class CardSide {
 
+    private final RequirementFunction  playingRequirements;
+    private final RewardFunction  playingReward;
     private final Set<Symbol> centerSymbol;
     private final Map<AnglePosition,Symbol> angles;
     // Modificare metodo costruttore, le strutture dati non le deve prendere in input ma le deve creare lui!!!!
@@ -14,9 +16,20 @@ public class CardSide {
      * @param centerSymbol - symbols displayed in the centre of the card
      * @param angles -
      */
-    public CardSide(Set<Symbol> centerSymbol, Map<AnglePosition,Symbol> angles){
+    public CardSide(Set<Symbol> centerSymbol, Map<AnglePosition,Symbol> angles, RequirementFunction playingrequirements, RewardFunction playingreward){
         this.centerSymbol = new HashSet<Symbol>(centerSymbol);
         this.angles = new HashMap<AnglePosition,Symbol>(angles);
+        this.playingRequirements = playingrequirements;
+        this.playingReward = playingreward;
+    }
+
+
+    public RequirementFunction getPlayingRequirements() {
+        return this.playingRequirements;
+    }
+
+    public RewardFunction getPlayingReward() {
+        return this.playingReward;
     }
 
     /**
