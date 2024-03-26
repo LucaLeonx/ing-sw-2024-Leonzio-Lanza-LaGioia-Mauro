@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.card;
 
 public class ObjectiveCard {
-    private RewardFunction rewardFunction;
+    private final RewardFunction rewardFunction;
 
     public ObjectiveCard(RewardFunction rewardFunction) {
         this.rewardFunction = rewardFunction;
