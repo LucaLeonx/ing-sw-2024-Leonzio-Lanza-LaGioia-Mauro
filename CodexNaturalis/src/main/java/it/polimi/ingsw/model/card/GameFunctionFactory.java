@@ -27,5 +27,15 @@ public abstract class GameFunctionFactory {
     public static RewardFunction
 
 
+    public static RewardFunction createCountSymbolsFunction(Symbol symbol){
+        return new RewardFunction() {
+            @Override
+            public int getPoints(GameField field) {
+                return field.getCounter(symbol);
+            }
+        };
+    }
+
+
 
 }

@@ -35,6 +35,12 @@ public class Player {
        this.cardsInHand.add(newCard);
     }
 
+    /**
+     * Remove a card from the hand. It is called when player plays a card.
+     * It Requires that there are 3 cards in player's hand.
+     * @param idCard
+     * @throws InvalidCardException called when the player doesn't have the card he was supposed to play
+     */
     public void removeCard(int idCard) throws InvalidCardException {
         int position = -1;
         for(int i=0; i<3; i++)
