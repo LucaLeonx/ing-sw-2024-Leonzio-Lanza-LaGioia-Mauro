@@ -89,14 +89,14 @@ CardSide -r- "0..3" Symbol : -centerSymbols
 CardSide -u-* "4" AnglePosition : - angles<AnglePosition, Symbol>
 !endsub
 !startsub FUNCTIONS
-'Consider making Map<Symbol, int> an object with Stream interface
+'Consider making Map<Symbol, Integer> an object with Stream interface
 abstract class GameFunctionFactory <<utility>> {
     + createPointsRewardFunction(points : int) : RewardFunction {static}
-    + createCountSymbolsGroupFunction(symbolOccurrences : Map<Symbol, int> {static}
+    + createCountSymbolsGroupFunction(symbolOccurrences : Map<Symbol, Integer> {static}
     + createCountSymbolsFunction(symbol : Symbol) : RewardFunction {static}
     + createCoveredAnglesFunction() : RewardFunction {static}
     + createPatternMatchFunction(pattern : Pattern) : RewardFunction {static}
-    + createRequiredSymbolsFunction(requiredSymbols : Map<Symbol, int>) : RequirementFunction {static}
+    + createRequiredSymbolsFunction(requiredSymbols : Map<Symbol, Integer>) : RequirementFunction {static}
 }
 
 interface RewardFunction {
