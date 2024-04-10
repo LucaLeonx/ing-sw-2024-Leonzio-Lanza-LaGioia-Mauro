@@ -1,13 +1,10 @@
 package it.polimi.ingsw.model.map;
 
 import java.util.*;
-//import java.awt.Point;
 import java.lang.Math;
 
 
 import it.polimi.ingsw.model.card.*;
-
-import javax.swing.plaf.synth.SynthUI;
 
 
 public class GameField{
@@ -16,7 +13,7 @@ public class GameField{
     private Map<Symbol, Integer> symbolCounters;
     private HashSet<Point> availableCells;
 
-    public GameField(){ //constructor of the Field with initial card
+    public GameField(){ 
         this.cards = new HashMap<>();
         this.angles= new HashMap<>();
         this.symbolCounters = new HashMap<>();

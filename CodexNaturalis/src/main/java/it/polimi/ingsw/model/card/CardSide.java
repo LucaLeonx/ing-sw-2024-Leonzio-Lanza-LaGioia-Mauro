@@ -16,11 +16,11 @@ public class CardSide {
      * @param centerSymbol - symbols displayed in the centre of the card
      * @param angles -
      */
-    public CardSide(Set<Symbol> centerSymbol, Map<AnglePosition,Symbol> angles, RequirementFunction playingrequirements, RewardFunction playingreward){
+    public CardSide(Set<Symbol> centerSymbol, Map<AnglePosition,Symbol> angles, RequirementFunction playingRequirements, RewardFunction playingReward){
         this.centerSymbol = new HashSet<Symbol>(centerSymbol);
         this.angles = new HashMap<AnglePosition,Symbol>(angles);
-        this.playingRequirements = playingrequirements;
-        this.playingReward = playingreward;
+        this.playingRequirements = playingRequirements;
+        this.playingReward = playingReward;
     }
 
 

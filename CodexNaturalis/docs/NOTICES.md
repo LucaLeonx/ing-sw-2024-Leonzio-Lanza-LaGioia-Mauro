@@ -15,11 +15,11 @@ Add a (really) brief description to each diagram, in English.
 
 Add a folder "deliverables" where to place the diagrams
 (you may add additional UML diagrams as well). Extra Sequence Diagrams
-(other phases, communication between Model, View and Controller)
+(other phases, communication between Model, View and Controller) are welcome
 
 Format: .pdf or .png
 
 Useful functions to have:
 - ping()
 - login(LoginInfo)
-- 
+- ...

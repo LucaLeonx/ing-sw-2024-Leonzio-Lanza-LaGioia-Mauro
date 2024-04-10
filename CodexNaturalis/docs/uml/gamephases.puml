@@ -33,6 +33,7 @@ PlayLastTurn : UpdatePoints()
 PlayLastTurn : DrawCard()
 PlayLastTurn : evaluateLastPlayer()
 
+EvaluateScore : evaluateObjectives()
 EvaluateScore : findWinner()
 
 
