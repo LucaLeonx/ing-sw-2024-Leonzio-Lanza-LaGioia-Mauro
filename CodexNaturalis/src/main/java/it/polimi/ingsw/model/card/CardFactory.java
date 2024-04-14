@@ -4,6 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 import com.google.gson.Gson;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonParseException;
+
+import static it.polimi.ingsw.model.card.GameFunctionFactory.createPointsRewardFunction;
 
 public abstract class CardFactory {
 
@@ -34,4 +38,15 @@ public abstract class CardFactory {
         return List.of();
     }
 
+}
+
+class RequirementFuncDeserializer implements JsonDeserializer<RequirementFunction>{
+   public RequirementFunction deserialize() throws JsonParseException {
+        return createRequiredFunction(true);
+   }
+}
+class RewardFuncDeserializer implements JsonDeserializer<RewardFunction>{
+    public RewardFunction deserialize() throws JsonParseException{
+        return createPointsRewardFunction(0);
+    }
 }
