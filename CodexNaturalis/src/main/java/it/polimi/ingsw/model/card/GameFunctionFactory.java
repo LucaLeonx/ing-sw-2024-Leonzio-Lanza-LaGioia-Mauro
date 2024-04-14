@@ -50,9 +50,5 @@ public abstract class GameFunctionFactory {
                 }
                     // return floor(field.getCounter(symbolOccurrences.keySet().stream().findFirst())/3); //stream().limit(1).collect(collector)
             };
-        }
     }
-
-
-
 }
