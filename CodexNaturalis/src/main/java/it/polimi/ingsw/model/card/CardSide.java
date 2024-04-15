@@ -8,8 +8,6 @@ public class CardSide {
     private final RewardFunction  playingReward;
     private final Set<Symbol> centerSymbol;
     private final Map<AnglePosition, Symbol> angles;
-    // Modificare metodo costruttore, le strutture dati non le deve prendere in input ma le deve creare lui!!!!
-    // Come passiamo le stutture dati al costruttore? Chi le crea?
 
     /**
      * Class constructor

@@ -54,7 +54,7 @@ public class GameField{
 
         // Verifica delle posizioni circostanti e aggiunta alle celle disponibili
         for (AnglePosition angle : AnglePosition.values()) {
-            if(currentSide.getSymbolFromAngle(angle) != Symbol.HIDDEN){
+                if(currentSide.getSymbolFromAngle(angle) != Symbol.HIDDEN){
                 angles.put(position.sum(angle.getRelativePosition()), AngleCell(position))
             }
         }

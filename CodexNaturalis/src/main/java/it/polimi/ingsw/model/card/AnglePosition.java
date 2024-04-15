@@ -23,8 +23,8 @@ public enum AnglePosition {
     }
 
     /**
-     * Returns the position of the corrisponding angle on the GameField, relative to a card
-     * @return The position of the corrisponding angle on the GameField, relative to a card
+     * Returns the position of the corresponding angle on the GameField, relative to a card
+     * @return The position of the corresponding angle on the GameField, relative to a card
      */
     public Point getRelativePosition(){
         return relativePosition;
