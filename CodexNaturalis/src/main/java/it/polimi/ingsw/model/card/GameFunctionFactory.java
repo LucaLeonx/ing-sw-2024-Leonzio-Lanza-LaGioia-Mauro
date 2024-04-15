@@ -58,7 +58,7 @@ public abstract class GameFunctionFactory {
             @Override
 
             public int getPoints(GameField field) {
-
+                return 0;
             }
         };
     }
@@ -189,28 +189,30 @@ public abstract class GameFunctionFactory {
                     PositionOfAngleCard=new Point(2,-2);
                 }
 
+
+                for(Point pField: field.getCards().keySet())
+                {
+                    for(int i=0; i<downmost.size(); i++) {
+                        if (downmost.get(i).x() == pField.x()) {
+                            if (pField.y() < downmost.get(i).y()) {
+                                downmost.remove(i);
+                                downmost.add(i, new Point(pField.x(), pField.y()));
+                            }
+                            if (pField.y() > topmost.get(i).y()) {
+                                topmost.remove(i);
+                                topmost.add(i, new Point(pField.x(), pField.y()));
+                            }
+                            break;
+                        }
+                        // If I don't find any points already in the arraylist that are on that column
+                        // we add the point to both arraylist at the bottom.
+                        topmost.add(new Point(pField.x(), pField.y()));
+                        downmost.add(new Point(pField.x(), pField.y()));
+                    }
+                }
+
                 if(angle==AnglePosition.UP_RIGHT || angle==AnglePosition.UP_LEFT)
                 {
-                    for(Point pField: field.getCards().keySet())
-                    {
-                        for(int i=0; i<downmost.size(); i++) {
-                            if (downmost.get(i).x() == pField.x()) {
-                                if (pField.y() < downmost.get(i).y()) {
-                                    downmost.remove(i);
-                                    downmost.add(i, new Point(pField.x(), pField.y()));
-                                }
-                                if (pField.y() > topmost.get(i).y()) {
-                                    topmost.remove(i);
-                                    topmost.add(i, new Point(pField.x(), pField.y()));
-                                }
-                                break;
-                            }
-                            // If I don't find any points already in the arraylist that are on that diagonal
-                            // we add the point to both arraylist at the bottom.
-                            topmost.add(new Point(pField.x(), pField.y()));
-                            downmost.add(new Point(pField.x(), pField.y()));
-                        }
-                    }
                     //now we start checking each column
                     Point direction=new Point(0, 4); //this is needed to update each time the temp point
                     Point temp; // A variable to go through the column
@@ -238,26 +240,6 @@ public abstract class GameFunctionFactory {
 
                 else
                 {
-                    for(Point pField: field.getCards().keySet())
-                    {
-                        for(int i=0; i<downmost.size(); i++) {
-                            if (downmost.get(i).x() == pField.x()) {
-                                if (pField.y() < downmost.get(i).y()) {
-                                    downmost.remove(i);
-                                    downmost.add(i, new Point(pField.x(), pField.y()));
-                                }
-                                if (pField.y() > topmost.get(i).y()) {
-                                    topmost.remove(i);
-                                    topmost.add(i, new Point(pField.x(), pField.y()));
-                                }
-                                break;
-                            }
-                            // If I don't find any points already in the arraylist that are on that diagonal
-                            // we add the point to both arraylist at the bottom.
-                            topmost.add(new Point(pField.x(), pField.y()));
-                            downmost.add(new Point(pField.x(), pField.y()));
-                        }
-                    }
                     //now we start checking each column
                     Point direction=new Point(0, -4); //this is needed to update each time the temp point
                     Point temp; // A variable to go through the column
