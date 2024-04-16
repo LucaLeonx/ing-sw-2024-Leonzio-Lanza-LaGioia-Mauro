@@ -7,7 +7,7 @@
       "playingRequirements": true,
       "playingReward": 0,
       "centerSymbol": ["BUG"],
-      "angles": {"UP_LEFT":"BLANk" ,"UP_RIGHT":"PLANT","DOWN_LEFT":"BUG","DOWN_RIGHT":"BLANK"}
+      "angles": {"UP_LEFT":"BLANK" ,"UP_RIGHT":"PLANT","DOWN_LEFT":"BUG","DOWN_RIGHT":"BLANK"}
     },
     "back": {
       "playingRequirements":true,
