@@ -51,7 +51,9 @@ public abstract class GameFunctionFactory {
             };
     }
 
-    ///////////////////////////////////
+    //To see:
+    // 1) can we add a method .equals in point?
+    // 2) !field.getCards().containsKey(temp) i' m not to sure that this thing work as intended
 
     public static RewardFunction createCoveredAnglesFunction(){
         return new RewardFunction() {
