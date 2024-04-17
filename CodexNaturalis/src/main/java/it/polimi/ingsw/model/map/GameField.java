@@ -85,10 +85,6 @@ public class GameField{
         }
 
 
-
-
-    };
-
     private class AngleCell{
         private final Stack<Point> attachedCardsPosition; //there is always a maximum of 2 symbols
         private Symbol topSymbol;
