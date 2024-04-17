@@ -7,10 +7,10 @@ import it.polimi.ingsw.model.card.*;
 
 
 public class GameField{
-    private Map<Point, Card> cards;
-    private Map<Point, AngleCell> angles;
-    private Map<Symbol, Integer> symbolCounters;
-    private HashSet<Point> availableCells;
+    private final Map<Point, Card> cards;
+    private final Map<Point, AngleCell> angles;
+    private final Map<Symbol, Integer> symbolCounters;
+    private final HashSet<Point> availableCells;
 
     public GameField(){
         this.cards = new HashMap<>();
