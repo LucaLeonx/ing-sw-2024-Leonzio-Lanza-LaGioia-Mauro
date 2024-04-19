@@ -46,7 +46,7 @@
     "back": {
       "playingRequirements":true,
       "playingReward": 0,
-      "centerSymbol ": [] ,
+      "centerSymbol": [] ,
       "angles": {"UP_LEFT":"BUG","UP_RIGHT":"ANIMAL","DOWN_LEFT":"MUSHROOM","DOWN_RIGHT":"PLANT"}
     }
   },

@@ -44,6 +44,7 @@
     - Server gives randomly to a player his/her colour.
     - Server gives to players
         a) 2 resource cards
+
         b) 1 gold card
         c) initial card 
         d) information about the visible cards and deck 
@@ -65,8 +66,8 @@
 
 ## Player draws
     - Player decides from which deck to draw, cmd draw(drawable) drawable enum: rd, gd, gc1, gc2, rc1, rc2.
-    - Iff the selected drawable was gc1, gc2, rc1, rc2, we need to
-        a) refill the table locally in the server 
+    - If the selected drawable was gc1, gc2, rc1, rc2, we need to
+        a) refill the table locally in 
         b) updates the cards in the hand of the player
     - Server sends to each player the new visible cards (and the back of the cards in the hand of the player?)
     - Server gives information to all player about whose turn is next: (Ste, Luca, *Gio*, Simo) 

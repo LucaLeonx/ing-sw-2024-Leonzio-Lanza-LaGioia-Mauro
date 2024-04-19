@@ -2,10 +2,10 @@ package it.polimi.ingsw.model.card;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.lang.reflect.Type;
 import java.util.*;
-import com.google.gson.Gson;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonParseException;
+
+import com.google.gson.*;
 
 import static it.polimi.ingsw.model.card.GameFunctionFactory.createPointsRewardFunction;
 
@@ -40,10 +40,15 @@ public abstract class CardFactory {
 
 }
 
-class RequirementFuncDeserializer implements JsonDeserializer<RequirementFunction>{
+class RequirementFuncDeserializer implements JsonDeserializer<RequirementFunction>{ @Override
    public RequirementFunction deserialize() throws JsonParseException {
         return createRequiredFunction(true);
    }
+
+    @Override
+    public RequirementFunction deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        return null;
+    }
 }
 class RewardFuncDeserializer implements JsonDeserializer<RewardFunction>{
     public RewardFunction deserialize() throws JsonParseException{
