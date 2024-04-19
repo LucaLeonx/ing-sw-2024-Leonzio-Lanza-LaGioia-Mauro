@@ -2,12 +2,13 @@ package it.polimi.ingsw.model.card;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.*;
-
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonParseException;
 
 import static it.polimi.ingsw.model.card.GameFunctionFactory.createPointsRewardFunction;
+import static it.polimi.ingsw.model.card.GameFunctionFactory.createRequiredSymbolsFunction;
 
 public abstract class CardFactory {
 
@@ -22,8 +23,7 @@ public abstract class CardFactory {
 
 //
 
-    private static RandomPicker<Card> getInitialcard() throws FileNotFoundException {
-        //scrivere CustomDeserialization per RequiredFunction e RewardFunction
+    public static RandomPicker<Card> getInitialcard() throws FileNotFoundException {
         FileReader reader= new FileReader("\\JSONfiles\\Initial.json");
         Gson gson = new Gson();
 
@@ -40,17 +40,13 @@ public abstract class CardFactory {
 
 }
 
-class RequirementFuncDeserializer implements JsonDeserializer<RequirementFunction>{ @Override
+abstract class RequirementFuncDeserializer implements JsonDeserializer<RequirementFunction>{
    public RequirementFunction deserialize() throws JsonParseException {
-        return createRequiredFunction(true);
+       HashMap<Symbol,Integer> emptyMap = new HashMap<>();
+       return createRequiredSymbolsFunction(emptyMap);
    }
-
-    @Override
-    public RequirementFunction deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        return null;
-    }
 }
-class RewardFuncDeserializer implements JsonDeserializer<RewardFunction>{
+abstract class RewardFuncDeserializer implements JsonDeserializer<RewardFunction>{
     public RewardFunction deserialize() throws JsonParseException{
         return createPointsRewardFunction(0);
     }
