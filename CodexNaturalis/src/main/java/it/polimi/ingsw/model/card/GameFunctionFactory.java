@@ -104,7 +104,7 @@ public abstract class GameFunctionFactory {
                     {
                        temp=new Point(leftmost.get(i).x(), leftmost.get(i).y());
                         NOC=0;
-                        while(!temp.equals(rightmost.get(i))
+                        while(!temp.equals(rightmost.get(i)))
                         {
                             if(!field.getCards().containsKey(temp) || field.getCards().get(temp).getCardColor()!=color_pattern)
                                 NOC=0;
@@ -146,7 +146,7 @@ public abstract class GameFunctionFactory {
                     {
                         temp=new Point(leftmost.get(i).x(), leftmost.get(i).y());
                         NOC=0;
-                        while(!temp.equals(rightmost.get(i))
+                        while(!temp.equals(rightmost.get(i)))
                         {
                             if(!field.getCards().containsKey(temp) || field.getCards().get(temp).getCardColor()!=color_pattern)
                                 NOC=0;
@@ -162,7 +162,7 @@ public abstract class GameFunctionFactory {
             }
         };
     }
-
+/*
     public static RewardFunction createBlockPatternMatchFunction(AnglePosition angle, CardColor color_block , CardColor color_Angle){
         return new RewardFunction() {
             @Override
@@ -222,7 +222,7 @@ public abstract class GameFunctionFactory {
                     {
                         temp=new Point(downmost.get(i).x(), downmost.get(i).y());
                         NOC=0;
-                        while(!temp.equals(topmost.get(i))
+                        while(!temp.equals(topmost.get(i)))
                         {
                             if(!field.getCards().containsKey(temp) || field.getCards().get(temp).getCardColor()!=color_block)
                                 NOC=0;
@@ -249,7 +249,7 @@ public abstract class GameFunctionFactory {
                     {
                         temp=new Point(topmost.get(i).x(), topmost.get(i).y());
                         NOC=0;
-                        while(!temp.equals(downmost.get(i))
+                        while(!temp.equals(downmost.get(i)))
                         {
                             if(!field.getCards().containsKey(temp) || field.getCards().get(temp).getCardColor()!=color_block)
                                 NOC=0;
