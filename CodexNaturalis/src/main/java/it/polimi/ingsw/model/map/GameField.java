@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.map;
 
 import java.util.*;
-import java.lang.Math;
 
 import it.polimi.ingsw.model.card.*;
 
@@ -24,8 +23,15 @@ public class GameField{
         return cards;
     }
 
-    public Map<Point, AngleCell> getAngles() {
-        return angles;
+    public Map<Point, Symbol> getAngles() { //creating a new Hash up to return only position and TopSymbol
+        Map <Point,Symbol> anglePositions= new HashMap<>();
+        for (Point point : angles.keySet()) {
+            AngleCell angleCell=angles.get(point);
+            Symbol topSymbol=angleCell.topSymbol;
+            anglePositions.put(point,topSymbol);
+        }
+
+        return anglePositions;
     }
 
     public int getCounter(Symbol symbol){  //returns the number of Symbol in Gamefield
@@ -40,11 +46,7 @@ public class GameField{
     {
         addCard(card, cardOrientation, position);
         updateCounters(position);
-
-    /*    addFreePositions(card, cardOrientation, position){
-            if()
-        }*/
-
+        updateAvailableCells(card);
     }
 
     private void addCard(Card card, CardOrientation orientation, Point position){
@@ -68,21 +70,32 @@ public class GameField{
                 Symbol topSymbol= angleCell.getTopSymbol();
                 Symbol replacedSymbol = angleCell.getBottomSymbol();
 
-                if(symbolCounters.containsKey(topSymbol)) {
-                    symbolCounters.put(topSymbol, symbolCounters.get(topSymbol) + 1);
-                }
-                else {
-                    symbolCounters.put(topSymbol, 1);
-                }
 
                 if (replacedSymbol != topSymbol) {
+                    if(symbolCounters.containsKey(topSymbol)) {
+                        symbolCounters.put(topSymbol, symbolCounters.get(topSymbol) + 1);
+                    }
+                    else {
+                        symbolCounters.put(topSymbol, 1);
+                    }
                     symbolCounters.put(replacedSymbol, symbolCounters.get(replacedSymbol) - 1);
                 }
 
+                //else if replaced symbol is equal to top symbol we don't need to update the number of elements
+
+        }
+
         }
 
 
+
+    private void updateAvailableCells(Card card){
+        for (AnglePosition angle : AnglePosition.values()) {
+
         }
+
+        }
+
 
 
     private class AngleCell{
