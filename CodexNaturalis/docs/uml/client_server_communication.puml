@@ -5,6 +5,7 @@ autonumber
 
 Client --> Server : ConnectToServer(url : String)
 'Es. tcp://localhost:2048
+
 Server --> Client : sendResponse(code : Accepted)
 
 alt Success
