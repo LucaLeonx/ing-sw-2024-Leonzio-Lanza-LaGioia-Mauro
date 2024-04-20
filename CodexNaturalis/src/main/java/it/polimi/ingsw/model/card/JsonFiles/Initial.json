@@ -1,4 +1,4 @@
-{"card":
+
 [
   {
     "id": 81,
@@ -99,6 +99,5 @@
       "angles": {"UP_LEFT": "MUSHROOM","UP_RIGHT":"ANIMAL","DOWN_LEFT":"PLANT","DOWN_RIGHT":"BUG"}
     }
   }
-
-]}
+]
 

@@ -160,7 +160,7 @@ public abstract class GameFunctionFactory {
             }
         };
     }
-
+/*
     public static RewardFunction createBlockPatternMatchFunction(AnglePosition angle, CardColor color_block , CardColor color_Angle){
         return new RewardFunction() {
             @Override

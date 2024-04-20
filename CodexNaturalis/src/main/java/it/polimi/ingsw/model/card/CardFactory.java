@@ -24,7 +24,7 @@ public abstract class CardFactory {
 //
 
     public static RandomPicker<Card> getInitialcard() throws FileNotFoundException {
-        FileReader reader= new FileReader("\\JSONfiles\\Initial.json");
+        FileReader reader= new FileReader("/home/luca/Documents/Projects/JavaProjects/ng-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/model/card/JsonFiles/Initial.json");
         Gson gson = new Gson();
 
         Card[] cards = gson.fromJson(reader,Card[].class);
