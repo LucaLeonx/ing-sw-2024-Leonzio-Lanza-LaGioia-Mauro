@@ -1,0 +1,89 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Client --> Server : ConnectToServer(url : String)
+'Es. tcp://localhost:2048
+Server --> Client : sendResponse(code : Accepted)
+
+alt Success
+
+    Client --> Server : registerUser(nickname : String)
+    Server --> Client : sendResponse(code : Accepted)
+
+else User with the same nickname registered
+    Server --> Client : sendResponse(code : DuplicatedUsername)
+    Client --> Server : registerUser(newNickname)
+end
+
+opt User was already in a Game \n(either playing or waiting to start)
+    Server --> Client : addUserToGame(nickname, gameId)
+end
+
+group periodically
+    Client --> Server : requestGameBoard()
+    Server --> Client : sendGameBoard()
+end
+
+opt User creates a new game
+    Client --> Server : createGame(name, requiredPlayersNum)
+    Server --> Client : sendResponse(code : Accepted, payload : gameId)
+
+end
+Client --> Server : joinGame(gameId)
+note bottom: When a User creates a Game, it joins it automatically. \nDuring updateGameBoard() the game is published to other players
+
+alt Successful join
+    Server --> Client : sendResponse(code : Accepted)
+    Server --> Server : updateGameBoard()
+else Maximum number of players reached \n(someone was quicker to join)
+    Server --> Client : sendResponse(code : MaximumPlayersNumberReached)
+end
+
+opt Game has reached the required number of players
+    Server --> Server : startGame(gameId)
+    Server --> Server : updateGameBoard()
+end
+
+newpage
+
+'Game initialization
+
+Server --> Client : sendPlayerSetupInformation()
+note left : Sent setup info: 2 resource cards, 1 gold card, \ninitial card, 2 objective cards
+loop On invalid move
+Client --> Server : sendSetupChoice(initialCardSide, objectiveCard)
+Server --> Client : sendResponse(code : InvalidChoice)
+end
+Server --> Client : sendResponse(code : Accepted)
+
+
+newpage
+
+'Player plays
+Server --> Client : sendGameInfo()
+note right : information include players maps, number of points, visible cards to draw
+note bottom : client checks to be the current player and checks the free points on its map
+
+loop On invalid move
+Client --> Server : sendCardToPlay(cardId, Side, Point)
+Server --> Client : sendResponse(core : InvalidMove)
+end
+Server --> Client : sendResponse(code : Accepted)
+note bottom : Client draws locally
+
+loop on invalid move
+Client --> Server : sendDrawCommand(card, deckCode)
+Server --> Client : sendResponse(code : InvalidDraw)
+end
+
+Server --> Client : sendResponse(code : Accepted)
+Server --> Client : sendGameInfo()
+note right : Update for other clients
+
+
+
+
+
+@enduml
