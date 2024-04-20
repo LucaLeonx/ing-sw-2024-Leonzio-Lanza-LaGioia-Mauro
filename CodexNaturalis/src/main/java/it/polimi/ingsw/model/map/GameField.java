@@ -23,8 +23,15 @@ public class GameField{
         return cards;
     }
 
-    public Map<Point, AngleCell> getAngles() {
-        return angles;
+    public Map<Point, Symbol> getAngles() { //creating a new Hash up to return only position and TopSymbol
+        Map <Point,Symbol> anglePositions= new HashMap<>();
+        for (Point point : angles.keySet()) {
+            AngleCell angleCell=angles.get(point);
+            Symbol topSymbol=angleCell.topSymbol;
+            anglePositions.put(point,topSymbol);
+        }
+
+        return anglePositions;
     }
 
     public int getCounter(Symbol symbol){  //returns the number of Symbol in Gamefield
