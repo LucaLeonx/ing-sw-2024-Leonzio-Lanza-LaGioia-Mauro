@@ -48,6 +48,38 @@ end
 
 newpage
 
+'Game initialization
+
+Server --> Client : sendPlayerSetupInformation()
+note left : Sent setup info: 2 resource cards, 1 gold card, \ninitial card, 2 objective cards
+loop On invalid move
+Client --> Server : sendSetupChoice(initialCardSide, objectiveCard)
+Server --> Client : sendResponse(code : InvalidChoice)
+
+
+newpage
+
+'Player plays
+Server --> Client : sendGameInfo()
+note right : information include players maps, number of points, visible cards to draw
+note bottom : client checks to be the current player and checks the free points on its map
+
+loop On invalid move
+Client --> Server : sendCardToPlay(cardId, Side, Point)
+Server --> Client : sendResponse(core : InvalidMove)
+end
+Server --> Client : sendResponse(code : Accepted)
+note bottom : Client draws locally
+
+loop on invalid move
+Client --> Server : sendDrawCommand(card, deckCode)
+Server --> Client : sendResponse(code : InvalidDraw)
+end
+
+Server --> Client : sendResponse(code : Accepted)
+Server --> Client : sendGameInfo()
+note right : Update for other clients
+
 
 
 

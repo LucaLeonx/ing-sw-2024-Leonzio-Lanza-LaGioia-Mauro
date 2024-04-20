@@ -17,7 +17,6 @@ public class GameField{
         this.angles= new HashMap<>();
         this.symbolCounters = new HashMap<>();
         this.availableCells = new HashSet<>();
-
     }
 
     public Map<Point, Card> getCards() {
