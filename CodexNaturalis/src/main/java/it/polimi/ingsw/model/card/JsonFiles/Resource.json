@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "color": "RED",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "FUNGI",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "FUNGI",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
+  },
+  {
+    "id": 2,
+    "color": "RED",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "FUNGI",
+        "UP_RIGHT": "FUNGI",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  }
+]

@@ -6,8 +6,8 @@ package it.polimi.ingsw.model.card;
 public enum Symbol {
     PLANT,
     ANIMAL,
-    BUG,
-    MUSHROOM,
+    INSECT,
+    FUNGI,
     QUILL,
     INKWELL,
     MANUSCRIPT,

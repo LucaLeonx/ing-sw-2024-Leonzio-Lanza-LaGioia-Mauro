@@ -38,15 +38,99 @@ public abstract class CardFactory {
         return  new RandomPicker<Card>(Arrays.asList(card));
     }
 
-    //private static CardSide createBackSide(Symbol centerSymbol){}
+    public static RandomPicker<Card> getResourceCards() throws FileNotFoundException{
+        FileReader reader= new FileReader("src/main/java/it/polimi/ingsw/model/card/JsonFiles/Resource.json");
+        GsonBuilder builder = new GsonBuilder();
 
+        builder.registerTypeAdapter(Card[].class,new ResourceCardAdapter());
+        Gson gson = builder.create();
+
+        Card[] card = gson.fromJson(reader,Card[].class);
+        return  new RandomPicker<Card>(Arrays.asList(card));
+
+    }
     private static List<Card> getCardList(){
         return List.of();
     }
 
 
 }
+class ResourceCardAdapter extends TypeAdapter<Card[]>{
+    public  Card[] read (JsonReader reader) throws IOException {
+        Card[] resourcesCard = new Card[40];
+        int i = 0;
+        String typeName = null;
 
+        reader.beginArray();
+
+        while (reader.hasNext()) {
+            int id = 0,reward = 0;
+            CardColor col = null;
+            CardSide front = null;
+            CardSide back = new CardSide(
+                    new HashSet<Symbol>(),
+                    Map.of(AnglePosition.UP_LEFT, Symbol.BLANK,
+                            AnglePosition.UP_RIGHT, Symbol.BLANK,
+                            AnglePosition.DOWN_LEFT, Symbol.BLANK,
+                            AnglePosition.DOWN_RIGHT, Symbol.BLANK),
+                    createRequiredSymbolsFunction(new HashMap<Symbol,Integer>()),
+                    createPointsRewardFunction(0)
+            );
+
+            reader.beginObject();
+            JsonToken token = reader.peek();
+            if(token.equals(JsonToken.NAME)){
+                typeName = reader.nextName();
+            }
+            if(typeName.equals("id")){
+                id = reader.nextInt();
+                typeName = reader.nextName();
+            }
+            if(typeName.equals("color")){
+                col = CardColor.valueOf(reader.nextString());
+                typeName = reader.nextName();
+            }
+            if(typeName.equals("front")){
+                Map<AnglePosition,Symbol> angle = new HashMap<AnglePosition,Symbol>();
+                reader.beginObject();
+
+                reader.nextName(); //RewardFunction
+                reward = reader.nextInt();
+
+                reader.nextName(); //angle
+                reader.beginObject();
+                token = reader.peek();
+                while(!token.equals(JsonToken.END_OBJECT)){
+                    angle.put(AnglePosition.valueOf(reader.nextName()),Symbol.valueOf(reader.nextString()));
+                    token = reader.peek();
+                }
+                reader.endObject();
+                //Create the front object
+                front = new CardSide(
+                        new HashSet<Symbol>(),
+                        angle,
+                        createRequiredSymbolsFunction(new HashMap<Symbol,Integer>()),
+                        createPointsRewardFunction(reward)
+                );
+
+                reader.endObject();
+                typeName = reader.nextName();
+            }
+
+            resourcesCard[i] = new Card(id,col,front,back);
+            i++;
+            if(token.equals(JsonToken.END_OBJECT)){
+                reader.endObject();
+            }
+        }
+        reader.endArray();
+        return resourcesCard;
+    }
+
+    public void write(JsonWriter write, Card[] card) throws IOException {
+
+    }
+}
 class InitialCardAdapter extends TypeAdapter<Card[]>{
     public  Card[] read (JsonReader reader) throws IOException{
         Card[] array = new Card[6];
@@ -94,6 +178,7 @@ class InitialCardAdapter extends TypeAdapter<Card[]>{
                     token = reader.peek();
                 }
                 reader.endObject();
+                //Create the front object
                 front = new CardSide(
                         centerSymbols,
                         angle,
@@ -117,6 +202,7 @@ class InitialCardAdapter extends TypeAdapter<Card[]>{
                     token = reader.peek();
                 }
                 reader.endObject();
+                //Create the back object
                 back = new CardSide(
                         new HashSet<Symbol>(),
                         angle,
@@ -135,7 +221,6 @@ class InitialCardAdapter extends TypeAdapter<Card[]>{
         reader.endArray();
         return array ;
     }
-
 
     public void write(JsonWriter write, Card[] card) throws IOException {
 

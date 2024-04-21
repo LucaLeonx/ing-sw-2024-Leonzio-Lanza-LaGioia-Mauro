@@ -4,20 +4,20 @@
     "color": "WHITE",
     "front": {
       "centerSymbol": [
-        "BUG"
+        "INSECT"
       ],
       "angles": {
         "UP_LEFT": "BLANK",
         "UP_RIGHT": "PLANT",
-        "DOWN_LEFT": "BUG",
+        "DOWN_LEFT": "INSECT",
         "DOWN_RIGHT": "BLANK"
       }
     },
     "back": {
       "angles": {
-        "UP_LEFT": "MUSHROOM",
+        "UP_LEFT": "FUNGI",
         "UP_RIGHT": "PLANT",
-        "DOWN_LEFT": "BUG",
+        "DOWN_LEFT": "INSECT",
         "DOWN_RIGHT": "ANIMAL"
       }
     }
@@ -27,21 +27,21 @@
     "color": "WHITE",
     "front": {
       "centerSymbol": [
-        "MUSHROOM"
+        "FUNGI"
       ],
       "angles": {
         "UP_LEFT": "ANIMAL",
         "UP_RIGHT": "BLANK",
         "DOWN_LEFT": "BLANK",
-        "DOWN_RIGHT": "MUSHROOM"
+        "DOWN_RIGHT": "FUNGI"
       }
     },
     "back": {
       "angles": {
         "UP_LEFT": "PLANT",
         "UP_RIGHT": "ANIMAL",
-        "DOWN_LEFT": "MUSHROOM",
-        "DOWN_RIGHT": "BUG"
+        "DOWN_LEFT": "FUNGI",
+        "DOWN_RIGHT": "INSECT"
       }
     }
   },
@@ -50,7 +50,7 @@
     "color": "WHITE",
     "front": {
       "centerSymbol": [
-        "MUSHROOM",
+        "FUNGI",
         "PLANT"
       ],
       "angles": {
@@ -62,9 +62,9 @@
     },
     "back": {
       "angles": {
-        "UP_LEFT": "BUG",
+        "UP_LEFT": "INSECT",
         "UP_RIGHT": "ANIMAL",
-        "DOWN_LEFT": "MUSHROOM",
+        "DOWN_LEFT": "FUNGI",
         "DOWN_RIGHT": "PLANT"
       }
     }
@@ -75,7 +75,7 @@
     "front": {
       "centerSymbol": [
         "ANIMAL",
-        "BUG"
+        "INSECT"
       ],
       "angles": {
         "UP_LEFT": "BLANK",
@@ -87,9 +87,9 @@
     "back": {
       "angles": {
         "UP_LEFT": "PLANT",
-        "UP_RIGHT": "BUG",
+        "UP_RIGHT": "INSECT",
         "DOWN_LEFT": "ANIMAL",
-        "DOWN_RIGHT": "MUSHROOM"
+        "DOWN_RIGHT": "FUNGI"
       }
     }
   },
@@ -99,7 +99,7 @@
     "front": {
       "centerSymbol": [
         "ANIMAL",
-        "BUG",
+        "INSECT",
         "PLANT"
       ],
       "angles": {
@@ -111,8 +111,8 @@
     },
     "back": {
       "angles": {
-        "UP_LEFT": "BUG",
-        "UP_RIGHT": "MUSHROOM",
+        "UP_LEFT": "INSECT",
+        "UP_RIGHT": "FUNGI",
         "DOWN_LEFT": "PLANT",
         "DOWN_RIGHT": "ANIMAL"
       }
@@ -125,7 +125,7 @@
       "centerSymbol": [
         "PLANT",
         "ANIMAL",
-        "MUSHROOM"
+        "FUNGI"
       ],
       "angles": {
         "UP_LEFT": "BLANK",
@@ -136,10 +136,10 @@
     },
     "back": {
       "angles": {
-        "UP_LEFT": "MUSHROOM",
+        "UP_LEFT": "FUNGI",
         "UP_RIGHT": "ANIMAL",
         "DOWN_LEFT": "PLANT",
-        "DOWN_RIGHT": "BUG"
+        "DOWN_RIGHT": "INSECT"
       }
     }
   }
