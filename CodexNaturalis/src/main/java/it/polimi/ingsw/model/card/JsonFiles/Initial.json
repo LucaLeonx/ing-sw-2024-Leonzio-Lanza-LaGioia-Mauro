@@ -1,73 +1,146 @@
-
 [
   {
     "id": 81,
     "color": "WHITE",
     "front": {
-      "centerSymbol": ["BUG"],
-      "angles": {"UP_LEFT":"BLANK" ,"UP_RIGHT":"PLANT","DOWN_LEFT":"BUG","DOWN_RIGHT":"BLANK"}
+      "centerSymbol": [
+        "BUG"
+      ],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "PLANT",
+        "DOWN_LEFT": "BUG",
+        "DOWN_RIGHT": "BLANK"
+      }
     },
     "back": {
-      "angles": {"UP_LEFT": "MUSHROOM","UP_RIGHT":"PLANT","DOWN_LEFT":"BUG","DOWN_RIGHT":"ANIMAL"}
+      "angles": {
+        "UP_LEFT": "MUSHROOM",
+        "UP_RIGHT": "PLANT",
+        "DOWN_LEFT": "BUG",
+        "DOWN_RIGHT": "ANIMAL"
+      }
     }
   },
-
   {
     "id": 82,
     "color": "WHITE",
     "front": {
-      "centerSymbol":["MUSHROOM"] ,
-      "angles": {"UP_LEFT":"ANIMAL","UP_RIGHT":"BLANK","DOWN_LEFT":"BLANK","DOWN_RIGHT":"MUSHROOM"}
+      "centerSymbol": [
+        "MUSHROOM"
+      ],
+      "angles": {
+        "UP_LEFT": "ANIMAL",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "MUSHROOM"
+      }
     },
     "back": {
-      "angles": {"UP_LEFT":"PLANT" ,"UP_RIGHT":"ANIMAL","DOWN_LEFT":"MUSHROOM","DOWN_RIGHT":"BUG"}
+      "angles": {
+        "UP_LEFT": "PLANT",
+        "UP_RIGHT": "ANIMAL",
+        "DOWN_LEFT": "MUSHROOM",
+        "DOWN_RIGHT": "BUG"
+      }
     }
   },
-
   {
     "id": 83,
     "color": "WHITE",
     "front": {
-      "centerSymbol": ["MUSHROOM","PLANT"],
-      "angles": {"UP_LEFT":"BLANK","UP_RIGHT":"BLANK","DOWN_LEFT":"BLANK","DOWN_RIGHT":"BLANK"}
+      "centerSymbol": [
+        "MUSHROOM",
+        "PLANT"
+      ],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "BLANK"
+      }
     },
     "back": {
-      "angles": {"UP_LEFT":"BUG","UP_RIGHT":"ANIMAL","DOWN_LEFT":"MUSHROOM","DOWN_RIGHT":"PLANT"}
+      "angles": {
+        "UP_LEFT": "BUG",
+        "UP_RIGHT": "ANIMAL",
+        "DOWN_LEFT": "MUSHROOM",
+        "DOWN_RIGHT": "PLANT"
+      }
     }
   },
-
   {
     "id": 84,
     "color": "WHITE",
     "front": {
-      "centerSymbol": ["ANIMAL","BUG"],
-      "angles": {"UP_LEFT":"BLANK","UP_RIGHT":"BLANK","DOWN_LEFT":"BLANK","DOWN_RIGHT":"BLANK"}
+      "centerSymbol": [
+        "ANIMAL",
+        "BUG"
+      ],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "BLANK"
+      }
     },
     "back": {
-      "angles": {"UP_LEFT":"PLANT","UP_RIGHT":"BUG","DOWN_LEFT":"ANIMAL","DOWN_RIGHT":"MUSHROOM"}
+      "angles": {
+        "UP_LEFT": "PLANT",
+        "UP_RIGHT": "BUG",
+        "DOWN_LEFT": "ANIMAL",
+        "DOWN_RIGHT": "MUSHROOM"
+      }
     }
   },
   {
     "id": 85,
     "color": "WHITE",
     "front": {
-      "centerSymbol": ["ANIMAL","BUG","PLANT"],
-      "angles": {"UP_LEFT":"BLANK","UP_RIGHT":"BLANK","DOWN_LEFT":"HIDDEN","DOWN_RIGHT":"HIDDEN"}
+      "centerSymbol": [
+        "ANIMAL",
+        "BUG",
+        "PLANT"
+      ],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "HIDDEN"
+      }
     },
     "back": {
-      "angles": {"UP_LEFT": "BUG","UP_RIGHT":"MUSHROOM","DOWN_LEFT":"PLANT","DOWN_RIGHT":"ANIMAL"}
+      "angles": {
+        "UP_LEFT": "BUG",
+        "UP_RIGHT": "MUSHROOM",
+        "DOWN_LEFT": "PLANT",
+        "DOWN_RIGHT": "ANIMAL"
+      }
     }
   },
   {
     "id": 86,
     "color": "WHITE",
     "front": {
-      "centerSymbol": ["PLANT","ANIMAL","MUSHROOM"],
-      "angles":{"UP_LEFT":"BLANK","UP_RIGHT":"BLANK","DOWN_LEFT":"HIDDEN","DOWN_RIGHT":"HIDDEN"}
+      "centerSymbol": [
+        "PLANT",
+        "ANIMAL",
+        "MUSHROOM"
+      ],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "HIDDEN"
+      }
     },
     "back": {
-      "angles": {"UP_LEFT": "MUSHROOM","UP_RIGHT":"ANIMAL","DOWN_LEFT":"PLANT","DOWN_RIGHT":"BUG"}
+      "angles": {
+        "UP_LEFT": "MUSHROOM",
+        "UP_RIGHT": "ANIMAL",
+        "DOWN_LEFT": "PLANT",
+        "DOWN_RIGHT": "BUG"
+      }
     }
   }
 ]
-

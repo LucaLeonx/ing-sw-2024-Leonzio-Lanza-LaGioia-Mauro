@@ -10,7 +10,7 @@ import java.util.Optional;
 public class CardFactoryTest {
     public static void main(String[] args) throws FileNotFoundException {
 
-        RandomPicker<Card> initalCardPicker = CardFactory.getInitialcards();
+        RandomPicker<Card> initalCardPicker = CardFactory.getInitialCards();
         Optional<Card> Optcarta;
         Card carta;
 
