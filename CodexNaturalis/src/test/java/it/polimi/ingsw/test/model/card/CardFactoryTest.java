@@ -18,10 +18,12 @@ public class CardFactoryTest {
             Optcarta = initalCardPicker.extractRandomElement();
             if(Optcarta.isPresent()) {
                 carta = Optcarta.get();
-                System.out.println("id :"+ carta.getId()+ "\n" + carta.getCardColor().toString());
+                System.out.println("id :"+ carta.getId());
 
             }
         }
+
+        return;
     }
 
 }
