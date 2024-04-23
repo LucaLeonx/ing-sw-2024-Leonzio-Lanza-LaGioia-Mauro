@@ -4,6 +4,8 @@ import java.util.*;
 
 import it.polimi.ingsw.model.card.*;
 
+import javax.management.RuntimeErrorException;
+
 
 public class GameField{
     private final Map<Point, Card> cards;
@@ -29,9 +31,10 @@ public class GameField{
 
     public Map<Point, Symbol> getAngles() { //creating a new Hash up to return only position and TopSymbol
         Map <Point,Symbol> anglePositions= new HashMap<>();
+
         for (Point point : angles.keySet()) {
-            AngleCell angleCell=angles.get(point);
-            Symbol topSymbol=angleCell.topSymbol;
+            AngleCell angleCell = angles.get(point);
+            Symbol topSymbol = angleCell.topSymbol;
             anglePositions.put(point,topSymbol);
         }
 
@@ -50,7 +53,36 @@ public class GameField{
     {
         addCard(card, cardOrientation, position);
         updateCounters(position);
-        // updateAvailableCells(card);
+        updateAvailableCells(card.getSide(cardOrientation), position);
+    }
+
+    public int getCoveredAnglesNumber(Card card){
+
+        Point cardPosition;
+        int coveredAnglesNumber = 0;
+
+        try {
+            cardPosition = getCardPositionById(card.getId());
+        } catch (RuntimeException e){
+            return coveredAnglesNumber;
+        }
+
+        for(AnglePosition anglePos : AnglePosition.values()){
+
+            Point currentAnglePosition = cardPosition.sum(anglePos.getRelativePosition());
+
+            if(angles.containsKey(currentAnglePosition)){
+
+                AngleCell currentAngleCell = angles.get(currentAnglePosition);
+
+                if(currentAngleCell.getTopCardPosition().equals(cardPosition)){
+                    coveredAnglesNumber++;
+                }
+            }
+        }
+
+        return coveredAnglesNumber;
+
     }
 
     private void addCard(Card card, CardOrientation orientation, Point position){
@@ -91,11 +123,23 @@ public class GameField{
 
         }
 
+    private void updateAvailableCells(CardSide cardSide, Point cardPosition){
 
+        for(AnglePosition angle : AnglePosition.values()){
+            if(cardSide.getSymbolFromAngle(angle) != Symbol.HIDDEN){
+               Point relativeCardPosition = new Point(angle.getRelativePosition().x(), angle.getRelativePosition().y());
+               availableCells.add(cardPosition.sum(relativeCardPosition));
+            }
+        }
+    }
 
-    /* private void updateAvailableCells(Card card){
-    } */
-
+    private Point getCardPositionById(int id) {
+        return cards.entrySet().stream()
+                .filter((e) -> e.getValue().getId() == id)
+                .findFirst()
+                .map(Map.Entry::getKey)
+                .orElseThrow(RuntimeException::new);
+    }
 
 
     private class AngleCell{
@@ -125,7 +169,7 @@ public class GameField{
 
         void attachNewCard(Point position, Symbol topSymbol){
             attachedCardsPosition.add(position);
-            this.bottomSymbol=this.topSymbol;   //in this way I can save the bottom symbol to update counters correctly
+            this.bottomSymbol = this.topSymbol;   //in this way I can save the bottom symbol to update counters correctly
             this.topSymbol = topSymbol;
         }
     }
