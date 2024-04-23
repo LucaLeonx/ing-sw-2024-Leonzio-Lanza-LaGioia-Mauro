@@ -98,9 +98,9 @@ abstract class GameFunctionFactory <<utility>> {
     + createPointsRewardFunction(points : int) : RewardFunction {static}
     + createCountSymbolsGroupFunction(symbolOccurrences : Map<Symbol, Integer> {static}
     + createCountSymbolsFunction(symbol : Symbol) : RewardFunction {static}
-    + createCoveredAnglesFunction() : RewardFunction {static}
-    + createDiagonalPatternMatchFunction(isSlopePositive : boolean, color_card: CardColor) : RewardFunction {static}
-    + createBlockPatternMatchFunction(angle : AnglePosition, color_block CardColor, color_angle: CardColor), ) : RewardFunction {static}
+    + createCoveredAnglesFunction(cardId : id) : RewardFunction {static}
+    + createDiagonalPatternMatchFunction(isSlopePositive : boolean, colorCard: CardColor) : RewardFunction {static}
+    + createBlockPatternMatchFunction(angle : AnglePosition, colorBlock CardColor, colorAngle: CardColor), ) : RewardFunction {static}
     + createRequiredSymbolsFunction(requiredSymbols : Map<Symbol, Integer>) : RequirementFunction {static}
 }
 
