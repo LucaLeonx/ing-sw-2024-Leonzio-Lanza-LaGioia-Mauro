@@ -10,8 +10,17 @@ import java.util.regex.Pattern;
 
 import static java.lang.Math.floor;
 
+/**
+ * This class is a factory for the Reward and Requirement functions
+ * evaluated when playing cards
+ */
 public abstract class GameFunctionFactory {
 
+    /**
+     *
+     * @param points
+     * @return
+     */
     public static RewardFunction createPointsRewardFunction(int points) {
         return new RewardFunction() {
             @Override
@@ -51,12 +60,12 @@ public abstract class GameFunctionFactory {
         };
     }
 
-    public static RewardFunction createCoveredAnglesFunction(int cardId){
+    public static RewardFunction createCoveredAnglesFunction(int cardId, int pointsPerAngle){
         return new RewardFunction() {
             @Override
 
             public int getPoints(GameField field) {
-                return field.getCoveredAnglesNumber(cardId);
+                return field.getCoveredAnglesNumber(cardId) * pointsPerAngle;
             }
         };
     }
