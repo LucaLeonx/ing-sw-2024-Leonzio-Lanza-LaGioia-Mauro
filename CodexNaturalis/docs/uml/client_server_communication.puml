@@ -3,13 +3,13 @@
 
 autonumber
 
-Client --> Server : ConnectToServer(url : String)
+== Connection to Server ==
+Client --> Server : connectToServer(url : String)
 'Es. tcp://localhost:2048
 
 Server --> Client : sendResponse(code : Accepted)
 
 alt Success
-
     Client --> Server : registerUser(nickname : String)
     Server --> Client : sendResponse(code : Accepted)
 
@@ -30,7 +30,6 @@ end
 opt User creates a new game
     Client --> Server : createGame(name, requiredPlayersNum)
     Server --> Client : sendResponse(code : Accepted, payload : gameId)
-
 end
 Client --> Server : joinGame(gameId)
 note bottom: When a User creates a Game, it joins it automatically. \nDuring updateGameBoard() the game is published to other players
@@ -49,42 +48,38 @@ end
 
 newpage
 
-'Game initialization
+== Game initialization ==
 
 Server --> Client : sendPlayerSetupInformation()
-note left : Sent setup info: 2 resource cards, 1 gold card, \ninitial card, 2 objective cards
-loop On invalid move
+note left : Sent setup information: 2 resource cards, 1 gold card, \ninitial card, 2 objective cards
+loop On invalid setup choice
 Client --> Server : sendSetupChoice(initialCardSide, objectiveCard)
 Server --> Client : sendResponse(code : InvalidChoice)
 end
 Server --> Client : sendResponse(code : Accepted)
 
-
 newpage
 
-'Player plays
-Server --> Client : sendGameInfo()
-note right : information include players maps, number of points, visible cards to draw
-note bottom : client checks to be the current player and checks the free points on its map
+== Player plays a card ==
 
+Server --> Client : sendGameInfo()
+note right : Information includes players maps, number of points, visible cards to draw
+
+...Client checks to be the current player and \nchecks the free points on its map...
 loop On invalid move
 Client --> Server : sendCardToPlay(cardId, Side, Point)
 Server --> Client : sendResponse(core : InvalidMove)
-end
+else Valid move
 Server --> Client : sendResponse(code : Accepted)
-note bottom : Client draws locally
+end
 
-loop on invalid move
+loop On invalid move
 Client --> Server : sendDrawCommand(card, deckCode)
 Server --> Client : sendResponse(code : InvalidDraw)
-end
-
+else Valid move
 Server --> Client : sendResponse(code : Accepted)
+end
 Server --> Client : sendGameInfo()
-note right : Update for other clients
-
-
-
-
+note right : Send update to the other clients
 
 @enduml
