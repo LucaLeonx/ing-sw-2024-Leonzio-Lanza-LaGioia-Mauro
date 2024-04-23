@@ -1,0 +1,70 @@
+[
+  {
+    "id": 41,
+    "color": "RED",
+    "front": {
+      "RewardFunction":{
+        "type": "QUILL",
+        "points": 1
+      },
+      "RequiredFunction": ["FUNGI", "FUNGI", "ANIMAL"],
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "QUILL"
+      }
+    }
+  },
+  {
+    "id": 42,
+    "color": "RED",
+    "front": {
+      "RewardFunction":{
+        "type": "INKWELL",
+        "points": 1
+      },
+      "RequiredFunction": ["FUNGI", "FUNGI", "PLANT"],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "INKWELL",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+  {
+    "id": 43,
+    "color": "RED",
+    "front": {
+      "RewardFunction":{
+        "type": "MANUSCRIPT",
+        "points": 1
+      },
+      "RequiredFunction": ["FUNGI", "FUNGI", "INSECT"],
+      "angles": {
+        "UP_LEFT": "MANUSCRIPT",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
+  },
+  {
+    "id": 44 ,
+    "color": "RED",
+    "front": {
+      "RewardFunction":{
+        "type": "COVEREDANGLES",
+        "points": 2
+      },
+      "RequiredFunction": ["FUNGI", "FUNGI", "FUNGI","ANIMAL"],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  }
+]
