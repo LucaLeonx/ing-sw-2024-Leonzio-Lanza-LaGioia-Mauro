@@ -491,6 +491,177 @@
         "DOWN_RIGHT": "BLANK"
       }
     }
+  },
+  {
+    "id": 71 ,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction":{
+        "type": "INKWELL",
+        "points": 1
+      },
+      "RequiredFunction": ["INSECT", "INSECT", "PLANT"],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "INKWELL",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+  {
+    "id": 72 ,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction":{
+        "type": "MANUSCRIPT",
+        "points": 1
+      },
+      "RequiredFunction": ["INSECT", "INSECT", "ANIMAL"],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "HIDDEN",
+        "DOWN_LEFT": "MANUSCRIPT",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+  {
+    "id": 73 ,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction":{
+        "type": "INKWELL",
+        "points": 1
+      },
+      "RequiredFunction": ["INSECT", "INSECT", "FUNGI"],
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "INKWELL"
+      }
+    }
+  },
+  {
+    "id": 74 ,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction":{
+        "type": "COVERDEDANGLES",
+        "points": 2
+      },
+      "RequiredFunction": ["INSECT", "INSECT", "INSECT", "ANIMAL"],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+  {
+    "id": 75 ,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction":{
+        "type": "COVEREDANGLES",
+        "points": 2
+      },
+      "RequiredFunction": ["INSECT", "INSECT", "INSECT", "PLANT"],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
+  },
+  {
+    "id": 76 ,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction":{
+        "type": "COVEREDANGLES",
+        "points": 2
+      },
+      "RequiredFunction": ["INSECT", "INSECT", "INSECT", "FUNGI"],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "HIDDEN",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+  {
+    "id": 77 ,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction":{
+        "type": "DEFAULT",
+        "points": 3
+      },
+      "RequiredFunction": ["INSECT", "INSECT", "INSECT"],
+      "angles": {
+        "UP_LEFT": "INKWELL",
+        "UP_RIGHT": "HIDDEN",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
+  },
+  {
+    "id": 78 ,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction":{
+        "type": "DEFAULT",
+        "points": 3
+      },
+      "RequiredFunction": ["INSECT", "INSECT", "INSECT"],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "MANUSCRIPT",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
+  },
+  {
+    "id": 79 ,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction":{
+        "type": "DEFAULT",
+        "points": 3
+      },
+      "RequiredFunction": ["INSECT", "INSECT", "INSECT"],
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "HIDDEN",
+        "DOWN_LEFT": "QUILL",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+  {
+    "id": 80 ,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction":{
+        "type": "DEFAULT",
+        "points": 5
+      },
+      "RequiredFunction": ["INSECT", "INSECT", "INSECT", "INSECT", "INSECT"],
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
   }
+
 
 ]
