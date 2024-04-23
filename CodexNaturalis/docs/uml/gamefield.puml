@@ -16,27 +16,30 @@ class Point
     + sum(other : Point) : Point
     + sum(points : Point...) : Point {static}
     + sum(points : Collection<Point>) : Point {static}
-
-
 }
 
 note "Java record with extra sum() method" as N1
 N1 .. Point
 
-class GameField{
+class GameField {
     - cards: Map<Point, Card>
-    - angles: Map<Point, Symbol>
+    - angles: Map<Point, AngleCell>
     - availableCells: Set<Point>
     - symbolCounters: Map<Symbol, int>
 
-    + GameField(initialCard : Card)
+    + GameField()
     + getCards() : Map<Point, Card>
     + getAngles(): Map<Point, Symbol>
     + getCounter(symbol : Symbol) : int
-    + addCard(card : Card, orientation : CardOrientation, position : Point)
+    + placeCard(card : Card, orientation : CardOrientation, position : Point)
     + getAvailablePositions() : Set<Point>
+    - addCard(card : Card, orientation : CardOrientation, position : Point)
 }
 GameField .r..> Point : <<uses>>
+
+class AngleCell {
+
+}
 !endsub
 
 

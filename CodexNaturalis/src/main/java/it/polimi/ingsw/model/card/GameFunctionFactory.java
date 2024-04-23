@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import static java.lang.Math.floor;
 
+
 /**
  * This class is a factory for the Reward and Requirement functions
  * evaluated when playing cards

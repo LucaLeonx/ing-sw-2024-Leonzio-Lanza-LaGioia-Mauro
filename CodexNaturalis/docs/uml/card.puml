@@ -38,17 +38,17 @@ enum CardOrientation{
 }
 
 class Card {
-    -id: int
-    +Card(color: CardColor, front: CardSide, back: CardSide)
-    +getId() : int
-    +getColor() : CardColor
-    +getSide(orientation: CardOrientation) : CardSide
+    - id: int
+    + Card(color: CardColor, front: CardSide, back: CardSide)
+    + getId() : int
+    + getColor() : CardColor
+    + getSide(orientation: CardOrientation) : CardSide
 }
 
 class CardSide {
     + CardSide(centerSymbols: Collection<Symbol>, angleSymbols: Map<AnglePosition, Symbol>, requirements : RequirementFunction, reward : RewardFunction)
     + getDisplayedSymbols() : Set<Symbol>
-    + getCenterSymbols() : Set<Symbol
+    + getCenterSymbols() : List<Symbol>
     + getSymbolFromAngle(position : AnglePosition) : Symbol
     + getPlayingRequirements() : RequirementFunction
     + getPlayingReward() : RewardFunction
