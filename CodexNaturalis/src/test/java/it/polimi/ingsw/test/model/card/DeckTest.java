@@ -28,4 +28,5 @@ public class DeckTest extends TestCase{
         assertFalse(oneCardDeck.isEmpty());
         assertTrue(emptyDeck.isEmpty());
     }
+
 }
