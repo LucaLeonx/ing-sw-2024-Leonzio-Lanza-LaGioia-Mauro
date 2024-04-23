@@ -57,7 +57,7 @@ public abstract class CardFactory {
 }
 class ResourceCardAdapter extends TypeAdapter<Card[]>{
     public  Card[] read (JsonReader reader) throws IOException {
-        Card[] resourcesCard = new Card[40];
+        Card[] resourcesCard = new Card[2];
         int i = 0;
         String typeName = null;
 
@@ -114,7 +114,7 @@ class ResourceCardAdapter extends TypeAdapter<Card[]>{
                 );
 
                 reader.endObject();
-                typeName = reader.nextName();
+                //typeName = reader.nextName();
             }
 
             resourcesCard[i] = new Card(id,col,front,back);
