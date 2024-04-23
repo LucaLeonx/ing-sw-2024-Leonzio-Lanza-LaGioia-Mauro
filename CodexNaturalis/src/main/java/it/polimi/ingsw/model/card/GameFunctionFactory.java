@@ -10,8 +10,17 @@ import java.util.regex.Pattern;
 
 import static java.lang.Math.floor;
 
+/**
+ * This class is a factory for the Reward and Requirement functions
+ * evaluated when playing cards
+ */
 public abstract class GameFunctionFactory {
 
+    /**
+     * Creates a function that awards points, regardless of the field status
+     * @param points The number of points to give
+     * @return A RewardFunction that gives a fixed amount of points
+     */
     public static RewardFunction createPointsRewardFunction(int points) {
         return new RewardFunction() {
             @Override
@@ -21,6 +30,11 @@ public abstract class GameFunctionFactory {
         };
     }
 
+    /**
+     * Creates a function that awards a point for each occurrence of the specified symbol on the field.
+     * @param symbol The symbol to count on the field
+     * @return A RewardFunction that awards a point for each occurrence of the specified symbol on the field
+     */
     public static RewardFunction createCountSymbolsFunction(Symbol symbol){
         return new RewardFunction() {
             @Override
@@ -31,37 +45,51 @@ public abstract class GameFunctionFactory {
     }
 
     /**
-     * @param symbolOccurrences
-     * @return
+     * Creates a function that gives a certain number of points for each symbols' grouping found on the map.
+     * @param symbolOccurrences Specifies how many occurrences of a symbol should be present in each group
+     * @param points The number of points awarded for each group
+     * @return A function that gives a given number of points for each group of symbols present on the map
      */
-
-    public static RewardFunction createCountGroupSymbolsFunction(Map<Symbol, Integer> symbolOccurrences){
+    public static RewardFunction createCountGroupSymbolsFunction(Map<Symbol, Integer> symbolOccurrences, int points){
         return new RewardFunction() {
             @Override
 
             public int getPoints(GameField field) {
-                List<Integer> numberOfGroups = new ArrayList<>();
 
                 return symbolOccurrences.keySet().stream()
                         .mapToInt(symbol -> field.getCounter(symbol) / symbolOccurrences.get(symbol))
                         .min()
-                        .orElse(0);
+                        .orElse(0) * points;
             }
-            // return floor(field.getCounter(symbolOccurrences.keySet().stream().findFirst())/3); //stream().limit(1).collect(collector)
+
         };
     }
 
-    public static RewardFunction createCoveredAnglesFunction(){
+    /**
+     * Creates a function that gives two points  for each angle covered by a card on the map
+     * @param cardId The id of the card to search
+     * @return A function that gives two points for each angle covered by a card on the map
+     */
+    public static RewardFunction createCoveredAnglesFunction(int cardId){
         return new RewardFunction() {
             @Override
 
             public int getPoints(GameField field) {
-                return 0;
+                return field.getCoveredAnglesNumber(cardId) * 2;
             }
         };
     }
 
-    public static RewardFunction createDiagonalPatternMatchFunction(boolean angle, CardColor color_pattern)
+    /**
+     * Creates a function that awards a certain number of points for disjoint group
+     * of cards that form a diagonal pattern.
+     * @param isSlopePositive Specifies whether the diagonal pattern is from lower left to upper right or not
+     *                        (otherwise it is from lower right to upper left)
+     * @param colorPattern The color of the cards of the pattern
+     * @return A function that hat awards a certain number of points for disjoint group
+     *         of cards that form a diagonal pattern.
+     */
+    public static RewardFunction createDiagonalPatternMatchFunction(boolean isSlopePositive, CardColor colorPattern)
     {
         return new RewardFunction() {
             @Override
@@ -78,7 +106,7 @@ public abstract class GameFunctionFactory {
                 Point translationVector = new Point(0,0);
                 int slope = 0;
 
-                if(angle == true){
+                if(isSlopePositive){
                     translationVector = new Point(2, 2);
                     slope = 1;
                 }
@@ -117,7 +145,7 @@ public abstract class GameFunctionFactory {
                     temp = leftmost.get(i);
                     cardsNum = 0;
                     while (!temp.equals(rightmost.get(i))) {
-                        if (!field.getCards().containsKey(temp) || field.getCards().get(temp).getCardColor() != color_pattern) {
+                        if (!field.getCards().containsKey(temp) || field.getCards().get(temp).getCardColor() != colorPattern) {
                             cardsNum = 0;
                         } else {
                             cardsNum++;
@@ -135,6 +163,16 @@ public abstract class GameFunctionFactory {
         };
     }
 
+    /**
+     * Creates a function that awards a certain number of points for disjoint group
+     * of cards that form a "block" pattern: two card of the same color on the same column,
+     * with a third one attached to one of the angles.
+     * @param angle The angle to which the card not in the column is attached
+     * @param colorBlock The color of the cards in the same column
+     * @param colorAngle The color of the card in the angle
+     * @return a function that awards a certain number of points for disjoint group
+     *      * of cards that form a "block" pattern.
+     */
     public static RewardFunction createBlockPatternMatchFunction(AnglePosition angle, CardColor colorBlock , CardColor colorAngle){
         return new RewardFunction() {
             @Override
@@ -239,10 +277,13 @@ public abstract class GameFunctionFactory {
         };
     }
 
+
     /**
-     *
-     * @param requiredSymbols The symbols required, alongside with their count
-     * @return true iff gamefield passed as field passed has more symbols that the one required.
+     * Creates a function that specifies the requirement of having a certain number of symbols
+     * of a specific type on the field.
+     * @param requiredSymbols The symbols required, alongside with their minimum number of occurrences
+     * @return A function that evaluates to true if and only if the number of occurrences of each specified
+     *         symbols reaches the minimum required.
      */
     public static RequirementFunction createRequiredSymbolsFunction(Map<Symbol, Integer> requiredSymbols){
         return new RequirementFunction() {

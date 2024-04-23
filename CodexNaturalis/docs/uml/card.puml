@@ -51,7 +51,7 @@ class CardSide {
     + getCenterSymbols() : Set<Symbol
     + getSymbolFromAngle(position : AnglePosition) : Symbol
     + getPlayingRequirements() : RequirementFunction
-    + getReward() : RewardFunction
+    + getPlayingReward() : RewardFunction
 }
 
 class RandomPicker <T>{
@@ -93,14 +93,14 @@ CardSide -r- "0..3" Symbol : -centerSymbols
 CardSide -u-* "4" AnglePosition : - angles<AnglePosition, Symbol>
 !endsub
 !startsub FUNCTIONS
-'Consider making Map<Symbol, Integer> an object with Stream interface
+
 abstract class GameFunctionFactory <<utility>> {
     + createPointsRewardFunction(points : int) : RewardFunction {static}
     + createCountSymbolsGroupFunction(symbolOccurrences : Map<Symbol, Integer> {static}
     + createCountSymbolsFunction(symbol : Symbol) : RewardFunction {static}
-    + createCoveredAnglesFunction() : RewardFunction {static}
-    + createDiagonalPatternMatchFunction(angle: boolean , color_card: CardColor) : RewardFunction {static}
-    + createBlockPatternMatchFunction(angle : AnglePosition, color_block CardColor, color_Angle: CardColor), ) : RewardFunction {static}
+    + createCoveredAnglesFunction(cardId : id) : RewardFunction {static}
+    + createDiagonalPatternMatchFunction(isSlopePositive : boolean, colorCard: CardColor) : RewardFunction {static}
+    + createBlockPatternMatchFunction(angle : AnglePosition, colorBlock CardColor, colorAngle: CardColor), ) : RewardFunction {static}
     + createRequiredSymbolsFunction(requiredSymbols : Map<Symbol, Integer>) : RequirementFunction {static}
 }
 

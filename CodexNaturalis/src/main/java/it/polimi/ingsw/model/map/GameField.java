@@ -56,13 +56,13 @@ public class GameField{
         updateAvailableCells(card.getSide(cardOrientation), position);
     }
 
-    public int getCoveredAnglesNumber(Card card){
+    public int getCoveredAnglesNumber(int cardId){
 
         Point cardPosition;
         int coveredAnglesNumber = 0;
 
         try {
-            cardPosition = getCardPositionById(card.getId());
+            cardPosition = getCardPositionById(cardId);
         } catch (RuntimeException e){
             return coveredAnglesNumber;
         }
@@ -128,7 +128,9 @@ public class GameField{
         for(AnglePosition angle : AnglePosition.values()){
             if(cardSide.getSymbolFromAngle(angle) != Symbol.HIDDEN){
                Point relativeCardPosition = new Point(angle.getRelativePosition().x() * 2, angle.getRelativePosition().y() * 2);
-               availableCells.add(cardPosition.sum(relativeCardPosition));
+               if(!cards.containsKey(relativeCardPosition)) {
+                   availableCells.add(cardPosition.sum(relativeCardPosition));
+               }
             }
         }
     }
