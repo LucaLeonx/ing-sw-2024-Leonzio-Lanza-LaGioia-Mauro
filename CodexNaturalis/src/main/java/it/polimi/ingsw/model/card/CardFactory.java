@@ -27,7 +27,7 @@ public abstract class CardFactory {
 
 //
 
-    public static RandomPicker<Card> getInitialCards() throws FileNotFoundException {
+    public static List<Card> getInitialCards() throws FileNotFoundException {
         FileReader reader= new FileReader("src/main/java/it/polimi/ingsw/model/card/JsonFiles/Initial.json");
         GsonBuilder builder = new GsonBuilder();
 
@@ -35,10 +35,10 @@ public abstract class CardFactory {
         Gson gson = builder.create();
 
         Card[] card = gson.fromJson(reader,Card[].class);
-        return  new RandomPicker<Card>(Arrays.asList(card));
+        return  Arrays.asList(card);
     }
 
-    public static RandomPicker<Card> getResourceCards() throws FileNotFoundException{
+    public static List<Card> getResourceCards() throws FileNotFoundException{
         FileReader reader= new FileReader("src/main/java/it/polimi/ingsw/model/card/JsonFiles/Resource.json");
         GsonBuilder builder = new GsonBuilder();
 
@@ -46,7 +46,7 @@ public abstract class CardFactory {
         Gson gson = builder.create();
 
         Card[] card = gson.fromJson(reader,Card[].class);
-        return  new RandomPicker<Card>(Arrays.asList(card));
+        return  Arrays.asList(card);
 
     }
     private static List<Card> getCardList(){
