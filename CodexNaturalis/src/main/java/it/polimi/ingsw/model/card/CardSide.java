@@ -30,7 +30,6 @@ public class CardSide {
         return centerSymbol;
     }
 
-
     /**
      *
      * @param position - is one of the 4 possible angles that a cardSide could have, its type is defined by AnglePosition enum

@@ -10,7 +10,9 @@ public class RandomPicker<T>{
     private final Iterator<T> elements;
 
     /**
-     * @param elements The collection of elements stored to be stored at start
+     * @param elements The collection of elements stored to be stored at start.
+     *                 Keep in mind that null objects can be added to and
+     *                 extracted from the RandomPicker.
      * @param rng The source of randomness used for random extractions.
      *            This parameter is useful for testing purposes
      */

@@ -50,7 +50,7 @@ public class GameField{
     {
         addCard(card, cardOrientation, position);
         updateCounters(position);
-        updateAvailableCells(card);
+        // updateAvailableCells(card);
     }
 
     private void addCard(Card card, CardOrientation orientation, Point position){
@@ -93,9 +93,8 @@ public class GameField{
 
 
 
-    private int updateAvailableCells(Card card){
-        return 0;
-    }
+    /* private void updateAvailableCells(Card card){
+    } */
 
 
 
