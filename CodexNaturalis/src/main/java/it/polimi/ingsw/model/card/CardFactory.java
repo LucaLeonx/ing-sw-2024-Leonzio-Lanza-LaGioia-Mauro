@@ -285,7 +285,7 @@ class GoldCardAdapter extends TypeAdapter<Card[]>{
                 if(tipoReward.equals("COVEREDANGLES")){
                     reader.nextName();
                     reader.nextInt();
-                    reward = createCoveredAnglesFunction();
+                    reward = createCoveredAnglesFunction(id);
                 } else if (tipoReward.equals("DEFAULT")) {
                     reader.nextName();
                     reward = createPointsRewardFunction(reader.nextInt());
