@@ -145,7 +145,7 @@ public abstract class GameFunctionFactory {
                     temp = leftmost.get(i);
                     cardsNum = 0;
                     while (!temp.equals(rightmost.get(i))) {
-                        if (!field.getCards().containsKey(temp) || field.getCards().get(temp).getCardColor() != color_pattern) {
+                        if (!field.getCards().containsKey(temp) || field.getCards().get(temp).getCardColor() != colorPattern) {
                             cardsNum = 0;
                         } else {
                             cardsNum++;
