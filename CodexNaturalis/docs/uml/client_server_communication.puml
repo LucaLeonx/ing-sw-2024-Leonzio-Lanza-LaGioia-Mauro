@@ -26,13 +26,15 @@ group periodically
     Client --> Server : requestGameBoard()
     Server --> Client : sendGameBoard()
 end
+note right: Information published about a Game: ID, name, CreatorNickname, RequiredPlayersNumber, Number and Nicknames of players ready to start
+
 
 opt User creates a new game
     Client --> Server : createGame(name, requiredPlayersNum)
     Server --> Client : sendResponse(code : Accepted, payload : gameId)
 end
 Client --> Server : joinGame(gameId)
-note bottom: When a User creates a Game, it joins it automatically. \nDuring updateGameBoard() the game is published to other players
+note left: When a User creates a Game, it joins it automatically. \nDuring updateGameBoard() the game is published to other players
 
 alt Successful join
     Server --> Client : sendResponse(code : Accepted)
@@ -70,16 +72,16 @@ loop On invalid move
 Client --> Server : sendCardToPlay(cardId, Side, Point)
 Server --> Client : sendResponse(core : InvalidMove)
 else Valid move
-Server --> Client : sendResponse(code : Accepted)
+    Server --> Client : sendResponse(code : Accepted)
 end
 
 loop On invalid move
-Client --> Server : sendDrawCommand(card, deckCode)
-Server --> Client : sendResponse(code : InvalidDraw)
+    Client --> Server : sendDrawCommand(card, deckCode)
+    Server --> Client : sendResponse(code : InvalidDraw)
 else Valid move
-Server --> Client : sendResponse(code : Accepted)
+    Server --> Client : sendResponse(code : Accepted)
 end
-Server --> Client : sendGameInfo()
+    Server --> Client : sendGameInfo()
 note right : Send update to the other clients
 
 @enduml
