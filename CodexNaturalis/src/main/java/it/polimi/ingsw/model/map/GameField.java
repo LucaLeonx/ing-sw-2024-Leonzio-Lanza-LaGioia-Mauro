@@ -56,13 +56,13 @@ public class GameField{
         updateAvailableCells(card.getSide(cardOrientation), position);
     }
 
-    public int getCoveredAnglesNumber(Card card){
+    public int getCoveredAnglesNumber(int cardId){
 
         Point cardPosition;
         int coveredAnglesNumber = 0;
 
         try {
-            cardPosition = getCardPositionById(card.getId());
+            cardPosition = getCardPositionById(cardId);
         } catch (RuntimeException e){
             return coveredAnglesNumber;
         }
