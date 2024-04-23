@@ -51,17 +51,17 @@ public abstract class GameFunctionFactory {
         };
     }
 
-    public static RewardFunction createCoveredAnglesFunction(){
+    public static RewardFunction createCoveredAnglesFunction(int cardId){
         return new RewardFunction() {
             @Override
 
             public int getPoints(GameField field) {
-                return 0;
+                return field.getCoveredAnglesNumber(cardId);
             }
         };
     }
 
-    public static RewardFunction createDiagonalPatternMatchFunction(boolean angle, CardColor color_pattern)
+    public static RewardFunction createDiagonalPatternMatchFunction(boolean isSlopePositive, CardColor color_pattern)
     {
         return new RewardFunction() {
             @Override
@@ -78,7 +78,7 @@ public abstract class GameFunctionFactory {
                 Point translationVector = new Point(0,0);
                 int slope = 0;
 
-                if(angle == true){
+                if(isSlopePositive){
                     translationVector = new Point(2, 2);
                     slope = 1;
                 }
