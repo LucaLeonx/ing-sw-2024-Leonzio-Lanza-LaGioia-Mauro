@@ -17,6 +17,10 @@ public class GameField{
         this.symbolCounters = new HashMap<>();
         this.availableCells = new HashSet<>();
 
+        // Initialize counters
+        for(Symbol symbol : Symbol.values()){
+            symbolCounters.put(symbol, 0);
+        }
     }
 
     public Map<Point, Card> getCards() {
@@ -89,17 +93,14 @@ public class GameField{
 
 
 
-    private void updateAvailableCells(Card card){
-        for (AnglePosition angle : AnglePosition.values()) {
-
-        }
-
-        }
+    private int updateAvailableCells(Card card){
+        return 0;
+    }
 
 
 
     private class AngleCell{
-        private final Stack<Point> attachedCardsPosition; //there is always a maximum of 2 symbols
+        private final Stack<Point> attachedCardsPosition; // there is always a maximum of 2 symbols
         private Symbol topSymbol;
 
         private Symbol bottomSymbol;

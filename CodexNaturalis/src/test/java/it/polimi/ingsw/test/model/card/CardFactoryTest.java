@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.card.*;
 import junit.framework.TestCase;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ public class CardFactoryTest extends TestCase {
                 System.out.print("Front center symbols: ");
                 for(Symbol s: frontCenter){ System.out.print(" "+ s.toString());}
 
-                Set<Symbol> backDisplayedSymbols = carta.getSide(CardOrientation.valueOf("BACK")).getDisplayedSymbols();
+                List<Symbol> backDisplayedSymbols = carta.getSide(CardOrientation.valueOf("BACK")).getDisplayedSymbols();
                 System.out.print("\nAll displayed symbols in the back: ");
                 for(Symbol s: backDisplayedSymbols){ System.out.print(" "+ s.toString());}
             }

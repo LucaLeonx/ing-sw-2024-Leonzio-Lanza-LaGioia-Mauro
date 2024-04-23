@@ -4,8 +4,8 @@ import java.util.*;
 
 public class CardSide {
 
-    private final RequirementFunction  playingRequirements;
-    private final RewardFunction  playingReward;
+    private final RequirementFunction playingRequirements;
+    private final RewardFunction playingReward;
     private final Set<Symbol> centerSymbol;
     private final Map<AnglePosition, Symbol> angles;
 
@@ -19,15 +19,6 @@ public class CardSide {
         this.angles = new HashMap<AnglePosition,Symbol>(angles);
         this.playingRequirements = playingRequirements;
         this.playingReward = playingReward;
-    }
-
-
-    public RequirementFunction getPlayingRequirements() {
-        return this.playingRequirements;
-    }
-
-    public RewardFunction getPlayingReward() {
-        return this.playingReward;
     }
 
     /**
@@ -51,18 +42,37 @@ public class CardSide {
 
     /**
      *
-     * @return All the symbols displayed in the card, both the center and the angles ones,
-     * note that the returned Set is a copy of the class attribute, NOT the same, so
-     * '==' statement will return false (as opposed to equals() method)
+     * @return A new List containing all the symbols on the given CardSide,
+     * both in the center and on the angles.
      */
-    public Set<Symbol> getDisplayedSymbols(){
-        Set<Symbol> displayedSymbols = new HashSet<>(getCenterSymbols());
+    public List<Symbol> getDisplayedSymbols(){
+        List<Symbol> displayedSymbols = new ArrayList<>(getCenterSymbols());
 
         for(AnglePosition position : AnglePosition.values()){
             displayedSymbols.add(getSymbolFromAngle(position));
         }
 
         return displayedSymbols;
+    }
+
+    /**
+     *
+     * @return An anonymous RequirementFunction that
+     * evaluates whether it is possible to play the card on the current side
+     * on the map
+     */
+    public RequirementFunction getPlayingRequirements() {
+        return this.playingRequirements;
+    }
+
+    /**
+     *
+     * @return An anonymous RewardFunction that returns the number of points
+     * earned when playing the card on the current side, depending on the other cards
+     * on the map
+     */
+    public RewardFunction getPlayingReward() {
+        return this.playingReward;
     }
 
 

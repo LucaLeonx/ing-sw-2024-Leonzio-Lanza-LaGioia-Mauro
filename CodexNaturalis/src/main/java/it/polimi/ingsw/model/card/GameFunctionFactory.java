@@ -251,7 +251,7 @@ public abstract class GameFunctionFactory {
             public boolean isSatisfied(GameField field) {
                 for(Symbol s: requiredSymbols.keySet())
                 {
-                    if(field.getCounter(s)<requiredSymbols.get(s))
+                    if(field.getCounter(s) < requiredSymbols.get(s))
                         return false;
                 }
                 return true;
