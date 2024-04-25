@@ -67,7 +67,7 @@ public abstract class CardFactory {
 }
 class ResourceCardAdapter extends TypeAdapter<Card[]>{
     public  Card[] read (JsonReader reader) throws IOException {
-        Card[] resourcesCard = new Card[2];
+        Card[] resourcesCard = new Card[40];
         int i = 0;
         String typeName = null;
 
@@ -239,7 +239,7 @@ class InitialCardAdapter extends TypeAdapter<Card[]>{
 
 class GoldCardAdapter extends TypeAdapter<Card[]>{
     public  Card[] read (JsonReader reader) throws IOException{
-        Card[] array = new Card[6];
+        Card[] array = new Card[40];
         int i=0;
         String typeName = null;
         reader.beginArray();
@@ -298,10 +298,11 @@ class GoldCardAdapter extends TypeAdapter<Card[]>{
 
                 reader.nextName(); //RequiredFunction
 
+                reader.beginArray();
                 token = reader.peek();
                 while(!token.equals(JsonToken.END_ARRAY)){
                     Symbol reqSymb = Symbol.valueOf(reader.nextString());
-                    if(!requiredSymbols.containsKey(reqSymb)){
+                    if(requiredSymbols.containsKey(reqSymb)){
                         requiredSymbols.replace(reqSymb,requiredSymbols.get(reqSymb)+1);
                     }
                     else{
@@ -329,7 +330,7 @@ class GoldCardAdapter extends TypeAdapter<Card[]>{
                 );
 
                 reader.endObject();
-                typeName = reader.nextName();
+                //typeName = reader.nextName();
             }
             array[i] = new Card(id,col,front,back);
             i++;
