@@ -1,0 +1,26 @@
+@startuml
+
+' Client
+class ClientController(){
+    connectToServer(url : String) throw NoConnectionException
+    registerPlayer(nickname : String, password : String) throw AlreadyRegisteredPlayerException
+    loginPlayer(nickname : String, password : String) throw WrongPasswordException, NotExistingUserException
+    requestLobbyInfo() : List<LobbyInfo>
+    ' ^ It could be just a string
+    requestCreateGame(nickname : String, name : String, requiredPlayersNumber : int)
+    joinGame(int idGame)
+}
+
+
+
+
+
+class LobbyInfo {
+    - id : int
+    - name : String
+    - creator : String
+    - requiredPlayers : int
+    - registeredPlayersNumber : int
+    - registeredPlayers : List<String> ' Can be removed later
+    + toString() : String
+}
