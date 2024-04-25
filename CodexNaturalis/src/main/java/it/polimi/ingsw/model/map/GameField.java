@@ -4,8 +4,6 @@ import java.util.*;
 
 import it.polimi.ingsw.model.card.*;
 
-import javax.management.RuntimeErrorException;
-
 
 public class GameField{
     private final Map<Point, Card> cards;
