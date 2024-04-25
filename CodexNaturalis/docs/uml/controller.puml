@@ -24,3 +24,33 @@ class LobbyInfo {
     - registeredPlayers : List<String> ' Can be removed later
     + toString() : String
 }
+
+' Server
+
+class GameControllerServer() {
+    sendPlayerHandSetupInformation(idGold1 : int, idResource1 :int, IdResource2 : int, IdObjective1 : int , IdObjective2 : int, idInitial : int)
+    sendSetUpChoice(idObjective : int, cardSide : cardOrientation)
+    sendPlayAndDraw(cardId, side : , point, choice : DrawChoice)
+
+}
+
+class  GameControllerClient() {
+      sendPlayerHandSetupInformation(idGold1 : int, idResource1 :int, IdResource2 : int, IdObjective1 : int , IdObjective2 : int, idInitial : int)
+      sendSetUpChoice(idObjective : int, cardSide : cardOrientation)
+      sendPlayAndDraw(cardId, side : , point, choice : DrawChoice)
+
+
+
+}
+
+enum DrawChoice {
+    DECK_GOLD,
+    DECK_RESOURCE,
+    RESOURCE_CARD_1,
+    RESOURCE_CARD_2,
+    GOLD_CARD_1,
+    GOLD_CARD_2
+}
+
+
+@enduml
