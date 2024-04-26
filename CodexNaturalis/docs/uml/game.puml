@@ -14,7 +14,7 @@ enum PlayerColor {
 
 class Game {
     - currentPlayer : Player
-    + setup()
+    + Game(players : List<String>)
 }
 
 class Player {

@@ -15,7 +15,12 @@ alt Success
 
 else User with the same nickname registered
     Server --> Client : sendResponse(code : DuplicatedUsername)
-    Client --> Server : registerUser(newNickname)
+    Client --> Server : registerUser(newNickname, temporaryCode)
+    alt Success
+        Server --> Client : sendResponse(code : Accepted)
+    else
+        Server --> Client : sendResponse(invalidTemporaryCode)
+    end
 end
 
 opt User was already in a Game \n(either playing or waiting to start)
@@ -27,7 +32,6 @@ group periodically
     Server --> Client : sendGameBoard()
 end
 note right: Information published about a Game: ID, name, CreatorNickname, RequiredPlayersNumber, Number and Nicknames of players ready to start
-
 
 opt User creates a new game
     Client --> Server : createGame(name, requiredPlayersNum)
@@ -46,6 +50,9 @@ end
 opt Game has reached the required number of players
     Server --> Server : startGame(gameId)
     Server --> Server : updateGameBoard()
+    Server --> Client : sendTempCode(temporaryCode : 112334)
+    note left : The server sends to the client a temporary code. It can use it to join back a match in case it disconnected.
+    note left : If a player quits a lobby, it doesn't automatically join it back
 end
 
 newpage

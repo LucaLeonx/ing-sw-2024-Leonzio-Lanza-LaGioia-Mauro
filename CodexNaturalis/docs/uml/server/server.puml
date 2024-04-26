@@ -1,0 +1,74 @@
+@startuml
+
+' Maybe just use a synchronized list
+class UserList <<synchronized>> {
+    - List<User> userList;
+    + UserList()
+    + getUserList() : List<String>
+    + getConnectionStatus(username : String) : boolean
+    + getTemporaryCode(username : String) : Optional<Integer>
+    + addUser(username : String)
+    + removeUser(username : String)
+    + setConnectionStatus(String username, isConnected : boolean)
+    + initializeTemporaryPassword(username : String)
+    + addUserLobby(username : String, lobbyId : int)
+    + removeUserLobby(username : String)
+}
+
+class User <<synchronized>> {
+    - String username;
+    - boolean isConnected;
+    ' May be changed to ENUM later
+    - Optional<Integer> temporaryPassword;
+    + getters()
+    // Used internally only by List
+}
+
+' Maybe add a LobbyList class, if necessary
+class Lobby <<synchronized>> {
+    - id : int
+    - name : String
+    - creatorUsername : String
+    - List<String> waitingPlayers;
+    - requiredNumberOfPlayers : int;
+    Lobby(id : int, lobbyName : String, creatorUsername : String)
+    + getters()
+    + addUser(username : String)
+    + removeUser(username : String)
+    + getRequiredNumberOfPlayers() : int
+    + getWaitingPlayersNumber() : int
+    + readyToStart() : boolean
+    + startGame() : // reference to game
+    // If the game hasn't started yet, the communication
+    // thread with the client is put in wait()
+    // Otherwise, the thread calls notifyAll()
+    // And a reference to the started Game is returned
+}
+
+class GameRecord {
+    'List<String> users;
+    - GameId : int
+    - Game game;
+}
+
+
+class AcceptanceSocket {
+    + start(address : String){ // ip + port
+    + stop()
+}
+
+class ClientManagementThread extends Thread {
+    - socket : TCPSocket
+    - execute()
+    // Possible use of state pattern
+}
+note top: For RMI, We export Lobby, User, Game classes (maybe controller?)
+
+class Server {
+    AcceptanceSocket
+    DisconnectedUserCleaner thread;
+    // Threads to manage other server-related stuff
+    // Other RMI related stuff
+}
+
+@enduml

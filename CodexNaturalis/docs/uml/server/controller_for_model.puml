@@ -1,0 +1,17 @@
+@startuml
+class Controller {
+    + createGame() : Game
+    + getSetupChoice() : 2 ObjectiveCard, InitialCard
+    + makePlayerSetupChoice(ObjectiveCard choice, Card initialCard , CardOrientation initialCardSide)
+    + setUpPlayerHand(player)
+    + makePlayerMove(player, CardOrientation, Point)
+    + makePlayerDraw(player, deck)
+
+    + getGameField(player)
+    + getCurrentPlayer()
+    + isLastTurn()
+    + getPlayerScores()
+    + getGame() : Game
+}
+@enduml
+
