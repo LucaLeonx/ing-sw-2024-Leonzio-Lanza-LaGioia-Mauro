@@ -46,16 +46,36 @@ public class CardFactoryTest extends TestCase {
         Set<Integer> resourceIds = new HashSet<Integer>();
         Set<Integer> actualIds = new HashSet<Integer>();
         Card card;
-        for (int i = 1; i < 40; i++) {
+        for (int i = 1; i <= 40; i++) {
             resourceIds.add(i);
         }
         for(int j = 0; j<40; j++) {
             //resourcePicker.extractRandomElement().ifPresent(card -> pickerIds.add(card.getId()));
             card = resourceCards.get(j);
+            actualIds.add(card.getId());
             System.out.println("id: " + card.getId());
 
         }
-        //assertEquals(resourceIds.size(), pickerIds.size());
-        //assertTrue(resourceIds.containsAll(pickerIds));
+        assertEquals(resourceIds.size(), actualIds.size());
+        assertTrue(resourceIds.containsAll(actualIds));
+    }
+
+    public void testGoldCard() throws FileNotFoundException {
+        List<Card> goldCards = CardFactory.getGoldCards();
+        Set<Integer> goldIds = new HashSet<Integer>();
+        Set<Integer> actualIds = new HashSet<Integer>();
+        Card card;
+        for (int i = 41; i <= 80; i++) {
+            goldIds.add(i);
+        }
+        for(int j = 0; j<40; j++) {
+            //resourcePicker.extractRandomElement().ifPresent(card -> pickerIds.add(card.getId()));
+            card = goldCards.get(j);
+            actualIds.add(card.getId());
+            System.out.println("id: " + card.getId());
+
+        }
+        assertEquals(goldIds.size(), actualIds.size());
+        assertTrue(goldIds.containsAll(actualIds));
     }
 }

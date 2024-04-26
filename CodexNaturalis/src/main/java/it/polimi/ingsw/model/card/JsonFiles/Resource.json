@@ -100,10 +100,7 @@
     "id": 8,
     "color": "RED",
     "front": {
-      "RewardFunction": {
-        "type" : "DEFAULT",
-        "points" : 1
-      },
+      "RewardFunction": 1,
       "angles": {
         "UP_LEFT": "BLANK",
         "UP_RIGHT": "FUNGI",
@@ -117,10 +114,7 @@
     "id": 9,
     "color": "RED",
     "front": {
-      "RewardFunction": {
-        "type" : "DEFAULT",
-        "points" : 1
-      },
+      "RewardFunction": 1,
       "angles": {
         "UP_LEFT": "FUNGI",
         "UP_RIGHT": "HIDDEN",
@@ -134,10 +128,7 @@
     "id": 10,
     "color": "RED",
     "front": {
-      "RewardFunction": {
-        "type" : "DEFAULT",
-        "points" : 1
-      },
+      "RewardFunction": 1,
       "angles": {
         "UP_LEFT": "HIDDEN",
         "UP_RIGHT": "BLANK",
@@ -248,10 +239,7 @@
     "id": 18,
     "color": "GREEN",
     "front": {
-      "RewardFunction": {
-        "type" : "DEFAULT",
-        "points" : 1
-      },
+      "RewardFunction": 1,
       "angles": {
         "UP_LEFT": "BLANK",
         "UP_RIGHT": "BLANK",
@@ -265,10 +253,7 @@
     "id": 19,
     "color": "GREEN",
     "front": {
-      "RewardFunction": {
-        "type" : "DEFAULT",
-        "points" : 1
-      },
+      "RewardFunction": 1,
       "angles": {
         "UP_LEFT": "BLANK",
         "UP_RIGHT": "BLANK",
@@ -282,10 +267,7 @@
     "id": 20,
     "color": "GREEN",
     "front": {
-      "RewardFunction": {
-        "type" : "DEFAULT",
-        "points" : 1
-      },
+      "RewardFunction": 1,
       "angles": {
         "UP_LEFT": "HIDDEN",
         "UP_RIGHT": "PLANT",
@@ -397,10 +379,7 @@
     "id": 28,
     "color": "SKYBLUE",
     "front": {
-      "RewardFunction": {
-        "type" : "DEFAULT",
-        "points" : 1
-      },
+      "RewardFunction": 1,
       "angles": {
         "UP_LEFT": "HIDDEN",
         "UP_RIGHT": "BLANK",
@@ -414,10 +393,7 @@
     "id": 29,
     "color": "SKYBLUE",
     "front": {
-      "RewardFunction": {
-        "type" : "DEFAULT",
-        "points" : 1
-      },
+      "RewardFunction": 1,
       "angles": {
         "UP_LEFT": "BLANK",
         "UP_RIGHT": "HIDDEN",
@@ -431,10 +407,7 @@
     "id": 30,
     "color": "SKYBLUE",
     "front": {
-      "RewardFunction": {
-        "type" : "DEFAULT",
-        "points" : 1
-      },
+      "RewardFunction": 1,
       "angles": {
         "UP_LEFT": "BLANK",
         "UP_RIGHT": "ANIMAL",
@@ -546,10 +519,7 @@
     "id": 38,
     "color": "PURPLE",
     "front": {
-      "RewardFunction": {
-        "type" : "DEFAULT",
-        "points" : 1
-      },
+      "RewardFunction": 1,
       "angles": {
         "UP_LEFT": "INSECT",
         "UP_RIGHT": "HIDDEN",
@@ -563,10 +533,7 @@
     "id": 39,
     "color": "PURPLE",
     "front": {
-      "RewardFunction": {
-        "type" : "DEFAULT",
-        "points" : 1
-      },
+      "RewardFunction": 1,
       "angles": {
         "UP_LEFT": "BLANK",
         "UP_RIGHT": "BLANK",
@@ -580,10 +547,7 @@
     "id": 40,
     "color": "PURPLE",
     "front": {
-      "RewardFunction": {
-        "type" : "DEFAULT",
-        "points" : 1
-      },
+      "RewardFunction": 1,
       "angles": {
         "UP_LEFT": "HIDDEN",
         "UP_RIGHT": "INSECT",

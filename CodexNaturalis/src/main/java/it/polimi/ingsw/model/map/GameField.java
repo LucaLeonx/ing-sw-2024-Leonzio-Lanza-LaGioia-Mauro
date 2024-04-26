@@ -35,7 +35,7 @@ public class GameField{
         for (Point point : angles.keySet()) {
             AngleCell angleCell = angles.get(point);
             Symbol topSymbol = angleCell.topSymbol;
-            anglePositions.put(point,topSymbol);
+            anglePositions.put(point, topSymbol);
         }
 
         return anglePositions;
@@ -52,8 +52,8 @@ public class GameField{
     public void placeCard(Card card, CardOrientation cardOrientation, Point position)
     {
         addCard(card, cardOrientation, position);
-        updateCounters(position);
-        updateAvailableCells(card.getSide(cardOrientation), position);
+        updateCounters(card, cardOrientation, position);
+        updateAvailableCells(card, cardOrientation, position);
     }
 
     public int getCoveredAnglesNumber(int cardId){
@@ -89,7 +89,7 @@ public class GameField{
 
         CardSide currentSide = card.getSide(orientation);
 
-        this.cards.put(position, card);
+        cards.put(position, card);
 
         for (AnglePosition angle : AnglePosition.values()) {
             if(currentSide.getSymbolFromAngle(angle) != Symbol.HIDDEN){
@@ -99,34 +99,28 @@ public class GameField{
         }
     }
 
-    private void updateCounters(Point position){
+    private void updateCounters(Card card, CardOrientation orientation, Point position){
+
+        for(Symbol symbol : card.getSide(orientation).getCenterSymbols()){
+            incrementCounter(symbol);
+        }
+
         for (AnglePosition angle : AnglePosition.values())
         {
-                AngleCell angleCell=angles.get(position.sum(angle.getRelativePosition())); //angleCell represents the position in which we need to check eventually the new symbol
+                AngleCell angleCell = angles.get(position.sum(angle.getRelativePosition())); //angleCell represents the position in which we need to check eventually the new symbol
                 Symbol topSymbol= angleCell.getTopSymbol();
                 Symbol replacedSymbol = angleCell.getBottomSymbol();
 
-
-                if (replacedSymbol != topSymbol) {
-                    if(symbolCounters.containsKey(topSymbol)) {
-                        symbolCounters.put(topSymbol, symbolCounters.get(topSymbol) + 1);
-                    }
-                    else {
-                        symbolCounters.put(topSymbol, 1);
-                    }
-                    symbolCounters.put(replacedSymbol, symbolCounters.get(replacedSymbol) - 1);
-                }
-
-                //else if replaced symbol is equal to top symbol we don't need to update the number of elements
+                incrementCounter(topSymbol);
+                decrementCounter(replacedSymbol);
 
         }
+    }
 
-        }
-
-    private void updateAvailableCells(CardSide cardSide, Point cardPosition){
+    private void updateAvailableCells(Card card, CardOrientation orientation, Point cardPosition){
 
         for(AnglePosition angle : AnglePosition.values()){
-            if(cardSide.getSymbolFromAngle(angle) != Symbol.HIDDEN){
+            if(card.getSide(orientation).getSymbolFromAngle(angle) != Symbol.HIDDEN){
                Point relativeCardPosition = new Point(angle.getRelativePosition().x() * 2, angle.getRelativePosition().y() * 2);
                if(!cards.containsKey(relativeCardPosition)) {
                    availableCells.add(cardPosition.sum(relativeCardPosition));
@@ -141,6 +135,14 @@ public class GameField{
                 .findFirst()
                 .map(Map.Entry::getKey)
                 .orElseThrow(RuntimeException::new);
+    }
+
+    private void incrementCounter(Symbol symbol){
+        symbolCounters.put(symbol, symbolCounters.get(symbol) + 1);
+    }
+
+    private void decrementCounter(Symbol symbol){
+        symbolCounters.put(symbol, symbolCounters.get(symbol) - 1);
     }
 
 
