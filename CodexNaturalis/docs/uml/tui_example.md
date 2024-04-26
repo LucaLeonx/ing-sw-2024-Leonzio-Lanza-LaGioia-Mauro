@@ -161,56 +161,27 @@ secret goal:
 
 ------------------------------------------------------------------------------------
 
-algorithm in a nutshell to build the map: 
-1) first count all the rows and column and create a matrix of strings with that many column and row
+Algorithm in a nutshell to build the map: 
+1) first count all the rows and column and create a matrix of strings with that many column and row 
 2) initialize the matrix with all black square 
-3) From the map of the card color all the adiacent cell of the color of the card
+3) From the map of the card color the up down, left and right cells of the color of the card
 4) add the symbol in the corresponding coordinate in the matrix.
+   (in case we get an hidden angle we should get to the top card to color properly)
+5) We add the starting symbol in (0,0) of the color of the player. 
+6) we print out the Map Matrix
+7) We print out what's underneath the starting symbol. 
 
-----------------------------------------------------------------------------------
-PROBLEMS
-Problem1: Let' s say we have these 2 cards: 
-⬜🟩⬜
-🟩🪴🟩
-⬜🟩⬜
-
-🍄🟥📝
-🟥🟥🟥
-🟥🟥🍄
-
-and we put them together in this way:  
-
-⬛⬛🍄🟥📝
-⬛⬛🟥🟥🟥
-⬜🟩🟥🟥🍄
-🟩🪴🟩⬛⬛
-⬜🟩⬜⬛⬛
-
-by the way the algorithm works it is unknown if the final configuration will be the correct one
-
-⬛⬛🍄🟥📝
-⬛⬛🟥🟥🟥
-⬜🟩🟥🟥🍄
-🟩🪴🟩⬛⬛
-⬜🟩⬜⬛⬛
-
-or the other one
-
-⬛⬛🍄🟥📝
-⬛⬛🟥🟥🟥
-⬜🟩🟩🟥🍄
-🟩🪴🟩⬛⬛
-⬜🟩⬜⬛⬛
+PS: The cells in our model translate 1 to 1 to the cell in the TUI. 
+Obviously there is going to be a displacement because we need to keep track of the fact that we have to map the position minX 
+and minY to the (0,0) position of the matrix. in order to do that we simply add abs(minX) to the x of the map and abs(minY) to the Y 
+to get to corresponding position of the matrix.  
 
 
 
-we could simply ignore it since it will be mostly a graphic problem since that square if it is red or green doesn't 
-represent a huge problem but just something to be noted 
-
-Problem 2: I've checked in my ide and the max number of emoji before automatically change line is 78.
-Considering that at the end of the day one card occupy just one emoji (the middle since the angle will be covered by other card)
-we have at max approximately 75 cards before TUI crush. 
-Considering that at max in a 2 player game we could have 80 card in a diagonal I don't think this represent a real problem 
+Side-note: 
+I've checked in my IDE and we don't have a max number of emoji before automatically changing line if we have a matrix.   
+(it simply opens a scrollbar below). However the normal length of 80/120 chars should be more than enough to display all maps. 
+If some problems arise we can always reduce the char size in the terminal.  
 
 ---------------------------------------------------------------------------------------------
 
