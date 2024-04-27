@@ -18,62 +18,45 @@ class Point <<immutable>> {
     + sum(points : Point...) : Point
     + sum(points : Collection<Point>) : Point {static}
     + scale(factor : int) : Point
+    + inverse() : Point
+    + getAdjacentPositions(scaleFactor : int) : Set<Point> {static}
 }
 
 note "Java record with extra sum() method" as N1
 N1 .. Point
-/'
-class GameField {
-    - cards: Map<Point, Card>
-    - angles: Map<Point, AngleCell>
-    - availableCells: Set<Point>
-    - symbolCounters: Map<Symbol, int>
-
-    + GameField()
-    + getCards() : Map<Point, Card>
-    + getAngles(): Map<Point, Symbol>
-    + getSymbolCounter(symbol : Symbol) : int
-    + placeCard(card : Card, orientation : CardOrientation, position : Point)
-    + getAvailablePositions() : Set<Point>
-    - addCard(card : Card, orientation : CardOrientation, position : Point)
-}'/
-
 
 class GameField <<synchronized>> {
+    - cards :  Map<Point, CardCell>
+    - angles : Map<Point, AngleCell>
     - availableCells: Set<Point>
     - symbolCounters: Map<Symbol, int>
-    - cardCells : Set<CardCell>
-    + getCards() : Set<CardCell>
+    + getCards() : Map<Point, Card>
+    + getCardCells() : Map<Point, CardCell>
     + getCardInPosition(position : Points) : CardCell
-    + getCardCellByCardId(cardId : int) : CardCell
-    + placeCard(position : Point, card : Card, orientation : CardOrientation)
     + getSymbolCount(symbol : Symbol) : int
     + getAvailablePositions() : Set<Point>
+    + placeCard(position : Point, card : Card, orientation : CardOrientation)
+    - registerCard(position : Point, card : Card, orientation : CardOrientation)
+    - updateAngles(position : Point, card : Card, orientation : CardOrientation)
+    - updateCounters(position : Point, card : Card, orientation : CardOrientation)
+    - updateAvailableCells(position : Point, card : Card, orientation : CardOrientation)
 }
 ' Returned sets are immutable copies
-
 
 class CardCell <<immutable>> {
     - position : Point {readOnly}
     - card : Card {readOnly}
     - cardOrientation : CardOrientation {readOnly}
-    - coveredAngles : Set<AnglePosition> {readOnly}
-    - CardCell(position : Point, card : Card, orientation : CardOrientation, coveredAngles : coveredAngles : Set<AnglePosition>)
     + CardCell(position : Point, card : Card, orientation : CardOrientation)
     + getPosition() : Point
     + getCard() : Card
     + getCardOrientation() : CardOrientation
     + getCardColor() : CardColor
     + getVisibleCardSide() : CardSide
-    + getAdjacentCardsPositions() : Set<Point>
-    + getCoveringCardsPositions() : Set<Point>
-    + withCoveredAngles(coveredAngles : Set<AnglePosition>) : CardCell
-    + equals(Object other) : boolean
-    + hashCode() : int // Overridden to use only position
 }
+note top : Java record
 
 class AngleCell <<immutable>> {
-     - position : Point {readOnly}
      - topCardPosition : Point {readOnly}
      - bottomCardPosition : Point {readOnly}
      - topSymbol : Point {readOnly}
@@ -86,7 +69,9 @@ class AngleCell <<immutable>> {
 !endsub
 
 CardCell .r..> Point : <<uses>>
+AngleCell .r..> Point : <<uses>>
 GameField .r..> Point : <<uses>>
-GameField --o CardCell : - cardCells
+GameField --o CardCell : - cards
+GameField --o AngleCell : - angles
 
 @enduml
