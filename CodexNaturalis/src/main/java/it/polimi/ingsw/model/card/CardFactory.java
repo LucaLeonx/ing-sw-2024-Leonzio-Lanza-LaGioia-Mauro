@@ -59,13 +59,19 @@ public abstract class CardFactory {
         return  Arrays.asList(card);
     }
 
-    private static List<Card> getCardList(){
-        return List.of();
+    public static List<ObjectiveCard> getObjectiveCards() throws FileNotFoundException{
+        FileReader reader= new FileReader("src/main/java/it/polimi/ingsw/model/card/JsonFiles/Objective.json");
+        GsonBuilder builder = new GsonBuilder();
+
+        builder.registerTypeAdapter(ObjectiveCard[].class,new ObjectiveCardAdapter());
+        Gson gson = builder.create();
+
+        ObjectiveCard[] card = gson.fromJson(reader,ObjectiveCard[].class);
+        return  Arrays.asList(card);
     }
-
-
 }
 class ResourceCardAdapter extends TypeAdapter<Card[]>{
+    @Override
     public  Card[] read (JsonReader reader) throws IOException {
         Card[] resourcesCard = new Card[40];
         int i = 0;
@@ -136,12 +142,13 @@ class ResourceCardAdapter extends TypeAdapter<Card[]>{
         reader.endArray();
         return resourcesCard;
     }
-
+    @Override
     public void write(JsonWriter write, Card[] card) throws IOException {
 
     }
 }
 class InitialCardAdapter extends TypeAdapter<Card[]>{
+    @Override
     public  Card[] read (JsonReader reader) throws IOException{
         Card[] array = new Card[6];
         int i=0;
@@ -232,12 +239,14 @@ class InitialCardAdapter extends TypeAdapter<Card[]>{
         return array ;
     }
 
+    @Override
     public void write(JsonWriter write, Card[] card) throws IOException {
 
     }
 }
 
 class GoldCardAdapter extends TypeAdapter<Card[]>{
+    @Override
     public  Card[] read (JsonReader reader) throws IOException{
         Card[] array = new Card[40];
         int i=0;
@@ -342,8 +351,99 @@ class GoldCardAdapter extends TypeAdapter<Card[]>{
         reader.endArray();
         return array ;
     }
-
+    @Override
     public void write(JsonWriter write, Card[] card) throws IOException {
+
+    }
+}
+
+class ObjectiveCardAdapter extends TypeAdapter<ObjectiveCard[]>{
+
+    @Override
+    public ObjectiveCard[] read(JsonReader reader) throws IOException {
+        ObjectiveCard[] array = new ObjectiveCard[16];
+        int i=0;
+        String typeName = null;
+        reader.beginArray();
+
+        while (reader.hasNext()) {
+            int id = 0;
+            RewardFunction reward = null;
+            Map<Symbol, Integer> symbolsGroup = new HashMap<Symbol, Integer>();
+
+            reader.beginObject();
+            JsonToken token = reader.peek();
+            if(token.equals(JsonToken.NAME)){
+                typeName = reader.nextName();
+            }
+            if(typeName.equals("id")){
+                id = reader.nextInt();
+                typeName = reader.nextName();
+            }
+            if(typeName.equals("type")){
+                String rewardType = reader.nextString();
+                if(rewardType.equals("DIAG")){
+                    reader.nextName();
+                    reader.beginArray();
+                    reward = createDiagonalPatternMatchFunction(reader.nextInt()==1,CardColor.valueOf(reader.nextString()));
+                    reader.endArray();
+                }
+                if(rewardType.equals("BLOCK")){
+                    CardColor colorblock = null ,colorangle = null;
+                    reader.nextName();
+                    String angle = reader.nextString();
+                    switch (angle){
+                        case "UP_LEFT":
+                            colorblock = CardColor.valueOf("RED");
+                            colorangle = CardColor.valueOf("GREEN");
+                            break;
+                        case "UP_RIGHT":
+                            colorblock = CardColor.valueOf("GREEN");
+                            colorangle = CardColor.valueOf("PURPLE");
+                            break;
+                        case "DOWN_LEFT":
+                            colorblock = CardColor.valueOf("SKYBLUE");
+                            colorangle = CardColor.valueOf("RED");
+                            break;
+                        case "DOWN_RIGHT":
+                            colorblock = CardColor.valueOf("PURPLE");
+                            colorangle = CardColor.valueOf("SKYBLUE");
+                            break;
+                    }
+                    reward = createBlockPatternMatchFunction(AnglePosition.valueOf(angle),colorblock,colorangle);
+                }
+                if(rewardType.equals("VECTOR")){
+                    reader.nextName();
+                    int points = reader.nextInt();
+                    reader.nextName();
+                    reader.beginArray();
+                    while(!reader.peek().equals(JsonToken.END_ARRAY)){
+                        Symbol reqSymb = Symbol.valueOf(reader.nextString());
+                        if(symbolsGroup.containsKey(reqSymb)){
+                            symbolsGroup.replace(reqSymb,symbolsGroup.get(reqSymb)+1);
+                        }
+                        else{
+                            symbolsGroup.put(reqSymb,1);
+                        }
+                    }
+                    reader.endArray();
+                    reward = createCountGroupSymbolsFunction(symbolsGroup,points);
+                }
+                token = reader.peek();
+            }
+            array[i] = new ObjectiveCard(id,reward);
+            i++;
+            if(token.equals(JsonToken.END_OBJECT)){
+                reader.endObject();
+            }
+        }
+
+        reader.endArray();
+        return array;
+    }
+
+    @Override
+    public void write(JsonWriter write, ObjectiveCard[] objCard) throws IOException {
 
     }
 }
