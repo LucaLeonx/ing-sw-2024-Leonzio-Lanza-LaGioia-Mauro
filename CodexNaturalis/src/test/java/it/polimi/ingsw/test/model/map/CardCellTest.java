@@ -31,47 +31,14 @@ public class CardCellTest extends TestCase {
             fail();
         }
 
-        cardCellA = new CardCell(new Point(2, 2), cardA, CardOrientation.FRONT);
-        cardCellB = new CardCell(new Point(4, -6), cardB, CardOrientation.BACK);
+        cardCellA = new CardCell(cardA, CardOrientation.FRONT);
+        cardCellB = new CardCell(cardB, CardOrientation.BACK);
     }
 
-    public void testPositionGetter(){
-        assertEquals(new Point(2,2), cardCellA.getPosition());
-    }
     public void testCardInfoGetters(){
-        assertEquals(cardA, cardCellA.getCard());
-        assertEquals(cardA.getCardColor(), cardCellA.getCardColor());
-        assertEquals(cardA.getSide(CardOrientation.FRONT), cardCellA.getVisibleCardSide());
+        assertEquals(cardA, cardCellA.card());
+        assertEquals(CardOrientation.FRONT, cardCellA.orientation());
+        assertEquals(cardA.getCardColor(), cardCellA.cardColor());
+        assertEquals(cardA.getSide(CardOrientation.FRONT), cardCellA.visibleCardSide());
     }
-
-    public void testAdjacentAnglesGetter(){
-        assertEquals(Set.of(
-                new Point(0,0),
-                new Point(4,4),
-                new Point(0,4),
-                new Point(4,0)), cardCellA.getAdjacentCardsPosition());
-        assertEquals(Set.of(
-                new Point(6,-4),
-                new Point(2,-8),
-                new Point(6, -8),
-                new Point(2,-4)), cardCellB.getAdjacentCardsPosition());
-    }
-
-    public void testAngleCovering(){
-        assertEquals(Set.of(), cardCellA.getCoveringCardsPositions());
-        assertEquals(Set.of(), cardCellB.getCoveringCardsPositions());
-        cardCellA = cardCellA.withCoveredAngles(UP_RIGHT, DOWN_LEFT);
-        cardCellB = cardCellB.withCoveredAngles(UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT);
-
-        assertEquals(Set.of(new Point(4,4), new Point(0, 0)), cardCellA.getCoveringCardsPositions());
-        assertEquals(Set.of(
-                new Point(6,-4),
-                new Point(2,-8),
-                new Point(6, -8),
-                new Point(2,-4)), cardCellB.getCoveringCardsPositions());
-    }
-
-
-
-
 }

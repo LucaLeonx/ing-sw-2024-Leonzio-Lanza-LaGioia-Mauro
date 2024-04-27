@@ -10,12 +10,11 @@ public class AngleCellTest extends TestCase {
     private AngleCell angleA;
     private AngleCell angleB;
     public void setUp(){
-        angleA = new AngleCell(new Point(1,1), new Point(2,2), new Point(0,0), Symbol.BLANK, Symbol.ANIMAL);
-        angleB = new AngleCell(new Point(1, 1), new Point(0,0), Symbol.ANIMAL);
+        angleA = new AngleCell(new Point(2,2), new Point(0,0), Symbol.BLANK, Symbol.ANIMAL);
+        angleB = new AngleCell(new Point(0,0), Symbol.ANIMAL);
     }
 
     public void testGetters(){
-        assertEquals(angleA.position(), new Point(1,1));
         assertEquals(angleA.topCardPosition(), new Point(2,2));
         assertEquals(angleA.bottomCardPosition(), new Point(0,0));
         assertEquals(angleA.topSymbol(), Symbol.BLANK);
