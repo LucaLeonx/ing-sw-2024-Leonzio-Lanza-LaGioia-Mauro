@@ -72,6 +72,17 @@ class CardCell <<immutable>> {
     + hashCode() : int // Overridden to use only position
 }
 
+class AngleCell <<immutable>> {
+     - position : Point {readOnly}
+     - topCardPosition : Point {readOnly}
+     - bottomCardPosition : Point {readOnly}
+     - topSymbol : Point {readOnly}
+     - bottomSymbol : Point {readOnly}
+     + AngleCell(position : Point, topCardPosition : Point, bottomCardPosition : Point, topSymbol : Symbol, bottomSymbol : Symbol)
+     + AngleCell(position : Point, topCardPosition : Point, topSymbol : Point)
+     + withNewTopCard(newTopCardPosition : Point, newTopSymbol : Symbol) : AngleCell
+}
+
 !endsub
 
 CardCell .r..> Point : <<uses>>
