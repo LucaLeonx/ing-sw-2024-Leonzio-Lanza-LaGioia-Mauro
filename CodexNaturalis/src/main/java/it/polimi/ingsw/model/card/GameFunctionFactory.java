@@ -6,9 +6,6 @@ import it.polimi.ingsw.model.map.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
-
-import static java.lang.Math.floor;
 
 
 /**
@@ -40,7 +37,7 @@ public abstract class GameFunctionFactory {
         return new RewardFunction() {
             @Override
             public int getPoints(GameField field) {
-                return field.getCounter(symbol);
+                return field.getSymbolCounter(symbol);
             }
         };
     }
@@ -58,7 +55,7 @@ public abstract class GameFunctionFactory {
             public int getPoints(GameField field) {
 
                 return symbolOccurrences.keySet().stream()
-                        .mapToInt(symbol -> field.getCounter(symbol) / symbolOccurrences.get(symbol))
+                        .mapToInt(symbol -> field.getSymbolCounter(symbol) / symbolOccurrences.get(symbol))
                         .min()
                         .orElse(0) * points;
             }
@@ -76,7 +73,29 @@ public abstract class GameFunctionFactory {
             @Override
 
             public int getPoints(GameField field) {
-                return field.getCoveredAnglesNumber(cardId) * 2;
+
+                Point cardPosition = new Point(0, 0);
+                int coveredAngles = 0;
+
+                // Find the position of the card on the field
+                try {
+                    cardPosition = field.getCards().entrySet()
+                            .stream().filter((entry) -> entry.getValue().getId() == cardId)
+                            .findFirst()
+                            .map(Map.Entry::getKey)
+                            .orElseThrow();
+                } catch(Exception e){
+                    // Searched card is not on the map, it cannot cover angles
+                    return 0;
+                }
+
+                for(Point anglePoint : Point.getAdjacentPositions(cardPosition)){
+                    if(field.getAngleCells().get(anglePoint).topCardPosition() == cardPosition){
+                        coveredAngles++;
+                    }
+                }
+
+                return coveredAngles * 2;
             }
         };
     }
@@ -141,11 +160,11 @@ public abstract class GameFunctionFactory {
                 }
                 //now we start checking each diagonal one by one
 
-                Point temp; // A variable to go through the diagonal
+                Point temp;
                 for(int i = 0; i < leftmost.size(); i++) {
                     temp = leftmost.get(i);
                     cardsNum = 0;
-                    while (!temp.equals(rightmost.get(i))) {
+                    while (!temp.equals((rightmost.get(i).sum(translationVector)))){
                         if (!field.getCards().containsKey(temp) || field.getCards().get(temp).getCardColor() != colorPattern) {
                             cardsNum = 0;
                         } else {
@@ -293,7 +312,7 @@ public abstract class GameFunctionFactory {
             public boolean isSatisfied(GameField field) {
                 for(Symbol s: requiredSymbols.keySet())
                 {
-                    if(field.getCounter(s) < requiredSymbols.get(s))
+                    if(field.getSymbolCounter(s) < requiredSymbols.get(s))
                         return false;
                 }
                 return true;

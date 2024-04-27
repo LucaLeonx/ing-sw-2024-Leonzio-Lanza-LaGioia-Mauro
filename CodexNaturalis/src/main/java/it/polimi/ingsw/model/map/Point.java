@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.map;
 
+import it.polimi.ingsw.model.card.AnglePosition;
+
 import java.util.*;
 import java.util.stream.*;
 
@@ -34,7 +36,7 @@ public record Point(int x, int y) {
      * @return The sum of the 2 points inside a new instance of Class Point
      */
     public Point sum(Point other){
-        return new Point(this.x() + other.y(), this.y() + other.y());
+        return new Point(this.x() + other.x(), this.y() + other.y());
     }
 
     /**
@@ -45,5 +47,23 @@ public record Point(int x, int y) {
      */
     public Point scale(int factor){
         return new Point(this.x() * factor, this.y() * factor);
+    }
+
+    public Point inverse() {
+        return this.scale(-1);
+    }
+
+    public static Set<Point> getAdjacentPositions(Point position, int scaleFactor){
+        return Stream.of(AnglePosition.values())
+                .map((angle) -> angle.getRelativePosition().scale(scaleFactor))
+                .map((relativePosition) -> Point.sum(position, relativePosition))
+                .collect(Collectors.toUnmodifiableSet());
+
+    }
+
+
+
+    public static Set<Point> getAdjacentPositions(Point position){
+        return getAdjacentPositions(position, 1);
     }
 }
