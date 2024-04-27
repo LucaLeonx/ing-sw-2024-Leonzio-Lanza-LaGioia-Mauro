@@ -1,19 +1,20 @@
 package it.polimi.ingsw.model.map;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import it.polimi.ingsw.model.card.*;
 
 
 public class GameField{
-    private final Map<Point, Card> cards;
+    private final Map<Point, CardCell> cards;
     private final Map<Point, AngleCell> angles;
+    private final Set<Point> availableCells;
     private final Map<Symbol, Integer> symbolCounters;
-    private final HashSet<Point> availableCells;
 
     public GameField(){
         this.cards = new HashMap<>();
-        this.angles= new HashMap<>();
+        this.angles = new HashMap<>();
         this.symbolCounters = new HashMap<>();
         this.availableCells = new HashSet<>();
 
@@ -23,116 +24,81 @@ public class GameField{
         }
     }
 
+    public Map<Point, CardCell> getCardCells() {
+        return Map.copyOf(cards);
+    }
     public Map<Point, Card> getCards() {
-        return cards;
+        return cards.entrySet().stream()
+                .map((entry) -> Map.entry(entry.getKey(), entry.getValue().card()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    public Map<Point, Symbol> getAngles() { //creating a new Hash up to return only position and TopSymbol
-        Map <Point,Symbol> anglePositions= new HashMap<>();
-
-        for (Point point : angles.keySet()) {
-            AngleCell angleCell = angles.get(point);
-            Symbol topSymbol = angleCell.topSymbol;
-            anglePositions.put(point, topSymbol);
-        }
-
-        return anglePositions;
+    public Map<Point, Symbol> getAnglesSymbols() {
+        return angles.entrySet().stream()
+                .map((entry) -> Map.entry(entry.getKey(), entry.getValue().topSymbol()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    public int getCounter(Symbol symbol){  //returns the number of Symbol in Gamefield
+    public Map<Point, AngleCell> getAngleCells() {
+        return Map.copyOf(angles);
+    }
+
+    public int getSymbolCounter(Symbol symbol){  //returns the number of Symbol in Gamefield
         return symbolCounters.get(symbol);
     }
 
     public Set<Point> getAvailablePositions() {
-        return availableCells;
+        return Set.copyOf(availableCells);
     }
 
     public void placeCard(Card card, CardOrientation cardOrientation, Point position)
     {
-        addCard(card, cardOrientation, position);
+        registerCard(card, cardOrientation, position);
+        updateAngles(card, cardOrientation, position);
         updateCounters(card, cardOrientation, position);
         updateAvailableCells(card, cardOrientation, position);
     }
 
-    public int getCoveredAnglesNumber(int cardId){
-
-        Point cardPosition;
-        int coveredAnglesNumber = 0;
-
-        try {
-            cardPosition = getCardPositionById(cardId);
-        } catch (RuntimeException e){
-            return coveredAnglesNumber;
-        }
-
-        for(AnglePosition anglePos : AnglePosition.values()){
-
-            Point currentAnglePosition = cardPosition.sum(anglePos.getRelativePosition());
-
-            if(angles.containsKey(currentAnglePosition)){
-
-                AngleCell currentAngleCell = angles.get(currentAnglePosition);
-
-                if(currentAngleCell.getTopCardPosition().equals(cardPosition)){
-                    coveredAnglesNumber++;
-                }
-            }
-        }
-
-        return coveredAnglesNumber;
-
+    private void registerCard(Card card, CardOrientation cardOrientation, Point cardPosition){
+        CardCell newCard = new CardCell(card, cardOrientation);
+        cards.put(cardPosition, newCard);
     }
 
-    private void addCard(Card card, CardOrientation orientation, Point position){
+    private void updateAngles(Card card, CardOrientation cardOrientation, Point cardPosition){
+        CardSide side = card.getSide(cardOrientation);
 
-        CardSide currentSide = card.getSide(orientation);
+        for(AnglePosition angle : AnglePosition.values()){
+            Point anglePosition = cardPosition.sum(angle.getRelativePosition());
+            Symbol topSymbol = side.getSymbolFromAngle(angle);
 
-        cards.put(position, card);
-
-        for (AnglePosition angle : AnglePosition.values()) {
-            if(currentSide.getSymbolFromAngle(angle) != Symbol.HIDDEN){
-                AngleCell newCell = new AngleCell(position, currentSide.getSymbolFromAngle(angle));
-                angles.put(position.sum(angle.getRelativePosition()), newCell);
-            }
+            // Create the angle if it doesn't exist
+            AngleCell previousAngle = angles.getOrDefault(anglePosition, new AngleCell(cardPosition, topSymbol));
+            angles.put(anglePosition, previousAngle.withNewTopCard(cardPosition, topSymbol));
         }
     }
 
-    private void updateCounters(Card card, CardOrientation orientation, Point position){
-
+    private void updateCounters(Card card, CardOrientation orientation, Point cardPosition){
         for(Symbol symbol : card.getSide(orientation).getCenterSymbols()){
             incrementCounter(symbol);
         }
 
-        for (AnglePosition angle : AnglePosition.values())
-        {
-                AngleCell angleCell = angles.get(position.sum(angle.getRelativePosition())); //angleCell represents the position in which we need to check eventually the new symbol
-                Symbol topSymbol= angleCell.getTopSymbol();
-                Symbol replacedSymbol = angleCell.getBottomSymbol();
+        for(Point point : Point.getAdjacentPositions(cardPosition)){
+            AngleCell updatedAngle = angles.get(point);
+            incrementCounter(updatedAngle.topSymbol());
 
-                incrementCounter(topSymbol);
-                decrementCounter(replacedSymbol);
-
-        }
-    }
-
-    private void updateAvailableCells(Card card, CardOrientation orientation, Point cardPosition){
-
-        for(AnglePosition angle : AnglePosition.values()){
-            if(card.getSide(orientation).getSymbolFromAngle(angle) != Symbol.HIDDEN){
-               Point relativeCardPosition = new Point(angle.getRelativePosition().x() * 2, angle.getRelativePosition().y() * 2);
-               if(!cards.containsKey(relativeCardPosition)) {
-                   availableCells.add(cardPosition.sum(relativeCardPosition));
-               }
+            // An already present angle has been covered
+            if(updatedAngle.isCovered()){
+                decrementCounter(updatedAngle.bottomSymbol());
             }
         }
     }
 
-    private Point getCardPositionById(int id) {
-        return cards.entrySet().stream()
-                .filter((e) -> e.getValue().getId() == id)
-                .findFirst()
-                .map(Map.Entry::getKey)
-                .orElseThrow(RuntimeException::new);
+    private void updateAvailableCells(Card card, CardOrientation cardOrientation, Point cardPosition){
+        for(AnglePosition angle : AnglePosition.values()){
+            if(card.getSide(cardOrientation).getSymbolFromAngle(angle) != Symbol.HIDDEN){
+                availableCells.add(cardPosition.sum(angle.getRelativePosition().scale(2)));
+            }
+        }
     }
 
     private void incrementCounter(Symbol symbol){
@@ -142,42 +108,8 @@ public class GameField{
     private void decrementCounter(Symbol symbol){
         symbolCounters.put(symbol, symbolCounters.get(symbol) - 1);
     }
-
-
-    private class AngleCell{
-        private final Stack<Point> attachedCardsPosition; // there is always a maximum of 2 symbols
-        private Symbol topSymbol;
-
-        private Symbol bottomSymbol;
-
-        AngleCell(Point topCardPosition, Symbol topSymbol) {
-            this.attachedCardsPosition = new Stack<>();
-            attachedCardsPosition.add(topCardPosition);
-            this.topSymbol = topSymbol;
-            this.bottomSymbol = topSymbol;
-        }
-
-        Symbol getTopSymbol(){
-            return topSymbol;
-        }
-
-        Symbol getBottomSymbol(){
-                return bottomSymbol;
-        }
-
-        Point getTopCardPosition(){
-            return attachedCardsPosition.getLast();
-        }
-
-        void attachNewCard(Point position, Symbol topSymbol){
-            attachedCardsPosition.add(position);
-            this.bottomSymbol = this.topSymbol;   //in this way I can save the bottom symbol to update counters correctly
-            this.topSymbol = topSymbol;
-        }
-    }
-
-
-
 }
+
+
 
 

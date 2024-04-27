@@ -32,7 +32,7 @@ class GameField {
     + GameField()
     + getCards() : Map<Point, Card>
     + getAngles(): Map<Point, Symbol>
-    + getCounter(symbol : Symbol) : int
+    + getSymbolCounter(symbol : Symbol) : int
     + placeCard(card : Card, orientation : CardOrientation, position : Point)
     + getAvailablePositions() : Set<Point>
     - addCard(card : Card, orientation : CardOrientation, position : Point)
