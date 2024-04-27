@@ -1,0 +1,52 @@
+@startuml
+
+'TODO:  Think about the task division between these classes and the Controllre ones,
+'       some of these methods may only launch the controller methods
+
+class Server{
+    - int socketPort
+    - ServerSocket socketImplementation
+    - RMIServer rmiImplementation
+    ' contains socket and RMI implementation (not extends them)
+    + startServer()
+    'Remember to use ExecutorsService object with Executors.newCachedThreadPool() method for socket multi-threading
+
+}
+
+class Client{
+    'First of all ask the user which type of connection he/she want to establish
+    ' and startClient() will create the connection with the chosen technology
+    - String nickname
+    + startClient()
+
+}
+
+interface RMIGeneral extends remote{
+' General interface inherited by both Client and Server
+    + startUpConnection() throws RemoteException
+    + addPlayer(String nickname) throws RemoteException
+    + removePlayer(String nickname) throws RemoteException
+    + sendMessage() throws RemoteException
+    + updateBoard() throws RemoteException
+
+}
+
+'RMI call the method in multi-Thread mode by default, we have to ensure the Thread-safety
+class RMIServerImpl extends UnicastRemoteObject implements RMIGeneral{
+
+}
+
+class RMIClient implements RMIGeneral{
+
+}
+
+class SocketClient{
+    + startClient() throws IOException
+}
+
+class ServerSocketClientHandler extends Runnable{
+    ''For handle multiple instances of socket connection
+    + run()
+}
+
+@enduml
