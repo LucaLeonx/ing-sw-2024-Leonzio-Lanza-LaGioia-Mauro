@@ -179,8 +179,8 @@ public class TUI {
         }
 
         //7 We print out what's underneath the starting symbol
-        Point O= new Point(0,0);
-        System.out.println("list of the symbol in the middle of the starting card: " + player.getField().getCards().get(O).getSide(CardOrientation.FRONT).getCenterSymbols());
+        Point origin = new Point(0,0);
+        System.out.println("list of the symbol in the middle of the starting card: " + player.getField().getCardCells().get(origin).visibleCardSide().getCenterSymbols());
 
     }
 

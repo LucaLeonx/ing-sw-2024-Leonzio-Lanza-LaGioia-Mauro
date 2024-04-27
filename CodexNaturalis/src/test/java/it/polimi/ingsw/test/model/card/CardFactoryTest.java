@@ -78,4 +78,23 @@ public class CardFactoryTest extends TestCase {
         assertEquals(goldIds.size(), actualIds.size());
         assertTrue(goldIds.containsAll(actualIds));
     }
+
+    public void testObjectiveCard() throws FileNotFoundException {
+        List<ObjectiveCard> objCards = CardFactory.getObjectiveCards();
+        Set<Integer> Ids = new HashSet<Integer>();
+        Set<Integer> actualIds = new HashSet<Integer>();
+        ObjectiveCard card;
+        for (int i = 87; i <= 102; i++) {
+            Ids.add(i);
+        }
+        for (int j = 0; j < 16; j++) {
+            //resourcePicker.extractRandomElement().ifPresent(card -> pickerIds.add(card.getId()));
+            card = objCards.get(j);
+            actualIds.add(card.getId());
+            System.out.println("id: " + card.getId());
+
+        }
+        assertEquals(Ids.size(), actualIds.size());
+        assertTrue(Ids.containsAll(actualIds));
+    }
 }
