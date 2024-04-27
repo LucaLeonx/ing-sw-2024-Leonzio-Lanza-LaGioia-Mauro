@@ -2,6 +2,8 @@ package it.polimi.ingsw.model.map;
 
 import it.polimi.ingsw.model.card.*;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -41,7 +43,7 @@ public class CardCell {
 
         return Stream.of(AnglePosition.values())
                 .map((angle) -> angle.getRelativePosition().scale(2))
-                .map((relativePosition) -> position.sum(relativePosition))
+                .map((relativePosition) -> Point.sum(position, relativePosition))
                 .collect(Collectors.toUnmodifiableSet());
 
     }
@@ -49,13 +51,13 @@ public class CardCell {
     public Set<Point> getCoveringCardsPositions(){
         return coveredAngles.stream()
                 .map((angle) -> angle.getRelativePosition().scale(2))
-                .map((relativePosition) -> position.sum(relativePosition))
+                .map((relativePosition) -> Point.sum(position, relativePosition))
                 .collect(Collectors.toUnmodifiableSet());
     }
 
-    public CardCell withCoveredAngles(Set<AnglePosition> newCoveredAngles){
+    public CardCell withCoveredAngles(AnglePosition... newCoveredAngles){
         Set<AnglePosition> coveredAngles = new HashSet<>(this.coveredAngles);
-        coveredAngles.addAll(newCoveredAngles);
+        Collections.addAll(coveredAngles, newCoveredAngles);
         return new CardCell(this.position, this.card, this.cardOrientation, coveredAngles);
     }
 

@@ -58,12 +58,6 @@ public abstract class CardFactory {
         Card[] card = gson.fromJson(reader,Card[].class);
         return  Arrays.asList(card);
     }
-
-    private static List<Card> getCardList(){
-        return List.of();
-    }
-
-
 }
 class ResourceCardAdapter extends TypeAdapter<Card[]>{
     public  Card[] read (JsonReader reader) throws IOException {
