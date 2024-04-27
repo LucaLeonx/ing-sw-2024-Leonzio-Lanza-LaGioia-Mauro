@@ -1,12 +1,14 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.model.card.CardColor;
+import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.card.Symbol;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 
 import static java.lang.Math.abs;
+
 
 public class TUI {
     static String fungiSymbol= "\uD83C\uDF44";
@@ -43,7 +45,7 @@ public class TUI {
         int maxY=0;
 
         // we used angles because in angles there will be the edge of the map, not in cards.
-        for(Point p: player.getField().getAngles().keySet())
+        for(Point p: player.getField().getAnglesSymbols().keySet())
         {
             if(p.x()<minX){
                 minX=p.x();
@@ -105,42 +107,42 @@ public class TUI {
 
 
         //4 Populate maps with the correct symbol.
-        for(Point p: player.getField().getAngles().keySet())
+        for(Point p: player.getField().getAnglesSymbols().keySet())
         {
             String symbol=whiteSquareSymbol;
-            if(player.getField().getAngles().get(p) == Symbol.ANIMAL)
+            if(player.getField().getAnglesSymbols().get(p) == Symbol.ANIMAL)
             {
                 symbol=animalSymbol;
             }
-            else if(player.getField().getAngles().get(p) == Symbol.PLANT)
+            else if(player.getField().getAnglesSymbols().get(p) == Symbol.PLANT)
             {
                 symbol=plantSymbol;
             }
-            else if(player.getField().getAngles().get(p) == Symbol.INSECT)
+            else if(player.getField().getAnglesSymbols().get(p) == Symbol.INSECT)
             {
                 symbol=insectSymbol;
             }
-            else if(player.getField().getAngles().get(p) == Symbol.FUNGI)
+            else if(player.getField().getAnglesSymbols().get(p) == Symbol.FUNGI)
             {
                 symbol=fungiSymbol;
             }
-            else if(player.getField().getAngles().get(p) == Symbol.INKWELL)
+            else if(player.getField().getAnglesSymbols().get(p) == Symbol.INKWELL)
             {
                 symbol=inkwellSymbol;
             }
-            else if(player.getField().getAngles().get(p) == Symbol.MANUSCRIPT)
+            else if(player.getField().getAnglesSymbols().get(p) == Symbol.MANUSCRIPT)
             {
                 symbol=manuscriptSymbol;
             }
-            else if(player.getField().getAngles().get(p) == Symbol.QUILL)
+            else if(player.getField().getAnglesSymbols().get(p) == Symbol.QUILL)
             {
                 symbol=quillSymbol;
             }
-            else if(player.getField().getAngles().get(p) == Symbol.BLANK)
+            else if(player.getField().getAnglesSymbols().get(p) == Symbol.BLANK)
             {
                 symbol=whiteSquareSymbol;
             }
-            else if(player.getField().getAngles().get(p) == Symbol.HIDDEN)
+            else if(player.getField().getAnglesSymbols().get(p) == Symbol.HIDDEN)
             {
                 //Qua raga ho bisogno di sapere la carta che sta coprendo quel punto.
                 // ho letto c'è una getTopCardPosition ma non so come fare a prendere l'angleCell a partire dal punto che esso ricopre
@@ -178,7 +180,7 @@ public class TUI {
 
         //7 We print out what's underneath the starting symbol
         Point O= new Point(0,0);
-        System.out.println("list of the symbol in the middle of thestarting card: " + player.getField().getCards().get(O).getSide().getCenterSymbols());
+        System.out.println("list of the symbol in the middle of the starting card: " + player.getField().getCards().get(O).getSide(CardOrientation.FRONT).getCenterSymbols());
 
     }
 

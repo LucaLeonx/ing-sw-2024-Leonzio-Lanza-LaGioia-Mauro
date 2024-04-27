@@ -31,6 +31,7 @@ class GameField <<synchronized>> {
     - availableCells: Set<Point>
     - symbolCounters: Map<Symbol, int>
     + getCards() : Map<Point, Card>
+    + getAngleSymbols() : Map<Point, Symbol>
     + getCardCells() : Map<Point, CardCell>
     + getCardInPosition(position : Points) : CardCell
     + getSymbolCount(symbol : Symbol) : int
