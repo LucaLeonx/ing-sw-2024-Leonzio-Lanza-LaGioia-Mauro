@@ -41,4 +41,12 @@ public class PointTest extends TestCase {
         assertEquals(new Point(0, -4), Point.sum(Set.of(a, b, c, d)));
         assertEquals(new Point(0,0), Point.sum(new ArrayList<>()));
     }
+
+    public void testScale(){
+        assertEquals(new Point(2,2), new Point(1,1).scale(2));
+        assertEquals(new Point(-2,2), new Point(-1,1).scale(2));
+        assertEquals(new Point(15,-9), new Point(5,-3).scale(3));
+        assertEquals(new Point(-2,-3), new Point(2,3).scale(-1));
+        assertEquals(new Point(0,0), new Point(4,7).scale(0));
+    }
 }

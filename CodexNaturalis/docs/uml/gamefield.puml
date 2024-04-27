@@ -17,7 +17,7 @@ class Point <<immutable>> {
     + sum(other : Point) : Point
     + sum(points : Point...) : Point
     + sum(points : Collection<Point>) : Point {static}
-    + scaleVector(factor : int) : Point
+    + scale(factor : int) : Point
 }
 
 note "Java record with extra sum() method" as N1
@@ -58,15 +58,16 @@ class CardCell <<immutable>> {
     - card : Card {readOnly}
     - cardOrientation : CardOrientation {readOnly}
     - coveredAngles : Set<AnglePosition> {readOnly}
+    - CardCell(position : Point, card : Card, orientation : CardOrientation, coveredAngles : coveredAngles : Set<AnglePosition>)
     + CardCell(position : Point, card : Card, orientation : CardOrientation)
-    + CardCell(position : Point, card : Card, orientation : CardOrientation)
+    + getPosition() : Point
     + getCard() : Card
     + getCardOrientation() : CardOrientation
     + getCardColor() : CardColor
     + getVisibleCardSide() : CardSide
     + getAdjacentCardsPositions() : Set<Point>
     + getCoveringCardsPositions() : Set<Point>
-    + withCoveredAnglesPositions(AnglesPosition) : CardCell
+    + withCoveredAngles(coveredAngles : Set<AnglePosition>) : CardCell
     + equals(Object other) : boolean
     + hashCode() : int // Overridden to use only position
 }

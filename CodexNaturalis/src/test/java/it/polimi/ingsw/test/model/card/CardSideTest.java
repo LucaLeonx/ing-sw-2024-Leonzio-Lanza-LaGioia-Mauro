@@ -18,7 +18,6 @@ public class CardSideTest extends TestCase {
 
     private CardSide resourceCardSide;
     private CardSide initialCardSide;
-
     private CardSide goldenCardSide;
 
     public void setUp(){

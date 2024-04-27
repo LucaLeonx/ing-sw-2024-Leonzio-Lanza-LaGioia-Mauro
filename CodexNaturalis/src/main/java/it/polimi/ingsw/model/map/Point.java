@@ -17,7 +17,7 @@ public record Point(int x, int y) {
     /**
      * This method performs the component sum of a collections.
      * @param points The collection containing the points to be summed
-     * @return The sum of the points. If the colleciton is empty, the Point(0, 0) is returned
+     * @return The sum of the points. If the collection is empty, the Point(0, 0) is returned
      */
     public static Point sum(Collection<Point> points){
         return sumPointStream(points.stream());
@@ -30,10 +30,20 @@ public record Point(int x, int y) {
 
     /**
      * This method performs the component sum of 2 points.
-     * @param other The Point istance to be summed
-     * @return The sum of the 2 points inside a new istance of Class Point
+     * @param other The Point instance to be summed
+     * @return The sum of the 2 points inside a new instance of Class Point
      */
     public Point sum(Point other){
         return new Point(this.x() + other.y(), this.y() + other.y());
+    }
+
+    /**
+     * This method returns a new Point whose coordinates are those of the caller,
+     * scaled (multiplied) by a given number
+     * @param factor The factor to which scale the coordinates
+     * @return A new Point whose coordinates are those of the caller, scaled by the specified factor
+     */
+    public Point scale(int factor){
+        return new Point(this.x() * factor, this.y() * factor);
     }
 }
