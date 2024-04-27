@@ -2,9 +2,10 @@
 skinparam linetype ortho
 skinparam nodesep 150
 skinparam ranksep 100
+skinparam dpi 300
+
 !startsub GAMEFIELD
-class Point
-{
+class Point <<immutable>> {
     - x : int {readOnly}
     - y : int {readOnly}
     + Point(x : int, y : int)
@@ -14,13 +15,14 @@ class Point
     + equals(Object other) : boolean
     + hashCode() : long
     + sum(other : Point) : Point
-    + sum(points : Point...) : Point {static}
+    + sum(points : Point...) : Point
     + sum(points : Collection<Point>) : Point {static}
+    + scaleVector(factor : int) : Point
 }
 
 note "Java record with extra sum() method" as N1
 N1 .. Point
-
+/'
 class GameField {
     - cards: Map<Point, Card>
     - angles: Map<Point, AngleCell>
@@ -34,14 +36,45 @@ class GameField {
     + placeCard(card : Card, orientation : CardOrientation, position : Point)
     + getAvailablePositions() : Set<Point>
     - addCard(card : Card, orientation : CardOrientation, position : Point)
-}
-GameField .r..> Point : <<uses>>
+}'/
 
-class AngleCell {
 
+class GameField <<synchronized>> {
+    - availableCells: Set<Point>
+    - symbolCounters: Map<Symbol, int>
+    - cardCells : Set<CardCell>
+    + getCards() : Set<CardCell>
+    + getCardInPosition(position : Points) : CardCell
+    + getCardCellByCardId(cardId : int) : CardCell
+    + placeCard(position : Point, card : Card, orientation : CardOrientation)
+    + getSymbolCount(symbol : Symbol) : int
+    + getAvailablePositions() : Set<Point>
 }
+' Returned sets are immutable copies
+
+
+class CardCell <<immutable>> {
+    - position : Point {readOnly}
+    - card : Card {readOnly}
+    - cardOrientation : CardOrientation {readOnly}
+    - coveredAngles : Set<AnglePosition> {readOnly}
+    + CardCell(position : Point, card : Card, orientation : CardOrientation)
+    + CardCell(position : Point, card : Card, orientation : CardOrientation)
+    + getCard() : Card
+    + getCardOrientation() : CardOrientation
+    + getCardColor() : CardColor
+    + getVisibleCardSide() : CardSide
+    + getAdjacentCardsPositions() : Set<Point>
+    + getCoveringCardsPositions() : Set<Point>
+    + withCoveredAnglesPositions(AnglesPosition) : CardCell
+    + equals(Object other) : boolean
+    + hashCode() : int // Overridden to use only position
+}
+
 !endsub
 
-
+CardCell .r..> Point : <<uses>>
+GameField .r..> Point : <<uses>>
+GameField --o CardCell : - cardCells
 
 @enduml
