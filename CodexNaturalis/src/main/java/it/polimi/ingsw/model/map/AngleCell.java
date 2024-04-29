@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.map;
 import it.polimi.ingsw.model.card.Symbol;
 
 /**
- * Class used by the Gamefiled to memorize the symbols in a specific point, because they can be overlapped
+ * Record used by the Gamefiled to represent the symbols in a specific point, because they can be overlapped
  * @param topCardPosition
  * @param bottomCardPosition
  * @param topSymbol

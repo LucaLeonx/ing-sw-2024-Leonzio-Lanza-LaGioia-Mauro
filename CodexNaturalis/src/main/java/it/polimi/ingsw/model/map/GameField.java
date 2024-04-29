@@ -27,7 +27,7 @@ public class GameField{
     /**
      *
      *
-     * @return A copy of cards Map
+     * @return A copy of the CardCell Map
      */
     public Map<Point, CardCell> getCardCells() {
         return Map.copyOf(cards);

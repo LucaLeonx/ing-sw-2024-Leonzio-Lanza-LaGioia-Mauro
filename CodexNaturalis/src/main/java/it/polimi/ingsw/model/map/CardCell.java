@@ -9,6 +9,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Record used by the Gamefield to represent the type of card with color and side in a specific point
+ * @param card - class of a specific card
+ * @param orientation - orientation of the card played by the Player
+ */
 public record CardCell(Card card, CardOrientation orientation) {
 
     public CardColor cardColor() {
