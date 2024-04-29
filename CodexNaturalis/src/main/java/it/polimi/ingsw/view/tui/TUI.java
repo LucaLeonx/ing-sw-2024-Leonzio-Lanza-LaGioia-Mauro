@@ -31,10 +31,10 @@ public class TUI {
     static String redCircleSymbol= "\uD83D\uDD34";
 
     public void drawMap(Player player) {
-        //debugging line to make sure the unicode is well written
-        //System.out.println(fungiSymbol + animalSymbol + insectSymbol + plantSymbol + manuscriptSymbol + quillSymbol + inkwellSymbol);
-        //System.out.println(whiteSquareSymbol +  redSquareSymbol + greenSquareSymbol + blueSquareSymbol + purpleSquareSymbol + goldSquareSymbol + blackSquareSymbol);
-        //System.out.println(blueCircleSymbol + greenCircleSymbol + yellowCircleSymbol + redCircleSymbol);
+        /*debugging lines to make sure the unicode is well written
+        System.out.println(fungiSymbol + animalSymbol + insectSymbol + plantSymbol + manuscriptSymbol + quillSymbol + inkwellSymbol);
+        System.out.println(whiteSquareSymbol +  redSquareSymbol + greenSquareSymbol + blueSquareSymbol + purpleSquareSymbol + goldSquareSymbol + blackSquareSymbol);
+        System.out.println(blueCircleSymbol + greenCircleSymbol + yellowCircleSymbol + redCircleSymbol); */
 
         System.out.flush();
 
@@ -144,8 +144,27 @@ public class TUI {
             }
             else if(player.getField().getAnglesSymbols().get(p) == Symbol.HIDDEN)
             {
-                //Qua raga ho bisogno di sapere la carta che sta coprendo quel punto.
-                // ho letto c'è una getTopCardPosition ma non so come fare a prendere l'angleCell a partire dal punto che esso ricopre
+                Point TopPositionCard=player.getField().getAngleCells().get(p).topCardPosition();
+                if(player.getField().getCards().get(TopPositionCard).getCardColor()==CardColor.WHITE)
+                {
+                    symbol=goldSquareSymbol;
+                }
+                else if(player.getField().getCards().get(TopPositionCard).getCardColor()==CardColor.SKYBLUE)
+                {
+                    symbol=blueSquareSymbol;
+                }
+                else if(player.getField().getCards().get(TopPositionCard).getCardColor()==CardColor.GREEN)
+                {
+                    symbol=greenSquareSymbol;
+                }
+                else if(player.getField().getCards().get(TopPositionCard).getCardColor()==CardColor.RED)
+                {
+                    symbol=redSquareSymbol;
+                }
+                else if(player.getField().getCards().get(TopPositionCard).getCardColor()==CardColor.PURPLE)
+                {
+                    symbol=purpleSquareSymbol;
+                }
             }
             matrixMap[p.x()+abs(minX)][p.y()+abs(minY)]=symbol;
         }
@@ -181,7 +200,6 @@ public class TUI {
         //7 We print out what's underneath the starting symbol
         Point origin = new Point(0,0);
         System.out.println("list of the symbol in the middle of the starting card: " + player.getField().getCardCells().get(origin).visibleCardSide().getCenterSymbols());
-
     }
 
 }

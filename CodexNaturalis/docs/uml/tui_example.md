@@ -67,12 +67,19 @@ WE USED THE FOLLOWING EMOJI TO BUILD TUI:
 🟩: \uD83D\uDFE9     BACKGROUND OR HIDDEN ANGLE OF A GREEN CARD
 🟦: \uD83D\uDFE6     BACKGROUND OR HIDDEN ANGLE OF A BLUE CARD
 🟪: \uD83D\uDFEA     BACKGROUND OR HIDDEN ANGLE OF A PURPLE CARD
-🟨: \uD83D\uDFE8     BACKGROUND OR HIDDEN ANGLE OF THE INITIAL CARD
-⬛: \u2B1B           TABLE
+🟫: \uD83D\uDFEB      BACKGROUND OR HIDDEN ANGLE OF THE INITIAL CARD
+🟨: \uD83D\uDFE8     SPECIAL COLOR FOR GOLDEN CARD IN THE DECK
+⬛: \u2B1B           TABLE AND BACKGROUND OF OBJECTIVE CARD
 🔵: \uD83D\uDD35     STARTING POINT OF A BLUE PLAYER
 🟢: \uD83D\uDFE2     STARTING POINT OF A GREEN PLAYER
 🟡: \uD83D\uDFE1     STARTING POINT OF A YELLOW PLAYER
 🔴: \uD83D\uDD34     STARTING POINT OF A RED PLAYER
+1️⃣: NOT FOUND        1 POINT FOR AN OBJECTIVE/GOLD CARD  
+2️⃣: NOT FOUND        2 POINTS FOR AN OBJECTIVE/GOLD CARD  
+3️⃣: NOT FOUND        3 POINTS FOR AN OBJETIVE/GOLD CARD
+5️⃣: NOT FOUND        5 POINTS FOR AN OBJETIVE/GOLD CARD
+◰ : \u25F0            SYMBOL TO SIGNAL THE FACT YOU ARE GETTING POINT BASED ON ANGLES COVERED
+❕:\u2755            SYMBOL USED TO SAY FOR EACH " | " IN A GOLD CARD. 
 
 Every emoji alligned perfectly with the other. 
 Test for correct alignment: 
@@ -84,16 +91,18 @@ Test for correct alignment:
 🫙   🫙   🫙   🫙   🫙   🫙   🫙   🫙   🫙   🫙   🫙   🫙   🫙   🫙   🫙   🫙
 ⬛   ⬛   ⬛   ⬛   ⬛   ⬛   ⬛   ⬛   ⬛   ⬛   ⬛   ⬛   ⬛   ⬛   ⬛   ⬛
 🔴   🔴   🔴   🔴   🔴   🔴   🔴   🔴   🔴   🔴   🔴   🔴   🔴   🔴   🔴   🔴
-
+2️⃣   2️⃣   2️⃣   2️⃣   2️⃣   2️⃣   2️⃣   2️⃣   2️⃣   2️⃣   2️⃣   2️⃣   2️⃣   2️⃣   2️⃣   2️⃣
+problem: following symbol aligns poorly. it could be still fine I guess since it would not be on the map.  
+◰   ◰   ◰   ◰   ◰   ◰   ◰   ◰   ◰   ◰   ◰   ◰   ◰   ◰   ◰   ◰   ◰   ◰   
 
 -----------------------------------------------------------------------------------------
 
-Example of the front of a card:
+Example of the front of a card in play:
 ⬜🟥📝
 🟥🟥🟥
 🍄🟥🍄
 
-Example of the back of a card:
+Example of the back of a card in play:
 ⬜🟥⬜
 🟥🍄🟥
 ⬜🟥⬜
@@ -105,16 +114,67 @@ write out what in the map would be underneath of it.
 An example of a map of green player:
 ⬜🟥⬜⬛⬜🟥📝
 🟥🍄🟥⬛🟥🟥🟥
-⬜🟥⬜🟨🍄🟥🍄
-⬛⬛🟨🟢🟨⬛⬛
-⬛⬛🪴🟨⬜⬛⬛
+⬜🟥⬜🟫🍄🟥🍄
+⬛⬛🟫🟢🟫⬛⬛
+⬛⬛🪴🟫⬜⬛⬛
 
 🟢: 🍄🦋🪴
 
-Example of an hand:
-⬜🟥📝  ⬜🟩🟩  🟦🟦⬜
-🟥🟥🟥  🟩🟩🟩  🟦🟦🟦
-🍄🟥🍄  🪴🟩🪴  🫙🟦🟦
+TODO: 
+For the hand and the decks we need to be a little bit more specific. In particular while when the card are played we are 
+only interested in the symbol that are displayed when they are in hand we would also need to know if that card gives point
+and which requirement it needs to satisfy. Of course it is impossible to display all this information in a 3*3 grid so we 
+opted to have a bigger image for the hand and the card that are played opting for a 5*3 grid. 
+
+Examples of a card in hand or to draw:
+
+normal example
+⬜🟪3️⃣🟪📝
+🟪🟪🟪🟪🟪
+🟪🦋🦋🦋🟪
+
+example with max number of symbol as requirements
+⬜🟥5️⃣🟥⬜
+🟥🍄🍄🟥🟥
+🟥🍄🍄🍄🟥
+
+example with conditional points (1 points for every quill) 
+⬜1️⃣❕🪶🟦
+🟦🟦🟦🟦🟦
+🪶🐺🐺🍄⬜
+
+
+
+example with conditional point (2 points for every angle that was covered) {small problem of alignment}
+⬜2️⃣❕◰ 🟩
+🟩🟩🟩🟩🟩
+🪶🪴🪴🍄⬜
+
+
+
+example of back and front of a resource card
+⬜🟥🟥🟥⬜
+🟥🟥🟥🟥🟥
+🍄🟥🟥🟥🍄
+
+
+⬜🟥🟥🟥⬜
+🟥🟥🍄🟥🟥
+⬜🟥🟥🟥⬜
+
+example of objective cards:
+⬜⬜⬜⬜⬜
+⬜🪶🪶🪶⬜
+⬜⬜⬜⬜⬜
+
+⬜⬜🟥⬜3️⃣
+⬜⬜🟥⬜⬜         
+⬜⬜⬜🟩⬜         
+
+⬜🟪⬜⬜2️⃣
+⬜⬜🟪⬜⬜
+⬜⬜⬜🟪⬜
+
 -----------------------------------------------------------------------------------------
 
 final TUI:
@@ -130,34 +190,33 @@ your map:
 
 Card to draw:
 
-decks:
-resource         gold
-⬜🟥⬜          ⬜🟪⬜
-🟥🍄🟥          🟪🦋🟪
-⬜🟥⬜          ⬜🟪⬜
+decks :
+resource            gold
+⬜🟥🟥🟥⬜         ⬜🟪🟨🟪⬜
+🟥🟥🍄🟥🟥         🟪🟨🦋🟨🟪
+⬜🟥🟥🟥⬜         ⬜🟪🟨🟪⬜
 
-cards down:
-resource         gold
-⬜🟥📝          ⬜🟩🟩  
-🟥🟥🟥          🟩🟩🟩  
-🍄🟥🍄          🪴🟩🪴
+cards on the table:
+          
+⬜🟥🟥🟥📝         ⬜🟪3️⃣🟪📝
+🟥🟥🟥🟥🟥         🟪🟪🟪🟪🟪  
+🍄🟥🟥🟥🍄         🟪🦋🦋🦋🟪
 
-🟦🟦⬜          ⬜🟪🟪  
-🟦🟦🟦          🟪🟪🟪
-🫙🟦🟦          🦋🟪🦋
+⬜🟦1️⃣🟦⬜         ⬜2️⃣❕◰ 🟦 
+🟦🟦🟦🟦🟦         🟦🟦🟦🟦🟦
+🫙🟦🟦🟦🟦         🪶🐺🐺🍄⬜
 
 common objectives:
-- 3 green diagonal
-- 1 block green and up right red
+⬜⬜🟥⬜3️⃣         ⬜🟪⬜⬜2️⃣
+⬜⬜🟥⬜⬜         ⬜⬜🟪⬜⬜
+⬜⬜⬜🟩⬜         ⬜⬜⬜🟪⬜
 
 
 your hand:
-⬜🟥📝  ⬜🟩🟩  🟦🟦⬜
-🟥🟥🟥  🟩🟩🟩  🟦🟦🟦
-🍄🟥🍄  🪴🟩🪴  🫙🟦🟦
+⬜🟥5️⃣🟥⬜         ⬜🟩🟩🟩🟩         🟪🟪🟪🟪⬜         ⬜⬜⬜⬜⬜
+🟥🍄🍄🟥🟥         🟩🟩🟩🟩🟩         🟪🟪🟪🟪🟪         ⬜🪶🪶🪶⬜
+🟥🍄🍄🍄🟥         🪴🟩🟩🟩🪴         🦋🟪🟪🟪🦋         ⬜⬜⬜⬜⬜
 
-secret goal:
-- 3 quill
 
 ------------------------------------------------------------------------------------
 
