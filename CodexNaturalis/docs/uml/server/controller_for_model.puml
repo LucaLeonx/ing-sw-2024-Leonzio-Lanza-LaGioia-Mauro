@@ -1,5 +1,7 @@
 @startuml
 class Controller {
+    - Game game
+
     + createGame() : Game
     + getSetupChoice() : 2 ObjectiveCard, InitialCard
     + makePlayerSetupChoice(ObjectiveCard choice, Card initialCard , CardOrientation initialCardSide)
