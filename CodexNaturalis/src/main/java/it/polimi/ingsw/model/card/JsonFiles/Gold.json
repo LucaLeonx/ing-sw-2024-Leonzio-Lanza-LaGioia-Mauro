@@ -316,7 +316,7 @@
       "RequiredFunction": ["PLANT", "PLANT", "PLANT"],
       "angles": {
         "UP_LEFT": "HIDDEN",
-        "UP_RIGHT": "MANUSCRIPT",
+        "UP_RIGHT": "INKWELL",
         "DOWN_LEFT": "HIDDEN",
         "DOWN_RIGHT": "BLANK"
       }
@@ -514,13 +514,13 @@
     "color": "PURPLE",
     "front": {
       "RewardFunction":{
-        "type": "INKWELL",
+        "type": "QUILL",
         "points": 1
       },
       "RequiredFunction": ["INSECT", "INSECT", "PLANT"],
       "angles": {
         "UP_LEFT": "BLANK",
-        "UP_RIGHT": "INKWELL",
+        "UP_RIGHT": "QUILL",
         "DOWN_LEFT": "HIDDEN",
         "DOWN_RIGHT": "BLANK"
       }

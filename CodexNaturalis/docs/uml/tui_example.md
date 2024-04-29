@@ -163,8 +163,8 @@ example of back and front of a resource card
 ⬜🟥🟥🟥⬜
 
 example of objective cards:
-⬜⬜⬜⬜⬜
-⬜🪶🪶🪶⬜
+⬜⬜⬜⬜3️⃣
+⬜🪶📝🫙⬜
 ⬜⬜⬜⬜⬜
 
 ⬜⬜🟥⬜3️⃣
@@ -213,8 +213,8 @@ common objectives:
 
 
 your hand:
-⬜🟥5️⃣🟥⬜         ⬜🟩🟩🟩🟩         🟪🟪🟪🟪⬜         ⬜⬜⬜⬜⬜
-🟥🍄🍄🟥🟥         🟩🟩🟩🟩🟩         🟪🟪🟪🟪🟪         ⬜🪶🪶🪶⬜
+⬜🟥5️⃣🟥⬜         ⬜🟩🟩🟩🟩         🟪🟪🟪🟪⬜         ⬜⬜⬜⬜3️⃣
+🟥🍄🍄🟥🟥         🟩🟩🟩🟩🟩         🟪🟪🟪🟪🟪         ⬜🪶📝🫙⬜
 🟥🍄🍄🍄🟥         🪴🟩🟩🟩🪴         🦋🟪🟪🟪🦋         ⬜⬜⬜⬜⬜
 
 
@@ -233,7 +233,10 @@ Algorithm in a nutshell to build the map:
 PS: The cells in our model translate 1 to 1 to the cell in the TUI. 
 Obviously there is going to be a displacement because we need to keep track of the fact that we have to map the position minX 
 and minY to the (0,0) position of the matrix. in order to do that we simply add abs(minX) to the x of the map and abs(minY) to the Y 
-to get to corresponding position of the matrix.  
+to get to corresponding position of the matrix.  (of course after having updated the min and the Max to the center of the card not the edge)
+
+PS2: Position number (8,8) in our matrix should be up right while in a matrix of course would be  down right. to fix this we need to put a minus
+symbol each time we consider the y of the matrix. In order to fix this we start reading not from the top to the bottom but bottom up.  
 
 
 
