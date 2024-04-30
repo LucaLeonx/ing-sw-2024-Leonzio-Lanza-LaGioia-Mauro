@@ -30,6 +30,7 @@ class GameField <<synchronized>> {
     - angles : Map<Point, AngleCell>
     - availableCells: Set<Point>
     - symbolCounters: Map<Symbol, int>
+    - lock : ReentrantReadWriteLock
     + getCards() : Map<Point, Card>
     + getAngleSymbols() : Map<Point, Symbol>
     + getCardCells() : Map<Point, CardCell>

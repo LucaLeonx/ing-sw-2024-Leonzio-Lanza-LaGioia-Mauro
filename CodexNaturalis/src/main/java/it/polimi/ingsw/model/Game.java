@@ -22,6 +22,7 @@ public class Game {
 
     public Game(List<String> playerNames) throws FileNotFoundException {
         int i = 0;
+
         PlayerColor[] playerColors = {PlayerColor.RED,PlayerColor.GREEN,PlayerColor.BLUE,PlayerColor.YELLOW};
         this.goldCardDeck = new Deck(CardFactory.getGoldCards());
         this.resourceCardDeck = new Deck(CardFactory.getResourceCards());
@@ -88,7 +89,7 @@ public class Game {
      * @param initialCard
      * @param choiceOrientation
      */
-    //is the initialCard parameter usefull? We surely don't to send this information back from the client to the server
+    // is the initialCard parameter useful? We surely don't to send this information back from the client to the server
     // We can just save it here or the controller can keep the information while waiting the client response
     public void setInitialCardOriented(String playerNick, Card initialCard, CardOrientation choiceOrientation){
         for(Player p : this.players){

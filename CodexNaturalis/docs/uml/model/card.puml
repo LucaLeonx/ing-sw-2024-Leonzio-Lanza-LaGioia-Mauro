@@ -37,51 +37,52 @@ enum CardOrientation{
     BACK
 }
 
-class Card {
-    - id: int
+class Card <<immutable>> {
+    - id: int {readOnly}
     + Card(color: CardColor, front: CardSide, back: CardSide)
     + getId() : int
     + getColor() : CardColor
     + getSide(orientation: CardOrientation) : CardSide
 }
 
-class CardSide {
+class CardSide <<immutable>> {
     + CardSide(centerSymbols: Collection<Symbol>, angleSymbols: Map<AnglePosition, Symbol>, requirements : RequirementFunction, reward : RewardFunction)
-    + getDisplayedSymbols() : Set<Symbol>
+    + getDisplayedSymbols() : List<Symbol>
     + getCenterSymbols() : List<Symbol>
+
     + getSymbolFromAngle(position : AnglePosition) : Symbol
     + getPlayingRequirements() : RequirementFunction
     + getPlayingReward() : RewardFunction
 }
 
-class RandomPicker <T>{
-    - elements : Set<T>
-    + RandomPicker(Collection<T> elements)
-    + isEmpty() : bool
-    + extractRandomElement() : Optional<T>
-}
-
-class ObjectiveCard {
-    - id : int
-    - rewardFunction : RewardFunction
+class ObjectiveCard <<immutable>> {
+    - id : int {readOnly}
+    - rewardFunction : RewardFunction {readOnly}
     + ObjectiveCard(id : int, rewardFunction : RewardFunction)
     + getId() : int
     + getRewardFunction() : RewardFunction
 }
 
-class Deck{
-    - topCard : Optional<Card>
-    + Deck(cards : Collection<Card>)
+class RandomPicker<T> {
+    - elements : Set<T>
+    + RandomPicker(Collection<T> elements)
     + isEmpty() : bool
-    + leftCards() : int
-    + showTopCard() : Optional<Card>
-    + draw() : Optional<Card>
+    + extractRandomElement() :
+    + getElementsList() : List<T>
 }
 
-
+class Deck <<concurrent>> {
+    - cardPicker : RandomPicker<Card>
+    + Deck(cards : Collection<Card>)
+    + isEmpty() : bool
+    + getLeftCardsNumber() : int
+    + getCards() : List<Card>
+    + showTopCard() throws EmptyDeckException: Card
+    + draw() throws EmptyDeckException: Card
+}
 
 Deck "1 " --* "*" Card : - cardPicker {readOnly}
-(Deck, Card) .. RandomPicker
+'(Deck, Card) .. RandomPicker
 
 Card  -r-* "2" CardSide : - front, back {readOnly}
 Card  -l-> CardColor : - color {readOnly}
