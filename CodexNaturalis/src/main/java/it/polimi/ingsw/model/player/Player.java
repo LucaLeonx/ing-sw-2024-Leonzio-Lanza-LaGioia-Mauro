@@ -48,7 +48,7 @@ public class Player {
         return secretObjective;
     }
 
-    public List<Card> getCardList() {
+    public List<Card> getCardsInHand() {
         return new ArrayList<>(cardsInHand);
     }
 
