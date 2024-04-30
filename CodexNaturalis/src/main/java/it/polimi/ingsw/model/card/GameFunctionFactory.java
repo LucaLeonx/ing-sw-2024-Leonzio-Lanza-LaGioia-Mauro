@@ -187,7 +187,7 @@ public abstract class GameFunctionFactory {
      * Creates a function that awards a certain number of points for disjoint group
      * of cards that form a "block" pattern: two card of the same color on the same column,
      * with a third one attached to one of the angles.
-     * @param angle The angle to which the card not in the column is attached
+     * @param angle the angle of the column block covered by the other card
      * @param colorBlock The color of the cards in the same column
      * @param colorAngle The color of the card in the angle
      * @return a function that awards a certain number of points for disjoint group
