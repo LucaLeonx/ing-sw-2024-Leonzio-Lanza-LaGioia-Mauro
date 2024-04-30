@@ -11,13 +11,12 @@ interface Controller {
     + choosePlayerSecretObjective(playerName : String, objective : ObjectiveCard) throws InvalidOperationException
     + chooseInitialCardSide(player : String) throws InvalidOperationException
     + getPlayerNames() : List<String> throws InvalidOperationException
-    + getPlayerInformation() : Player throws InvalidOperationException
+    + getPlayerInformation(name : String) : Player throws InvalidOperationException
     + getCurrentPlayerNickname() : String throws InvalidOperationException
     + getDrawableCards() : Map<DrawChoice, CardSide> throws InvalidOperationException
     + isLastTurn() : boolean throws InvalidOperationException
     + updateNextPlayer() throws InvalidOperationException
-    + makeCurrentPlayerPlace(idCard : int, placementPoint : Point) throws InvalidMoveException
-    + makeCurrentPlayerDraw(drawChoice : DrawChoice) throws InvalidMoveException
+    + makeCurrentPlayerMove(idCard : int, placementPoint : Point, drawChoice : DrawChoice) throws InvalidMoveException
     + getWinner() : String throws InvalidOperationException
 }
 
@@ -40,8 +39,7 @@ abstract class ControllerState {
     + chooseInitialCardSide(player : String)
     + getPlayerPublicInformation() : Player
     + getPlayerFullInformation() : Player
-    + getPlayerCardsInHand(name : String) : List<Card>
-    + getDrawableCards() : Map<DrawChoice, CardSide>
+    + getDrawableCards() : Map<DrawChoice, Card>
     + getCurrentPlayerNickname() : String
     + isLastTurn() : boolean
     + passTurnToNextPlayer()
