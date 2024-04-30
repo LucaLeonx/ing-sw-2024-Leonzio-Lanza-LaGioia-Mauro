@@ -114,12 +114,23 @@ public class GameFieldTest extends TestCase {
         return true;
     }
 
+    public void testGetters(){
+        GameField field = new GameField();
+        field.placeCard(initialCards.get(2), CardOrientation.FRONT, new Point(0,0));
+        field.placeCard(resourceCards.get(18), CardOrientation.FRONT, new Point(2, -2));
+        field.placeCard(resourceCards.get(11), CardOrientation.FRONT, new Point(4, -4));
+        field.placeCard(resourceCards.get(12), CardOrientation.FRONT, new Point(2, 2));
+
+        checkInvariants(field);
+
+        RewardFunction rewardFunction = GameFunctionFactory.createDiagonalPatternMatchFunction(true, CardColor.SKYBLUE);
+        assertEquals(2, rewardFunction.getPoints(field));
+    }
+
     public void testFieldConstruction(){
         checkInvariants(emptyField);
         checkInvariants(diagonalField);
     }
-
-    public
 
     public void testDiagonalPattern(){
         RewardFunction patternReward = GameFunctionFactory.createDiagonalPatternMatchFunction(true, CardColor.RED);
@@ -128,7 +139,7 @@ public class GameFieldTest extends TestCase {
 
 
 
-    public void testDiagnoalPattern2(){
+    public void testDiagonalPattern2(){
 
         GameField field = new GameField();
 
