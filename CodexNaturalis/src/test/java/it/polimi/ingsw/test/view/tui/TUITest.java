@@ -34,15 +34,15 @@ public class TUITest extends TestCase {
             e.printStackTrace();
             fail();
         }
-        playerTestDiagonal=new Player("Diagonale", PlayerColor.RED);
+        playerTestDiagonal=new Player("Diagonale", PlayerColor.RED, new ObjectiveCard(0, null));
         playerTestDiagonal.getField().placeCard(initialCards.get(0), CardOrientation.BACK, new Point(0,0));
         playerTestDiagonal.getField().placeCard(resourceCards.get(0), CardOrientation.FRONT, new Point(2,2));
         playerTestDiagonal.getField().placeCard(resourceCards.get(1), CardOrientation.FRONT, new Point(4,4));
         //playerTestDiagonal.getField().placeCard(resourceCards.get(2), CardOrientation.FRONT, new Point(6,6));
 
-        T=new Player("Topolino", PlayerColor.RED);
-        M=new Player("Minie", PlayerColor.BLUE);
-        P=new Player("Paperina", PlayerColor.YELLOW);
+        T=new Player("Topolino", PlayerColor.RED, new ObjectiveCard(0, null));
+        M=new Player("Minie", PlayerColor.BLUE, new ObjectiveCard(0, null));
+        P=new Player("Paperina", PlayerColor.YELLOW, new ObjectiveCard(0, null));
 
         M.getField().placeCard(initialCards.get(2), CardOrientation.FRONT, new Point(0,0));
         M.getField().placeCard(resourceCards.get(18), CardOrientation.FRONT, new Point(2, -2));
@@ -73,7 +73,6 @@ public class TUITest extends TestCase {
         P.getField().placeCard(resourceCards.get(17), CardOrientation.BACK, new Point(8, -8));
         P.getField().placeCard(goldenCards.get(32), CardOrientation.FRONT, new Point(10, -10));
         P.getField().placeCard(goldenCards.get(20), CardOrientation.FRONT, new Point(-8, 8));
-
 
         T.getField().placeCard(initialCards.get(1), CardOrientation.FRONT, new Point(0,0));
         T.getField().placeCard(resourceCards.get(31), CardOrientation.FRONT, new Point( -2, -2));

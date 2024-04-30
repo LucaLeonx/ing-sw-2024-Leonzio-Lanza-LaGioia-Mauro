@@ -42,13 +42,13 @@ public class Game {
         this.commonObjectiveCards.add(this.objCardsPicker.extractRandomElement().orElse(null));
         this.commonObjectiveCards.add(this.objCardsPicker.extractRandomElement().orElse(null));
 
-
+        /*
         this.visibleGoldCard.add(this.goldCardDeck.getTopCard());
 
         this.visibleResourceCard = new ArrayList<Card>(2);
         this.visibleResourceCard.add(this.resourceCardDeck.getTopCard());
         this.visibleResourceCard.add(this.resourceCardDeck.getTopCard());
-
+        */
         this.players = new ArrayList<Player>();
         for(String player : playerNames){
             Player p = new Player(player,playerColors[i], new ObjectiveCard(0, GameFunctionFactory.createPointsRewardFunction(0)));
@@ -59,10 +59,13 @@ public class Game {
         isLastTurn = false;
     }
     private void setupPlayersHand(Player p){
+        /*
         p.addCard(this.goldCardDeck.getTopCard());
         p.addCard(this.resourceCardDeck.getTopCard());
         p.addCard(this.resourceCardDeck.getTopCard());
+        */
     }
+
 
     /**
      * This method assign for each player the initial card randomly given to him,
@@ -160,11 +163,11 @@ public class Game {
         Map<DrawChoice, Card> drawableCards = new HashMap<>(visibleCards);
         rwl.readLock().lock();
         if(!resourceCardDeck.isEmpty()){
-            drawableCards.put(DrawChoice.DECK_RESOURCE, generateDummyCard(resourceCardDeck.getTopCard()) .)
+            //drawableCards.put(DrawChoice.DECK_RESOURCE, generateDummyCard(resourceCardDeck.getTopCard()));
         }
 
         if(!goldCardDeck.isEmpty()){
-            drawableCards.put(DrawChoice.DECK_GOLD, generateDummyCard(resourceCardDeck.getTopCard()) .)
+            //drawableCards.put(DrawChoice.DECK_GOLD, generateDummyCard(resourceCardDeck.getTopCard()));
         }
         rwl.readLock().unlock();
 
@@ -185,7 +188,7 @@ public class Game {
         Deck deckToUse = switch(drawChoice){
             case DECK_RESOURCE, RESOURCE_CARD_1, RESOURCE_CARD_2 -> resourceCardDeck;
             case DECK_GOLD, GOLD_CARD_1, GOLD_CARD_2 -> goldCardDeck;
-        }
+        };
 
         try {
             playedCard = currentPlayer.removeCard(cardId);
@@ -234,8 +237,9 @@ public class Game {
 
     private boolean setLastTurn(){
         rwl.readLock().lock();
-        boolean isNewLastTurn = (resourceCardDeck.isEmpty() && goldCardDeck.isEmpty())
+        boolean newLastTurn = (resourceCardDeck.isEmpty() && goldCardDeck.isEmpty())
                 || players.stream().anyMatch(player -> player.getScore() >= 20);
         rwl.readLock().unlock();
+        return newLastTurn;
     }
 }

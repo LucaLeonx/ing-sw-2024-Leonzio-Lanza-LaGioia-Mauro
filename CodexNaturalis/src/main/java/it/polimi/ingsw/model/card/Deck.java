@@ -17,8 +17,8 @@ public class Deck {
         return (numberOfCards == 0);
     }
 
-    public Card getTopCard(){
-        return topCard.orElseThrow(EmptyDeckException::new);
+    public Optional<Card> getTopCard(){
+        return topCard;
     }
 
     public int getNumberOfCards() {

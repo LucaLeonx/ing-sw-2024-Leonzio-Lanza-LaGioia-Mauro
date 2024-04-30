@@ -52,12 +52,12 @@ public class GameFieldTest extends TestCase {
 
     private boolean checkAllCardsCoordinatesAreEven(GameField field){
         return field.getCardCells().keySet().stream()
-                .allMatch((position) -> (position.x() % 2 == 0 && position.y() % 2 == 0));
+                .allMatch((position) -> (Math.abs(position.x()) % 2 == 0 && Math.abs(position.y()) % 2 == 0));
     }
 
     private boolean checkAllAnglesCoordinatesAreOdd(GameField field){
         return field.getAngleCells().keySet().stream()
-                .allMatch((position) -> (position.x() % 2 == 1 && position.y() % 2 == 1));
+                .allMatch((position) -> (Math.abs(position.x()) % 2 == 1 && Math.abs(position.y()) % 2 == 1));
     }
 
     private boolean checkAllAnglesExists(GameField field){
@@ -119,9 +119,38 @@ public class GameFieldTest extends TestCase {
         checkInvariants(diagonalField);
     }
 
+    public
+
     public void testDiagonalPattern(){
         RewardFunction patternReward = GameFunctionFactory.createDiagonalPatternMatchFunction(true, CardColor.RED);
         assertEquals(patternReward.getPoints(diagonalField), 2);
+    }
+
+
+
+    public void testDiagnoalPattern2(){
+
+        GameField field = new GameField();
+
+        field.placeCard(initialCards.get(2), CardOrientation.FRONT, new Point(0,0));
+        field.placeCard(resourceCards.get(18), CardOrientation.FRONT, new Point(2, -2));
+        field.placeCard(resourceCards.get(11), CardOrientation.FRONT, new Point(4, -4));
+        field.placeCard(resourceCards.get(12), CardOrientation.FRONT, new Point(6, -6));
+        field.placeCard(goldenCards.get(19), CardOrientation.FRONT, new Point(4, 0));
+        field.placeCard(resourceCards.get(20), CardOrientation.FRONT, new Point(-2, -2));
+        field.placeCard(resourceCards.get(24), CardOrientation.FRONT, new Point(-4, -4));
+        field.placeCard(resourceCards.get(35), CardOrientation.FRONT, new Point(-2, 2));
+        field.placeCard(goldenCards.get(31), CardOrientation.FRONT, new Point(0, 4));
+        field.placeCard(resourceCards.get(39), CardOrientation.FRONT, new Point(-2, 6));
+        field.placeCard(goldenCards.get(36), CardOrientation.BACK, new Point(2, 2));
+        field.placeCard(goldenCards.get(25), CardOrientation.FRONT, new Point(-6, -6));
+        field.placeCard(goldenCards.get(33), CardOrientation.FRONT, new Point(-4, 4));
+        field.placeCard(resourceCards.get(29), CardOrientation.FRONT, new Point(-8, -8));
+
+        checkInvariants(field);
+
+        RewardFunction rewardFunction = GameFunctionFactory.createDiagonalPatternMatchFunction(true, CardColor.SKYBLUE);
+        assertEquals(2, rewardFunction.getPoints(field));
     }
 
 
