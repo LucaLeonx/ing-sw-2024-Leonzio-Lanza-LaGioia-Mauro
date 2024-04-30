@@ -26,7 +26,7 @@ public class Game {
     private final List<ObjectiveCard> commonObjectiveCards;
     private RandomPicker<ObjectiveCard> objCardsPicker;
 
-    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
+    private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock(true);
 
     public Game(List<String> playerNames, Map<DrawChoice, Card> visibleCards) throws FileNotFoundException {
         this.visibleCards = visibleCards;
@@ -59,7 +59,6 @@ public class Game {
         isLastTurn = false;
     }
     private void setupPlayersHand(Player p){
-
         p.addCard(this.goldCardDeck.getTopCard());
         p.addCard(this.resourceCardDeck.getTopCard());
         p.addCard(this.resourceCardDeck.getTopCard());
@@ -109,34 +108,57 @@ public class Game {
     }
 
     public List<String> getPlayersNicknames(){
-        return players.stream().map(Player::getNickname).toList();
+        rwl.readLock().lock();
+        List<String> playerNicknames = players.stream().map(Player::getNickname).toList();
+        rwl.readLock().unlock();
+
+        return playerNicknames;
     }
 
     public Player getPlayerInformation(String nickname) throws NoSuchElementException {
-        return players.stream()
+        rwl.readLock().lock();
+        Player playerInformation = players.stream()
                 .filter((player) -> player.getNickname().equals(nickname))
                 .findFirst().orElseThrow(NoSuchElementException::new);
+        rwl.readLock().unlock();
+
+        return playerInformation;
     }
 
     public String getCurrentPlayerNickname() {
-        return currentPlayer.getNickname();
+        rwl.readLock().lock();
+
+        String currentPlayerNickname = currentPlayer.getNickname();
+
+        rwl.writeLock().unlock();
+        return currentPlayerNickname;
     }
 
     public boolean isLastTurn(){
-        return isLastTurn;
+        rwl.readLock().lock();
+        boolean returnedLastTurn = isLastTurn;
+        rwl.readLock().unlock();
+        return returnedLastTurn;
     }
 
     public boolean isLastPlayer(){
-        return currentPlayer.equals(players.getLast());
+        rwl.readLock().lock();
+        boolean isLastPlayer = currentPlayer.equals(players.getLast());
+        rwl.readLock().unlock();
+        return isLastPlayer;
     }
 
     public List<ObjectiveCard> getCommonObjectiveCards() {
-        return commonObjectiveCards;
+        rwl.readLock().lock();
+        List<ObjectiveCard> commonObjectives = commonObjectiveCards;
+        rwl.readLock().unlock();
+        return commonObjectives;
     }
 
     public Map<DrawChoice, Card> getDrawableCards(){
-        Map<DrawChoice, Card> drawableCards = new HashMap<>(visibleCards);
 
+        Map<DrawChoice, Card> drawableCards = new HashMap<>(visibleCards);
+        rwl.readLock().lock();
         if(!resourceCardDeck.isEmpty()){
             drawableCards.put(DrawChoice.DECK_RESOURCE, generateDummyCard(resourceCardDeck.getTopCard()) .)
         }
@@ -144,16 +166,19 @@ public class Game {
         if(!goldCardDeck.isEmpty()){
             drawableCards.put(DrawChoice.DECK_GOLD, generateDummyCard(resourceCardDeck.getTopCard()) .)
         }
+        rwl.readLock().unlock();
 
         return drawableCards;
     }
 
+    // Move in CardFactory
     public Card generateDummyCard(Card card){
         return new Card(0, card.getCardColor(), card.getSide(CardOrientation.BACK), card.getSide(CardOrientation.BACK));
     }
 
     public void makeCurrentPlayerMove(int cardId, CardOrientation orientation, Point placementPoint, DrawChoice drawChoice) throws InvalidOperationException {
 
+        rwl.writeLock().lock();
         Card playedCard;
         CardSide playedSide;
         GameField field = currentPlayer.getField();
@@ -193,19 +218,24 @@ public class Game {
         }
 
         updateNextPlayer();
+        rwl.writeLock().unlock();
     }
 
     public void updateNextPlayer(){
+        rwl.writeLock().lock();
         if(isLastPlayer()){
             currentPlayer = players.getFirst();
             isLastTurn = setLastTurn();
         } else {
             currentPlayer = players.get(players.indexOf(currentPlayer));
         }
+        rwl.writeLock().unlock();
     }
 
     private boolean setLastTurn(){
-        return (resourceCardDeck.isEmpty() && goldCardDeck.isEmpty())
+        rwl.readLock().lock();
+        boolean isNewLastTurn = (resourceCardDeck.isEmpty() && goldCardDeck.isEmpty())
                 || players.stream().anyMatch(player -> player.getScore() >= 20);
+        rwl.readLock().unlock();
     }
 }
