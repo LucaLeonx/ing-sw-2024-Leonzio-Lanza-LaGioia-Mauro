@@ -119,7 +119,6 @@ public class GameFieldTest extends TestCase {
         checkInvariants(diagonalField);
     }
 
-    public
 
     public void testDiagonalPattern(){
         RewardFunction patternReward = GameFunctionFactory.createDiagonalPatternMatchFunction(true, CardColor.RED);
