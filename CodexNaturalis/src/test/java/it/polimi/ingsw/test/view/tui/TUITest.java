@@ -1,4 +1,4 @@
-package it.polimi.ingsw.test.model.map;
+package it.polimi.ingsw.test.view.tui;
 
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.AngleCell;
