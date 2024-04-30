@@ -143,7 +143,7 @@ public abstract class GameFunctionFactory {
                     for(int i = 0; i < leftmost.size(); i++) {
                         if (leftmost.get(i).y() - slope * leftmost.get(i).x() == pField.y() - slope * pField.x()) {
                             if (pField.x() < leftmost.get(i).x()) {
-                                rightmost.set(i, pField);
+                                leftmost.set(i, pField);
                             } else if (pField.x() > rightmost.get(i).x()) {
                                 rightmost.set(i, pField);
                             }
@@ -158,8 +158,27 @@ public abstract class GameFunctionFactory {
                         leftmost.add(pField);
                     }
                 }
-                //now we start checking each diagonal one by one
+                /*
+                for(int i=0; i<leftmost.size(); i++) {
+                    int diagonale1;
+                    int diagonale2;
+                    if(isSlopePositive)
+                    {
+                        diagonale1=leftmost.get(i).y()-leftmost.get(i).x();
+                        diagonale2=rightmost.get(i).y()-rightmost.get(i).x();
+                    }
+                    else
+                    {
+                        diagonale1=leftmost.get(i).y()+leftmost.get(i).x();
+                        diagonale2=rightmost.get(i).y()+rightmost.get(i).x();
+                    }
+                    System.out.println("primo punto in diagonale "+ diagonale1+  " è: "+ leftmost.get(i));
+                    System.out.println("ultimo punto in diagonale "+ diagonale2+ " è: " + rightmost.get(i));
 
+                }
+                */
+
+                //now we start checking each diagonal one by one
                 Point temp;
                 for(int i = 0; i < leftmost.size(); i++) {
                     temp = leftmost.get(i);
@@ -276,7 +295,7 @@ public abstract class GameFunctionFactory {
                     temp = startingPoint.get(i);
                     cardsNum = 0;
 
-                    while(!temp.equals(endingPoint.get(i)))
+                    while(!temp.equals(endingPoint.get(i).sum(direction)))
                     {
                         if(!field.getCards().containsKey(temp) || field.getCards().get(temp).getCardColor() != colorBlock)
                             cardsNum = 0;

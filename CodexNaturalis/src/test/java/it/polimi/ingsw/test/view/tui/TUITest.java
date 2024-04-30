@@ -9,6 +9,8 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.tui.TUI;
 import junit.framework.TestCase;
+import it.polimi.ingsw.test.model.map.GameFieldTest;
+
 
 import java.util.List;
 import java.util.Map;
@@ -59,20 +61,22 @@ public class TUITest extends TestCase {
         M.getField().placeCard(goldenCards.get(33), CardOrientation.FRONT, new Point(-4, 4));
         M.getField().placeCard(resourceCards.get(29), CardOrientation.FRONT, new Point(-8, -8));
 
+
         P.getField().placeCard(initialCards.get(4), CardOrientation.FRONT, new Point(0,0));
         P.getField().placeCard(resourceCards.get(25), CardOrientation.FRONT, new Point(2,2));
         P.getField().placeCard(resourceCards.getFirst(), CardOrientation.BACK, new Point(4 ,0));
         P.getField().placeCard(resourceCards.get(16), CardOrientation.FRONT, new Point(-2, 2));
         P.getField().placeCard(resourceCards.get(10), CardOrientation.FRONT, new Point(-4, 4));
         P.getField().placeCard(goldenCards.get(17), CardOrientation.FRONT, new Point(-6, 6));
-        P.getField().placeCard(resourceCards.get(22), CardOrientation.BACK, new Point(6, -2)); //Here there should be a wolf up left!.
+        P.getField().placeCard(resourceCards.get(22), CardOrientation.FRONT, new Point(6, -2));
         P.getField().placeCard(resourceCards.get(2), CardOrientation.FRONT, new Point(4, -4));
-        P.getField().placeCard(goldenCards.get(21), CardOrientation.FRONT, new Point(8, -4)); //here there should be an angle that covers the green card. problem with anglecell?
         P.getField().placeCard(goldenCards.get(12), CardOrientation.FRONT, new Point(6, -6));
+        P.getField().placeCard(goldenCards.get(21), CardOrientation.FRONT, new Point(8, -4));
         P.getField().placeCard(resourceCards.get(37), CardOrientation.FRONT, new Point(10, -6));
         P.getField().placeCard(resourceCards.get(17), CardOrientation.BACK, new Point(8, -8));
         P.getField().placeCard(goldenCards.get(32), CardOrientation.FRONT, new Point(10, -10));
         P.getField().placeCard(goldenCards.get(20), CardOrientation.FRONT, new Point(-8, 8));
+
 
         T.getField().placeCard(initialCards.get(1), CardOrientation.FRONT, new Point(0,0));
         T.getField().placeCard(resourceCards.get(31), CardOrientation.FRONT, new Point( -2, -2));
@@ -90,17 +94,16 @@ public class TUITest extends TestCase {
         T.getField().placeCard(goldenCards.get(18), CardOrientation.FRONT, new Point(4, 0));
 
 
-
-
-
-
     }
 
+    // To see the real image of the maps go to Notes-->ExampleMaps
     public void testTUIWithDiagonalMap(){
+        new GameFieldTest().checkInvariants(T.getField());
         tui.drawMap(playerTestDiagonal);
     }
 
     public void testTUIWithMinnieMap(){
+        new GameFieldTest().checkInvariants(M.getField());
         tui.drawMap(M);
     }
 
@@ -110,6 +113,7 @@ public class TUITest extends TestCase {
 
 
     public void testTUIWithTopolinoMap(){
+        new GameFieldTest().checkInvariants(T.getField());
         tui.drawMap(T);
     }
 

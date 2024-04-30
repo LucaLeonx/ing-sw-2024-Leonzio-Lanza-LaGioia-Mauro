@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static it.polimi.ingsw.model.card.Symbol.HIDDEN;
+
 public class GameFieldTest extends TestCase {
 
     private List<Card> resourceCards;
@@ -39,7 +41,7 @@ public class GameFieldTest extends TestCase {
 
     }
 
-    private void checkInvariants(GameField field){
+    public void checkInvariants(GameField field){
         Map<Point, AngleCell> angles = field.getAngleCells();
         Map<Point, CardCell> cards = field.getCardCells();
 
@@ -48,6 +50,7 @@ public class GameFieldTest extends TestCase {
         assertTrue(checkAllAnglesExists(field));
         assertTrue(checkAllAnglesSymbolsAreCoherent(field));
         assertTrue(checkAllAnglesAttachOppositeCards(field));
+        assertTrue(checkNoCardAttachesHiddenAngle(field));
     }
 
     private boolean checkAllCardsCoordinatesAreEven(GameField field){
@@ -114,6 +117,12 @@ public class GameFieldTest extends TestCase {
         return true;
     }
 
+    private boolean checkNoCardAttachesHiddenAngle(GameField field){
+        return field.getAngleCells().values().stream().noneMatch((angle) ->
+                (angle.bottomSymbol() == HIDDEN && angle.topSymbol() != HIDDEN) ||
+                        angle.bottomSymbol() == HIDDEN && angle.topCardPosition() != angle.bottomCardPosition());
+    }
+
     public void testFieldConstruction(){
         checkInvariants(emptyField);
         checkInvariants(diagonalField);
@@ -146,9 +155,12 @@ public class GameFieldTest extends TestCase {
         field.placeCard(resourceCards.get(29), CardOrientation.FRONT, new Point(-8, -8));
 
         checkInvariants(field);
-
-        RewardFunction rewardFunction = GameFunctionFactory.createDiagonalPatternMatchFunction(true, CardColor.SKYBLUE);
-        assertEquals(2, rewardFunction.getPoints(field));
+        RewardFunction CommonObjective1 = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.DOWN_RIGHT, CardColor.RED, CardColor.GREEN);
+        RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
+        RewardFunction SecretObjective = GameFunctionFactory.createDiagonalPatternMatchFunction(true, CardColor.SKYBLUE);
+        assertEquals(0,CommonObjective1.getPoints(field)); // funziona
+        assertEquals(2,CommonObjective2.getPoints(field)); // funziona
+        assertEquals(2, SecretObjective.getPoints(field)); // funziona
     }
 
     public void testPattenPaperina(){
@@ -171,6 +183,14 @@ public class GameFieldTest extends TestCase {
         field.placeCard(goldenCards.get(20), CardOrientation.FRONT, new Point(-8, 8));
 
         checkInvariants(field);
+        RewardFunction CommonObjective1 = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.DOWN_RIGHT, CardColor.RED, CardColor.GREEN);
+        RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
+        RewardFunction SecretObjective = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.UP_LEFT, CardColor.PURPLE, CardColor.SKYBLUE);
+
+        assertEquals(3,CommonObjective1.getPoints(field)); // funziona
+        assertEquals(2,CommonObjective2.getPoints(field)); // funziona
+        assertEquals(3, SecretObjective.getPoints(field)); // non funziona da 0 quando dovrebbe dare 3
+
 
     }
 
@@ -196,6 +216,16 @@ public class GameFieldTest extends TestCase {
         field.placeCard(goldenCards.get(18), CardOrientation.FRONT, new Point(4, 0));
 
         checkInvariants(field);
+
+        RewardFunction CommonObjective1 = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.DOWN_RIGHT, CardColor.RED, CardColor.GREEN);
+        RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
+        RewardFunction SecretObjective = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.UP_RIGHT, CardColor.SKYBLUE, CardColor.RED);
+
+        assertEquals(3,CommonObjective1.getPoints(field)); // funziona
+        assertEquals(2,CommonObjective2.getPoints(field)); // funziona
+        assertEquals(3, SecretObjective.getPoints(field)); // funziona.
+
+
 
 
     }
