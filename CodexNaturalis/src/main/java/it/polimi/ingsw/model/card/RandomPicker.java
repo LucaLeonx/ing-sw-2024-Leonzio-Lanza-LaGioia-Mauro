@@ -7,7 +7,7 @@ public class RandomPicker<T>{
      * This class stores a set of elements, allowing to extract
      * them in random order, without reinsertion
      */
-    private final Iterator<T> elements;
+    private final Stack<T> elements;
 
     /**
      * @param elements The collection of elements stored to be stored at start.
@@ -16,12 +16,11 @@ public class RandomPicker<T>{
      * @param rng The source of randomness used for random extractions.
      *            This parameter is useful for testing purposes
      */
-    public RandomPicker(Collection<T> elements, Random rng){
-        List<T> temporaryList = new ArrayList<>(elements);
-        Collections.shuffle(temporaryList, rng);
-        this.elements = temporaryList.iterator();
+    public RandomPicker(Collection<T> elements, Random rng) {
+        this.elements = new Stack<>();
+        this.elements.addAll(elements);
+        Collections.shuffle(this.elements, rng);
     }
-
     /**
      * RandomPicker constructor with default randomness source
      * @param elements The collection of elements stored to be stored at start
@@ -35,7 +34,7 @@ public class RandomPicker<T>{
      * @return True if and only if the RandomPicker is empty
      */
     public boolean isEmpty(){
-        return !elements.hasNext();
+        return elements.empty();
     }
 
     /**
@@ -43,12 +42,18 @@ public class RandomPicker<T>{
      * @return
      */
     public Optional<T> extractRandomElement(){
-        Optional<T> extractedElement = Optional.empty();
+        Optional<T> extractedElement;
 
-        if(!isEmpty()){
-            extractedElement = Optional.of(elements.next());
+        try {
+            extractedElement = Optional.of(elements.pop());
+        } catch (EmptyStackException e){
+            extractedElement = Optional.empty();
         }
 
         return extractedElement;
+    }
+
+    public List<T> getElements(){
+        return List.copyOf(elements);
     }
 }

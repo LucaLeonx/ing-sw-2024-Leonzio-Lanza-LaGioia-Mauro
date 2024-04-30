@@ -1,0 +1,105 @@
+@startuml
+skinparam groupinheritance 3
+
+class GameFactory {
+    + newStartGame()
+    + newGameFromSnapshot() // For persistence
+}
+
+'exported to RMI. Maybe can be abstract class
+interface Controller {
+    + choosePlayerSecretObjective(playerName : String, objective : ObjectiveCard) throws InvalidOperationException
+    + chooseInitialCardSide(player : String) throws InvalidOperationException
+    + getPlayerNames() : List<String> throws InvalidOperationException
+    + getPlayerInformation() : Player throws InvalidOperationException
+    + getCurrentPlayerNickname() : String throws InvalidOperationException
+    + getDrawableCards() : Map<DrawChoice, CardSide> throws InvalidOperationException
+    + isLastTurn() : boolean throws InvalidOperationException
+    + updateNextPlayer() throws InvalidOperationException
+    + makeCurrentPlayerPlace(idCard : int, placementPoint : Point) throws InvalidMoveException
+    + makeCurrentPlayerDraw(drawChoice : DrawChoice) throws InvalidMoveException
+    + getWinner() : String throws InvalidOperationException
+}
+
+class ClientController implements Controller {
+}
+
+'IMPORTANT: Make CardFactory work on Decks as singletons (load them from disk once)
+class ServerController implements Controller{
+    - state : ControllerState
+    + GameController(game : Game, initialState : InitialState)
+    - changeState()
+}
+
+
+abstract class ControllerState {
+    - game : Game
+    + getPlayerNames() : List<String>
+    + getPlayerSetup(name : String) : List
+    + choosePlayerSecretObjective(playerName : String, objective : ObjectiveCard)
+    + chooseInitialCardSide(player : String)
+    + getPlayerPublicInformation() : Player
+    + getPlayerFullInformation() : Player
+    + getPlayerCardsInHand(name : String) : List<Card>
+    + getDrawableCards() : Map<DrawChoice, CardSide>
+    + getCurrentPlayerNickname() : String
+    + isLastTurn() : boolean
+    + passTurnToNextPlayer()
+    + makeCurrentPlayerPlace(idCard : int, side: CardOrientation, placementPoint : Point) throws InvalidMoveException
+    + makeCurrentPlayerDraw(drawChoice : DrawChoice) : Card throws InvalidMoveException
+    + getWinner() : String
+    + transitionFunction() : State
+}
+
+class SetupState implements ControllerState {
+     - game : Game
+     - Map<String, PlayerSetup> setupInformation
+     + SetupState(game : Game, resourceCards : List<Card>, goldenCards : List<Card, initialCards : List<Card>,
+     objectiveCards : List<Card>)
+     @Override
+     + getPlayerNames() : List<String>
+     + getPlayerSetup(name : String)
+     + transitionFunction() : State [PlayState]
+     - checkAllPlayersHaveSetup() : boolean
+}
+
+class PlayState implements ControllerState {
+    + PlayState(game : Game)
+    + getPlayerNames() : List<String>
+    + getPlayerPublicInformation(name : String) : Player
+    + getCurrentPlayerCardsInHand(name : String) : List<Card>
+    + getDrawableCards() : Map<DrawChoice, Card>
+    + getCurrentPlayerNickname() : String
+    + isLastTurn() : boolean
+    + passTurnToNextPlayer()
+    + makeCurrentPlayerPlace(idCard : int, side: CardOrientation, placementPoint : Point) throws InvalidMoveException
+    + makeCurrentPlayerDraw(drawChoice : DrawChoice) : Card throws InvalidMoveException
+    + transitionFunction() : ControllerState [PlayState or EndGameState]
+    - generateDummyCard(initialCard : Card) : Card
+    - getDummyObjectiveCard() : ObjectiveCard
+}
+
+class EndGameState implements ControllerState {
+    + EndGameState(game : Game)
+    + getPlayerNames() : List<String>
+    + getPlayerPublicInformation(name : String) : Player // Now show the secret objectives
+    + getPlayerCardsInHand(name : String) : List<Card>
+    + getDrawableCards() : Map<DrawChoice, CardSide>
+    + getWinner() :
+    - evaluateObjectivePoints()
+    + transitionFunction() : State [EndGameState]
+}
+
+
+class ServerSetupState implements SetupState
+class ServerPlayState implements PlayState
+class ServerEndState implements EndGameState
+class ClientSetupState implements SetupState
+class ClientPlayState implements PlayState
+class ClientEndGameState implements EndGameState
+
+ServerController -down--> ControllerState : - state
+ClientController -down--> ControllerState : - State
+
+
+@enduml

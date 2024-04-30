@@ -368,7 +368,7 @@
       "RewardFunction": 0,
       "angles": {
         "UP_LEFT": "QUILL",
-        "UP_RIGHT": "BLANK",
+        "UP_RIGHT": "HIDDEN",
         "DOWN_LEFT": "ANIMAL",
         "DOWN_RIGHT": "FUNGI"
       }

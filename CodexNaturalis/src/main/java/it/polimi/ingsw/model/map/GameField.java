@@ -11,17 +11,26 @@ public class GameField{
     private final Map<Point, AngleCell> angles;
     private final Set<Point> availableCells;
     private final Map<Symbol, Integer> symbolCounters;
-
     public GameField(){
         this.cards = new HashMap<>();
         this.angles = new HashMap<>();
         this.symbolCounters = new HashMap<>();
         this.availableCells = new HashSet<>();
+        this.availableCells.add(new Point(0,0));
+        // Add the position for initial card
 
         // Initialize counters
         for(Symbol symbol : Symbol.values()){
             symbolCounters.put(symbol, 0);
         }
+    }
+
+    // Copy constructor
+    public GameField(GameField other){
+        this.cards = new HashMap<>(other.cards);
+        this.angles = new HashMap<>(other.angles);
+        this.availableCells = new HashSet<>(other.availableCells);
+        this.symbolCounters = new HashMap<>(other.symbolCounters);
     }
 
     /**

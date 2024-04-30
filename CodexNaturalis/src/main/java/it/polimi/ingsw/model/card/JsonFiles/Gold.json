@@ -75,7 +75,7 @@
         "type": "COVEREDANGLES",
         "points": 2
       },
-      "RequiredFunction": ["FUNGI", "FUNGI", "FUNGI","INSECT"],
+      "RequiredFunction": ["FUNGI", "FUNGI", "FUNGI","PLANT"],
       "angles": {
         "UP_LEFT": "BLANK",
         "UP_RIGHT": "BLANK",
@@ -262,7 +262,7 @@
         "type": "COVEREDANGLES",
         "points": 2
       },
-      "RequiredFunction": ["PLANT", "PLANT", "FUNGI"],
+      "RequiredFunction": ["PLANT", "PLANT", "PLANT", "FUNGI"],
       "angles": {
         "UP_LEFT": "BLANK",
         "UP_RIGHT": "HIDDEN",
@@ -347,7 +347,7 @@
         "type": "INKWELL",
         "points": 1
       },
-      "RequiredFunction": ["ANIMAL", "ANIMAL", "ANIMAL"],
+      "RequiredFunction": ["ANIMAL", "ANIMAL", "INSECT"],
       "angles": {
         "UP_LEFT": "INKWELL",
         "UP_RIGHT": "BLANK",
@@ -430,7 +430,7 @@
     "front": {
       "RewardFunction":{
         "type": "COVEREDANGLES",
-        "points": 1
+        "points": 2
       },
       "RequiredFunction": ["ANIMAL", "ANIMAL", "ANIMAL", "PLANT"],
       "angles": {

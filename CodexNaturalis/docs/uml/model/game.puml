@@ -1,0 +1,74 @@
+@startuml
+
+!startsub GAME
+skinparam linetype ortho
+skinparam nodesep 250
+skinparam ranksep 60
+
+enum PlayerColor {
+    RED,
+    BLUE,
+    GREEN,
+    YELLOW,
+}
+
+enum DrawChoice {
+    DECK_GOLD,
+    DECK_RESOURCE,
+    RESOURCE_CARD_1,
+    RESOURCE_CARD_2,
+    GOLD_CARD_1,
+    GOLD_CARD_2
+}
+
+class Game <<synchronized>> {
+    - lock : ReentrantReadWriteLock
+    - currentPlayer : Player
+    - List<Player> : players
+    - isLastTurn : boolean
+    + Game(players : List<Player>, resourceCardsDeck:  goldenCardsDeck : Deck,
+    visibleCards : Map<DrawChoice, Card>, currentPlayerNickname : String, isLastTurn : boolean)
+    + getPlayersNicknames() : List<String>
+    + getPlayerInformation(name : String) : Player
+    + getCurrentPlayerNickname() : String
+    + isLastTurn() : boolean
+    + getCommonObjectiveCards() : List<ObjectiveCard>
+    + getDrawableCards() : Map<DrawChoice, Card>
+    + makeCurrentPlayerPlace(idCard : int, placementPoint : Point) throws InvalidMoveException
+    + makeCurrentPlayerDraw(drawChoice : DrawChoice) throws InvalidMoveException
+    + getResourceCardDeck() : Deck
+    + getGoldenCardDeck() : Deck
+    // As an alternative, it could be simplified the interface by allowing explicit lock management
+}
+
+class Player {
+    - nickname : String {readOnly}
+    - score : AtomicInteger
+    - lock : ReentrantReadWriteLock
+    + Player(nickname : String, color : Color, secretObjective : ObjectiveCard, cardsInHand : Set<Card>)
+    + getNickname() : String
+    + getColor() : PlayerColor
+    + getCardList() : List<Card>
+    + getScore() : int
+    + getField() : GameField
+    + addCardInHand(newCard : Card)
+    + removeCardInHand(idCard : int) : Card throw InvalidCardException
+    + setScore(newScore : int) : int
+}
+'note top: getCardList() returns card in the same position used by removeCard()
+
+Player -l-> PlayerColor : - color {readOnly}
+Player -u-> ObjectiveCard : - secretObjective {readOnly}
+Player --> "3" Card : - cardsInHand : ConcurrentSkipListSet
+Player -r-> GameField : - field {readOnly}
+
+Game .. DrawChoice : <<uses>>
+Game -d-* "2..4" Player : - players
+Game -l-* "2" Deck : - goldenCardsDeck, resourceCardsDeck
+Game --* "2" Card : - visibleGoldenCard
+Game --* "2" Card : - visibleResourceCard
+Game -r-o "2" ObjectiveCard : - commonObjectiveCards
+
+!endsub
+
+@enduml
