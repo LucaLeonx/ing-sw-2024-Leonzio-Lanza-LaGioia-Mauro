@@ -158,9 +158,9 @@ public class GameFieldTest extends TestCase {
         RewardFunction CommonObjective1 = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.DOWN_RIGHT, CardColor.RED, CardColor.GREEN);
         RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
         RewardFunction SecretObjective = GameFunctionFactory.createDiagonalPatternMatchFunction(true, CardColor.SKYBLUE);
-        assertEquals(0,CommonObjective1.getPoints(field)); // funziona
-        assertEquals(2,CommonObjective2.getPoints(field)); // funziona
-        assertEquals(2, SecretObjective.getPoints(field)); // funziona
+        assertEquals(0,CommonObjective1.getPoints(field));
+        assertEquals(2,CommonObjective2.getPoints(field));
+        assertEquals(2, SecretObjective.getPoints(field));
     }
 
     public void testPattenPaperina(){
@@ -173,9 +173,9 @@ public class GameFieldTest extends TestCase {
         field.placeCard(resourceCards.get(16), CardOrientation.FRONT, new Point(-2, 2));
         field.placeCard(resourceCards.get(10), CardOrientation.FRONT, new Point(-4, 4));
         field.placeCard(goldenCards.get(17), CardOrientation.FRONT, new Point(-6, 6));
-        field.placeCard(resourceCards.get(22), CardOrientation.BACK, new Point(6, -2)); //Here there should be a wolf up left!.
+        field.placeCard(resourceCards.get(22), CardOrientation.BACK, new Point(6, -2));
         field.placeCard(resourceCards.get(2), CardOrientation.FRONT, new Point(4, -4));
-        field.placeCard(goldenCards.get(21), CardOrientation.FRONT, new Point(8, -4)); //here there should be an angle that covers the green card. problem with anglecell?
+        field.placeCard(goldenCards.get(21), CardOrientation.FRONT, new Point(8, -4));
         field.placeCard(goldenCards.get(12), CardOrientation.FRONT, new Point(6, -6));
         field.placeCard(resourceCards.get(37), CardOrientation.FRONT, new Point(10, -6));
         field.placeCard(resourceCards.get(17), CardOrientation.BACK, new Point(8, -8));
@@ -187,9 +187,9 @@ public class GameFieldTest extends TestCase {
         RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
         RewardFunction SecretObjective = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.UP_LEFT, CardColor.PURPLE, CardColor.SKYBLUE);
 
-        assertEquals(3,CommonObjective1.getPoints(field)); // funziona
-        assertEquals(2,CommonObjective2.getPoints(field)); // funziona
-        assertEquals(3, SecretObjective.getPoints(field)); // non funziona da 0 quando dovrebbe dare 3
+        assertEquals(3,CommonObjective1.getPoints(field));
+        assertEquals(2,CommonObjective2.getPoints(field));
+        assertEquals(3, SecretObjective.getPoints(field));
 
 
     }
@@ -221,9 +221,9 @@ public class GameFieldTest extends TestCase {
         RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
         RewardFunction SecretObjective = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.UP_RIGHT, CardColor.SKYBLUE, CardColor.RED);
 
-        assertEquals(3,CommonObjective1.getPoints(field)); // funziona
-        assertEquals(2,CommonObjective2.getPoints(field)); // funziona
-        assertEquals(3, SecretObjective.getPoints(field)); // funziona.
+        assertEquals(3,CommonObjective1.getPoints(field));
+        assertEquals(2,CommonObjective2.getPoints(field));
+        assertEquals(3, SecretObjective.getPoints(field));
 
 
 

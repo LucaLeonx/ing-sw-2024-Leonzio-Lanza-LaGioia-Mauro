@@ -158,25 +158,6 @@ public abstract class GameFunctionFactory {
                         leftmost.add(pField);
                     }
                 }
-                /*
-                for(int i=0; i<leftmost.size(); i++) {
-                    int diagonale1;
-                    int diagonale2;
-                    if(isSlopePositive)
-                    {
-                        diagonale1=leftmost.get(i).y()-leftmost.get(i).x();
-                        diagonale2=rightmost.get(i).y()-rightmost.get(i).x();
-                    }
-                    else
-                    {
-                        diagonale1=leftmost.get(i).y()+leftmost.get(i).x();
-                        diagonale2=rightmost.get(i).y()+rightmost.get(i).x();
-                    }
-                    System.out.println("primo punto in diagonale "+ diagonale1+  " è: "+ leftmost.get(i));
-                    System.out.println("ultimo punto in diagonale "+ diagonale2+ " è: " + rightmost.get(i));
-
-                }
-                */
 
                 //now we start checking each diagonal one by one
                 Point temp;
@@ -265,8 +246,8 @@ public abstract class GameFunctionFactory {
                     }
                     case AnglePosition.UP_LEFT:{
                         positionOfAngleCard = new Point(-2, 2);
-                        startingPoint = topmost;
-                        endingPoint = lowermost;
+                        startingPoint = lowermost;
+                        endingPoint = topmost;
                         direction = new Point(0, 4);
                         break;
                     }

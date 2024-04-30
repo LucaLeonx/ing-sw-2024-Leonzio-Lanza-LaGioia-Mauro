@@ -1,8 +1,6 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.model.card.CardColor;
-import it.polimi.ingsw.model.card.CardOrientation;
-import it.polimi.ingsw.model.card.Symbol;
+import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -30,6 +28,14 @@ public class TUI {
     static String greenCircleSymbol= "\uD83D\uDFE2";
     static String yellowCircleSymbol= "\uD83D\uDFE1";
     static String redCircleSymbol= "\uD83D\uDD34";
+    static String onePointSymbol= "1️⃣";
+    static String twoPointsSymbol= "2️⃣";
+
+    static String threePointsSymbol= "3️⃣";
+
+    static String fivePointsSymbol = "5️⃣";
+    static String coveredAnglesSymbol = "\u25F0";
+    static String forEachSymbol ="\u2755";
 
 
 
@@ -217,5 +223,134 @@ public class TUI {
         Point origin = new Point(0,0);
         System.out.println("list of the symbol in the middle of the starting card: " + player.getField().getCardCells().get(origin).visibleCardSide().getCenterSymbols());
     }
+
+    public void showPoints(Player player) {
+        System.out.println("Player " + player.getNickname() + " has "+ player.getScore() + " points");
+    }
+    public void showHand(Player player)
+    {
+        String[][] matrixHand = new String[3][23]; // 20 columns for 3 cards +2 cells for tabs
+
+
+    }
+    public void showCardsOnTable()
+    {
+        String[][] decks = new String[3][11]; // 11 columns for 2 cards +1 cells for tabs
+        String[][] drawable1 = new String[3][11]; // 1st row of card that are face up on the table to draw from
+        String[][] drawable2 = new String[3][11];
+        String[][] objectives = new String[3][11];
+    }
+
+    abstract public String[][] drawCard(Card card){}
+
+    public String[][] drawCard(ObjectiveCard card){
+        String[][] cardDrawn = new String[3][5];
+        // I set every cell to black (background) so I will change only the cells that I need to change
+        for(int i=0; i<3; i++){
+            for(int j=0; j<5; j++){
+                cardDrawn[i][j]=blackSquareSymbol;
+            }
+        }
+        switch (card.getId()) {
+            case 0:
+                cardDrawn[0][4]=twoPointsSymbol;
+                cardDrawn[0][3]=redSquareSymbol;
+                cardDrawn[1][2]=redSquareSymbol;
+                cardDrawn[2][1]=redSquareSymbol;
+                break;
+            case 1:
+                cardDrawn[0][4]=twoPointsSymbol;
+                cardDrawn[0][1]=greenSquareSymbol;
+                cardDrawn[1][2]=greenSquareSymbol;
+                cardDrawn[2][3]=greenSquareSymbol;
+                break;
+            case 2:
+                cardDrawn[0][4]=twoPointsSymbol;
+                cardDrawn[0][3]=blueSquareSymbol;
+                cardDrawn[1][2]=blueSquareSymbol;
+                cardDrawn[2][1]=blueSquareSymbol;
+                break;
+            case 3:
+                cardDrawn[0][4]=twoPointsSymbol;
+                cardDrawn[0][1]=purpleSquareSymbol;
+                cardDrawn[1][2]=purpleSquareSymbol;
+                cardDrawn[2][3]=purpleSquareSymbol;
+                break;
+            case 4:
+                cardDrawn[0][4]=threePointsSymbol;
+                cardDrawn[0][2]=redSquareSymbol;
+                cardDrawn[1][2]=redSquareSymbol;
+                cardDrawn[2][3]=greenSquareSymbol;
+                break;
+            case 5:
+                cardDrawn[0][4]=threePointsSymbol;
+                cardDrawn[0][2]=greenSquareSymbol;
+                cardDrawn[1][2]=greenSquareSymbol;
+                cardDrawn[2][1]=purpleSquareSymbol;
+                break;
+            case 6:
+                cardDrawn[0][4]=threePointsSymbol;
+                cardDrawn[1][2]=blueSquareSymbol;
+                cardDrawn[2][2]=blueSquareSymbol;
+                cardDrawn[0][3]=purpleSquareSymbol;
+                break;
+            case 7:
+                cardDrawn[0][4]=threePointsSymbol;
+                cardDrawn[1][2]=purpleSquareSymbol;
+                cardDrawn[2][2]=purpleSquareSymbol;
+                cardDrawn[0][1]=blueSquareSymbol;
+                break;
+            case 8:
+                cardDrawn[0][4]=twoPointsSymbol;
+                cardDrawn[1][1]=fungiSymbol;
+                cardDrawn[1][2]=fungiSymbol;
+                cardDrawn[1][3]=fungiSymbol;
+                break;
+            case 9:
+                cardDrawn[0][4]=twoPointsSymbol;
+                cardDrawn[1][1]=plantSymbol;
+                cardDrawn[1][2]=plantSymbol;
+                cardDrawn[1][3]=plantSymbol;
+                break;
+            case 10:
+                cardDrawn[0][4]=twoPointsSymbol;
+                cardDrawn[1][1]=animalSymbol;
+                cardDrawn[1][2]=animalSymbol;
+                cardDrawn[1][3]=animalSymbol;
+                break;
+            case 11:
+                cardDrawn[0][4]=twoPointsSymbol;
+                cardDrawn[1][1]=insectSymbol;
+                cardDrawn[1][2]=insectSymbol;
+                cardDrawn[1][3]=insectSymbol;
+                break;
+            case 12:
+                cardDrawn[0][4]=threePointsSymbol;
+                cardDrawn[1][1]=quillSymbol;
+                cardDrawn[1][2]=inkwellSymbol;
+                cardDrawn[1][3]=manuscriptSymbol;
+                break;
+            case 13:
+                cardDrawn[0][4]=twoPointsSymbol;
+                cardDrawn[1][1]=manuscriptSymbol;
+                cardDrawn[1][2]=manuscriptSymbol;
+                break;
+            case 14:
+                cardDrawn[0][4]=twoPointsSymbol;
+                cardDrawn[1][1]=inkwellSymbol;
+                cardDrawn[1][2]=inkwellSymbol;
+                break;
+            case 15:
+                cardDrawn[0][4]=twoPointsSymbol;
+                cardDrawn[1][1]=quillSymbol;
+                cardDrawn[1][2]=quillSymbol;
+                break;
+            default:
+                System.out.println("Error, idCard out of range");
+                break;
+        }
+        return cardDrawn;
+    }
+
 
 }
