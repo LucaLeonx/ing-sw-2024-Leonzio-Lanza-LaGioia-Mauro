@@ -99,5 +99,8 @@ class ClientEndGameState implements EndGameState
 ServerController -down--> ControllerState : - state
 ClientController -down--> ControllerState : - State
 
+ClientController.startGame()  {
+    GameRMIController = LobbyRMIController.startGame(nickName);
+}
 
 @enduml
