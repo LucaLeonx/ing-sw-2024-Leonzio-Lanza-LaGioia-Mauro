@@ -1,26 +1,35 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.card.*;
+import it.polimi.ingsw.model.map.GameField;
 import it.polimi.ingsw.model.map.Point;
+import it.polimi.ingsw.model.player.InvalidCardException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Game {
     private Deck goldCardDeck;
     private Deck resourceCardDeck;
-    private List<Player> players;
+    private final List<Player> players;
+
+    private boolean isLastTurn;
     private Player currentPlayer;
-    private List<Card> visibleGoldCard;
+    // To be removed
     private List<Card> visibleResourceCard;
-    private List<ObjectiveCard> commonObjectiveCards;
+    private List<Card> visibleGoldCard;
+
+    private final Map<DrawChoice, Card> visibleCards;
+    private final List<ObjectiveCard> commonObjectiveCards;
     private RandomPicker<ObjectiveCard> objCardsPicker;
 
-    public Game(List<String> playerNames) throws FileNotFoundException {
+    private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock(true);
+
+    public Game(List<String> playerNames, Map<DrawChoice, Card> visibleCards) throws FileNotFoundException {
+        this.visibleCards = visibleCards;
         int i = 0;
 
         PlayerColor[] playerColors = {PlayerColor.RED,PlayerColor.GREEN,PlayerColor.BLUE,PlayerColor.YELLOW};
@@ -33,27 +42,27 @@ public class Game {
         this.commonObjectiveCards.add(this.objCardsPicker.extractRandomElement().orElse(null));
         this.commonObjectiveCards.add(this.objCardsPicker.extractRandomElement().orElse(null));
 
-        this.visibleGoldCard = new ArrayList<Card>(2);
-        this.visibleGoldCard.add(this.goldCardDeck.getTopCard().orElse(null));
-        this.visibleGoldCard.add(this.goldCardDeck.getTopCard().orElse(null));
+
+        this.visibleGoldCard.add(this.goldCardDeck.getTopCard());
 
         this.visibleResourceCard = new ArrayList<Card>(2);
-        this.visibleResourceCard.add(this.resourceCardDeck.getTopCard().orElse(null));
-        this.visibleResourceCard.add(this.resourceCardDeck.getTopCard().orElse(null));
+        this.visibleResourceCard.add(this.resourceCardDeck.getTopCard());
+        this.visibleResourceCard.add(this.resourceCardDeck.getTopCard());
 
         this.players = new ArrayList<Player>();
         for(String player : playerNames){
-            Player p = new Player(player,playerColors[i]);
+            Player p = new Player(player,playerColors[i], new ObjectiveCard(0, GameFunctionFactory.createPointsRewardFunction(0)));
             setupPlayersHand(p);
             this.players.add(p);
             i++;
         }
-
+        isLastTurn = false;
     }
     private void setupPlayersHand(Player p){
-        p.addCard(this.goldCardDeck.getTopCard().orElse(null));
-        p.addCard(this.resourceCardDeck.getTopCard().orElse(null));
-        p.addCard(this.resourceCardDeck.getTopCard().orElse(null));
+
+        p.addCard(this.goldCardDeck.getTopCard());
+        p.addCard(this.resourceCardDeck.getTopCard());
+        p.addCard(this.resourceCardDeck.getTopCard());
     }
 
     /**
@@ -75,8 +84,8 @@ public class Game {
         ObjectiveCard[] objCardToChoose = new ObjectiveCard[2];
         for(Player p: this.players){
             if(p.getNickname().equals(playerNick)){
-                objCardToChoose[0] = this.objCardsPicker.extractRandomElement().orElse(null);
-                objCardToChoose[1] = this.objCardsPicker.extractRandomElement().orElse(null);
+                objCardToChoose[0] = this.objCardsPicker.extractRandomElement().orElseThrow(() -> new RuntimeException("No ObjectiveCard Available"));
+                objCardToChoose[1] = this.objCardsPicker.extractRandomElement().orElseThrow(() -> new RuntimeException("No ObjectiveCard Available"));
             }
         }
         return objCardToChoose;
@@ -99,4 +108,104 @@ public class Game {
         }
     }
 
+    public List<String> getPlayersNicknames(){
+        return players.stream().map(Player::getNickname).toList();
+    }
+
+    public Player getPlayerInformation(String nickname) throws NoSuchElementException {
+        return players.stream()
+                .filter((player) -> player.getNickname().equals(nickname))
+                .findFirst().orElseThrow(NoSuchElementException::new);
+    }
+
+    public String getCurrentPlayerNickname() {
+        return currentPlayer.getNickname();
+    }
+
+    public boolean isLastTurn(){
+        return isLastTurn;
+    }
+
+    public boolean isLastPlayer(){
+        return currentPlayer.equals(players.getLast());
+    }
+
+    public List<ObjectiveCard> getCommonObjectiveCards() {
+        return commonObjectiveCards;
+    }
+
+    public Map<DrawChoice, Card> getDrawableCards(){
+        Map<DrawChoice, Card> drawableCards = new HashMap<>(visibleCards);
+
+        if(!resourceCardDeck.isEmpty()){
+            drawableCards.put(DrawChoice.DECK_RESOURCE, generateDummyCard(resourceCardDeck.getTopCard()) .)
+        }
+
+        if(!goldCardDeck.isEmpty()){
+            drawableCards.put(DrawChoice.DECK_GOLD, generateDummyCard(resourceCardDeck.getTopCard()) .)
+        }
+
+        return drawableCards;
+    }
+
+    public Card generateDummyCard(Card card){
+        return new Card(0, card.getCardColor(), card.getSide(CardOrientation.BACK), card.getSide(CardOrientation.BACK));
+    }
+
+    public void makeCurrentPlayerMove(int cardId, CardOrientation orientation, Point placementPoint, DrawChoice drawChoice) throws InvalidOperationException {
+
+        Card playedCard;
+        CardSide playedSide;
+        GameField field = currentPlayer.getField();
+        Deck deckToUse = switch(drawChoice){
+            case DECK_RESOURCE, RESOURCE_CARD_1, RESOURCE_CARD_2 -> resourceCardDeck;
+            case DECK_GOLD, GOLD_CARD_1, GOLD_CARD_2 -> goldCardDeck;
+        }
+
+        try {
+            playedCard = currentPlayer.removeCard(cardId);
+            playedSide = playedCard.getSide(orientation);
+        } catch (InvalidCardException e) {
+            throw new InvalidOperationException(e.getMessage());
+        }
+
+        if(!field.getAvailablePositions().contains(placementPoint)){
+            throw new InvalidOperationException("The position " + placementPoint + "is not among available ones");
+        } else if(!playedSide.getPlayingRequirements().isSatisfied(field)){
+            throw new InvalidOperationException("Playing requirements for the card on this side are not satisfied");
+        }
+
+        field.placeCard(playedCard, orientation, placementPoint);
+        currentPlayer.incrementScore(playedSide.getPlayingReward().getPoints(field));
+
+        switch(drawChoice){
+            case DECK_RESOURCE, DECK_GOLD -> currentPlayer.addCard(deckToUse.draw()
+                    .orElseThrow(() -> new InvalidOperationException("Cannot draw from empty golden cards deck")));
+            case RESOURCE_CARD_1, RESOURCE_CARD_2, GOLD_CARD_1, GOLD_CARD_2 ->
+            {
+                Card drawnCard = visibleCards.get(drawChoice);
+
+                currentPlayer.addCard(drawnCard);
+                if(!deckToUse.isEmpty()){
+                    visibleCards.put(drawChoice, deckToUse.draw().get());
+                }
+            }
+        }
+
+        updateNextPlayer();
+    }
+
+    public void updateNextPlayer(){
+        if(isLastPlayer()){
+            currentPlayer = players.getFirst();
+            isLastTurn = setLastTurn();
+        } else {
+            currentPlayer = players.get(players.indexOf(currentPlayer));
+        }
+    }
+
+    private boolean setLastTurn(){
+        return (resourceCardDeck.isEmpty() && goldCardDeck.isEmpty())
+                || players.stream().anyMatch(player -> player.getScore() >= 20);
+    }
 }

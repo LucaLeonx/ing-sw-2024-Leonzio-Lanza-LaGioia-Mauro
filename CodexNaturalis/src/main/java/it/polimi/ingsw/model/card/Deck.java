@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.card;
 import java.util.*;
 
 public class Deck {
-
     private Optional<Card> topCard;
     private int numberOfCards;
     private final RandomPicker<Card> cardPicker;
@@ -18,8 +17,8 @@ public class Deck {
         return (numberOfCards == 0);
     }
 
-    public Optional<Card> getTopCard(){
-        return topCard;
+    public Card getTopCard(){
+        return topCard.orElseThrow(EmptyDeckException::new);
     }
 
     public int getNumberOfCards() {
