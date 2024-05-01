@@ -241,9 +241,109 @@ public class TUI {
         String[][] objectives = new String[3][11];
     }
 
-    abstract public String[][] drawCard(Card card){}
+    public String[][] sketchCard(Card card){
+        if(card.getId()<=40) {
+            return sketchResourceCard(card);
+        }
+        else if(card.getId()>40 && card.getId()<=80) {
+            return sketchGoldenCard(card);
+        }
+        else if(card.getId()>=87 && card.getId()<=102){
+            return  sketchObjectiveCard(card);
+        }
 
-    public String[][] drawCard(ObjectiveCard card){
+
+    }
+
+
+    public String[][] sketchResourceCard(Card card) {
+        String[][] cardDrawn = new String[3][5];
+        String background;
+        switch (card.getCardColor()) {
+            case CardColor.RED:
+                background = redSquareSymbol;
+                break;
+            case CardColor.GREEN:
+                background = greenSquareSymbol;
+                break;
+            case CardColor.PURPLE:
+                background = purpleSquareSymbol;
+                break;
+            case CardColor.SKYBLUE:
+                background = blueSquareSymbol;
+                break;
+            default:
+                System.out.println("Error");
+                break;
+        }
+
+        for(int i=0; i<3; i++){
+            for(int j=0; j<5; j++){
+                cardDrawn[i][j]=blackSquareSymbol;
+            }
+        }
+
+        // I don't need to check the orientation since all card displayed in hand/ in play are on the front side.
+        for(int i=0; i<4; i++) {
+            String symbol=blackSquareSymbol;
+            AnglePosition angle = AnglePosition.UP_LEFT;
+            int x=0;
+            int y=0;
+            switch (i) {
+            case 0:
+                angle=AnglePosition.UP_LEFT;
+                x=0;
+                y=0;
+                break;
+            case 1:
+                angle=AnglePosition.UP_RIGHT;
+                x=4;
+                y=0;
+                break;
+            case 2:
+                angle=AnglePosition.DOWN_LEFT;
+                x=0;
+                y=2;
+                break;
+            case 3:
+                angle=AnglePosition.DOWN_RIGHT;
+                x=4;
+                y=2;
+                break;
+            }
+            switch (card.getSide(CardOrientation.FRONT).getSymbolFromAngle(angle)){
+                case Symbol.ANIMAL:
+                    symbol=animalSymbol;
+                case Symbol.FUNGI:
+                    symbol=fungiSymbol;
+                case Symbol.PLANT:
+                    symbol=plantSymbol;
+                case Symbol.INSECT:
+                    symbol=insectSymbol;
+                case Symbol.QUILL:
+                    symbol=quillSymbol;
+                case Symbol.MANUSCRIPT:
+                    symbol=manuscriptSymbol;
+                case Symbol.INKWELL:
+                    symbol=inkwellSymbol;
+                case Symbol.BLANK:
+                    symbol=whiteSquareSymbol;
+            }
+            // if it is hidden I don't want to change emoji from the background color.
+            if(card.getSide(CardOrientation.FRONT).getSymbolFromAngle(angle) != Symbol.HIDDEN) {
+                cardDrawn[y][x] = symbol;
+            }
+        }
+        return cardDrawn;
+    }
+
+    public String[][] sketchGoldenCard(Card card) {
+
+
+    }
+
+
+    public String[][] sketchObjectiveCard(Card card){
         String[][] cardDrawn = new String[3][5];
         // I set every cell to black (background) so I will change only the cells that I need to change
         for(int i=0; i<3; i++){
@@ -252,95 +352,95 @@ public class TUI {
             }
         }
         switch (card.getId()) {
-            case 0:
+            case 87:
                 cardDrawn[0][4]=twoPointsSymbol;
                 cardDrawn[0][3]=redSquareSymbol;
                 cardDrawn[1][2]=redSquareSymbol;
                 cardDrawn[2][1]=redSquareSymbol;
                 break;
-            case 1:
+            case 88:
                 cardDrawn[0][4]=twoPointsSymbol;
                 cardDrawn[0][1]=greenSquareSymbol;
                 cardDrawn[1][2]=greenSquareSymbol;
                 cardDrawn[2][3]=greenSquareSymbol;
                 break;
-            case 2:
+            case 89:
                 cardDrawn[0][4]=twoPointsSymbol;
                 cardDrawn[0][3]=blueSquareSymbol;
                 cardDrawn[1][2]=blueSquareSymbol;
                 cardDrawn[2][1]=blueSquareSymbol;
                 break;
-            case 3:
+            case 90:
                 cardDrawn[0][4]=twoPointsSymbol;
                 cardDrawn[0][1]=purpleSquareSymbol;
                 cardDrawn[1][2]=purpleSquareSymbol;
                 cardDrawn[2][3]=purpleSquareSymbol;
                 break;
-            case 4:
+            case 91:
                 cardDrawn[0][4]=threePointsSymbol;
                 cardDrawn[0][2]=redSquareSymbol;
                 cardDrawn[1][2]=redSquareSymbol;
                 cardDrawn[2][3]=greenSquareSymbol;
                 break;
-            case 5:
+            case 92:
                 cardDrawn[0][4]=threePointsSymbol;
                 cardDrawn[0][2]=greenSquareSymbol;
                 cardDrawn[1][2]=greenSquareSymbol;
                 cardDrawn[2][1]=purpleSquareSymbol;
                 break;
-            case 6:
+            case 93:
                 cardDrawn[0][4]=threePointsSymbol;
                 cardDrawn[1][2]=blueSquareSymbol;
                 cardDrawn[2][2]=blueSquareSymbol;
                 cardDrawn[0][3]=purpleSquareSymbol;
                 break;
-            case 7:
+            case 94:
                 cardDrawn[0][4]=threePointsSymbol;
                 cardDrawn[1][2]=purpleSquareSymbol;
                 cardDrawn[2][2]=purpleSquareSymbol;
                 cardDrawn[0][1]=blueSquareSymbol;
                 break;
-            case 8:
+            case 95:
                 cardDrawn[0][4]=twoPointsSymbol;
                 cardDrawn[1][1]=fungiSymbol;
                 cardDrawn[1][2]=fungiSymbol;
                 cardDrawn[1][3]=fungiSymbol;
                 break;
-            case 9:
+            case 96:
                 cardDrawn[0][4]=twoPointsSymbol;
                 cardDrawn[1][1]=plantSymbol;
                 cardDrawn[1][2]=plantSymbol;
                 cardDrawn[1][3]=plantSymbol;
                 break;
-            case 10:
+            case 97:
                 cardDrawn[0][4]=twoPointsSymbol;
                 cardDrawn[1][1]=animalSymbol;
                 cardDrawn[1][2]=animalSymbol;
                 cardDrawn[1][3]=animalSymbol;
                 break;
-            case 11:
+            case 98:
                 cardDrawn[0][4]=twoPointsSymbol;
                 cardDrawn[1][1]=insectSymbol;
                 cardDrawn[1][2]=insectSymbol;
                 cardDrawn[1][3]=insectSymbol;
                 break;
-            case 12:
+            case 99:
                 cardDrawn[0][4]=threePointsSymbol;
                 cardDrawn[1][1]=quillSymbol;
                 cardDrawn[1][2]=inkwellSymbol;
                 cardDrawn[1][3]=manuscriptSymbol;
                 break;
-            case 13:
+            case 100:
                 cardDrawn[0][4]=twoPointsSymbol;
                 cardDrawn[1][1]=manuscriptSymbol;
                 cardDrawn[1][2]=manuscriptSymbol;
                 break;
-            case 14:
+            case 101:
                 cardDrawn[0][4]=twoPointsSymbol;
                 cardDrawn[1][1]=inkwellSymbol;
                 cardDrawn[1][2]=inkwellSymbol;
                 break;
-            case 15:
+            case 102:
                 cardDrawn[0][4]=twoPointsSymbol;
                 cardDrawn[1][1]=quillSymbol;
                 cardDrawn[1][2]=quillSymbol;
@@ -351,6 +451,10 @@ public class TUI {
         }
         return cardDrawn;
     }
+
+    //public String[][] drawCard( card) {
+
+    //}
 
 
 }
