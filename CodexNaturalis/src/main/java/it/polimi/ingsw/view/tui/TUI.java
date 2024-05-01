@@ -556,5 +556,13 @@ public class TUI {
         return cardDrawn;
     }
 
+    String[][] sketchGoldDeck(){
+
+    }
+
+    String[][] sketchResourceDeck(){
+
+    }
+
 
 }
