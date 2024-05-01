@@ -82,7 +82,7 @@ public class TUI {
         //3 Populate maps with the correct card color and add central symbol if the orientation of the card is back
         for(Point p: player.getField().getCards().keySet())
         {
-            String centralSymbol; //We need this to keep track of what we need to put in the central cell of the card in case the card is plaued on the back.
+            String centralSymbol=animalSymbol; //We need this to keep track of what we need to put in the central cell of the card in case the card is plaued on the back.
             String cardColor=animalSymbol;
             if(player.getField().getCards().get(p).getCardColor() == CardColor.SKYBLUE)
             {
@@ -108,14 +108,12 @@ public class TUI {
             {
                 cardColor=brownSquareSymbol; // initial card
             }
-            //PROBLEMA: Non so come stabilire se la carta è giocata sul retro o sul fronte.
-            /*if(player.getField().getCards().get(p).) {
+            if(player.getField().getCardCells().get(p).visibleCardSide().equals(player.getField().getCards().get(p).getSide(CardOrientation.FRONT))) {
                 matrixMap[p.y() + abs(minY)][p.x() + abs(minX)] = cardColor;
             }
             else{
                 matrixMap[p.y() + abs(minY)][p.x() + abs(minX)] = centralSymbol;
-            }*/
-            matrixMap[p.y() + abs(minY)][p.x() + abs(minX)] = cardColor; //da rimuovere quando fixiamo il bug.
+            }
 
             matrixMap[p.y()+abs(minY)+1][p.x()+abs(minX)]=cardColor;
             matrixMap[p.y()+abs(minY)][p.x()+abs(minX)+1]=cardColor;
