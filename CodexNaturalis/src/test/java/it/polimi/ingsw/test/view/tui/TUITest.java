@@ -43,7 +43,7 @@ public class TUITest extends TestCase {
         //playerTestDiagonal.getField().placeCard(resourceCards.get(2), CardOrientation.FRONT, new Point(6,6));
 
         T=new Player("Topolino", PlayerColor.RED, new ObjectiveCard(0, null));
-        M=new Player("Minie", PlayerColor.BLUE, new ObjectiveCard(0, null));
+        M=new Player("Minnie", PlayerColor.BLUE, new ObjectiveCard(0, null));
         P=new Player("Paperina", PlayerColor.YELLOW, new ObjectiveCard(0, null));
 
         M.getField().placeCard(initialCards.get(2), CardOrientation.FRONT, new Point(0,0));
