@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
 import it.polimi.ingsw.model.DrawChoice;
-import it.polimi.ingsw.model.InvalidOperationException;
+import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.Map;
 public interface ClientController {
     // WARNING: The methods may throw unchecked exceptions, if called in the wrong place
     public List<String> getPlayerNames();
-    public PlayerSetup getPlayerSetup();
+    public PlayerSetupInfo getPlayerSetup();
     public ControlledPlayerInfo getControlledPlayerInformation();
     public OpponentInfo getOpponentInformation(String opponentName);
     /**
@@ -22,7 +22,9 @@ public interface ClientController {
     public Map<DrawChoice, CardSideInfo> getDrawableCards();
     public String getCurrentPlayerName();
     public boolean isLastTurn();
+    public boolean hasGameEnded();
     public String getWinner();
+    public void setPlayerSetup(ObjectiveInfo chosenObjective, CardOrientation initialCardSide);
     public void makeMove(CardInfo card, Point placementPoint, DrawChoice drawchoice);
     public void start();
     public void close();

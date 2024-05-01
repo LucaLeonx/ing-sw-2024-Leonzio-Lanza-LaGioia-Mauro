@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.controller.clientcontroller.PlayerSetupInfo;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.InvalidOperationException;
@@ -10,16 +11,16 @@ import it.polimi.ingsw.model.player.Player;
 import java.util.List;
 import java.util.Map;
 
-abstract class ControllerState {
+abstract class GameState {
     private Game game;
 
     public List<String> getPlayerNames(){
         return game.getPlayersNicknames();
     }
 
-    public abstract PlayerSetup getPlayerSetup(String name);
+    public abstract PlayerSetupInfo getPlayerSetup(String name);
 
-    public abstract void registerPlayerSetupChoice(String name, ObjectiveCard secretObjective, CardOrientation initialCardOrientation);
+    public abstract void registerPlayerSetupChoice(String name, int secretObjective, CardOrientation initialCardOrientation);
 
     public Player getPlayerFullInformation(String name){
         return game.getPlayerInformation(name);
@@ -61,9 +62,7 @@ abstract class ControllerState {
         }
     }
 
-    private ObjectiveCard generateDummyObjective(){
-        return new ObjectiveCard(0, GameFunctionFactory.createPointsRewardFunction(0));
+    public boolean hasGameEnded() {
+        return false;
     }
 }
-
-record PlayerSetup(){};

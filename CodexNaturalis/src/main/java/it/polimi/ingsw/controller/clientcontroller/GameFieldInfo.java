@@ -11,5 +11,5 @@ import java.util.SortedMap;
  *                    They are sorted based on their insertion order
  * @param availablePositions Positions available to put cards
  */
-public record GameFieldInfo(SortedMap<Point, CardSideInfo> placedCards,
-                            Set<Point> availablePositions) {}
+public record GameFieldInfo(SortedMap<Point, CardCellInfo> placedCards,
+                                          Set<Point> availablePositions) {}
