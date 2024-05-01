@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
+import it.polimi.ingsw.model.map.CardCell;
 import it.polimi.ingsw.model.map.Point;
 
 import java.util.Set;

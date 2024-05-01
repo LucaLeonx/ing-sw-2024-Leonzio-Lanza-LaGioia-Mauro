@@ -21,7 +21,7 @@ public class RMIGameManager implements GameManager{
 
     @Override
     public GameInfo getGameInfo() {
-        return new GameInfo(state.getCurrentPlayerNickname())
+        return new GameInfo(state.getCurrentPlayerNickname(), state.getPlayerNames(), );
     }
 
     @Override

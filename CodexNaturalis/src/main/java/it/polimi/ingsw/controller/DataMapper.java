@@ -49,7 +49,6 @@ public abstract class DataMapper {
 
     private static GameFieldInfo convertToInfo(GameField field) {
         return new GameFieldInfo(null, field.getAvailablePositions());
-
     }
 
     private static CardCellInfo convertToInfo(CardCell cardCell){
