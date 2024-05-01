@@ -229,16 +229,120 @@ public class TUI {
     }
     public void showHand(Player player)
     {
-        String[][] matrixHand = new String[3][23]; // 20 columns for 3 cards +2 cells for tabs
+        String[][] matrixHand = new String[3][23]; // 20 columns for 3 cards +3 cells for tabs
 
+        for(int i=0; i<3; i++) {
+            for(int j=0; j<23; j++){
+                matrixHand[i][j]="\t\t"; //I add the space between the card.
+            }
+        }
+
+        for(int i=0; i<3; i++) {
+            String[][] currentCard = new String[3][5];
+            currentCard=sketchCard(player.getCardsInHand().get(i));
+            for(int j=0; j<3; j++){
+                for(int k=0; k<5; k++) {
+                    matrixHand[j][k+6*i]=currentCard[j][k];
+                }
+            }
+        }
+        String[][] currentCard = new String[3][5];
+        currentCard=sketchObjectiveCard(player.getSecretObjective());
+        for(int j=0; j<3; j++){
+            for(int k=0; k<5; k++) {
+                matrixHand[j][k+17]=currentCard[j][k];
+            }
+        }
+
+        for(int i=0; i<3; i++) {
+            for(int j=0; j<23; j++){
+                System.out.print(matrixHand[i][j]);
+            }
+            System.out.println();
+        }
 
     }
-    public void showCardsOnTable()
+    public void showCardsOnTable(CardColor colorGoldDeck, CardColor colorResourceDeck, Card resourceCard1, Card resourceCard2, Card goldenCard1, Card goldenCard2, ObjectiveCard objectiveCard1, ObjectiveCard objectiveCard2)
     {
         String[][] decks = new String[3][11]; // 11 columns for 2 cards +1 cells for tabs
-        String[][] drawable1 = new String[3][11]; // 1st row of card that are face up on the table to draw from
-        String[][] drawable2 = new String[3][11];
+        String[][] drawableCards1 = new String[3][11]; // 1st row of card that are face up on the table to draw from
+        String[][] drawableCards2 = new String[3][11];
         String[][] objectives = new String[3][11];
+
+        //I add the space between the card.
+        for(int i=0; i<3; i++) {
+            for(int j=0; j<11; j++){
+                decks[i][j]="\t\t";
+                drawableCards1[i][j]="\t\t";
+                drawableCards2[i][j]="\t\t";
+                objectives[i][j]="\t\t";
+            }
+        }
+
+        String[][] Card1 = new String[3][5];
+        String[][] Card2 = new String[3][5];
+
+        Card1=sketchCard(resourceCard1);
+        Card2=sketchCard(goldenCard1);
+
+        for(int j=0; j<3; j++){
+            for(int k=0; k<5; k++) {
+                drawableCards1[j][k]=Card1[j][k];
+                drawableCards1[j][k+6]=Card1[j][k];
+            }
+        }
+
+        Card1=sketchCard(resourceCard2);
+        Card2=sketchCard(goldenCard2);
+
+        for(int j=0; j<3; j++){
+            for(int k=0; k<5; k++) {
+                drawableCards2[j][k]=Card2[j][k];
+                drawableCards2[j][k+6]=Card2[j][k];
+            }
+        }
+
+        Card1=sketchObjectiveCard(objectiveCard1);
+        Card2=sketchObjectiveCard(objectiveCard2);
+
+        for(int j=0; j<3; j++){
+            for(int k=0; k<5; k++) {
+                drawableCards2[j][k]=Card2[j][k];
+                drawableCards2[j][k+6]=Card2[j][k];
+            }
+        }
+
+        for(int i=0; i<3; i++) {
+            for(int j=0; j<11; j++){
+                System.out.print(decks[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.print("\n\n");
+
+        for(int i=0; i<3; i++) {
+            for(int j=0; j<11; j++){
+                System.out.print(drawableCards1[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.print("\n\n");
+
+        for(int i=0; i<3; i++) {
+            for(int j=0; j<11; j++){
+                System.out.print(drawableCards2[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.print("\n\n");
+
+        for(int i=0; i<3; i++) {
+            for(int j=0; j<11; j++){
+                System.out.print(objectives[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.print("\n\n");
     }
 
     public String[][] sketchCard(Card card){
@@ -248,11 +352,10 @@ public class TUI {
         else if(card.getId()>40 && card.getId()<=80) {
             return sketchGoldenCard(card);
         }
-        else if(card.getId()>=87 && card.getId()<=102){
-            return  sketchObjectiveCard(card);
+        else {
+            System.out.println("Error, card not supported by this method");
+            return null;
         }
-
-
     }
 
 
@@ -338,12 +441,13 @@ public class TUI {
     }
 
     public String[][] sketchGoldenCard(Card card) {
+        String[][] cardDrawn = new String[3][5];
 
-
+        return cardDrawn;
     }
 
 
-    public String[][] sketchObjectiveCard(Card card){
+    public String[][] sketchObjectiveCard(ObjectiveCard card){
         String[][] cardDrawn = new String[3][5];
         // I set every cell to black (background) so I will change only the cells that I need to change
         for(int i=0; i<3; i++){
@@ -451,10 +555,6 @@ public class TUI {
         }
         return cardDrawn;
     }
-
-    //public String[][] drawCard( card) {
-
-    //}
 
 
 }
