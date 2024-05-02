@@ -3,7 +3,8 @@ skinparam groupinheritance 3
 
 class GameFactory {
     + newStartGame()
-    + newGameFromSnapshot() // For persistence
+    + newGameFromSnapshot()
+    ' For persistence
 }
 
 'exported to RMI. Maybe can be abstract class
@@ -99,8 +100,8 @@ class ClientEndGameState implements EndGameState
 ServerController -down--> ControllerState : - state
 ClientController -down--> ControllerState : - State
 
-ClientController.startGame()  {
-    GameRMIController = LobbyRMIController.startGame(nickName);
-}
+'ClientController.startGame()  {
+'    GameRMIController = LobbyRMIController.startGame(nickName);
+'}
 
 @enduml

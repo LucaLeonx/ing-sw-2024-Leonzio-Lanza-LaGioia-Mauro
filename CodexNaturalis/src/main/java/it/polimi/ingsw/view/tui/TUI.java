@@ -357,12 +357,10 @@ public class TUI {
             return null;
         }
     }
-
-
-    public String[][] sketchResourceCard(Card card) {
-        String[][] cardDrawn = new String[3][5];
-        String background;
-        switch (card.getCardColor()) {
+    public String[][] sketchBackground(CardColor color) {
+        String[][] cardSketched = new String[3][5];
+        String background=blackSquareSymbol;
+        switch (color) {
             case CardColor.RED:
                 background = redSquareSymbol;
                 break;
@@ -382,9 +380,15 @@ public class TUI {
 
         for(int i=0; i<3; i++){
             for(int j=0; j<5; j++){
-                cardDrawn[i][j]=blackSquareSymbol;
+                cardSketched[i][j]=background;
             }
         }
+        return  cardSketched;
+    }
+
+    public String[][] sketchResourceCard(Card card) {
+        String[][] cardSketched = new String[3][5];
+        cardSketched=sketchBackground(card.getCardColor());
 
         // I don't need to check the orientation since all card displayed in hand/ in play are on the front side.
         for(int i=0; i<4; i++) {
@@ -417,152 +421,207 @@ public class TUI {
             switch (card.getSide(CardOrientation.FRONT).getSymbolFromAngle(angle)){
                 case Symbol.ANIMAL:
                     symbol=animalSymbol;
+                    break;
                 case Symbol.FUNGI:
                     symbol=fungiSymbol;
+                    break;
                 case Symbol.PLANT:
                     symbol=plantSymbol;
+                    break;
                 case Symbol.INSECT:
                     symbol=insectSymbol;
+                    break;
                 case Symbol.QUILL:
                     symbol=quillSymbol;
+                    break;
                 case Symbol.MANUSCRIPT:
                     symbol=manuscriptSymbol;
+                    break;
                 case Symbol.INKWELL:
                     symbol=inkwellSymbol;
+                    break;
                 case Symbol.BLANK:
                     symbol=whiteSquareSymbol;
+                    break;
             }
             // if it is hidden I don't want to change emoji from the background color.
             if(card.getSide(CardOrientation.FRONT).getSymbolFromAngle(angle) != Symbol.HIDDEN) {
-                cardDrawn[y][x] = symbol;
+                cardSketched[y][x] = symbol;
             }
         }
-        return cardDrawn;
+        return cardSketched;
     }
 
     public String[][] sketchGoldenCard(Card card) {
-        String[][] cardDrawn = new String[3][5];
+        String[][] cardSketched = new String[3][5];
 
-        return cardDrawn;
+        return cardSketched;
     }
 
 
     public String[][] sketchObjectiveCard(ObjectiveCard card){
-        String[][] cardDrawn = new String[3][5];
-        // I set every cell to black (background) so I will change only the cells that I need to change
+        String[][] cardSketched = new String[3][5];
+        // I set every cell to black (background) so I will change only the cells that I need to change. I can't use the
+        // set background function since black is not on the "normal color card" but since every time the color
+        // chosen for the objective card for the background is always black it is sufficient to implement a nested for as it follows:
+
         for(int i=0; i<3; i++){
             for(int j=0; j<5; j++){
-                cardDrawn[i][j]=blackSquareSymbol;
+                cardSketched[i][j]=blackSquareSymbol;
             }
         }
         switch (card.getId()) {
             case 87:
-                cardDrawn[0][4]=twoPointsSymbol;
-                cardDrawn[0][3]=redSquareSymbol;
-                cardDrawn[1][2]=redSquareSymbol;
-                cardDrawn[2][1]=redSquareSymbol;
+                cardSketched[0][4]=twoPointsSymbol;
+                cardSketched[0][3]=redSquareSymbol;
+                cardSketched[1][2]=redSquareSymbol;
+                cardSketched[2][1]=redSquareSymbol;
                 break;
             case 88:
-                cardDrawn[0][4]=twoPointsSymbol;
-                cardDrawn[0][1]=greenSquareSymbol;
-                cardDrawn[1][2]=greenSquareSymbol;
-                cardDrawn[2][3]=greenSquareSymbol;
+                cardSketched[0][4]=twoPointsSymbol;
+                cardSketched[0][1]=greenSquareSymbol;
+                cardSketched[1][2]=greenSquareSymbol;
+                cardSketched[2][3]=greenSquareSymbol;
                 break;
             case 89:
-                cardDrawn[0][4]=twoPointsSymbol;
-                cardDrawn[0][3]=blueSquareSymbol;
-                cardDrawn[1][2]=blueSquareSymbol;
-                cardDrawn[2][1]=blueSquareSymbol;
+                cardSketched[0][4]=twoPointsSymbol;
+                cardSketched[0][3]=blueSquareSymbol;
+                cardSketched[1][2]=blueSquareSymbol;
+                cardSketched[2][1]=blueSquareSymbol;
                 break;
             case 90:
-                cardDrawn[0][4]=twoPointsSymbol;
-                cardDrawn[0][1]=purpleSquareSymbol;
-                cardDrawn[1][2]=purpleSquareSymbol;
-                cardDrawn[2][3]=purpleSquareSymbol;
+                cardSketched[0][4]=twoPointsSymbol;
+                cardSketched[0][1]=purpleSquareSymbol;
+                cardSketched[1][2]=purpleSquareSymbol;
+                cardSketched[2][3]=purpleSquareSymbol;
                 break;
             case 91:
-                cardDrawn[0][4]=threePointsSymbol;
-                cardDrawn[0][2]=redSquareSymbol;
-                cardDrawn[1][2]=redSquareSymbol;
-                cardDrawn[2][3]=greenSquareSymbol;
+                cardSketched[0][4]=threePointsSymbol;
+                cardSketched[0][2]=redSquareSymbol;
+                cardSketched[1][2]=redSquareSymbol;
+                cardSketched[2][3]=greenSquareSymbol;
                 break;
             case 92:
-                cardDrawn[0][4]=threePointsSymbol;
-                cardDrawn[0][2]=greenSquareSymbol;
-                cardDrawn[1][2]=greenSquareSymbol;
-                cardDrawn[2][1]=purpleSquareSymbol;
+                cardSketched[0][4]=threePointsSymbol;
+                cardSketched[0][2]=greenSquareSymbol;
+                cardSketched[1][2]=greenSquareSymbol;
+                cardSketched[2][1]=purpleSquareSymbol;
                 break;
             case 93:
-                cardDrawn[0][4]=threePointsSymbol;
-                cardDrawn[1][2]=blueSquareSymbol;
-                cardDrawn[2][2]=blueSquareSymbol;
-                cardDrawn[0][3]=purpleSquareSymbol;
+                cardSketched[0][4]=threePointsSymbol;
+                cardSketched[1][2]=blueSquareSymbol;
+                cardSketched[2][2]=blueSquareSymbol;
+                cardSketched[0][3]=purpleSquareSymbol;
                 break;
             case 94:
-                cardDrawn[0][4]=threePointsSymbol;
-                cardDrawn[1][2]=purpleSquareSymbol;
-                cardDrawn[2][2]=purpleSquareSymbol;
-                cardDrawn[0][1]=blueSquareSymbol;
+                cardSketched[0][4]=threePointsSymbol;
+                cardSketched[1][2]=purpleSquareSymbol;
+                cardSketched[2][2]=purpleSquareSymbol;
+                cardSketched[0][1]=blueSquareSymbol;
                 break;
             case 95:
-                cardDrawn[0][4]=twoPointsSymbol;
-                cardDrawn[1][1]=fungiSymbol;
-                cardDrawn[1][2]=fungiSymbol;
-                cardDrawn[1][3]=fungiSymbol;
+                cardSketched[0][4]=twoPointsSymbol;
+                cardSketched[1][1]=fungiSymbol;
+                cardSketched[1][2]=fungiSymbol;
+                cardSketched[1][3]=fungiSymbol;
                 break;
             case 96:
-                cardDrawn[0][4]=twoPointsSymbol;
-                cardDrawn[1][1]=plantSymbol;
-                cardDrawn[1][2]=plantSymbol;
-                cardDrawn[1][3]=plantSymbol;
+                cardSketched[0][4]=twoPointsSymbol;
+                cardSketched[1][1]=plantSymbol;
+                cardSketched[1][2]=plantSymbol;
+                cardSketched[1][3]=plantSymbol;
                 break;
             case 97:
-                cardDrawn[0][4]=twoPointsSymbol;
-                cardDrawn[1][1]=animalSymbol;
-                cardDrawn[1][2]=animalSymbol;
-                cardDrawn[1][3]=animalSymbol;
+                cardSketched[0][4]=twoPointsSymbol;
+                cardSketched[1][1]=animalSymbol;
+                cardSketched[1][2]=animalSymbol;
+                cardSketched[1][3]=animalSymbol;
                 break;
             case 98:
-                cardDrawn[0][4]=twoPointsSymbol;
-                cardDrawn[1][1]=insectSymbol;
-                cardDrawn[1][2]=insectSymbol;
-                cardDrawn[1][3]=insectSymbol;
+                cardSketched[0][4]=twoPointsSymbol;
+                cardSketched[1][1]=insectSymbol;
+                cardSketched[1][2]=insectSymbol;
+                cardSketched[1][3]=insectSymbol;
                 break;
             case 99:
-                cardDrawn[0][4]=threePointsSymbol;
-                cardDrawn[1][1]=quillSymbol;
-                cardDrawn[1][2]=inkwellSymbol;
-                cardDrawn[1][3]=manuscriptSymbol;
+                cardSketched[0][4]=threePointsSymbol;
+                cardSketched[1][1]=quillSymbol;
+                cardSketched[1][2]=inkwellSymbol;
+                cardSketched[1][3]=manuscriptSymbol;
                 break;
             case 100:
-                cardDrawn[0][4]=twoPointsSymbol;
-                cardDrawn[1][1]=manuscriptSymbol;
-                cardDrawn[1][2]=manuscriptSymbol;
+                cardSketched[0][4]=twoPointsSymbol;
+                cardSketched[1][1]=manuscriptSymbol;
+                cardSketched[1][2]=manuscriptSymbol;
                 break;
             case 101:
-                cardDrawn[0][4]=twoPointsSymbol;
-                cardDrawn[1][1]=inkwellSymbol;
-                cardDrawn[1][2]=inkwellSymbol;
+                cardSketched[0][4]=twoPointsSymbol;
+                cardSketched[1][1]=inkwellSymbol;
+                cardSketched[1][2]=inkwellSymbol;
                 break;
             case 102:
-                cardDrawn[0][4]=twoPointsSymbol;
-                cardDrawn[1][1]=quillSymbol;
-                cardDrawn[1][2]=quillSymbol;
+                cardSketched[0][4]=twoPointsSymbol;
+                cardSketched[1][1]=quillSymbol;
+                cardSketched[1][2]=quillSymbol;
                 break;
             default:
                 System.out.println("Error, idCard out of range");
                 break;
         }
-        return cardDrawn;
+        return cardSketched;
     }
 
-    String[][] sketchGoldDeck(){
-
+    String[][] sketchGoldenDeck(CardColor colorDeck){
+        String[][] goldenDeck = new String[3][5];
+        goldenDeck=sketchBackground(colorDeck);
+        goldenDeck=addBlankAngles(goldenDeck);
+        goldenDeck=addCentralSymbol(goldenDeck, colorDeck);
+        goldenDeck[0][2]=yellowSquareSymbol;
+        goldenDeck[1][1]=yellowSquareSymbol;
+        goldenDeck[1][3]=yellowSquareSymbol;
+        goldenDeck[2][2]=yellowSquareSymbol;
+        return goldenDeck;
     }
 
-    String[][] sketchResourceDeck(){
-
+    String[][] sketchResourceDeck(CardColor colorDeck){
+        String[][] resourceDeck = new String[3][5];
+        resourceDeck=sketchBackground(colorDeck);
+        resourceDeck=addBlankAngles(resourceDeck);
+        resourceDeck=addCentralSymbol(resourceDeck, colorDeck);
+        return resourceDeck; 
     }
+
+    String[][] addBlankAngles(String[][] sketchedCard) {
+        sketchedCard[0][0]=whiteSquareSymbol;
+        sketchedCard[0][4]=whiteSquareSymbol;
+        sketchedCard[2][0]=whiteSquareSymbol;
+        sketchedCard[2][4]=whiteSquareSymbol;
+        return sketchedCard;
+    }
+
+    String[][] addCentralSymbol(String[][] sketchedCard,CardColor color){
+        String symbol = blackSquareSymbol;
+        switch (color){
+            case CardColor.SKYBLUE:
+                symbol=animalSymbol;
+                break;
+            case CardColor.RED:
+                symbol=fungiSymbol;
+                break;
+            case CardColor.GREEN:
+                symbol=plantSymbol;
+                break;
+            case CardColor.PURPLE:
+                symbol=insectSymbol;
+                break;
+            default:
+                System.out.println("Invalid card as input");
+        }
+        sketchedCard[1][2]=symbol;
+        return sketchedCard;
+    }
+
+
 
 
 }
