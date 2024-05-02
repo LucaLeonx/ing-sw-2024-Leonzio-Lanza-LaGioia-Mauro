@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.controller.servercontroller;
 
 import it.polimi.ingsw.controller.clientcontroller.PlayerSetupInfo;
 import it.polimi.ingsw.model.DrawChoice;
@@ -20,8 +20,8 @@ public class RMIGameManager implements GameManager{
     }
 
     @Override
-    public GameInfo getGameInfo() {
-        return new GameInfo(state.getCurrentPlayerNickname(), state.getPlayerNames(), );
+    public GameSnapshot getGameInfo() {
+        return new GameSnapshot();
     }
 
     @Override

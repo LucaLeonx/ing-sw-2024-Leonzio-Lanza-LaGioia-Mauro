@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.controller.servercontroller;
 
 import it.polimi.ingsw.controller.clientcontroller.PlayerSetupInfo;
 import it.polimi.ingsw.model.DrawChoice;
