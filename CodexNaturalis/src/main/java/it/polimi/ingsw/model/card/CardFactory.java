@@ -15,17 +15,25 @@ import static it.polimi.ingsw.model.card.GameFunctionFactory.*;
 
 public abstract class CardFactory {
 
-    /*
-            return new CardSide(new HashSet<>().add(centerSymbol), Map.of(
-                AnglePosition.UP_LEFT, Symbol.BLANK,
-                AnglePosition.UP_RIGHT, Symbol.BLANK,
-                AnglePosition.DOWN_LEFT, Symbol.BLANK,
-                AnglePosition.DOWN_RIGHT, Symbol.BLANK
-        ));
-     */
+    private List<Card> InitialCards;
+    private List<Card> ResourceCards;
+    private List<Card> GoldCards;
+    private List<ObjectiveCard> ObjectiveCards;
+    private void setupInitial() throws FileNotFoundException{
 
-//
+    }
 
+    private void setupResource() throws FileNotFoundException{
+
+    }
+
+    private void setupGold() throws FileNotFoundException{
+
+    }
+
+    private void setupObjective() throws FileNotFoundException{
+
+    }
     public static List<Card> getInitialCards() throws FileNotFoundException {
         FileReader reader= new FileReader("src/main/java/it/polimi/ingsw/model/card/JsonFiles/Initial.json");
         GsonBuilder builder = new GsonBuilder();
