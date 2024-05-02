@@ -1,5 +1,11 @@
 package it.polimi.ingsw.view.tui;
 
+import it.polimi.ingsw.controller.clientcontroller.CardInfo;
+import it.polimi.ingsw.controller.clientcontroller.ControlledPlayerInfo;
+import it.polimi.ingsw.controller.clientcontroller.ObjectiveInfo;
+import it.polimi.ingsw.controller.clientcontroller.OpponentInfo;
+import it.polimi.ingsw.model.DrawChoice;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;
@@ -37,6 +43,12 @@ public class TUI {
     static String coveredAnglesSymbol = "\u25F0";
     static String forEachSymbol ="\u2755";
 
+// TODO:  Fix DrawCards On table based on the new structure in ClientController. (When we introduce a new class in client.Controller containing things regarding table)
+// TODO:  implement TUI in case there is no deck or some drawable cards / Cards in hands are missing. (When we decide how to say there is some missing cards)
+    //TODO:  testing. (When we fix infoTraslator)
+    //TODO: SketchGoldenCard method (When we decide if it is possible to have a list of symbol as recquirements or if it is better to have a big switch statement similar to what we have for ObjectiveCards)
+    //TODO: Evaluate whether or not certain attribute like the name are needed in Objective card.
+    //TODO: change also DrawMap with new structure (When we are sure this infoTraslator works properly)
 
 
     public void drawMap(Player player) {
@@ -224,10 +236,10 @@ public class TUI {
         System.out.println("list of the symbol in the middle of the starting card: " + player.getField().getCardCells().get(origin).visibleCardSide().getCenterSymbols());
     }
 
-    public void showPoints(Player player) {
-        System.out.println("Player " + player.getNickname() + " has "+ player.getScore() + " points");
+    public void showPoints(OpponentInfo player) {
+        System.out.println("Player " + player.nickname() + " has "+ player.score() + " points");
     }
-    public void showHand(Player player)
+    public void showHand(ControlledPlayerInfo player)
     {
         String[][] matrixHand = new String[3][23]; // 20 columns for 3 cards +3 cells for tabs
 
@@ -239,7 +251,7 @@ public class TUI {
 
         for(int i=0; i<3; i++) {
             String[][] currentCard = new String[3][5];
-            currentCard=sketchCard(player.getCardsInHand().get(i));
+            currentCard=sketchCard(player.cards().get(i));
             for(int j=0; j<3; j++){
                 for(int k=0; k<5; k++) {
                     matrixHand[j][k+6*i]=currentCard[j][k];
@@ -247,7 +259,7 @@ public class TUI {
             }
         }
         String[][] currentCard = new String[3][5];
-        currentCard=sketchObjectiveCard(player.getSecretObjective());
+        currentCard=sketchObjectiveCard(player.secretObjective());
         for(int j=0; j<3; j++){
             for(int k=0; k<5; k++) {
                 matrixHand[j][k+17]=currentCard[j][k];
@@ -262,12 +274,21 @@ public class TUI {
         }
 
     }
-    public void showCardsOnTable(CardColor colorGoldDeck, CardColor colorResourceDeck, Card resourceCard1, Card resourceCard2, Card goldenCard1, Card goldenCard2, ObjectiveCard objectiveCard1, ObjectiveCard objectiveCard2)
+    public void showCardsOnTable(CardColor colorGoldDeck, CardColor colorResourceDeck)
     {
+        CardInfo resourceCard1=game.getDrawableCards().get(DrawChoice.RESOURCE_CARD_1);
+        CardInfo resourceCard2=game.getDrawableCards().get(DrawChoice.RESOURCE_CARD_2);
+        CardInfo goldenCard1=game.getDrawableCards().get(DrawChoice.GOLD_CARD_1);
+        CardInfo goldenCard2=game.getDrawableCards().get(DrawChoice.GOLD_CARD_2);
+        ObjectiveInfo objectiveCard1=game.getCommonObjectiveCards().get(0);
+        ObjectiveInfo objectiveCard2=game.getCommonObjectiveCards().get(1);
+
+
         String[][] decks = new String[3][11]; // 11 columns for 2 cards +1 cells for tabs
         String[][] drawableCards1 = new String[3][11]; // 1st row of card that are face up on the table to draw from
         String[][] drawableCards2 = new String[3][11];
         String[][] objectives = new String[3][11];
+
 
         //I add the space between the card.
         for(int i=0; i<3; i++) {
@@ -281,6 +302,16 @@ public class TUI {
 
         String[][] Card1 = new String[3][5];
         String[][] Card2 = new String[3][5];
+
+        Card1=sketchGoldenDeck();
+        Card2=sketchResourceDeck();
+
+        for(int j=0; j<3; j++){
+            for(int k=0; k<5; k++) {
+                decks[j][k]=Card1[j][k];
+                decks[j][k+6]=Card1[j][k];
+            }
+        }
 
         Card1=sketchCard(resourceCard1);
         Card2=sketchCard(goldenCard1);
@@ -345,11 +376,11 @@ public class TUI {
         System.out.print("\n\n");
     }
 
-    public String[][] sketchCard(Card card){
-        if(card.getId()<=40) {
+    public String[][] sketchCard(CardInfo card){
+        if(card.id()<=40) {
             return sketchResourceCard(card);
         }
-        else if(card.getId()>40 && card.getId()<=80) {
+        else if(card.id()>40 && card.id()<=80) {
             return sketchGoldenCard(card);
         }
         else {
@@ -357,6 +388,7 @@ public class TUI {
             return null;
         }
     }
+
     public String[][] sketchBackground(CardColor color) {
         String[][] cardSketched = new String[3][5];
         String background=blackSquareSymbol;
@@ -377,7 +409,6 @@ public class TUI {
                 System.out.println("Error");
                 break;
         }
-
         for(int i=0; i<3; i++){
             for(int j=0; j<5; j++){
                 cardSketched[i][j]=background;
@@ -386,9 +417,9 @@ public class TUI {
         return  cardSketched;
     }
 
-    public String[][] sketchResourceCard(Card card) {
+    public String[][] sketchResourceCard(CardInfo card) {
         String[][] cardSketched = new String[3][5];
-        cardSketched=sketchBackground(card.getCardColor());
+        cardSketched=sketchBackground(card.color());
 
         // I don't need to check the orientation since all card displayed in hand/ in play are on the front side.
         for(int i=0; i<4; i++) {
@@ -418,7 +449,7 @@ public class TUI {
                 y=2;
                 break;
             }
-            switch (card.getSide(CardOrientation.FRONT).getSymbolFromAngle(angle)){
+            switch (card.getSide(CardOrientation.FRONT).angleSymbols().get(angle)){
                 case Symbol.ANIMAL:
                     symbol=animalSymbol;
                     break;
@@ -445,21 +476,21 @@ public class TUI {
                     break;
             }
             // if it is hidden I don't want to change emoji from the background color.
-            if(card.getSide(CardOrientation.FRONT).getSymbolFromAngle(angle) != Symbol.HIDDEN) {
+            if(card.getSide(CardOrientation.FRONT).angleSymbols().get(angle) != Symbol.HIDDEN) {
                 cardSketched[y][x] = symbol;
             }
         }
         return cardSketched;
     }
 
-    public String[][] sketchGoldenCard(Card card) {
+    public String[][] sketchGoldenCard(CardInfo card) {
         String[][] cardSketched = new String[3][5];
 
         return cardSketched;
     }
 
 
-    public String[][] sketchObjectiveCard(ObjectiveCard card){
+    public String[][] sketchObjectiveCard(ObjectiveInfo card){
         String[][] cardSketched = new String[3][5];
         // I set every cell to black (background) so I will change only the cells that I need to change. I can't use the
         // set background function since black is not on the "normal color card" but since every time the color
@@ -470,7 +501,7 @@ public class TUI {
                 cardSketched[i][j]=blackSquareSymbol;
             }
         }
-        switch (card.getId()) {
+        switch (card.id()) {
             case 87:
                 cardSketched[0][4]=twoPointsSymbol;
                 cardSketched[0][3]=redSquareSymbol;

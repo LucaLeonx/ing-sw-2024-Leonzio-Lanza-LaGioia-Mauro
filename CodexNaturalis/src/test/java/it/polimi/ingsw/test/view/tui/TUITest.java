@@ -1,5 +1,10 @@
 package it.polimi.ingsw.test.view.tui;
 
+import it.polimi.ingsw.controller.clientcontroller.CardInfo;
+import it.polimi.ingsw.controller.clientcontroller.CardSideInfo;
+import it.polimi.ingsw.controller.clientcontroller.ControlledPlayerInfo;
+import it.polimi.ingsw.controller.clientcontroller.ObjectiveInfo;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.AngleCell;
 import it.polimi.ingsw.model.map.CardCell;
@@ -12,9 +17,11 @@ import junit.framework.TestCase;
 import it.polimi.ingsw.test.model.map.GameFieldTest;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.*;
 
 public class TUITest extends TestCase {
 
@@ -116,6 +123,20 @@ public class TUITest extends TestCase {
         new GameFieldTest().checkInvariants(T.getField());
         tui.drawMap(T);
     }
+
+    public void testShowHand(){
+        //T.addCard(resourceCards.get(0));
+        //T.addCard(resourceCards.get(1));
+        //T.addCard(resourceCards.get(2));
+
+    }
+
+    public void testShowCardsOnTable(){
+        //List cardsInHand =new ArrayList<CardInfo>();
+        //cardsInHand.add(new CardInfo(1,CardColor.RED,new CardSideInfo(),new CardSideInfo()));
+        //ControlledPlayerInfo Topolino = new ControlledPlayerInfo("Topolino", PlayerColor.RED, new ObjectiveInfo(1, "b"), );
+    }
+
 
 
 }
