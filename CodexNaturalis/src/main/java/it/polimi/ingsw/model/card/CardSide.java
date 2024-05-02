@@ -27,7 +27,7 @@ public class CardSide {
      * @return A Set with the values of the center symbols
      */
     public Set<Symbol> getCenterSymbols(){
-        return centerSymbol;
+        return Set.copyOf(centerSymbol);
     }
 
     /**

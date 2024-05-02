@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.card.CardOrientation;
 
 public record CardInfo(
                        int id,
+                       CardColor color,
                        CardSideInfo front,
                        CardSideInfo back){
     public CardSideInfo getSide(CardOrientation orientation){
