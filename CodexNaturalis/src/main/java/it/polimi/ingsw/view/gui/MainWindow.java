@@ -1,63 +1,49 @@
 package it.polimi.ingsw.view.gui;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+
 
 public class MainWindow extends JFrame {
+    private static CardLayout cardLayout;
+    private static JPanel cardPanel;
 
-    private JPanel currentPanel;
-
-    public MainWindow() {
-        super("Main Window");
+    public MainWindow()
+    {
+        setTitle("Codex Naturalis");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
-        setLocationRelativeTo(null);
-
-        // Imposta il pannello iniziale
-        currentPanel = new StartPanel();
-        setContentPane(currentPanel);
-
+        setSize(600, 600);
         setVisible(true);
+
+        cardLayout = new CardLayout();
+        cardPanel = new JPanel(cardLayout);
+
+        FirstPanel firstPanel= new FirstPanel();
+        SecondPanel secondPanel= new SecondPanel();
+        ThirdPanel thirdPanel= new ThirdPanel();
+        cardPanel.add(firstPanel);
+        cardPanel.add(secondPanel);
+        cardPanel.add(thirdPanel);
+
+        add(cardPanel);
+
     }
 
-    // Metodo per cambiare il pannello attuale
-    public void changePanel(JPanel newPanel) {
-        setContentPane(newPanel);
-        validate(); // Ricarica il contenuto del frame
+    public static CardLayout getCardLayout(){
+        return cardLayout;
     }
 
-    // Pannello di avvio
-    private class StartPanel extends JPanel implements ActionListener {
-        public StartPanel() {
-            JButton goToNextWindowButton = new JButton("Go to Next Window");
-            goToNextWindowButton.addActionListener(this);
-            add(goToNextWindowButton);
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            // Cambia al pannello successivo quando il pulsante viene premuto
-            changePanel(new NextWindowPanel());
-        }
+    public static JPanel getJPanel(){
+        return cardPanel;
     }
 
-    // Pannello successivo
-    private class NextWindowPanel extends JPanel {
-        public NextWindowPanel() {
-            JButton goBackButton = new JButton("Go Back");
-            goBackButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Torna al pannello precedente quando il pulsante viene premuto
-                    changePanel(new StartPanel());
-                }
-            });
-            add(goBackButton);
-        }
+    public static void goToNextWindow(){
+        cardLayout.next(cardPanel);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(MainWindow::new);
+        SwingUtilities.invokeLater(() -> {
+            MainWindow window = new MainWindow();
+        });
     }
 }
