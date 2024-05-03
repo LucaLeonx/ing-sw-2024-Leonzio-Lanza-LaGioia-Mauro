@@ -1,5 +1,10 @@
 package it.polimi.ingsw.test.view.tui;
 
+import it.polimi.ingsw.controller.clientcontroller.CardInfo;
+import it.polimi.ingsw.controller.clientcontroller.CardSideInfo;
+import it.polimi.ingsw.controller.clientcontroller.ControlledPlayerInfo;
+import it.polimi.ingsw.controller.clientcontroller.ObjectiveInfo;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.AngleCell;
 import it.polimi.ingsw.model.map.CardCell;
@@ -9,10 +14,14 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.tui.TUI;
 import junit.framework.TestCase;
+import it.polimi.ingsw.test.model.map.GameFieldTest;
 
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.*;
 
 public class TUITest extends TestCase {
 
@@ -41,7 +50,7 @@ public class TUITest extends TestCase {
         //playerTestDiagonal.getField().placeCard(resourceCards.get(2), CardOrientation.FRONT, new Point(6,6));
 
         T=new Player("Topolino", PlayerColor.RED, new ObjectiveCard(0, null));
-        M=new Player("Minie", PlayerColor.BLUE, new ObjectiveCard(0, null));
+        M=new Player("Minnie", PlayerColor.BLUE, new ObjectiveCard(0, null));
         P=new Player("Paperina", PlayerColor.YELLOW, new ObjectiveCard(0, null));
 
         M.getField().placeCard(initialCards.get(2), CardOrientation.FRONT, new Point(0,0));
@@ -59,20 +68,22 @@ public class TUITest extends TestCase {
         M.getField().placeCard(goldenCards.get(33), CardOrientation.FRONT, new Point(-4, 4));
         M.getField().placeCard(resourceCards.get(29), CardOrientation.FRONT, new Point(-8, -8));
 
+
         P.getField().placeCard(initialCards.get(4), CardOrientation.FRONT, new Point(0,0));
         P.getField().placeCard(resourceCards.get(25), CardOrientation.FRONT, new Point(2,2));
         P.getField().placeCard(resourceCards.getFirst(), CardOrientation.BACK, new Point(4 ,0));
         P.getField().placeCard(resourceCards.get(16), CardOrientation.FRONT, new Point(-2, 2));
         P.getField().placeCard(resourceCards.get(10), CardOrientation.FRONT, new Point(-4, 4));
         P.getField().placeCard(goldenCards.get(17), CardOrientation.FRONT, new Point(-6, 6));
-        P.getField().placeCard(resourceCards.get(22), CardOrientation.BACK, new Point(6, -2)); //Here there should be a wolf up left!.
+        P.getField().placeCard(resourceCards.get(22), CardOrientation.FRONT, new Point(6, -2));
         P.getField().placeCard(resourceCards.get(2), CardOrientation.FRONT, new Point(4, -4));
-        P.getField().placeCard(goldenCards.get(21), CardOrientation.FRONT, new Point(8, -4)); //here there should be an angle that covers the green card. problem with anglecell?
         P.getField().placeCard(goldenCards.get(12), CardOrientation.FRONT, new Point(6, -6));
+        P.getField().placeCard(goldenCards.get(21), CardOrientation.FRONT, new Point(8, -4));
         P.getField().placeCard(resourceCards.get(37), CardOrientation.FRONT, new Point(10, -6));
         P.getField().placeCard(resourceCards.get(17), CardOrientation.BACK, new Point(8, -8));
         P.getField().placeCard(goldenCards.get(32), CardOrientation.FRONT, new Point(10, -10));
         P.getField().placeCard(goldenCards.get(20), CardOrientation.FRONT, new Point(-8, 8));
+
 
         T.getField().placeCard(initialCards.get(1), CardOrientation.FRONT, new Point(0,0));
         T.getField().placeCard(resourceCards.get(31), CardOrientation.FRONT, new Point( -2, -2));
@@ -90,17 +101,16 @@ public class TUITest extends TestCase {
         T.getField().placeCard(goldenCards.get(18), CardOrientation.FRONT, new Point(4, 0));
 
 
-
-
-
-
     }
 
+    // To see the real image of the maps go to Notes-->ExampleMaps
     public void testTUIWithDiagonalMap(){
+        new GameFieldTest().checkInvariants(T.getField());
         tui.drawMap(playerTestDiagonal);
     }
 
     public void testTUIWithMinnieMap(){
+        new GameFieldTest().checkInvariants(M.getField());
         tui.drawMap(M);
     }
 
@@ -110,8 +120,23 @@ public class TUITest extends TestCase {
 
 
     public void testTUIWithTopolinoMap(){
+        new GameFieldTest().checkInvariants(T.getField());
         tui.drawMap(T);
     }
+
+    public void testShowHand(){
+        //T.addCard(resourceCards.get(0));
+        //T.addCard(resourceCards.get(1));
+        //T.addCard(resourceCards.get(2));
+
+    }
+
+    public void testShowCardsOnTable(){
+        //List cardsInHand =new ArrayList<CardInfo>();
+        //cardsInHand.add(new CardInfo(1,CardColor.RED,new CardSideInfo(),new CardSideInfo()));
+        //ControlledPlayerInfo Topolino = new ControlledPlayerInfo("Topolino", PlayerColor.RED, new ObjectiveInfo(1, "b"), );
+    }
+
 
 
 }

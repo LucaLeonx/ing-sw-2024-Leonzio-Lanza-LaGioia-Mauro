@@ -1,3 +1,11 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xm
 # TEMPLATE gitignore Prova Finale Ingegneria del Software 2023/24
 
 # Il file .gitignore è nascosto di default su Linux e macOS. Potete aprirlo e modificarlo dal terminale.
@@ -8,44 +16,51 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # Ignore game assets
-CodexNaturalis/assets/*
+assets/*
 
 # User-specific stuff
-CodexNaturalis/CodexNaturalis/.idea/**/workspace.xml
-CodexNaturalis/CodexNaturalis/.idea/**/tasks.xml
-CodexNaturalis/CodexNaturalis/.idea/**/usage.statistics.xml
-CodexNaturalis/CodexNaturalis/.idea/**/dictionaries
-CodexNaturalis/CodexNaturalis/.idea/**/shelf
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
 
 # AWS User-specific
-CodexNaturalis/.idea/**/aws.xml
+.idea/**/aws.xml
 
 # Generated files
-CodexNaturalis/CodexNaturalis/.idea/**/contentModel.xml
+.idea/**/contentModel.xml
 
 # Sensitive or high-churn files
-CodexNaturalis/CodexNaturalis/.idea/**/dataSources/
-CodexNaturalis/CodexNaturalis/.idea/**/dataSources.ids
-CodexNaturalis/CodexNaturalis/.idea/**/dataSources.local.xml
-CodexNaturalis/.idea/**/sqlDataSources.xml
-CodexNaturalis/.idea/**/dynamic.xml
-CodexNaturalis/.idea/**/uiDesigner.xml
-CodexNaturalis/.idea/**/dbnavigator.xml
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+.idea/**/compiler.xml
+.idea/**/encondings.xml
+.idea/**/jarRepositories.xml
+.idea/**/misc.xml
+.idea/**/modules.xml
+.idea/**/vcs.xml
 
 # Gradle
-CodexNaturalis/.idea/**/gradle.xml
-CodexNaturalis/.idea/**/libraries
+.idea/**/gradle.xml
+.idea/**/libraries
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
 # auto-import.
-CodexNaturalis/.idea/artifacts
-CodexNaturalis/.idea/compiler.xml
-CodexNaturalis/.idea/jarRepositories.xml
-CodexNaturalis/.idea/modules.xml
-CodexNaturalis/.idea/*.iml
-CodexNaturalis/.idea/modules
+.idea/artifacts
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/modules.xml
+.idea/*.iml
+.idea/modules
 *.iml
 *.ipr
 
@@ -53,26 +68,26 @@ CodexNaturalis/.idea/modules
 cmake-build-*/
 
 # Mongo Explorer plugin
-CodexNaturalis/.idea/**/mongoSettings.xml
+.idea/**/mongoSettings.xml
 
 # File-based project format
 *.iws
 
 # IntelliJ
-CodexNaturalis/.idea/*
+.idea/*
 out/
 
 # mpeltonen/sbt-idea plugin
-CodexNaturalis/.idea_modules/
+.idea_modules/
 
 # JIRA plugin
 atlassian-ide-plugin.xml
 
 # Cursive Clojure plugin
-CodexNaturalis/.idea/replstate.xml
+.idea/replstate.xml
 
 # SonarLint plugin
-CodexNaturalis/.idea/sonarlint/
+.idea/sonarlint/
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
@@ -81,11 +96,12 @@ crashlytics-build.properties
 fabric.properties
 
 # Editor-based Rest Client
-CodexNaturalis/.idea/httpRequests
+.idea/httpRequests
 
 # Android studio 3.1+ serialized cache file
-CodexNaturalis/.idea/caches/build_file_checksums.ser
+.idea/caches/build_file_checksums.ser
 
-CodexNaturalis/.idea/
-
-CodexNaturalis/target/
+/.idea/
+/target/
+/Writerside/
+/Writerside2/

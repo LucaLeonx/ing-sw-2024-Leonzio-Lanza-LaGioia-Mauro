@@ -143,7 +143,7 @@ public abstract class GameFunctionFactory {
                     for(int i = 0; i < leftmost.size(); i++) {
                         if (leftmost.get(i).y() - slope * leftmost.get(i).x() == pField.y() - slope * pField.x()) {
                             if (pField.x() < leftmost.get(i).x()) {
-                                rightmost.set(i, pField);
+                                leftmost.set(i, pField);
                             } else if (pField.x() > rightmost.get(i).x()) {
                                 rightmost.set(i, pField);
                             }
@@ -158,8 +158,8 @@ public abstract class GameFunctionFactory {
                         leftmost.add(pField);
                     }
                 }
-                //now we start checking each diagonal one by one
 
+                //now we start checking each diagonal one by one
                 Point temp;
                 for(int i = 0; i < leftmost.size(); i++) {
                     temp = leftmost.get(i);
@@ -246,8 +246,8 @@ public abstract class GameFunctionFactory {
                     }
                     case AnglePosition.UP_LEFT:{
                         positionOfAngleCard = new Point(-2, 2);
-                        startingPoint = topmost;
-                        endingPoint = lowermost;
+                        startingPoint = lowermost;
+                        endingPoint = topmost;
                         direction = new Point(0, 4);
                         break;
                     }
@@ -276,7 +276,7 @@ public abstract class GameFunctionFactory {
                     temp = startingPoint.get(i);
                     cardsNum = 0;
 
-                    while(!temp.equals(endingPoint.get(i)))
+                    while(!temp.equals(endingPoint.get(i).sum(direction)))
                     {
                         if(!field.getCards().containsKey(temp) || field.getCards().get(temp).getCardColor() != colorBlock)
                             cardsNum = 0;

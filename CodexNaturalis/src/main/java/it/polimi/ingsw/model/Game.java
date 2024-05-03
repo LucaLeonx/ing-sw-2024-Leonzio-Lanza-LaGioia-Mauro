@@ -195,29 +195,37 @@ public class Game {
             playedSide = playedCard.getSide(orientation);
         } catch (InvalidCardException e) {
             throw new InvalidOperationException(e.getMessage());
+        } finally {
+            rwl.writeLock().unlock();
         }
 
         if(!field.getAvailablePositions().contains(placementPoint)){
+            rwl.writeLock().unlock();
             throw new InvalidOperationException("The position " + placementPoint + "is not among available ones");
         } else if(!playedSide.getPlayingRequirements().isSatisfied(field)){
+            rwl.writeLock().unlock();
             throw new InvalidOperationException("Playing requirements for the card on this side are not satisfied");
         }
 
         field.placeCard(playedCard, orientation, placementPoint);
         currentPlayer.incrementScore(playedSide.getPlayingReward().getPoints(field));
+        try{
+            switch(drawChoice){
+                case DECK_RESOURCE, DECK_GOLD -> currentPlayer.addCard(deckToUse.draw()
+                       .orElseThrow(() -> new InvalidOperationException("Cannot draw from empty golden cards deck")));
+                case RESOURCE_CARD_1, RESOURCE_CARD_2, GOLD_CARD_1, GOLD_CARD_2 ->
+                {
+                    Card drawnCard = visibleCards.get(drawChoice);
 
-        switch(drawChoice){
-            case DECK_RESOURCE, DECK_GOLD -> currentPlayer.addCard(deckToUse.draw()
-                    .orElseThrow(() -> new InvalidOperationException("Cannot draw from empty golden cards deck")));
-            case RESOURCE_CARD_1, RESOURCE_CARD_2, GOLD_CARD_1, GOLD_CARD_2 ->
-            {
-                Card drawnCard = visibleCards.get(drawChoice);
-
-                currentPlayer.addCard(drawnCard);
-                if(!deckToUse.isEmpty()){
-                    visibleCards.put(drawChoice, deckToUse.draw().get());
+                    currentPlayer.addCard(drawnCard);
+                    if(!deckToUse.isEmpty()){
+                        visibleCards.put(drawChoice, deckToUse.draw().get());
+                    }
                 }
             }
+        } catch(InvalidOperationException e){
+            rwl.writeLock().unlock();
+            throw e;
         }
 
         updateNextPlayer();

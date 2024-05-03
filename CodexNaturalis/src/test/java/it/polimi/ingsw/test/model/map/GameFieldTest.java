@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static it.polimi.ingsw.model.card.Symbol.HIDDEN;
+
 public class GameFieldTest extends TestCase {
 
     private List<Card> resourceCards;
@@ -39,7 +41,7 @@ public class GameFieldTest extends TestCase {
 
     }
 
-    private void checkInvariants(GameField field){
+    public void checkInvariants(GameField field){
         Map<Point, AngleCell> angles = field.getAngleCells();
         Map<Point, CardCell> cards = field.getCardCells();
 
@@ -48,6 +50,7 @@ public class GameFieldTest extends TestCase {
         assertTrue(checkAllAnglesExists(field));
         assertTrue(checkAllAnglesSymbolsAreCoherent(field));
         assertTrue(checkAllAnglesAttachOppositeCards(field));
+        assertTrue(checkNoCardAttachesHiddenAngle(field));
     }
 
     private boolean checkAllCardsCoordinatesAreEven(GameField field){
@@ -114,12 +117,17 @@ public class GameFieldTest extends TestCase {
         return true;
     }
 
+    private boolean checkNoCardAttachesHiddenAngle(GameField field){
+        return field.getAngleCells().values().stream().noneMatch((angle) ->
+                (angle.bottomSymbol() == HIDDEN && angle.topSymbol() != HIDDEN) ||
+                        angle.bottomSymbol() == HIDDEN && angle.topCardPosition() != angle.bottomCardPosition());
+    }
+
     public void testFieldConstruction(){
         checkInvariants(emptyField);
         checkInvariants(diagonalField);
     }
 
-    public
 
     public void testDiagonalPattern(){
         RewardFunction patternReward = GameFunctionFactory.createDiagonalPatternMatchFunction(true, CardColor.RED);
@@ -127,8 +135,7 @@ public class GameFieldTest extends TestCase {
     }
 
 
-
-    public void testDiagnoalPattern2(){
+    public void testPatternMinnie(){
 
         GameField field = new GameField();
 
@@ -148,10 +155,82 @@ public class GameFieldTest extends TestCase {
         field.placeCard(resourceCards.get(29), CardOrientation.FRONT, new Point(-8, -8));
 
         checkInvariants(field);
-
-        RewardFunction rewardFunction = GameFunctionFactory.createDiagonalPatternMatchFunction(true, CardColor.SKYBLUE);
-        assertEquals(2, rewardFunction.getPoints(field));
+        RewardFunction CommonObjective1 = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.DOWN_RIGHT, CardColor.RED, CardColor.GREEN);
+        RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
+        RewardFunction SecretObjective = GameFunctionFactory.createDiagonalPatternMatchFunction(true, CardColor.SKYBLUE);
+        assertEquals(0,CommonObjective1.getPoints(field));
+        assertEquals(2,CommonObjective2.getPoints(field));
+        assertEquals(2, SecretObjective.getPoints(field));
     }
+
+    public void testPattenPaperina(){
+
+        GameField field = new GameField();
+
+        field.placeCard(initialCards.get(4), CardOrientation.FRONT, new Point(0,0));
+        field.placeCard(resourceCards.get(25), CardOrientation.FRONT, new Point(2,2));
+        field.placeCard(resourceCards.getFirst(), CardOrientation.BACK, new Point(4 ,0));
+        field.placeCard(resourceCards.get(16), CardOrientation.FRONT, new Point(-2, 2));
+        field.placeCard(resourceCards.get(10), CardOrientation.FRONT, new Point(-4, 4));
+        field.placeCard(goldenCards.get(17), CardOrientation.FRONT, new Point(-6, 6));
+        field.placeCard(resourceCards.get(22), CardOrientation.BACK, new Point(6, -2));
+        field.placeCard(resourceCards.get(2), CardOrientation.FRONT, new Point(4, -4));
+        field.placeCard(goldenCards.get(21), CardOrientation.FRONT, new Point(8, -4));
+        field.placeCard(goldenCards.get(12), CardOrientation.FRONT, new Point(6, -6));
+        field.placeCard(resourceCards.get(37), CardOrientation.FRONT, new Point(10, -6));
+        field.placeCard(resourceCards.get(17), CardOrientation.BACK, new Point(8, -8));
+        field.placeCard(goldenCards.get(32), CardOrientation.FRONT, new Point(10, -10));
+        field.placeCard(goldenCards.get(20), CardOrientation.FRONT, new Point(-8, 8));
+
+        checkInvariants(field);
+        RewardFunction CommonObjective1 = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.DOWN_RIGHT, CardColor.RED, CardColor.GREEN);
+        RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
+        RewardFunction SecretObjective = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.UP_LEFT, CardColor.PURPLE, CardColor.SKYBLUE);
+
+        assertEquals(3,CommonObjective1.getPoints(field));
+        assertEquals(2,CommonObjective2.getPoints(field));
+        assertEquals(3, SecretObjective.getPoints(field));
+
+
+    }
+
+
+
+    public void testPatternTopolino(){
+
+        GameField field = new GameField();
+
+        field.placeCard(initialCards.get(1), CardOrientation.FRONT, new Point(0,0));
+        field.placeCard(resourceCards.get(31), CardOrientation.FRONT, new Point( -2, -2));
+        field.placeCard(resourceCards.get(13), CardOrientation.FRONT, new Point(2, -2));
+        field.placeCard(goldenCards.get(15), CardOrientation.BACK, new Point(4, -4));
+        field.placeCard(resourceCards.get(9), CardOrientation.FRONT, new Point(2, 2));
+        field.placeCard(resourceCards.get(14), CardOrientation.FRONT, new Point(6, -6));
+        field.placeCard(goldenCards.get(30), CardOrientation.FRONT, new Point(4, 4));
+        field.placeCard(resourceCards.get(19), CardOrientation.BACK, new Point(2, -6));
+        field.placeCard(goldenCards.get(2), CardOrientation.FRONT, new Point(2, 6));
+        field.placeCard(resourceCards.get(23), CardOrientation.FRONT, new Point(-2, 2));
+        field.placeCard(resourceCards.get(1), CardOrientation.BACK, new Point(0, 8));
+        field.placeCard(goldenCards.get(1), CardOrientation.FRONT, new Point(-4, 4));
+        field.placeCard(goldenCards.get(27), CardOrientation.BACK, new Point(-2, 6));
+        field.placeCard(goldenCards.get(18), CardOrientation.FRONT, new Point(4, 0));
+
+        checkInvariants(field);
+
+        RewardFunction CommonObjective1 = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.DOWN_RIGHT, CardColor.RED, CardColor.GREEN);
+        RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
+        RewardFunction SecretObjective = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.UP_RIGHT, CardColor.SKYBLUE, CardColor.RED);
+
+        assertEquals(3,CommonObjective1.getPoints(field));
+        assertEquals(2,CommonObjective2.getPoints(field));
+        assertEquals(3, SecretObjective.getPoints(field));
+
+
+
+
+    }
+
+
 
 
 }
