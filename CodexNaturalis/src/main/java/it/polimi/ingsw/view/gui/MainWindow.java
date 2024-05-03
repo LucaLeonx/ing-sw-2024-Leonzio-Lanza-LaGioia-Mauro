@@ -18,12 +18,14 @@ public class MainWindow extends JFrame {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
-        FirstPanel firstPanel= new FirstPanel();
-        SecondPanel secondPanel= new SecondPanel();
-        ThirdPanel thirdPanel= new ThirdPanel();
-        cardPanel.add(firstPanel);
-        cardPanel.add(secondPanel);
-        cardPanel.add(thirdPanel);
+        ChooseConnectionPanel chooseConnectionPanel = new ChooseConnectionPanel();
+        ChooseLoginPanel chooseloginPanel= new ChooseLoginPanel();
+        LoginPanel loginPanel = new LoginPanel();
+        RegisterPanel registerPanel = new RegisterPanel();
+        cardPanel.add(chooseConnectionPanel);
+        cardPanel.add(chooseloginPanel);
+        cardPanel.add(loginPanel);
+        cardPanel.add(registerPanel);
 
         add(cardPanel);
 
@@ -41,9 +43,11 @@ public class MainWindow extends JFrame {
         cardLayout.next(cardPanel);
     }
 
+    public static void goToPreviousWindow(){
+        cardLayout.previous(cardPanel);
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            MainWindow window = new MainWindow();
-        });
+        SwingUtilities.invokeLater(MainWindow::new);
     }
 }

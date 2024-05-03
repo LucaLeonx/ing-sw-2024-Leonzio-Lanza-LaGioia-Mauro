@@ -3,15 +3,14 @@ package it.polimi.ingsw.view.gui;
 import javax.swing.*;
 import java.awt.*;
 
-public class ThirdPanel extends JPanel{
-    public ThirdPanel(){
+public class LoginPanel extends ButtonListPanel{
+    public LoginPanel(){
         buildPanel();
     }
-
     private void buildPanel(){
         this.setLayout(new BorderLayout());
-        JTextArea textArea= new JTextArea("Third Panel");
+        JTextArea textArea= new JTextArea("LOGIN Panel");
         add(textArea, BorderLayout.CENTER);
-
+        addBottomFrame();
     }
 }
