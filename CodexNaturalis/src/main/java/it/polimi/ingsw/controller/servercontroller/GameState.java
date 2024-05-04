@@ -26,7 +26,7 @@ abstract class GameState {
         return game.getPlayerInformation(name);
     }
 
-    public Player getPlayerPublicInformation(String name){
+    /*public Player getPlayerPublicInformation(String name){
         Player fullPlayerInformation = game.getPlayerInformation(name);
 
         List<Card> hiddenHand = fullPlayerInformation.getCardsInHand().stream()
@@ -36,7 +36,7 @@ abstract class GameState {
                 generateDummyObjective(), fullPlayerInformation.getCardsInHand(),
                 fullPlayerInformation.getField());
 
-    }
+    }*/
 
     public Map<DrawChoice, Card> getDrawableCards() {
         return game.getDrawableCards();

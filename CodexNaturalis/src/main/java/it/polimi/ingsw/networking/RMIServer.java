@@ -13,7 +13,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIController{
         this.lobbies = new ArrayList<>();
     }
     @Override
-    public void addLobby(String creator, String name, int playersNumber) {
+    public void addLobby(String creator, String name, int playersNumber) throws RemoteException {
         Random rn = new Random();
         int randomID = rn.nextInt();
         while(lobbies.stream().map(Lobby::getId).toList().contains(randomID)){
@@ -23,7 +23,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIController{
     }
 
     @Override
-    public void addUserToLobby(int lobbyId, String username) {
+    public void addUserToLobby(int lobbyId, String username) throws RemoteException{
         for (Lobby lobby : lobbies) {
             if (lobby.getId() == lobbyId) {
                 lobby.addUser(username);
@@ -32,16 +32,16 @@ public class RMIServer extends UnicastRemoteObject implements RMIController{
     }
 
     @Override
-    public List<Lobby> getLobbies(){
+    public List<Lobby> getLobbies() throws RemoteException{
         return new ArrayList<>(lobbies);
     }
     @Override
-    public List<String> getLobbiesNames() {
+    public List<String> getLobbiesNames() throws RemoteException{
         return lobbies.stream().map(Lobby::getName).toList();
     }
 
     @Override
-    public List<String> getUsersFromLobby(int lobbyId) {
+    public List<String> getUsersFromLobby(int lobbyId) throws RemoteException{
         return null;
     }
 }

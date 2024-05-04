@@ -1,7 +1,7 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.networking.RMIServer;
-
+import it.polimi.ingsw.networking.RMIController;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -13,6 +13,7 @@ public class AppServer {
 
         RMIServer rmiServer = new RMIServer();
 
+        LocateRegistry.createRegistry(1099);
         Registry reg = LocateRegistry.getRegistry();
         reg.rebind("Codex_Naturalis_server",reg);
 

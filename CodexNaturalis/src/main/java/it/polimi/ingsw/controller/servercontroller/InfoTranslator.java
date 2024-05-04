@@ -18,9 +18,9 @@ public abstract class InfoTranslator {
         return null;
     }
 
-    public static PlayerSetupInfo convertToInfo(ObjectiveCard firstObjective, ObjectiveCard secondObjective, Card initialCard){
+    /*public static PlayerSetupInfo convertToInfo(ObjectiveCard firstObjective, ObjectiveCard secondObjective, Card initialCard){
         return new PlayerSetupInfo(convertToInfo(firstObjective), convertToInfo(secondObjective), convertToInfo(initialCard));
-    }
+    }*/
 
     private static CardSideInfo convertToInfo(Card card, CardOrientation orientation, boolean isPlayable) {
         CardSide side = card.getSide(orientation);
@@ -31,9 +31,9 @@ public abstract class InfoTranslator {
         return new CardSideInfo(angles, List.copyOf(side.getCenterSymbols()),  orientation, isPlayable);
     }
 
-    private static CardInfo convertToInfo(Card card, GameField field){
+    /*private static CardInfo convertToInfo(Card card, GameField field){
         return new CardInfo(card.getId(), convertToInfo(card, CardOrientation.FRONT, card.getSide(CardOrientation.FRONT).getPlayingRequirements().isSatisfied(field)), convertToInfo(card, CardOrientation.BACK, card.getSide(CardOrientation.BACK).getPlayingRequirements().isSatisfied(field));
-    }
+    }*/
 
     private static ObjectiveInfo convertToInfo(ObjectiveCard objective){
         return new ObjectiveInfo(objective.getId(),
@@ -44,7 +44,7 @@ public abstract class InfoTranslator {
         return new RewardInfo(Arrays.stream(rewardFunction.getClass().getMethods()).findFirst().toString());
     }
 
-    private static GameFieldInfo convertToInfo(GameField field) {
+    /*private static GameFieldInfo convertToInfo(GameField field) {
         Map<Point, CardCellInfo> cardInfo = new HashMap<>();
         Map<Point, AngleCellInfo> angleInfo = new HashMap<>();
 
@@ -57,11 +57,11 @@ public abstract class InfoTranslator {
         }
 
         return new GameFieldInfo(cardInfo, angleInfo, field.getAvailablePositions());
-    }
+    }*/
 
-    private static CardCellInfo convertToInfo(CardCell cardCell){
+    /*private static CardCellInfo convertToInfo(CardCell cardCell){
         return new CardCellInfo(new CardInfo(cardCell.card().getId(), cardCell.cardColor()), cardCell.orientation(), true), cardCell.orientation());
-    }
+    }*/
 
     private static AngleCellInfo convertToInfo(AngleCell angleCell){
         return new AngleCellInfo(angleCell.topSymbol(), angleCell.topCardPosition());

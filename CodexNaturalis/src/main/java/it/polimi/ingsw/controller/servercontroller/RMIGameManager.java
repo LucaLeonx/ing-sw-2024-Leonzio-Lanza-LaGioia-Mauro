@@ -21,7 +21,7 @@ public class RMIGameManager implements GameManager{
 
     @Override
     public GameSnapshot getGameInfo() {
-        return new GameSnapshot();
+        return null; //new GameSnapshot();
     }
 
     @Override
@@ -40,9 +40,9 @@ public class RMIGameManager implements GameManager{
     }
 
     @Override
-    public void registerPlayerMove(int placedCardId,  Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws InvalidOperationException {
+    public void registerPlayerMove(int placedCardId,  Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) /*throws InvalidOperationException */{
         if(state.getCurrentPlayerNickname().equals(playerName)) {
-            state.makeCurrentPlayerMove(placedCardId, chosenSide, placementPoint, drawChoice);
+            /*state.makeCurrentPlayerMove(placedCardId, chosenSide, placementPoint, drawChoice);*/
         }
     }
 }
