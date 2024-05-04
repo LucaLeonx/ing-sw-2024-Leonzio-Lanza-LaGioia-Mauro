@@ -10,7 +10,7 @@ public interface RMIController extends Remote {
 
     public void addLobby(String creator, String name, int playersNumber) throws RemoteException;
 
-    public void addUserToLobby(int lobbyId,String username) throws RemoteException;
+    public  void addUserToLobby(int lobbyId,String username) throws RemoteException;
 
     public List<Lobby> getLobbies() throws RemoteException;
 

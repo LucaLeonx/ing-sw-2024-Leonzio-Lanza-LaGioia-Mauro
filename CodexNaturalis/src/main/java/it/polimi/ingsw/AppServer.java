@@ -15,7 +15,7 @@ public class AppServer {
 
         LocateRegistry.createRegistry(1099);
         Registry reg = LocateRegistry.getRegistry();
-        reg.rebind("Codex_Naturalis_server",reg);
+        reg.rebind("Codex_Naturalis_server",rmiServer);
 
         System.out.println("Registry bound, ready to listen for clients");
     }

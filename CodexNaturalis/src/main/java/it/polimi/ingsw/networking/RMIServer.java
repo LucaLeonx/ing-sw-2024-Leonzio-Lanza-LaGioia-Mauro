@@ -23,7 +23,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIController{
     }
 
     @Override
-    public void addUserToLobby(int lobbyId, String username) throws RemoteException{
+    public synchronized void addUserToLobby(int lobbyId, String username) throws RemoteException{
         for (Lobby lobby : lobbies) {
             if (lobby.getId() == lobbyId) {
                 lobby.addUser(username);
@@ -42,6 +42,14 @@ public class RMIServer extends UnicastRemoteObject implements RMIController{
 
     @Override
     public List<String> getUsersFromLobby(int lobbyId) throws RemoteException{
+        for(Lobby l: lobbies){
+            if(l.getId() == lobbyId){
+                return l.getConnectedUser();
+            }
+        }
         return null;
     }
+
+
+
 }

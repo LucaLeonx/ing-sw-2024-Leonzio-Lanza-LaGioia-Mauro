@@ -43,5 +43,13 @@ public class Lobby {
 
     public String getCreatorUsername(){ return this.creatorUsername; }
 
+    public LobbyInfo getLobbyInfo(){
+        return new LobbyInfo(id,
+                name,
+                creatorUsername,
+                waitingPlayers,
+                requiredNumOfPlayers,
+                waitingPlayers.size());
+    }
 
 }
