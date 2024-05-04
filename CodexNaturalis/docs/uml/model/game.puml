@@ -22,29 +22,26 @@ enum DrawChoice {
 }
 
 class Game <<synchronized>> {
-    - lock : ReentrantReadWriteLock
     - currentPlayer : Player
     - List<Player> : players
     - isLastTurn : boolean
+    '- drawableCards
     + Game(players : List<Player>, resourceCardsDeck:  goldenCardsDeck : Deck,
     visibleCards : Map<DrawChoice, Card>, currentPlayerNickname : String, isLastTurn : boolean)
     + getPlayersNicknames() : List<String>
-    + getPlayerInformation(name : String) : Player
-    + getCurrentPlayerNickname() : String
+    + getPlayer(name : String) : Player
+    + getCurrentPlayer() : String
     + isLastTurn() : boolean
     + getCommonObjectiveCards() : List<ObjectiveCard>
     + getDrawableCards() : Map<DrawChoice, Card>
-    + makeCurrentPlayerPlace(idCard : int, placementPoint : Point) throws InvalidMoveException
-    + makeCurrentPlayerDraw(drawChoice : DrawChoice) throws InvalidMoveException
+    + makeDraw(drawChoice : DrawChoice) : Card
     + getResourceCardDeck() : Deck
     + getGoldenCardDeck() : Deck
-    // As an alternative, it could be simplified the interface by allowing explicit lock management
 }
 
 class Player {
     - nickname : String {readOnly}
     - score : AtomicInteger
-    - lock : ReentrantReadWriteLock
     + Player(nickname : String, color : Color, secretObjective : ObjectiveCard, cardsInHand : Set<Card>)
     + getNickname() : String
     + getColor() : PlayerColor
@@ -53,7 +50,7 @@ class Player {
     + getField() : GameField
     + addCardInHand(newCard : Card)
     + removeCardInHand(idCard : int) : Card throw InvalidCardException
-    + setScore(newScore : int) : int
+    + incrementScore(increment : int) : int
 }
 'note top: getCardList() returns card in the same position used by removeCard()
 

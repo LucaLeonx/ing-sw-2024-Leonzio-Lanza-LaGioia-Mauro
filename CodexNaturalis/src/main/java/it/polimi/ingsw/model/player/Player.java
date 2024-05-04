@@ -11,7 +11,7 @@ public class Player {
     private int score;
     private final GameField field;
     private final PlayerColor color;
-    private final ObjectiveCard secretObjective;
+    private ObjectiveCard secretObjective;
     private final List<Card> cardsInHand;
 
     public Player(String nickname, PlayerColor color, ObjectiveCard secretObjective, List<Card> cardsInHand, GameField field) {
@@ -32,8 +32,8 @@ public class Player {
         this.field = new GameField(other.field);
     }
 
-    public Player(String nickname, PlayerColor color, ObjectiveCard secretObjective){
-        this(nickname, color, secretObjective,new ArrayList<>(), new GameField());
+    public Player(String nickname, PlayerColor color){
+        this(nickname, color, null, new ArrayList<>(), new GameField());
     }
 
     public String getNickname() {
@@ -44,8 +44,15 @@ public class Player {
         return color;
     }
 
-    public ObjectiveCard getSecretObjective() {
-        return secretObjective;
+    public synchronized ObjectiveCard getSecretObjective() {
+        if(secretObjective != null) {
+            return secretObjective;
+        } else {
+            throw new NullPointerException("Secret Objective is null");
+        }
+    }
+    public void setSecretObjective(ObjectiveCard secretObjective) {
+        this.secretObjective = secretObjective;
     }
 
     public List<Card> getCardsInHand() {
@@ -63,18 +70,21 @@ public class Player {
      * @throws InvalidCardException called when the player doesn't have the card he was supposed to play
      */
     public Card removeCard(int cardId) throws InvalidCardException {
-        Card removedCard = cardsInHand.stream()
-                .filter(card -> card.getId() == cardId)
-                .findFirst().orElseThrow(() -> new InvalidCardException(cardId));
-        cardsInHand.remove(removedCard);
+        Card removedCard = null;
+        synchronized (cardsInHand) {
+            removedCard = cardsInHand.stream()
+                    .filter(card -> card.getId() == cardId)
+                    .findFirst().orElseThrow(() -> new InvalidCardException(cardId));
+            cardsInHand.remove(removedCard);
+        }
         return removedCard;
     }
 
-    public int getScore() {
+    public synchronized int getScore() {
         return score;
     }
 
-    public void incrementScore(int increment) {
+    public synchronized void incrementScore(int increment) {
         this.score += increment;
     }
 

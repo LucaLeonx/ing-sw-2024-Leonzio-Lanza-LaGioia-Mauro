@@ -13,27 +13,33 @@ public class Deck {
         topCard = cardPicker.extractRandomElement();
     }
 
-    public boolean isEmpty(){
+    public synchronized boolean isEmpty(){
         return (numberOfCards == 0);
     }
 
-    public Optional<Card> getTopCard(){
-        return topCard;
+    public synchronized Card getTopCard(){
+        if(topCard.isPresent()) {
+            return topCard.get();
+        } else {
+            throw new EmptyDeckException();
+        }
     }
 
-    public int getNumberOfCards() {
+    public synchronized int getNumberOfCards() {
         return numberOfCards;
     }
 
-    public Optional<Card> draw(){
+    public synchronized Card draw(){
+        if(topCard.isPresent()) {
+            Optional<Card> drawnCard = topCard;
+            topCard = cardPicker.extractRandomElement();
 
-        Optional<Card> returnedCard = topCard;
-        topCard = cardPicker.extractRandomElement();
-
-        if(numberOfCards > 0){
-            numberOfCards--;
+            if (numberOfCards > 0) { //TODO: if statement can safely be removed
+                numberOfCards--;
+            }
+            return drawnCard.get();
+        } else {
+            throw new EmptyDeckException();
         }
-
-        return returnedCard;
     }
 }

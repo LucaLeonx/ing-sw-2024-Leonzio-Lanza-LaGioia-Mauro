@@ -38,7 +38,7 @@ public class GameField{
      *
      * @return A copy of the CardCell Map
      */
-    public Map<Point, CardCell> getCardCells() {
+    public synchronized Map<Point, CardCell> getCardCells() {
         return Map.copyOf(cards);
     }
 
@@ -46,7 +46,7 @@ public class GameField{
      *
      * @return A map with all the cards and their coordinates placed on the GameField
      */
-    public Map<Point, Card> getCards() {
+    public synchronized Map<Point, Card> getCards() {
         return cards.entrySet().stream()
                 .map((entry) -> Map.entry(entry.getKey(), entry.getValue().card()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -56,7 +56,7 @@ public class GameField{
      *
      * @return A map with all the symbols and their coordinates placed on the Game Field
      */
-    public Map<Point, Symbol> getAnglesSymbols() {
+    public synchronized Map<Point, Symbol> getAnglesSymbols() {
         return angles.entrySet().stream()
                 .map((entry) -> Map.entry(entry.getKey(), entry.getValue().topSymbol()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -66,7 +66,7 @@ public class GameField{
      *
      * @return A map with all the AngleCell and theis coordinates placed on the Game Field
      */
-    public Map<Point, AngleCell> getAngleCells() {
+    public synchronized Map<Point, AngleCell> getAngleCells() {
         return Map.copyOf(angles);
     }
 
@@ -75,7 +75,7 @@ public class GameField{
      * @param symbol - enum with all the symbols on the angles and center of the Cards
      * @return the number of elements of a specif symbol in a Game Field, useful for objective Cards
      */
-    public int getSymbolCounter(Symbol symbol){  //returns the number of Symbol in Gamefield
+    public synchronized int getSymbolCounter(Symbol symbol){  //returns the number of Symbol in Gamefield
         return symbolCounters.get(symbol);
     }
 
@@ -83,7 +83,7 @@ public class GameField{
      *
      * @return the available positions where it's possible to place the cards
      */
-    public Set<Point> getAvailablePositions() {
+    public synchronized Set<Point> getAvailablePositions() {
         return Set.copyOf(availableCells);
     }
 
@@ -94,7 +94,7 @@ public class GameField{
      * @param position - point of the place in which the player wants to place the card
      *
      */
-    public void placeCard(Card card, CardOrientation cardOrientation, Point position)
+    public synchronized void placeCard(Card card, CardOrientation cardOrientation, Point position)
     {
         registerCard(card, cardOrientation, position);
         updateAngles(card, cardOrientation, position);

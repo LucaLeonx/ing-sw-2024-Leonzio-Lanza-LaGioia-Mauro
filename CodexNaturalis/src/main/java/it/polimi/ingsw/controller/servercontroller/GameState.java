@@ -4,65 +4,111 @@ import it.polimi.ingsw.controller.clientcontroller.PlayerSetupInfo;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.InvalidOperationException;
+import it.polimi.ingsw.model.PlayerSetup;
 import it.polimi.ingsw.model.card.*;
+import it.polimi.ingsw.model.map.GameField;
 import it.polimi.ingsw.model.map.Point;
+import it.polimi.ingsw.model.player.InvalidCardException;
 import it.polimi.ingsw.model.player.Player;
 
 import java.util.List;
-import java.util.Map;
+import java.util.NoSuchElementException;
 
 abstract class GameState {
-    private Game game;
 
-    public List<String> getPlayerNames(){
+    Game game;
+    String controlledPlayer;
+
+    public GameState(Game game, String controlledPlayer){
+        this.game = game;
+        this.controlledPlayer = controlledPlayer;
+    }
+
+    public List<String> getPlayerNames() throws InvalidOperationException{
         return game.getPlayersNicknames();
     }
 
-    public abstract PlayerSetupInfo getPlayerSetup(String name);
-
-    public abstract void registerPlayerSetupChoice(String name, int secretObjective, CardOrientation initialCardOrientation);
-
-    public Player getPlayerFullInformation(String name){
-        return game.getPlayerInformation(name);
+    public PlayerSetupInfo getPlayerSetup(String controlledPlayer) throws InvalidOperationException{
+        return InfoTranslator.convertToInfo(game.getPlayerSetup(controlledPlayer));
     }
 
-    public Player getPlayerPublicInformation(String name){
-        Player fullPlayerInformation = game.getPlayerInformation(name);
-
-        List<Card> hiddenHand = fullPlayerInformation.getCardsInHand().stream()
-                .map(card -> game.generateDummyCard(card)).toList();
-
-        return new Player(fullPlayerInformation.getNickname(), fullPlayerInformation.getColor(),
-                generateDummyObjective(), fullPlayerInformation.getCardsInHand(),
-                fullPlayerInformation.getField());
-
+    public GameInfo getGameInfo() throws InvalidOperationException{
+        return InfoTranslator.convertToGameInfo(game);
     }
 
-    public Map<DrawChoice, Card> getDrawableCards() {
-        return game.getDrawableCards();
-    }
-
-    public String getCurrentPlayerNickname(){
+    public String getCurrentPlayerNickname()throws InvalidOperationException{
         return game.getCurrentPlayerNickname();
     }
 
-    public boolean isLastTurn(){
-        return game.isLastTurn();
+    public boolean isLastPlayerTurn() throws InvalidOperationException{
+        return game.isLastPlayerTurn();
     }
 
-    public void updateNextPlayer(){
-        game.updateNextPlayer();
+    public void registerPlayerSetupChoice(int secretObjectiveId, CardOrientation initialCardOrientation){
+        Player player = game.getPlayer(controlledPlayer);
+        PlayerSetup setup = game.getPlayerSetup(controlledPlayer);
+        ObjectiveCard chosenObjective = (secretObjectiveId == setup.objective1().getId()) ? setup.objective1() : setup.objective2();
+
+        player.setSecretObjective(chosenObjective);
+        player.getField().placeCard(setup.initialCard(), initialCardOrientation, new Point(0,0));
     }
 
-    public void makeCurrentPlayerMove(int cardId, CardOrientation orientation, Point placement, DrawChoice choice) throws InvalidOperationException {
+    public void makeCurrentPlayerMove(int cardId, CardOrientation orientation, Point placement, DrawChoice drawChoice) throws InvalidOperationException{
+
+        if(!game.getCurrentPlayerNickname().equals(controlledPlayer)) {
+            throw new InvalidOperationException("Cannot play during the turn of another player");
+        }
+
         try{
-            game.makeCurrentPlayerMove(cardId, orientation, placement, choice);
-        } catch (Exception e){
+            Player player = game.getPlayer(controlledPlayer);
+            Card playedCard = player.removeCard(cardId);
+            GameField field = player.getField();
+
+            if(!field.getAvailablePositions().contains(placement)){
+                throw new InvalidOperationException("The position " + placement + "is not available");
+            }
+
+            if(!playedCard.getSide(orientation).getPlayingRequirements().isSatisfied(field)){
+                throw new InvalidOperationException("Cannot play card: " + cardId + "on "
+                + orientation + "side: requirements not satisfied");
+            }
+
+            field.placeCard(playedCard, orientation, placement);
+            player.incrementScore(playedCard.getSide(orientation).getPlayingReward().getPoints(field));
+
+            Deck selectedDeck = switch(drawChoice){
+                case DECK_RESOURCE, RESOURCE_CARD_1, RESOURCE_CARD_2 -> game.getResourceCardDeck();
+                case DECK_GOLD, GOLD_CARD_1, GOLD_CARD_2 -> game.getGoldenCardDeck();
+            };
+
+            switch(drawChoice){
+                case DECK_RESOURCE, DECK_GOLD: {
+                    player.addCard(selectedDeck.draw());
+                }
+                case RESOURCE_CARD_1, RESOURCE_CARD_2, GOLD_CARD_1, GOLD_CARD_2:
+                    player.addCard(game.getVisibleCard(drawChoice));
+                    game.getVisibleCards().remove(drawChoice);
+                    game.getVisibleCards().put(drawChoice, selectedDeck.draw());
+            }
+
+            game.setLastTurn(
+                    (game.getResourceCardDeck().isEmpty() && game.getGoldenCardDeck().isEmpty())
+        || game.getPlayers().stream().anyMatch((participant) -> participant.getScore() >= 20 ));
+
+            game.changeCurrentPlayer();
+
+        } catch(InvalidCardException | NoSuchElementException e){
             throw new InvalidOperationException(e.getMessage());
         }
+    }
+
+    public void skipTurn() throws InvalidOperationException {
+        game.changeCurrentPlayer();
     }
 
     public boolean hasGameEnded() {
         return false;
     }
+
+    public abstract GameState transition(GameManager manager);
 }
