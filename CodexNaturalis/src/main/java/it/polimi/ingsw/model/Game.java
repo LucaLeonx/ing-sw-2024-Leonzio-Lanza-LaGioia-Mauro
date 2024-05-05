@@ -108,7 +108,7 @@ public class Game {
         return players;
     }
 
-    public synchronized boolean isLastPlayerTurn(){
+    public synchronized boolean isLastPlayerOfRound(){
         return currentPlayer.getNickname().equals(players.getLast().getNickname());
     }
 
@@ -116,8 +116,8 @@ public class Game {
         return currentPlayer.getNickname();
     }
 
-    public synchronized boolean isLastPlayer(){
-       return currentPlayer.equals(players.getLast());
+    public synchronized boolean isLastTurn(){
+       return isLastTurn;
     }
 
     public List<ObjectiveCard> getCommonObjectiveCards() {

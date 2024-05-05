@@ -5,21 +5,18 @@ import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.InvalidOperationException;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
-import it.polimi.ingsw.model.player.Player;
 
 import java.util.List;
 
 public class RMIGameManager implements GameManager{
-    private final String controlledPlayer;
     private GameState state;
 
-    public RMIGameManager(String controlledPlayer, GameState previousState){
-        this.controlledPlayer = controlledPlayer;
+    public RMIGameManager(GameState previousState){
         this.state = previousState;
     }
 
     public RMIGameManager(String controlledPlayer, List<String> playerNames){
-        this(controlledPlayer, new SetupState(controlledPlayer, playerNames));
+        this.state = new SetupState(controlledPlayer, playerNames, this);
     }
     @Override
     public String getCurrentPlayer() throws InvalidOperationException {
@@ -33,12 +30,12 @@ public class RMIGameManager implements GameManager{
 
     @Override
     public PlayerSetupInfo getPlayerSetup() throws InvalidOperationException {
-        return state.getPlayerSetup(controlledPlayer);
+        return state.getPlayerSetup();
     }
 
     @Override
-    public boolean isLastTurn() {
-        return state.isLastPlayerTurn();
+    public boolean isLastTurn() throws InvalidOperationException {
+        return state.isLastTurn();
     }
 
     @Override
@@ -47,7 +44,7 @@ public class RMIGameManager implements GameManager{
     }
 
     @Override
-    public void registerPlayerSetupChoice(int chosenObjectiveId, CardOrientation initialCardOrientation) {
+    public void registerPlayerSetupChoice(int chosenObjectiveId, CardOrientation initialCardOrientation) throws InvalidOperationException {
         state.registerPlayerSetupChoice(chosenObjectiveId, initialCardOrientation);
     }
 
@@ -56,7 +53,8 @@ public class RMIGameManager implements GameManager{
         state.makeCurrentPlayerMove(placedCardId, chosenSide, placementPoint, drawChoice);
     }
 
-    public synchronized void updateState(){
-        this.state = state.transition(this);
+    public synchronized void setState(GameState newState) {
+        this.state = newState;
     }
 }
+

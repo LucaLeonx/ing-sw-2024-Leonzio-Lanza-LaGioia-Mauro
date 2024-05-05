@@ -10,13 +10,12 @@ import java.util.List;
 
 public class SetupState extends GameState{
 
-    public SetupState(String controlledPlayer, List<String> playerNames){
-        super(new Game(playerNames), controlledPlayer);
+    public SetupState(String controlledPlayer, List<String> playerNames, RMIGameManager gameManager){
+        super(new Game(playerNames), controlledPlayer, gameManager);
     }
 
     @Override
-    public GameInfo getGameInfo() throws InvalidOperationException{
-        if
+    public GameInfo getGameInfo() throws InvalidOperationException {
         return super.getGameInfo();
     }
 
@@ -31,7 +30,7 @@ public class SetupState extends GameState{
     }
 
     @Override
-    public GameState transition(GameManager manager) {
-
+    public void transition() {
+        gameManager.setState(new PlayState(game, controlledPlayer, gameManager));
     }
 }

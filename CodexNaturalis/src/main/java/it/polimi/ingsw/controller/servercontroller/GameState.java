@@ -19,16 +19,19 @@ abstract class GameState {
     Game game;
     String controlledPlayer;
 
-    public GameState(Game game, String controlledPlayer){
+    RMIGameManager gameManager;
+
+    public GameState(Game game, String controlledPlayer, RMIGameManager gameManager){
         this.game = game;
         this.controlledPlayer = controlledPlayer;
+        this.gameManager = gameManager;
     }
 
     public List<String> getPlayerNames() throws InvalidOperationException{
         return game.getPlayersNicknames();
     }
 
-    public PlayerSetupInfo getPlayerSetup(String controlledPlayer) throws InvalidOperationException{
+    public PlayerSetupInfo getPlayerSetup() throws InvalidOperationException{
         return InfoTranslator.convertToInfo(game.getPlayerSetup(controlledPlayer));
     }
 
@@ -40,11 +43,15 @@ abstract class GameState {
         return game.getCurrentPlayerNickname();
     }
 
-    public boolean isLastPlayerTurn() throws InvalidOperationException{
-        return game.isLastPlayerTurn();
+    public boolean isLastPlayerOfRound() throws InvalidOperationException{
+        return game.isLastPlayerOfRound();
     }
 
-    public void registerPlayerSetupChoice(int secretObjectiveId, CardOrientation initialCardOrientation){
+    public boolean isLastTurn(){
+        return game.isLastTurn();
+    }
+
+    public void registerPlayerSetupChoice(int secretObjectiveId, CardOrientation initialCardOrientation) throws InvalidOperationException {
         Player player = game.getPlayer(controlledPlayer);
         PlayerSetup setup = game.getPlayerSetup(controlledPlayer);
         ObjectiveCard chosenObjective = (secretObjectiveId == setup.objective1().getId()) ? setup.objective1() : setup.objective2();
@@ -54,7 +61,6 @@ abstract class GameState {
     }
 
     public void makeCurrentPlayerMove(int cardId, CardOrientation orientation, Point placement, DrawChoice drawChoice) throws InvalidOperationException{
-
         if(!game.getCurrentPlayerNickname().equals(controlledPlayer)) {
             throw new InvalidOperationException("Cannot play during the turn of another player");
         }
@@ -90,11 +96,11 @@ abstract class GameState {
                     game.getVisibleCards().remove(drawChoice);
                     game.getVisibleCards().put(drawChoice, selectedDeck.draw());
             }
-
-            game.setLastTurn(
-                    (game.getResourceCardDeck().isEmpty() && game.getGoldenCardDeck().isEmpty())
-        || game.getPlayers().stream().anyMatch((participant) -> participant.getScore() >= 20 ));
-
+            if(isLastPlayerOfRound()) {
+                game.setLastTurn(
+                        (game.getResourceCardDeck().isEmpty() && game.getGoldenCardDeck().isEmpty())
+                                || game.getPlayers().stream().anyMatch((participant) -> participant.getScore() >= 20));
+            }
             game.changeCurrentPlayer();
 
         } catch(InvalidCardException | NoSuchElementException e){
@@ -103,6 +109,10 @@ abstract class GameState {
     }
 
     public void skipTurn() throws InvalidOperationException {
+        if(!game.getCurrentPlayerNickname().equals(controlledPlayer)) {
+            throw new InvalidOperationException("Cannot skip turn during when another player is playing");
+        }
+
         game.changeCurrentPlayer();
     }
 
@@ -110,5 +120,5 @@ abstract class GameState {
         return false;
     }
 
-    public abstract GameState transition(GameManager manager);
+    public abstract void transition();
 }
