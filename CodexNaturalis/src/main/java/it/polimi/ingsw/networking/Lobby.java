@@ -1,9 +1,11 @@
 package it.polimi.ingsw.networking;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Lobby {
+public class Lobby implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final int id;
     private String name;
     private final String creatorUsername;
@@ -52,4 +54,8 @@ public class Lobby {
                 waitingPlayers.size());
     }
 
+    @Override
+    public String toString() {
+        return "id :"+ id + " Lobby: " + name + " ||Created by: " + creatorUsername + "|| " + waitingPlayers.size() + "/" + requiredNumOfPlayers + " Players";
+    }
 }

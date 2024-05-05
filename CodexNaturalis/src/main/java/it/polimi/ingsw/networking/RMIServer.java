@@ -1,5 +1,6 @@
 package it.polimi.ingsw.networking;
 
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -33,17 +34,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIController {
     }
 
     @Override
-    public List<LobbyInfo> getLobbies() throws RemoteException {
-        List<LobbyInfo> infos = new ArrayList<>();
-        for (Lobby lobby : lobbies) {
-            infos.add(new LobbyInfo(lobby.getId(),
-                    lobby.getName(),
-                    lobby.getCreatorUsername(),
-                    lobby.getConnectedUser(),
-                    lobby.getRequiredNumOfPlayers(),
-                    lobby.getNumOfWaitingPlayers()));
-        }
-        return infos;
+    public List<Lobby> getLobbies() throws RemoteException {
+        return lobbies;
     }
 
     @Override

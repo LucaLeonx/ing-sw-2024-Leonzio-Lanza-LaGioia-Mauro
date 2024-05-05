@@ -20,7 +20,7 @@ public class AppClient {
 
         String input;
         while (true){
-            System.out.println("Give you action \n1. For add lobby\n2. to add enter in a Lobby\nEnter 'exit' for exit");
+            System.out.println("\nGive you action \n1. For add lobby\n2. to add enter in a Lobby\n3. For show the avilable lobbies\nEnter 'exit' for exit");
             Scanner stdin = new Scanner(System.in);
             input = stdin.nextLine();
 
@@ -34,10 +34,9 @@ public class AppClient {
                 System.out.println("Give your name");
                 testController.addLobby(stdin.nextLine(),lobbyname,4);
                 System.out.println("These are the registered lobbies");
-                System.out.println(testController.test());
-                List<LobbyInfo> lobbies = testController.getLobbies();
-                for(int i = 0;i< lobbies.size() ;i++){
-                    System.out.println(lobbies.get(i).toString());
+                List<Lobby> lobbies = testController.getLobbies();
+                for(Lobby l : lobbies){
+                    System.out.println(l);
                 }
             } else if (input.equals("2")) {
                 System.out.println("Give you name");
@@ -45,6 +44,8 @@ public class AppClient {
                 System.out.println("Give the lobby id where you want to enter: ");
                 int lobbyid = stdin.nextInt();
                 testController.addUserToLobby(lobbyid,userName);
+            } else if (input.equals("3")) {
+                testController.getLobbies().forEach(System.out::println);
             }
 
         }

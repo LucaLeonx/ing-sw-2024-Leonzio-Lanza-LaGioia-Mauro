@@ -16,5 +16,7 @@ public class AppServer {
         reg.rebind("Codex_Naturalis_server",rmiServer);
 
         System.out.println("Registry bound, ready to listen for clients");
+
+
     }
 }

@@ -1,8 +1,9 @@
 package it.polimi.ingsw.networking;
 
+import java.io.Serializable;
 import java.util.List;
 
-public record LobbyInfo(int id,
+public record LobbyInfo (int id,
                         String name,
                         String creator,
                         List<String> players,
