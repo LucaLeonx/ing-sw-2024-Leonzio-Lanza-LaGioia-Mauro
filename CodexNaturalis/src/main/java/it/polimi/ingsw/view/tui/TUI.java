@@ -239,7 +239,8 @@ public class TUI {
     public void showPoints(OpponentInfo player) {
         System.out.println("Player " + player.nickname() + " has "+ player.score() + " points");
     }
-    public void showHand(ControlledPlayerInfo player)
+
+ /*   public void showHand(ControlledPlayerInfo player)
     {
         String[][] matrixHand = new String[3][23]; // 20 columns for 3 cards +3 cells for tabs
 
@@ -274,8 +275,10 @@ public class TUI {
         }
 
     }
+
     public void showCardsOnTable(CardColor colorGoldDeck, CardColor colorResourceDeck)
     {
+
         CardInfo resourceCard1=game.getDrawableCards().get(DrawChoice.RESOURCE_CARD_1);
         CardInfo resourceCard2=game.getDrawableCards().get(DrawChoice.RESOURCE_CARD_2);
         CardInfo goldenCard1=game.getDrawableCards().get(DrawChoice.GOLD_CARD_1);
@@ -312,6 +315,7 @@ public class TUI {
                 decks[j][k+6]=Card1[j][k];
             }
         }
+
 
         Card1=sketchCard(resourceCard1);
         Card2=sketchCard(goldenCard1);
@@ -650,9 +654,6 @@ public class TUI {
         }
         sketchedCard[1][2]=symbol;
         return sketchedCard;
-    }
-
-
-
+    }*/
 
 }

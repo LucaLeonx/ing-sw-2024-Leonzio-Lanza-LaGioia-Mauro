@@ -1,6 +1,4 @@
-package it.polimi.ingsw;
-
-import it.polimi.ingsw.networking.RMIServer;
+package it.polimi.ingsw.networking;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
@@ -13,9 +11,12 @@ public class AppServer {
 
         RMIServer rmiServer = new RMIServer();
 
+        LocateRegistry.createRegistry(1099);
         Registry reg = LocateRegistry.getRegistry();
-        reg.rebind("Codex_Naturalis_server",reg);
+        reg.rebind("Codex_Naturalis_server",rmiServer);
 
         System.out.println("Registry bound, ready to listen for clients");
+
+
     }
 }
