@@ -7,6 +7,7 @@ import java.util.List;
 public record ControlledPlayerInfo(String nickname,
                                    PlayerColor color,
                                    ObjectiveInfo secretObjective,
-                                   List<CardInfo> cards,
+                                   int score,
+                                   List<CardInfo> cardsInHand,
                                    GameFieldInfo field) {
 }

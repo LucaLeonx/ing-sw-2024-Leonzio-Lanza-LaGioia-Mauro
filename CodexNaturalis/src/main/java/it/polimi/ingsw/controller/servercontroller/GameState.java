@@ -1,5 +1,8 @@
 package it.polimi.ingsw.controller.servercontroller;
 
+import it.polimi.ingsw.controller.clientcontroller.ControlledPlayerInfo;
+import it.polimi.ingsw.controller.clientcontroller.DrawableCardsInfo;
+import it.polimi.ingsw.controller.clientcontroller.OpponentInfo;
 import it.polimi.ingsw.controller.clientcontroller.PlayerSetupInfo;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
@@ -32,11 +35,7 @@ abstract class GameState {
     }
 
     public PlayerSetupInfo getPlayerSetup() throws InvalidOperationException{
-        return InfoTranslator.convertToInfo(game.getPlayerSetup(controlledPlayer));
-    }
-
-    public GameInfo getGameInfo() throws InvalidOperationException{
-        return InfoTranslator.convertToGameInfo(game);
+        return InfoTranslator.convertToPlayerSetupInfo(game.getPlayerSetup(controlledPlayer));
     }
 
     public String getCurrentPlayerNickname()throws InvalidOperationException{
@@ -120,5 +119,22 @@ abstract class GameState {
         return false;
     }
 
+
+
+    public ControlledPlayerInfo getControlledPlayerInfo() throws InvalidOperationException{
+        return InfoTranslator.convertToControlledPlayerInfo(game.getPlayer(controlledPlayer));
+    }
+
+    public OpponentInfo getOpponentPlayerInfo(String name) throws InvalidOperationException {
+        if(!getPlayerNames().contains(name)){
+            throw new InvalidOperationException("Information unavailable: the opponent is not existent");
+        }
+        return InfoTranslator.convertToOpponentPlayerInfo(game.getPlayer(name));
+    }
+
     public abstract void transition();
+
+    public DrawableCardsInfo getDrawableCardsInfo() {
+        return InfoTranslator.convertToDrawableCardsInfo(game);
+    }
 }

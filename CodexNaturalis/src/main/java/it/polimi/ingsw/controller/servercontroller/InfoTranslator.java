@@ -1,71 +1,112 @@
 package it.polimi.ingsw.controller.servercontroller;
 
 import it.polimi.ingsw.controller.clientcontroller.*;
+import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.model.PlayerSetup;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.AngleCell;
 import it.polimi.ingsw.model.map.CardCell;
 import it.polimi.ingsw.model.map.GameField;
 import it.polimi.ingsw.model.map.Point;
+import it.polimi.ingsw.model.player.Player;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import static it.polimi.ingsw.model.card.CardOrientation.*;
+import static it.polimi.ingsw.model.DrawChoice.*;
+
+import java.util.*;
 
 public abstract class InfoTranslator {
-    public static GameSnapshot convertToGameInfo(Game game){
-        return null;
-    }
+    public static DrawableCardsInfo convertToDrawableCardsInfo(Game game){
+        Map<DrawChoice, CardSideInfo> convertedInfo = new HashMap<>();
 
-    /*public static PlayerSetupInfo convertToInfo(ObjectiveCard firstObjective, ObjectiveCard secondObjective, Card initialCard){
-        return new PlayerSetupInfo(convertToInfo(firstObjective), convertToInfo(secondObjective), convertToInfo(initialCard));
-    }*/
-
-    private static CardSideInfo convertToInfo(Card card, CardOrientation orientation, boolean isPlayable) {
-        CardSide side = card.getSide(orientation);
-        Map<AnglePosition, Symbol> angles = new HashMap<>();
-        for(AnglePosition angle : AnglePosition.values()){
-            angles.put(angle, side.getSymbolFromAngle(angle));
-        }
-        return new CardSideInfo(angles, List.copyOf(side.getCenterSymbols()),  orientation, isPlayable);
-    }
-
-    /*private static CardInfo convertToInfo(Card card, GameField field){
-        return new CardInfo(card.getId(), convertToInfo(card, CardOrientation.FRONT, card.getSide(CardOrientation.FRONT).getPlayingRequirements().isSatisfied(field)), convertToInfo(card, CardOrientation.BACK, card.getSide(CardOrientation.BACK).getPlayingRequirements().isSatisfied(field));
-    }*/
-
-    private static ObjectiveInfo convertToInfo(ObjectiveCard objective){
-        return new ObjectiveInfo(objective.getId(),
-                Arrays.stream(objective.getClass().getMethods()).findFirst().toString());
-    }
-
-    private static RewardInfo convertToInfo(RewardFunction rewardFunction) {
-        return new RewardInfo(Arrays.stream(rewardFunction.getClass().getMethods()).findFirst().toString());
-    }
-
-    /*private static GameFieldInfo convertToInfo(GameField field) {
-        Map<Point, CardCellInfo> cardInfo = new HashMap<>();
-        Map<Point, AngleCellInfo> angleInfo = new HashMap<>();
-
-        for(Map.Entry<Point, CardCell> entry : field.getCardCells().entrySet()){
-            cardInfo.put(entry.getKey(), convertToInfo(entry.getValue()));
+        if(!game.getResourceCardDeck().isEmpty()) {
+            Card resourceTopCard = game.getResourceCardDeck().getTopCard();
+            convertedInfo.put(DECK_RESOURCE, convertToCardSideInfo(resourceTopCard, BACK, true));
         }
 
-        for(Map.Entry<Point, AngleCell> entry : field.getAngleCells().entrySet()){
-            angleInfo.put(entry.getKey(), convertToInfo(entry.getValue()));
+        if(!game.getResourceCardDeck().isEmpty()) {
+            Card goldTopCard = game.getResourceCardDeck().getTopCard();
+            convertedInfo.put(DECK_GOLD, convertToCardSideInfo(goldTopCard, BACK, true));
         }
 
-        return new GameFieldInfo(cardInfo, angleInfo, field.getAvailablePositions());
-    }*/
+        for(Map.Entry<DrawChoice, Card> visibleCardEntry : game.getVisibleCards().entrySet()){
+            convertedInfo.put(visibleCardEntry.getKey(), convertToCardSideInfo(visibleCardEntry.getValue(), FRONT, true));
+        }
 
-    /*private static CardCellInfo convertToInfo(CardCell cardCell){
-        return new CardCellInfo(new CardInfo(cardCell.card().getId(), cardCell.cardColor()), cardCell.orientation(), true), cardCell.orientation());
-    }*/
+        return new DrawableCardsInfo(convertedInfo);
+    }
 
-    private static AngleCellInfo convertToInfo(AngleCell angleCell){
+    public static ControlledPlayerInfo convertToControlledPlayerInfo(Player player) {
+
+        ObjectiveInfo secretObjective;
+
+        try{
+            secretObjective = convertToObjectiveInfo(player.getSecretObjective());
+        } catch (NullPointerException e){
+            secretObjective = new ObjectiveInfo(-1);
+        }
+
+        return new ControlledPlayerInfo(player.getNickname(), player.getColor(),
+                secretObjective, player.getScore(),
+                player.getCardsInHand().stream().map((card) -> convertToCardInfo(card, player.getField())).toList(),
+                convertToFieldInfo(player.getField()));
+    }
+
+    private static ObjectiveInfo convertToObjectiveInfo(ObjectiveCard secretObjective) {
+        return new ObjectiveInfo(secretObjective.getId());
+    }
+
+    private static GameFieldInfo convertToFieldInfo(GameField field) {
+        Map<Point, CardCellInfo> cardCellInfoMap = new HashMap<>();
+        Map<Point, AngleCellInfo> angleCellInfoMap = new HashMap<>();
+
+        for(Map.Entry<Point, CardCell> cardCell : field.getCardCells().entrySet()){
+            cardCellInfoMap.put(cardCell.getKey(), convertToCardCellInfo(cardCell.getValue()));
+        }
+
+        for(Map.Entry<Point, AngleCell> angleCell : field.getAngleCells().entrySet()){
+            angleCellInfoMap.put(angleCell.getKey(), convertToAngleCellInfo(angleCell.getValue()));
+        }
+
+        return new GameFieldInfo(cardCellInfoMap, angleCellInfoMap, field.getAvailablePositions());
+
+    }
+
+    private static AngleCellInfo convertToAngleCellInfo(AngleCell angleCell) {
         return new AngleCellInfo(angleCell.topSymbol(), angleCell.topCardPosition());
     }
 
-    /* public static JSON generateJSONInformation(Game game); */
+    private static CardCellInfo convertToCardCellInfo(CardCell cardCell) {
+        return new CardCellInfo(convertToCardInfo(cardCell.card(), new GameField()), cardCell.orientation());
+    }
+
+    public static PlayerSetupInfo convertToPlayerSetupInfo(PlayerSetup setup){
+        return new PlayerSetupInfo(convertToObjectiveInfo(setup.objective1()),
+                convertToObjectiveInfo(setup.objective2()),
+                convertToCardInfo(setup.initialCard(), new GameField()));
+    }
+
+    public static CardInfo convertToCardInfo(Card card, GameField field){
+        CardSideInfo front = convertToCardSideInfo(card, FRONT, card.getSide(FRONT).getPlayingRequirements().isSatisfied(field));
+        CardSideInfo back = convertToCardSideInfo(card, BACK, card.getSide(BACK).getPlayingRequirements().isSatisfied(field));
+
+        return new CardInfo(card.getId(), front, back);
+    }
+
+    public static CardSideInfo convertToCardSideInfo(Card card, CardOrientation orientation, boolean isPlayable){
+        CardSide side = card.getSide(orientation);
+        Map<AnglePosition, Symbol> angleSymbols = new HashMap<>();
+
+        for(AnglePosition angle : AnglePosition.values()){
+            angleSymbols.put(angle, side.getSymbolFromAngle(angle));
+        }
+
+        return new CardSideInfo(angleSymbols, side.getCenterSymbols(), card.getCardColor(), orientation, isPlayable, new ArrayList<>());
+    }
+
+    public static OpponentInfo convertToOpponentPlayerInfo(Player player) {
+        return new OpponentInfo(player.getNickname(), player.getColor(), player.getScore(), player.getCardsInHand().stream().map((card) -> convertToCardSideInfo(card, BACK, true)).toList(),
+                convertToFieldInfo(player.getField()));
+    }
 }

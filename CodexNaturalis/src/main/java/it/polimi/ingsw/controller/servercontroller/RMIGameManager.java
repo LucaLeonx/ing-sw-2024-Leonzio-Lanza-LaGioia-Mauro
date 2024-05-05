@@ -1,5 +1,8 @@
 package it.polimi.ingsw.controller.servercontroller;
 
+import it.polimi.ingsw.controller.clientcontroller.ControlledPlayerInfo;
+import it.polimi.ingsw.controller.clientcontroller.DrawableCardsInfo;
+import it.polimi.ingsw.controller.clientcontroller.OpponentInfo;
 import it.polimi.ingsw.controller.clientcontroller.PlayerSetupInfo;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.InvalidOperationException;
@@ -22,10 +25,19 @@ public class RMIGameManager implements GameManager{
     public String getCurrentPlayer() throws InvalidOperationException {
         return state.getCurrentPlayerNickname();
     }
+    @Override
+    public ControlledPlayerInfo getControlledPlayerInfo() throws InvalidOperationException {
+        return state.getControlledPlayerInfo();
+    }
 
     @Override
-    public GameInfo getGameInfo() throws InvalidOperationException {
-        return state.getGameInfo();
+    public OpponentInfo getOpponentInfo(String name) throws InvalidOperationException {
+        return state.getOpponentPlayerInfo(name);
+    }
+
+    @Override
+    public DrawableCardsInfo getDrawableCardsInfo() throws InvalidOperationException {
+        return state.getDrawableCardsInfo();
     }
 
     @Override

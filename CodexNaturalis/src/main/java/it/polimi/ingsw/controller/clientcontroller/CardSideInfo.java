@@ -8,7 +8,9 @@ import java.util.Set;
 
 public record CardSideInfo(
                            Map<AnglePosition, Symbol> angleSymbols,
-                           List<Symbol> centerSymbols,
+                           Set<Symbol> centerSymbols,
+                           CardColor color,
                            CardOrientation side,
-                           boolean isPlayable) {
+                           boolean isPlayable,
+                           List<Symbol> requiredSymbols) {
 }

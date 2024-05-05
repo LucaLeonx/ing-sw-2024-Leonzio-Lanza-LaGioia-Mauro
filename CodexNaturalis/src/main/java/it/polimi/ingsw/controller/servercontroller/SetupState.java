@@ -15,11 +15,6 @@ public class SetupState extends GameState{
     }
 
     @Override
-    public GameInfo getGameInfo() throws InvalidOperationException {
-        return super.getGameInfo();
-    }
-
-    @Override
     public void makeCurrentPlayerMove(int cardId, CardOrientation orientation, Point placement, DrawChoice choice) throws InvalidOperationException {
         throw new InvalidOperationException("Cannot perform move during setup phase");
     }
