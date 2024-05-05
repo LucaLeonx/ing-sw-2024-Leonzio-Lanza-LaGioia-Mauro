@@ -12,10 +12,13 @@ public interface RMIController extends Remote {
 
     public  void addUserToLobby(int lobbyId,String username) throws RemoteException;
 
-    public List<Lobby> getLobbies() throws RemoteException;
+    public List<LobbyInfo> getLobbies() throws RemoteException;
 
     public List<String> getLobbiesNames() throws RemoteException;
 
     public List<String> getUsersFromLobby(int lobbyId) throws RemoteException;
 
+    public LobbyInfo getLobbyInfo(int lobbyId) throws RemoteException;
+
+    public String test() throws RemoteException;
 }

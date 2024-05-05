@@ -10,7 +10,7 @@ public record LobbyInfo(int id,
                         int currNumPlayers){
     @Override
     public String toString() {
-        return (String) ("id " ) ;
+        return id + " Lobby: " + name + " Created by: " + creator + " " + currNumPlayers + "/" + reqPlayers + "Players";
     }
 }
 

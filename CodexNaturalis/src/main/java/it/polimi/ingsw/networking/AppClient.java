@@ -1,16 +1,11 @@
-package it.polimi.ingsw;
-
-import it.polimi.ingsw.networking.Lobby;
-import it.polimi.ingsw.networking.RMIController;
+package it.polimi.ingsw.networking;
 
 import javax.naming.*;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.List;
 import java.util.Scanner;
 
 public class AppClient {
@@ -25,10 +20,12 @@ public class AppClient {
 
         String input;
         while (true){
-            System.out.println("Give you action \n1. For add lobby\n2. to add User to Lobby\nEnter 'exit' for exit");
+            System.out.println("Give you action \n1. For add lobby\n2. to add enter in a Lobby\nEnter 'exit' for exit");
             Scanner stdin = new Scanner(System.in);
             input = stdin.nextLine();
+
             if(input.equals("exit")){break;}
+
             if(input.equals("1")){
                 System.out.println("Give the lobby name");
                 String lobbyname = stdin.nextLine();
@@ -36,9 +33,18 @@ public class AppClient {
                 //int num = stdin.nextInt();
                 System.out.println("Give your name");
                 testController.addLobby(stdin.nextLine(),lobbyname,4);
-                //testController.getLobbies().stream().map(Lobby -> lobbyname).forEach(System.out::println);
+                System.out.println("These are the registered lobbies");
+                System.out.println(testController.test());
+                List<LobbyInfo> lobbies = testController.getLobbies();
+                for(int i = 0;i< lobbies.size() ;i++){
+                    System.out.println(lobbies.get(i).toString());
+                }
             } else if (input.equals("2")) {
-
+                System.out.println("Give you name");
+                String userName = stdin.nextLine();
+                System.out.println("Give the lobby id where you want to enter: ");
+                int lobbyid = stdin.nextInt();
+                testController.addUserToLobby(lobbyid,userName);
             }
 
         }

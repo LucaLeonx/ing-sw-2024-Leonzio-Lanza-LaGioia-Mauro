@@ -1,7 +1,5 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.networking;
 
-import it.polimi.ingsw.networking.RMIServer;
-import it.polimi.ingsw.networking.RMIController;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
