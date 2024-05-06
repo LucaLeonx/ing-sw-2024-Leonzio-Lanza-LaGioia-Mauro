@@ -1,6 +1,8 @@
 package it.polimi.ingsw.networking;
 
 
+import it.polimi.ingsw.controller.servercontroller.RMIGameManager;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;

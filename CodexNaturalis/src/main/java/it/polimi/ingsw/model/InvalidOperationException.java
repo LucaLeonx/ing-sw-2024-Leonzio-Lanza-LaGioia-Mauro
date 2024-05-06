@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-public class InvalidOperationException extends Exception{
+public class InvalidOperationException extends RuntimeException{
     public InvalidOperationException(String message){
         super(message);
     }
