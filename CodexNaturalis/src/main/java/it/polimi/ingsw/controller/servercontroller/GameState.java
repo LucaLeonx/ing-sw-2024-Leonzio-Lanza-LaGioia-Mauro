@@ -21,7 +21,6 @@ abstract class GameState {
 
     Game game;
     String controlledPlayer;
-
     RMIGameManagerImpl gameManager;
 
     public GameState(Game game, String controlledPlayer, RMIGameManagerImpl gameManager){
@@ -89,11 +88,13 @@ abstract class GameState {
             switch(drawChoice){
                 case DECK_RESOURCE, DECK_GOLD: {
                     player.addCard(selectedDeck.draw());
+                    break;
                 }
                 case RESOURCE_CARD_1, RESOURCE_CARD_2, GOLD_CARD_1, GOLD_CARD_2:
                     player.addCard(game.getVisibleCard(drawChoice));
                     game.getVisibleCards().remove(drawChoice);
                     game.getVisibleCards().put(drawChoice, selectedDeck.draw());
+                    break;
             }
             if(isLastPlayerOfRound()) {
                 game.setLastTurn(

@@ -15,6 +15,7 @@ import static it.polimi.ingsw.model.card.CardOrientation.*;
 import static it.polimi.ingsw.model.DrawChoice.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class InfoTranslator {
     public static DrawableCardsInfo convertToDrawableCardsInfo(Game game){
@@ -49,7 +50,7 @@ public abstract class InfoTranslator {
 
         return new ControlledPlayerInfo(player.getNickname(), player.getColor(),
                 secretObjective, player.getScore(),
-                player.getCardsInHand().stream().map((card) -> convertToCardInfo(card, player.getField())).toList(),
+                player.getCardsInHand().stream().map((card) -> convertToCardInfo(card, player.getField())).collect(Collectors.toCollection(ArrayList::new)),
                 convertToFieldInfo(player.getField()));
     }
 
@@ -58,8 +59,8 @@ public abstract class InfoTranslator {
     }
 
     private static GameFieldInfo convertToFieldInfo(GameField field) {
-        Map<Point, CardCellInfo> cardCellInfoMap = new HashMap<>();
-        Map<Point, AngleCellInfo> angleCellInfoMap = new HashMap<>();
+        HashMap<Point, CardCellInfo> cardCellInfoMap = new HashMap<>();
+        HashMap<Point, AngleCellInfo> angleCellInfoMap = new HashMap<>();
 
         for(Map.Entry<Point, CardCell> cardCell : field.getCardCells().entrySet()){
             cardCellInfoMap.put(cardCell.getKey(), convertToCardCellInfo(cardCell.getValue()));
@@ -69,7 +70,7 @@ public abstract class InfoTranslator {
             angleCellInfoMap.put(angleCell.getKey(), convertToAngleCellInfo(angleCell.getValue()));
         }
 
-        return new GameFieldInfo(cardCellInfoMap, angleCellInfoMap, field.getAvailablePositions());
+        return new GameFieldInfo(cardCellInfoMap, angleCellInfoMap, new HashSet<>(field.getAvailablePositions()));
 
     }
 
@@ -96,17 +97,22 @@ public abstract class InfoTranslator {
 
     public static CardSideInfo convertToCardSideInfo(Card card, CardOrientation orientation, boolean isPlayable){
         CardSide side = card.getSide(orientation);
-        Map<AnglePosition, Symbol> angleSymbols = new HashMap<>();
+        HashMap<AnglePosition, Symbol> angleSymbols = new HashMap<>();
 
         for(AnglePosition angle : AnglePosition.values()){
             angleSymbols.put(angle, side.getSymbolFromAngle(angle));
         }
 
-        return new CardSideInfo(angleSymbols, side.getCenterSymbols(), card.getCardColor(), orientation, isPlayable, new ArrayList<>());
+        return new CardSideInfo(angleSymbols, new HashSet<>(side.getCenterSymbols()), card.getCardColor(), orientation, isPlayable, new ArrayList<>());
     }
 
     public static OpponentInfo convertToOpponentPlayerInfo(Player player) {
-        return new OpponentInfo(player.getNickname(), player.getColor(), player.getScore(), player.getCardsInHand().stream().map((card) -> convertToCardSideInfo(card, BACK, true)).toList(),
-                convertToFieldInfo(player.getField()));
+
+        ArrayList<CardSideInfo> opponentHand = new ArrayList<>();
+        for(Card card : player.getCardsInHand()){
+            opponentHand.add(convertToCardSideInfo(card, BACK, true));
+        }
+
+        return new OpponentInfo(player.getNickname(), player.getColor(), player.getScore(), opponentHand, convertToFieldInfo(player.getField()));
     }
 }

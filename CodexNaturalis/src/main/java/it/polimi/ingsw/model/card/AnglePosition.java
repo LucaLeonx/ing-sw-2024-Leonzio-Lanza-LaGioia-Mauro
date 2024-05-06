@@ -2,11 +2,13 @@ package it.polimi.ingsw.model.card;
 
 import it.polimi.ingsw.model.map.Point;
 
+import java.io.Serializable;
+
 /**
  * This enum represents the possible position of the angles of a Card.
  *
  */
-public enum AnglePosition {
+public enum AnglePosition implements Serializable {
     UP_LEFT(new Point(-1, 1)),
     UP_RIGHT(new Point(1, 1)),
     DOWN_LEFT(new Point(-1, -1)),

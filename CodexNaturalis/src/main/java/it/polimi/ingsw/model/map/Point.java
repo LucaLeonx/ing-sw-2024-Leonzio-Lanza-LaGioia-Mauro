@@ -2,10 +2,11 @@ package it.polimi.ingsw.model.map;
 
 import it.polimi.ingsw.model.card.AnglePosition;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.*;
 
-public record Point(int x, int y) {
+public record Point(int x, int y) implements Serializable {
     /**
      * This method performs the component sum of the points passed
      * as parameters.

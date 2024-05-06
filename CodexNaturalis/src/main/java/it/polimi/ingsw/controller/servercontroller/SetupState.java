@@ -6,17 +6,21 @@ import it.polimi.ingsw.model.InvalidOperationException;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.Point;
 
-import java.util.List;
-
 public class SetupState extends GameState{
 
-    public SetupState(String controlledPlayer, List<String> playerNames, RMIGameManager gameManager){
-        super(new Game(playerNames), controlledPlayer, gameManager);
+    public SetupState(String controlledPlayer, Game game, RMIGameManagerImpl gameManager){
+        super(game, controlledPlayer, gameManager);
     }
 
     @Override
     public void makeCurrentPlayerMove(int cardId, CardOrientation orientation, Point placement, DrawChoice choice) throws InvalidOperationException {
         throw new InvalidOperationException("Cannot perform move during setup phase");
+    }
+
+    @Override
+    public void registerPlayerSetupChoice(int secretObjectiveId, CardOrientation initialCardOrientation) throws InvalidOperationException{
+        super.registerPlayerSetupChoice(secretObjectiveId, initialCardOrientation);
+        transition();
     }
 
     @Override

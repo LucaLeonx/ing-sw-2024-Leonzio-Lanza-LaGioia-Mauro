@@ -1,10 +1,8 @@
 package it.polimi.ingsw.controller.servercontroller;
 
-import it.polimi.ingsw.controller.clientcontroller.ControlledPlayerInfo;
-import it.polimi.ingsw.controller.clientcontroller.DrawableCardsInfo;
-import it.polimi.ingsw.controller.clientcontroller.OpponentInfo;
-import it.polimi.ingsw.controller.clientcontroller.PlayerSetupInfo;
+import it.polimi.ingsw.controller.clientcontroller.*;
 import it.polimi.ingsw.model.DrawChoice;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.InvalidOperationException;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
@@ -20,8 +18,8 @@ public class RMIGameManagerImpl extends UnicastRemoteObject implements RMIGameMa
         this.state = previousState;
     }
 
-    public RMIGameManagerImpl(String controlledPlayer, List<String> playerNames) throws RemoteException{
-        this.state = new SetupState(controlledPlayer, playerNames, this);
+    public RMIGameManagerImpl(String controlledPlayer, Game newGame) throws RemoteException{
+        this.state = new SetupState(controlledPlayer, newGame, this);
     }
 
     @Override
@@ -70,6 +68,10 @@ public class RMIGameManagerImpl extends UnicastRemoteObject implements RMIGameMa
 
     public synchronized void setState(GameState newState) {
         this.state = newState;
+    }
+
+    public ObjectiveInfo test(){
+        return new ObjectiveInfo(107);
     }
 }
 

@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 
 public class PlayState extends GameState {
-    public PlayState(Game game, String controlledPlayer, RMIGameManager gameManager) {
+    public PlayState(Game game, String controlledPlayer, RMIGameManagerImpl gameManager) {
         super(game, controlledPlayer, gameManager);
     }
 

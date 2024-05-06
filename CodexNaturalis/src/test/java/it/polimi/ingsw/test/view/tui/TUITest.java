@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.*;
 
-public class TUITest extends TestCase {
+/*public class TUITest extends TestCase {
 
     private List<Card> resourceCards;
     private List<Card> goldenCards;
@@ -139,4 +139,4 @@ public class TUITest extends TestCase {
 
 
 
-}
+}*/

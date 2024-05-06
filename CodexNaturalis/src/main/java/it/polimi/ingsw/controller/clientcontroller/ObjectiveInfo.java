@@ -1,3 +1,5 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
-public record ObjectiveInfo(int id){}
+import java.io.Serializable;
+
+public record ObjectiveInfo(int id) implements Serializable {}

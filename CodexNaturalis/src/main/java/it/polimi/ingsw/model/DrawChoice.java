@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model;
 
 
-public enum DrawChoice {
+import java.io.Serializable;
+
+public enum DrawChoice implements Serializable {
         DECK_GOLD,
         DECK_RESOURCE,
         RESOURCE_CARD_1,

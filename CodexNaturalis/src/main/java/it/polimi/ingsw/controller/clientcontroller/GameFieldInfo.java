@@ -5,9 +5,8 @@ import it.polimi.ingsw.model.map.AngleCell;
 import it.polimi.ingsw.model.map.CardCell;
 import it.polimi.ingsw.model.map.Point;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Data transfer object for fields
@@ -15,6 +14,6 @@ import java.util.SortedMap;
  *                    They are sorted based on their insertion order
  * @param availablePositions Positions available to put cards
  */
-public record GameFieldInfo(Map<Point, CardCellInfo> placedCards,
-                            Map<Point, AngleCellInfo> placedAngles,
-                            Set<Point> availablePositions) {}
+public record GameFieldInfo(HashMap<Point, CardCellInfo> placedCards,
+                            HashMap<Point, AngleCellInfo> placedAngles,
+                            HashSet<Point> availablePositions) implements Serializable {}

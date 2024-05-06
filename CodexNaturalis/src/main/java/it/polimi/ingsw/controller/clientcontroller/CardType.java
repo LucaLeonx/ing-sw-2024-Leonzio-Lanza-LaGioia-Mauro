@@ -1,6 +1,8 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
-public enum CardType {
+import java.io.Serializable;
+
+public enum CardType implements Serializable {
     RESOURCE,
     GOLD,
     INITIAL,
