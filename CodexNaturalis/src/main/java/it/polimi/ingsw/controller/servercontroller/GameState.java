@@ -22,9 +22,9 @@ abstract class GameState {
     Game game;
     String controlledPlayer;
 
-    RMIGameManager gameManager;
+    RMIGameManagerImpl gameManager;
 
-    public GameState(Game game, String controlledPlayer, RMIGameManager gameManager){
+    public GameState(Game game, String controlledPlayer, RMIGameManagerImpl gameManager){
         this.game = game;
         this.controlledPlayer = controlledPlayer;
         this.gameManager = gameManager;

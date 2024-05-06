@@ -12,7 +12,7 @@ import it.polimi.ingsw.model.player.Player;
 
 public class EndState extends GameState{
 
-    public EndState(Game game, String controlledPlayer, RMIGameManager gameManager){
+    public EndState(Game game, String controlledPlayer, RMIGameManagerImpl gameManager){
         super(game, controlledPlayer, gameManager);
     }
     @Override
