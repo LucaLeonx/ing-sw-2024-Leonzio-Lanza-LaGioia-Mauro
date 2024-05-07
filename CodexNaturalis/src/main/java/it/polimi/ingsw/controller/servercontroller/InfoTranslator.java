@@ -89,8 +89,8 @@ public abstract class InfoTranslator {
     }
 
     public static CardInfo convertToCardInfo(Card card, GameField field){
-        CardSideInfo front = convertToCardSideInfo(card, FRONT, card.getSide(FRONT).getPlayingRequirements().isSatisfied(field));
-        CardSideInfo back = convertToCardSideInfo(card, BACK, card.getSide(BACK).getPlayingRequirements().isSatisfied(field));
+        CardSideInfo front = convertToCardSideInfo(card, FRONT, card.getSide(FRONT).isPlayable(field));
+        CardSideInfo back = convertToCardSideInfo(card, BACK, card.getSide(BACK).isPlayable(field));
 
         return new CardInfo(card.getId(), front, back);
     }
