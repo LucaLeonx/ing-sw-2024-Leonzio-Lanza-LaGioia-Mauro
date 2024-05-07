@@ -41,10 +41,7 @@ public class TUI {
     static String coveredAnglesSymbol = "\u25F0 ";
     static String forEachSymbol ="\u2755";
 
-// TODO:  Fix DrawCards On table based on the new structure in ClientController. (When we introduce a new class in client.Controller containing things regarding table)
 // TODO:  implement TUI in case there is no deck or some drawable cards / Cards in hands are missing. (When we decide how to say there is some missing cards)
-    //TODO:  testing. (When we fix infoTraslator)
-    //TODO: SketchGoldenCard method (When we decide if it is possible to have a list of symbol as recquirements or if it is better to have a big switch statement similar to what we have for ObjectiveCards)
 
 
 
