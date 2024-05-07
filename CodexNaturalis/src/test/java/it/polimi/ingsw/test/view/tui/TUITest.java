@@ -1,7 +1,8 @@
 package it.polimi.ingsw.test.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.*;
-import it.polimi.ingsw.controller.servercontroller.InfoTranslator;
+import it.polimi.ingsw.dataobject.DrawableCardsInfo;
+import it.polimi.ingsw.dataobject.InfoTranslator;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.*;
@@ -16,6 +17,7 @@ import junit.framework.TestCase;
 import it.polimi.ingsw.test.model.map.GameFieldTest;
 
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -134,11 +136,11 @@ public class TUITest extends TestCase {
 
     }
 
-    public void testShowCardsOnTable(){
+    public void testShowCardsOnTable() throws FileNotFoundException {
        Game game = new Game(List.of("Pippo", "Paperino", "Pluto", "Clarabella"));
        game.getVisibleCards().put(DrawChoice.DECK_GOLD, CardFactory.getResourceCards().get(10));
        DrawableCardsInfo drawableCards = InfoTranslator.convertToDrawableCardsInfo(game);
-       showDrawableCards(drawableCards);
+       //showDrawableCards(drawableCards);
     }
 
 

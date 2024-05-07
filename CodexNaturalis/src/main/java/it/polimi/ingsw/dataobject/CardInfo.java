@@ -1,5 +1,6 @@
 package it.polimi.ingsw.dataobject;
 
+import it.polimi.ingsw.model.card.CardColor;
 import it.polimi.ingsw.model.card.CardOrientation;
 
 import java.io.Serializable;
