@@ -1,8 +1,5 @@
-package it.polimi.ingsw.controller.servercontroller;
+package it.polimi.ingsw.dataobject;
 
-import it.polimi.ingsw.controller.clientcontroller.CardSideInfo;
-import it.polimi.ingsw.controller.clientcontroller.ControlledPlayerInfo;
-import it.polimi.ingsw.controller.clientcontroller.OpponentInfo;
 import it.polimi.ingsw.model.DrawChoice;
 
 import java.util.List;

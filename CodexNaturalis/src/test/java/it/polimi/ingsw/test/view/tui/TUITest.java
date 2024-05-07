@@ -1,14 +1,7 @@
 package it.polimi.ingsw.test.view.tui;
 
-import it.polimi.ingsw.controller.clientcontroller.CardInfo;
-import it.polimi.ingsw.controller.clientcontroller.CardSideInfo;
-import it.polimi.ingsw.controller.clientcontroller.ControlledPlayerInfo;
-import it.polimi.ingsw.controller.clientcontroller.ObjectiveInfo;
-import it.polimi.ingsw.model.Game;
+import it.polimi.ingsw.dataobject.InfoTranslator;
 import it.polimi.ingsw.model.card.*;
-import it.polimi.ingsw.model.map.AngleCell;
-import it.polimi.ingsw.model.map.CardCell;
-import it.polimi.ingsw.model.map.GameField;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -17,17 +10,14 @@ import junit.framework.TestCase;
 import it.polimi.ingsw.test.model.map.GameFieldTest;
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
-import java.util.*;
 
-/*public class TUITest extends TestCase {
+public class TUITest extends TestCase {
 
     private List<Card> resourceCards;
     private List<Card> goldenCards;
     private List<Card> initialCards;
+    private List<ObjectiveCard> objectiveCards;
     private Player playerTestDiagonal;
     private Player M;
     private Player T;
@@ -39,19 +29,20 @@ import java.util.*;
             resourceCards = CardFactory.getResourceCards();
             goldenCards = CardFactory.getGoldCards();
             initialCards = CardFactory.getInitialCards();
+            objectiveCards = CardFactory.getObjectiveCards();
         } catch (Exception e){
             e.printStackTrace();
             fail();
         }
-        playerTestDiagonal=new Player("Diagonale", PlayerColor.RED, new ObjectiveCard(0, null));
+        playerTestDiagonal=new Player("Diagonale", PlayerColor.RED);
         playerTestDiagonal.getField().placeCard(initialCards.get(0), CardOrientation.BACK, new Point(0,0));
         playerTestDiagonal.getField().placeCard(resourceCards.get(0), CardOrientation.FRONT, new Point(2,2));
         playerTestDiagonal.getField().placeCard(resourceCards.get(1), CardOrientation.FRONT, new Point(4,4));
         //playerTestDiagonal.getField().placeCard(resourceCards.get(2), CardOrientation.FRONT, new Point(6,6));
 
-        T=new Player("Topolino", PlayerColor.RED, new ObjectiveCard(0, null));
-        M=new Player("Minnie", PlayerColor.BLUE, new ObjectiveCard(0, null));
-        P=new Player("Paperina", PlayerColor.YELLOW, new ObjectiveCard(0, null));
+        T=new Player("Topolino", PlayerColor.RED);
+        M=new Player("Minnie", PlayerColor.BLUE);
+        P=new Player("Paperina", PlayerColor.YELLOW);
 
         M.getField().placeCard(initialCards.get(2), CardOrientation.FRONT, new Point(0,0));
         M.getField().placeCard(resourceCards.get(18), CardOrientation.FRONT, new Point(2, -2));
@@ -105,38 +96,38 @@ import java.util.*;
 
     // To see the real image of the maps go to Notes-->ExampleMaps
     public void testTUIWithDiagonalMap(){
-        new GameFieldTest().checkInvariants(T.getField());
-        tui.drawMap(playerTestDiagonal);
+        new GameFieldTest().checkInvariants(playerTestDiagonal.getField());
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(playerTestDiagonal), InfoTranslator.convertToFieldInfo(playerTestDiagonal.getField()));
     }
 
     public void testTUIWithMinnieMap(){
         new GameFieldTest().checkInvariants(M.getField());
-        tui.drawMap(M);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(M), InfoTranslator.convertToFieldInfo(M.getField()));
     }
 
     public void testTUIWithPaperinaMap(){
-        tui.drawMap(P);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(P), InfoTranslator.convertToFieldInfo(P.getField()));
     }
 
 
     public void testTUIWithTopolinoMap(){
         new GameFieldTest().checkInvariants(T.getField());
-        tui.drawMap(T);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()));
     }
 
     public void testShowHand(){
-        //T.addCard(resourceCards.get(0));
-        //T.addCard(resourceCards.get(1));
-        //T.addCard(resourceCards.get(2));
+        T.addCard(resourceCards.get(0));
+        T.addCard(resourceCards.get(1));
+        T.addCard(goldenCards.get(13));
+        T.setSecretObjective(objectiveCards.get(1));
+        tui.showHand(InfoTranslator.convertToControlledPlayerInfo(T));
 
     }
 
     public void testShowCardsOnTable(){
-        //List cardsInHand =new ArrayList<CardInfo>();
-        //cardsInHand.add(new CardInfo(1,CardColor.RED,new CardSideInfo(),new CardSideInfo()));
-        //ControlledPlayerInfo Topolino = new ControlledPlayerInfo("Topolino", PlayerColor.RED, new ObjectiveInfo(1, "b"), );
+
     }
 
 
 
-}*/
+}

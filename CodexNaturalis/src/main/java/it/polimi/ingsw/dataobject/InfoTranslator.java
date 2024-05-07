@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.servercontroller;
+package it.polimi.ingsw.dataobject;
 
 import it.polimi.ingsw.controller.clientcontroller.*;
 import it.polimi.ingsw.model.DrawChoice;
@@ -54,11 +54,11 @@ public abstract class InfoTranslator {
                 convertToFieldInfo(player.getField()));
     }
 
-    private static ObjectiveInfo convertToObjectiveInfo(ObjectiveCard secretObjective) {
+    public static ObjectiveInfo convertToObjectiveInfo(ObjectiveCard secretObjective) {
         return new ObjectiveInfo(secretObjective.getId());
     }
 
-    private static GameFieldInfo convertToFieldInfo(GameField field) {
+    public static GameFieldInfo convertToFieldInfo(GameField field) {
         HashMap<Point, CardCellInfo> cardCellInfoMap = new HashMap<>();
         HashMap<Point, AngleCellInfo> angleCellInfoMap = new HashMap<>();
 
@@ -91,19 +91,27 @@ public abstract class InfoTranslator {
     public static CardInfo convertToCardInfo(Card card, GameField field){
         CardSideInfo front = convertToCardSideInfo(card, FRONT, card.getSide(FRONT).getPlayingRequirements().isSatisfied(field));
         CardSideInfo back = convertToCardSideInfo(card, BACK, card.getSide(BACK).getPlayingRequirements().isSatisfied(field));
-
-        return new CardInfo(card.getId(), front, back);
+        return new CardInfo(card.getId(), card.getCardColor(), front, back);
     }
 
     public static CardSideInfo convertToCardSideInfo(Card card, CardOrientation orientation, boolean isPlayable){
         CardSide side = card.getSide(orientation);
         HashMap<AnglePosition, Symbol> angleSymbols = new HashMap<>();
+        CardType type=CardType.RESOURCE;
 
         for(AnglePosition angle : AnglePosition.values()){
             angleSymbols.put(angle, side.getSymbolFromAngle(angle));
         }
+        if(card.getId()>=1 && card.getId()<=40){
+            type=CardType.RESOURCE;
+        }
+        else if(card.getId()<=80 && card.getId()>=41) {
+            type=CardType.GOLD;
+        } else if (card.getId()>=81 && card.getId()<=86) {
+            type=CardType.INITIAL;
+        }
 
-        return new CardSideInfo(angleSymbols, new HashSet<>(side.getCenterSymbols()), card.getCardColor(), orientation, isPlayable, new ArrayList<>());
+        return new CardSideInfo(angleSymbols, new HashSet<>(side.getCenterSymbols()), card.getCardColor(), orientation, type, isPlayable, new ArrayList<>());
     }
 
     public static OpponentInfo convertToOpponentPlayerInfo(Player player) {

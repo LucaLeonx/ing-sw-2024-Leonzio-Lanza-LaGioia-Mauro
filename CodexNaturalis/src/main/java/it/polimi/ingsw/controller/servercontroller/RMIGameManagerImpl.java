@@ -1,16 +1,14 @@
 package it.polimi.ingsw.controller.servercontroller;
 
-import it.polimi.ingsw.controller.clientcontroller.*;
+import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.InvalidOperationException;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
-
+/*
 public class RMIGameManagerImpl extends UnicastRemoteObject implements RMIGameManager{
     private GameState state;
 
@@ -79,4 +77,4 @@ public class RMIGameManagerImpl extends UnicastRemoteObject implements RMIGameMa
         return new ObjectiveInfo(107);
     }
 }
-
+*/

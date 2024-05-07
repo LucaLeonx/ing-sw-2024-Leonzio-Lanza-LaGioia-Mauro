@@ -1,15 +1,14 @@
 package it.polimi.ingsw.controller.servercontroller;
 
-import it.polimi.ingsw.controller.clientcontroller.PlayerSetupInfo;
+import it.polimi.ingsw.dataobject.PlayerSetupInfo;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.InvalidOperationException;
-import it.polimi.ingsw.model.PlayerSetup;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 
 public class PlayState extends GameState {
-    public PlayState(Game game, String controlledPlayer, RMIGameManagerImpl gameManager) {
+    public PlayState(Game game, String controlledPlayer, ServerController gameManager) {
         super(game, controlledPlayer, gameManager);
     }
 

@@ -15,8 +15,7 @@ public class ChooseLoginPanel extends ButtonListPanel {
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
         buttonsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JTextArea incipitTextArea = new JTextArea();
-        incipitTextArea.append("Choose your connection:\n");
+        JLabel incipitTextArea = new JLabel("Choose your connection:\n");
 
         this.setLayout(new BorderLayout());
 
@@ -25,24 +24,25 @@ public class ChooseLoginPanel extends ButtonListPanel {
 
         JTextArea connectionTextArea = new JTextArea();
 
-        addBottomFrame();
+        //addBottomFrame();
 
         login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {//performed method after pushing a button
                 connectionTextArea.append("Login selected\n");
-                MainWindow.goToNextWindow();
+                MainWindow.goToWindow("loginPanel");
             }
         }
         );
+
         register.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {//performed method after pushing a button
                 connectionTextArea.append("Register selected\n");
-                MainWindow.goToNextWindow();
-                MainWindow.goToNextWindow();
+                MainWindow.goToWindow("registerPanel");
             }
         });
+
 
         add(incipitTextArea, BorderLayout.NORTH);
         add(buttonsPanel, BorderLayout.CENTER);

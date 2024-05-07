@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.controller.clientcontroller.ObjectiveInfo;
 import it.polimi.ingsw.model.card.Card;
 import it.polimi.ingsw.model.card.ObjectiveCard;
 

@@ -1,10 +1,7 @@
 package it.polimi.ingsw.test.server;
 
-import it.polimi.ingsw.controller.servercontroller.RMIGameManager;
 import it.polimi.ingsw.controller.servercontroller.RMIGameManagerImpl;
-import it.polimi.ingsw.controller.servercontroller.SetupState;
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.networking.RMIServer;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
