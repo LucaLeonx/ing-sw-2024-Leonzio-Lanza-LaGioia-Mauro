@@ -1,7 +1,5 @@
-package it.polimi.ingsw.controller.clientcontroller;
+package it.polimi.ingsw.dataobject;
 
-import it.polimi.ingsw.model.card.Card;
-import it.polimi.ingsw.model.card.CardColor;
 import it.polimi.ingsw.model.card.CardOrientation;
 
 import java.io.Serializable;

@@ -1,12 +1,11 @@
-package it.polimi.ingsw.networking;
+package it.polimi.ingsw.dataobject;
 
-import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
 
 public record LobbyInfo (int id,
                         String name,
                         String creator,
-                        List<String> players,
+                        ArrayList<String> players,
                         int reqPlayers,
                         int currNumPlayers){
     @Override

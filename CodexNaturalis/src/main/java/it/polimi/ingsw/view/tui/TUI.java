@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.*;
+import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
-import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;

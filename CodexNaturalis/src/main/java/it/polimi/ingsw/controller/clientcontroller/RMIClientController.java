@@ -1,18 +1,5 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
-import it.polimi.ingsw.controller.servercontroller.RMIGameManager;
-import it.polimi.ingsw.controller.servercontroller.RMIGameManagerImpl;
-import it.polimi.ingsw.model.DrawChoice;
-import it.polimi.ingsw.model.card.CardOrientation;
-import it.polimi.ingsw.model.map.Point;
-import it.polimi.ingsw.networking.RMIController;
-
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.util.List;
-import java.util.Map;
 /*
 public class RMIClientController implements ClientController{
 

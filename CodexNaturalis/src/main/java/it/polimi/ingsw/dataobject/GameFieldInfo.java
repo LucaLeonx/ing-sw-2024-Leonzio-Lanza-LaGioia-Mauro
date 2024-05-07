@@ -1,8 +1,5 @@
-package it.polimi.ingsw.controller.clientcontroller;
+package it.polimi.ingsw.dataobject;
 
-import it.polimi.ingsw.model.card.Symbol;
-import it.polimi.ingsw.model.map.AngleCell;
-import it.polimi.ingsw.model.map.CardCell;
 import it.polimi.ingsw.model.map.Point;
 
 import java.io.Serializable;

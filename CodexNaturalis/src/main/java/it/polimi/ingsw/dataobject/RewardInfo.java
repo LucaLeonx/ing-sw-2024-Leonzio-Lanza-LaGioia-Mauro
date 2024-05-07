@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller.clientcontroller;
+package it.polimi.ingsw.dataobject;
 
 import java.io.Serializable;
 

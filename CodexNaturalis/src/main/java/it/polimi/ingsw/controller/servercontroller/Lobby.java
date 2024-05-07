@@ -1,4 +1,6 @@
-package it.polimi.ingsw.networking;
+package it.polimi.ingsw.controller.servercontroller;
+
+import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,7 +51,7 @@ public class Lobby implements Serializable {
         return new LobbyInfo(id,
                 name,
                 creatorUsername,
-                waitingPlayers,
+                new ArrayList<>(waitingPlayers),
                 requiredNumOfPlayers,
                 waitingPlayers.size());
     }

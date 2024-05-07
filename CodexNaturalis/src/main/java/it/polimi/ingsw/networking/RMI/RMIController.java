@@ -1,15 +1,16 @@
-package it.polimi.ingsw.networking;
+package it.polimi.ingsw.networking.RMI;
 
 
-import it.polimi.ingsw.controller.servercontroller.RMIGameManager;
+import it.polimi.ingsw.controller.servercontroller.Controller;
+import it.polimi.ingsw.controller.servercontroller.Lobby;
+import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
-import java.rmi.*;
 
-public interface RMIController extends Remote {
-
+public interface RMIController extends Remote, Controller {
+/*
     public void addLobby(String creator, String name, int playersNumber) throws RemoteException;
 
     public  void addUserToLobby(int lobbyId, String username) throws RemoteException;
@@ -22,4 +23,6 @@ public interface RMIController extends Remote {
 
     public LobbyInfo getLobbyInfo(int lobbyId) throws RemoteException;
     public String test() throws RemoteException;
+TO DELETE*/
+
 }
