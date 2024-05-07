@@ -46,6 +46,11 @@ public class EndState extends GameState{
     }
 
     @Override
+    public String getWinnerName(){
+        throw new InvalidOperationException("Cannot decide the winner while playing");
+    }
+
+    @Override
     public boolean hasGameEnded(){
         return true;
     }

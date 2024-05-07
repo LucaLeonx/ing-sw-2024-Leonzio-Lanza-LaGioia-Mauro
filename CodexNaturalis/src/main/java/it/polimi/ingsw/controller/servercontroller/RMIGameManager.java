@@ -18,4 +18,5 @@ public interface RMIGameManager extends Remote {
     public boolean hasGameEnded() throws RemoteException;
     public void registerPlayerSetupChoice(int chosenObjectiveId, CardOrientation initialCardOrientation) throws RemoteException;
     public void registerPlayerMove(int placedCardId,  Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException;
+    public String getWinnerName();
 }

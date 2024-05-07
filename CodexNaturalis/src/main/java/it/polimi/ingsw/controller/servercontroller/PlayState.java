@@ -43,6 +43,10 @@ public class PlayState extends GameState {
         }
     }
 
+    @Override
+    public String getWinnerName(){
+        throw new InvalidOperationException("Cannot decide the winner while playing");
+    }
 
     @Override
     public void transition() {

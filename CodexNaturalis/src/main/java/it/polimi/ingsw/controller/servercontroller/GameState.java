@@ -133,9 +133,15 @@ abstract class GameState {
         return InfoTranslator.convertToOpponentPlayerInfo(game.getPlayer(name));
     }
 
-    public abstract void transition();
-
     public DrawableCardsInfo getDrawableCardsInfo() {
         return InfoTranslator.convertToDrawableCardsInfo(game);
     }
+
+    public String getWinnerName(){
+        List<Player> leaderboard = game.getPlayers();
+        leaderboard.sort((p1, p2) -> (p1.getScore() > p2.getScore()) ? 1 : -1);
+        return leaderboard.getFirst().getNickname();
+    }
+
+    public abstract void transition();
 }
