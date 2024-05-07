@@ -64,6 +64,11 @@ public class RMIGameManagerImpl extends UnicastRemoteObject implements RMIGameMa
         state.makeCurrentPlayerMove(placedCardId, chosenSide, placementPoint, drawChoice);
     }
 
+    @Override
+    public String getWinnerName(){
+        return state.getWinnerName();
+    }
+
     public synchronized void setState(GameState newState) {
         this.state = newState;
     }

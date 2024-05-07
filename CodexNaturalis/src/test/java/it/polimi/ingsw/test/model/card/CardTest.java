@@ -1,11 +1,15 @@
 package it.polimi.ingsw.test.model.card;
 
+import it.polimi.ingsw.dataobject.RewardType;
+import it.polimi.ingsw.model.Requirement;
+import it.polimi.ingsw.model.Reward;
 import it.polimi.ingsw.model.card.*;
 import junit.framework.TestCase;
 import org.junit.*;
 
 import java.util.*;
 
+import static it.polimi.ingsw.dataobject.RewardType.NONE;
 import static it.polimi.ingsw.model.card.AnglePosition.*;
 import static it.polimi.ingsw.model.card.AnglePosition.DOWN_LEFT;
 import static it.polimi.ingsw.model.card.Symbol.*;
@@ -24,8 +28,8 @@ public class CardTest extends TestCase {
                         entry(DOWN_RIGHT, BLANK),
                         entry(DOWN_LEFT, BLANK)
                 ),
-                GameFunctionFactory.createRequiredSymbolsFunction(new HashMap<>()),
-                GameFunctionFactory.createPointsRewardFunction(0));
+                new Requirement(new HashMap<>()),
+                new Reward(NONE, GameFunctionFactory.createPointsRewardFunction(0)));
         CardSide frontSide = new CardSide(
                 new HashSet<>(List.of(ANIMAL)),
                 Map.ofEntries(
@@ -34,11 +38,11 @@ public class CardTest extends TestCase {
                         entry(DOWN_RIGHT, QUILL),
                         entry(DOWN_LEFT, BLANK)
                 ),
-                GameFunctionFactory.createRequiredSymbolsFunction(new HashMap<>(Map.ofEntries(
+                new Requirement(new HashMap<>(Map.ofEntries(
                         entry(ANIMAL, 2),
                         entry(INSECT, 1)
                 ))),
-                GameFunctionFactory.createPointsRewardFunction(3));
+                new Reward(RewardType.THREE_POINTS, GameFunctionFactory.createPointsRewardFunction(3)));
 
         card = new Card(11, CardColor.SKYBLUE, frontSide, backSide);
     }
@@ -55,10 +59,4 @@ public class CardTest extends TestCase {
         assertEquals(card.getSide(CardOrientation.BACK).getDisplayedSymbols(), List.of(BLANK, BLANK, BLANK, BLANK));
         assertEquals(card.getSide(CardOrientation.FRONT).getCenterSymbols(), Set.of(ANIMAL));
     }
-
-
-
-
-
-
 }

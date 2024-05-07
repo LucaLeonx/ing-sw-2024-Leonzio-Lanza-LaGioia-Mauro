@@ -1,5 +1,8 @@
 package it.polimi.ingsw.controller.servercontroller;
 
+import it.polimi.ingsw.model.Game;
+
+import java.rmi.RemoteException;
 import java.util.Optional;
 
 public class User {
@@ -21,6 +24,4 @@ public class User {
     public boolean checkPass(Integer pass){
         return tempPassword.orElse(-1).equals(pass);
     }
-
-
 }

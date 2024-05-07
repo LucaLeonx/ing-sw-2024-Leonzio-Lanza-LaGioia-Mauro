@@ -69,13 +69,13 @@ abstract class GameState  extends ServerState{
                 throw new InvalidOperationException("The position " + placement + "is not available");
             }
 
-            if(!playedCard.getSide(orientation).getPlayingRequirements().isSatisfied(field)){
+            if(!playedCard.getSide(orientation).isPlayable(field)){
                 throw new InvalidOperationException("Cannot play card: " + cardId + "on "
                 + orientation + "side: requirements not satisfied");
             }
 
             field.placeCard(playedCard, orientation, placement);
-            player.incrementScore(playedCard.getSide(orientation).getPlayingReward().getPoints(field));
+            player.incrementScore(playedCard.getSide(orientation).getRewardPoints(field));
 
             Deck selectedDeck = switch(drawChoice){
                 case DECK_RESOURCE, RESOURCE_CARD_1, RESOURCE_CARD_2 -> game.getResourceCardDeck();
@@ -130,9 +130,15 @@ abstract class GameState  extends ServerState{
         return InfoTranslator.convertToOpponentPlayerInfo(game.getPlayer(name));
     }
 
-    public abstract void transition();
-
     public DrawableCardsInfo getDrawableCardsInfo() {
         return InfoTranslator.convertToDrawableCardsInfo(game);
     }
+
+    public String getWinnerName(){
+        List<Player> leaderboard = game.getPlayers();
+        leaderboard.sort((p1, p2) -> (p1.getScore() > p2.getScore()) ? 1 : -1);
+        return leaderboard.getFirst().getNickname();
+    }
+
+    public abstract void transition();
 }

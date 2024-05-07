@@ -1,11 +1,15 @@
 package it.polimi.ingsw.model.card;
 
+import it.polimi.ingsw.model.Requirement;
+import it.polimi.ingsw.model.Reward;
+import it.polimi.ingsw.model.map.GameField;
+
 import java.util.*;
 
 public class CardSide {
 
-    private final RequirementFunction playingRequirements;
-    private final RewardFunction playingReward;
+    private final Requirement playingRequirements;
+    private final Reward playingReward;
     private final Set<Symbol> centerSymbol;
     private final Map<AnglePosition, Symbol> angles;
 
@@ -16,7 +20,7 @@ public class CardSide {
      * @param playingRequirements A function to determine whether a card can be played on this side on the map
      * @param playingReward A function that returns the number of points awarded when playing the card on this side on the map
      */
-    public CardSide(Set<Symbol> centerSymbol, Map<AnglePosition,Symbol> angles, RequirementFunction playingRequirements, RewardFunction playingReward){
+    public CardSide(Set<Symbol> centerSymbol, Map<AnglePosition,Symbol> angles, Requirement playingRequirements, Reward playingReward){
         this.centerSymbol = new HashSet<Symbol>(centerSymbol);
         this.angles = new HashMap<AnglePosition,Symbol>(angles);
         this.playingRequirements = playingRequirements;
@@ -59,7 +63,7 @@ public class CardSide {
      * evaluates whether it is possible to play the card on the current side
      * on the map
      */
-    public RequirementFunction getPlayingRequirements() {
+    public Requirement getPlayingRequirements() {
         return this.playingRequirements;
     }
 
@@ -69,10 +73,15 @@ public class CardSide {
      * earned when playing the card on the current side, depending on the other cards
      * on the map
      */
-    public RewardFunction getPlayingReward() {
+    public Reward getPlayingReward() {
         return this.playingReward;
     }
 
+    public int getRewardPoints(GameField field){
+        return playingReward.rewardCalculator().getPoints(field);
+    }
 
-
+    public boolean isPlayable(GameField field){
+        return playingRequirements.getRequirementCalculator().isSatisfied(field);
+    }
 }

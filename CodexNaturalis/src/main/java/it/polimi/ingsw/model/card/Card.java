@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.card;
 
 public class Card{
-
     private final int id;
     private final CardColor color;
     private final CardSide front;
