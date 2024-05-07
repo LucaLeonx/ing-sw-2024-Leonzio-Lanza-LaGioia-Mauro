@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.clientcontroller.*;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.*;
+import it.polimi.ingsw.model.map.GameField;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -48,7 +49,7 @@ public class TUI {
     //TODO: change also DrawMap with new structure (When we are sure this infoTraslator works properly)
 
 
-    public void drawMap(Player player) {
+    public void drawMap(ControlledPlayerInfo player, GameFieldInfo gamefield) {
 
         System.out.flush();
 
@@ -59,7 +60,7 @@ public class TUI {
         int maxY = 0; // y of the topmost  cell
 
         //
-        for (Point p : player.getField().getCards().keySet()) {
+        for (Point p : gamefield.placedCards().keySet()) {
             if (p.x() < minX) {
                 minX = p.x();
             }
@@ -95,35 +96,35 @@ public class TUI {
 
 
         //3 Populate maps with the correct card color and add central symbol if the orientation of the card is back
-        for(Point p: player.getField().getCards().keySet())
+        for(Point p: gamefield.placedCards().keySet())
         {
             String centralSymbol=animalSymbol; //We need this to keep track of what we need to put in the central cell of the card in case the card is plaued on the back.
             String cardColor=animalSymbol;
-            if(player.getField().getCards().get(p).getCardColor() == CardColor.SKYBLUE)
+            if(gamefield.placedCards().get(p).card().color() == CardColor.SKYBLUE)
             {
                 cardColor=blueSquareSymbol;
                 centralSymbol=animalSymbol;
             }
-            else if(player.getField().getCards().get(p).getCardColor() == CardColor.RED)
+            else if(gamefield.placedCards().get(p).card().color() == CardColor.RED)
             {
                 cardColor=redSquareSymbol;
                 centralSymbol=fungiSymbol;
             }
-            else if(player.getField().getCards().get(p).getCardColor() == CardColor.GREEN)
+            else if(gamefield.placedCards().get(p).card().color() == CardColor.GREEN)
             {
                 cardColor=greenSquareSymbol;
                 centralSymbol=plantSymbol;
             }
-            else if(player.getField().getCards().get(p).getCardColor() == CardColor.PURPLE)
+            else if(gamefield.placedCards().get(p).card().color() == CardColor.PURPLE)
             {
                 cardColor=purpleSquareSymbol;
                 centralSymbol=insectSymbol;
             }
-            else if(player.getField().getCards().get(p).getCardColor() == CardColor.WHITE)
+            else if(gamefield.placedCards().get(p).card().color() == CardColor.WHITE)
             {
                 cardColor=brownSquareSymbol; // initial card
             }
-            if(player.getField().getCardCells().get(p).visibleCardSide().equals(player.getField().getCards().get(p).getSide(CardOrientation.FRONT))) {
+            if(gamefield.placedCards().get(p).orientation().equals(CardOrientation.FRONT)) {
                 matrixMap[p.y() + abs(minY)][p.x() + abs(minX)] = cardColor;
             }
             else{
@@ -138,61 +139,61 @@ public class TUI {
 
 
         //4 Populate maps with the correct symbol.
-        for(Point p: player.getField().getAnglesSymbols().keySet())
+        for(Point p: gamefield.placedAngles().keySet())
         {
             String symbol=whiteSquareSymbol;
-            if(player.getField().getAnglesSymbols().get(p) == Symbol.ANIMAL)
+            if(gamefield.placedAngles().get(p).topSymbol() == Symbol.ANIMAL)
             {
                 symbol=animalSymbol;
             }
-            else if(player.getField().getAnglesSymbols().get(p) == Symbol.PLANT)
+            else if(gamefield.placedAngles().get(p).topSymbol() == Symbol.PLANT)
             {
                 symbol=plantSymbol;
             }
-            else if(player.getField().getAnglesSymbols().get(p) == Symbol.INSECT)
+            else if(gamefield.placedAngles().get(p).topSymbol() == Symbol.INSECT)
             {
                 symbol=insectSymbol;
             }
-            else if(player.getField().getAnglesSymbols().get(p) == Symbol.FUNGI)
+            else if(gamefield.placedAngles().get(p).topSymbol() == Symbol.FUNGI)
             {
                 symbol=fungiSymbol;
             }
-            else if(player.getField().getAnglesSymbols().get(p) == Symbol.INKWELL)
+            else if(gamefield.placedAngles().get(p).topSymbol()== Symbol.INKWELL)
             {
                 symbol=inkwellSymbol;
             }
-            else if(player.getField().getAnglesSymbols().get(p) == Symbol.MANUSCRIPT)
+            else if(gamefield.placedAngles().get(p).topSymbol() == Symbol.MANUSCRIPT)
             {
                 symbol=manuscriptSymbol;
             }
-            else if(player.getField().getAnglesSymbols().get(p) == Symbol.QUILL)
+            else if(gamefield.placedAngles().get(p).topSymbol() == Symbol.QUILL)
             {
                 symbol=quillSymbol;
             }
-            else if(player.getField().getAnglesSymbols().get(p) == Symbol.BLANK)
+            else if(gamefield.placedAngles().get(p).topSymbol() == Symbol.BLANK)
             {
                 symbol=whiteSquareSymbol;
             }
-            else if(player.getField().getAnglesSymbols().get(p) == Symbol.HIDDEN)
+            else if(gamefield.placedAngles().get(p).topSymbol() == Symbol.HIDDEN)
             {
-                Point TopPositionCard=player.getField().getAngleCells().get(p).topCardPosition();
-                if(player.getField().getCards().get(TopPositionCard).getCardColor()==CardColor.WHITE)
+                Point TopPositionCard=gamefield.placedAngles().get(p).topCardPosition();
+                if(gamefield.placedCards().get(TopPositionCard).card().color()==CardColor.WHITE)
                 {
                     symbol=brownSquareSymbol;
                 }
-                else if(player.getField().getCards().get(TopPositionCard).getCardColor()==CardColor.SKYBLUE)
+                else if(gamefield.placedCards().get(TopPositionCard).card().color()==CardColor.SKYBLUE)
                 {
                     symbol=blueSquareSymbol;
                 }
-                else if(player.getField().getCards().get(TopPositionCard).getCardColor()==CardColor.GREEN)
+                else if(gamefield.placedCards().get(TopPositionCard).card().color()==CardColor.GREEN)
                 {
                     symbol=greenSquareSymbol;
                 }
-                else if(player.getField().getCards().get(TopPositionCard).getCardColor()==CardColor.RED)
+                else if(gamefield.placedCards().get(TopPositionCard).card().color()==CardColor.RED)
                 {
                     symbol=redSquareSymbol;
                 }
-                else if(player.getField().getCards().get(TopPositionCard).getCardColor()==CardColor.PURPLE)
+                else if(gamefield.placedCards().get(TopPositionCard).card().color()==CardColor.PURPLE)
                 {
                     symbol=purpleSquareSymbol;
                 }
@@ -202,19 +203,19 @@ public class TUI {
 
         //5 we add the player token in the middle of the map
         String playerSymbol=blueCircleSymbol; //we need to initialize it to not get strange error.
-        if(player.getColor() == PlayerColor.BLUE)
+        if(player.color() == PlayerColor.BLUE)
         {
             playerSymbol=blueCircleSymbol;
         }
-        else if(player.getColor() == PlayerColor.RED)
+        else if(player.color() == PlayerColor.RED)
         {
             playerSymbol=redCircleSymbol;
         }
-        else if(player.getColor() == PlayerColor.GREEN)
+        else if(player.color() == PlayerColor.GREEN)
         {
             playerSymbol=greenCircleSymbol;
         }
-        else if(player.getColor() == PlayerColor.YELLOW)
+        else if(player.color() == PlayerColor.YELLOW)
         {
             playerSymbol=yellowCircleSymbol;
         }
@@ -230,7 +231,8 @@ public class TUI {
 
         //7 We print out what's underneath the starting symbol
         Point origin = new Point(0,0);
-        System.out.println("list of the symbol in the middle of the starting card: " + player.getField().getCardCells().get(origin).visibleCardSide().getCenterSymbols());
+        CardOrientation initialCardOrientation= gamefield.placedCards().get(origin).orientation();
+        System.out.println("list of the symbol in the middle of the starting card: " + gamefield.placedCards().get(origin).card().getSide(initialCardOrientation).centerSymbols());
     }
 
     public void showPoints(OpponentInfo player) {
@@ -239,6 +241,7 @@ public class TUI {
 
    public void showHand(ControlledPlayerInfo player)
     {
+        System.out.println("Your hand: ");
         String[][] matrixHand = new String[3][23]; // 20 columns for 3 cards +3 cells for tabs
 
         for(int i=0; i<3; i++) {
@@ -260,7 +263,7 @@ public class TUI {
         currentCard=sketchObjectiveCard(player.secretObjective());
         for(int j=0; j<3; j++){
             for(int k=0; k<5; k++) {
-                matrixHand[j][k+17]=currentCard[j][k];
+                matrixHand[j][k+18]=currentCard[j][k];
             }
         }
 
@@ -419,8 +422,6 @@ public class TUI {
     public String[][] sketchResourceCard(CardSideInfo card) {
         String[][] cardSketched = new String[3][5];
         cardSketched=sketchBackground(card.color());
-
-        // I don't need to check the orientation since all card displayed in hand/ in play are on the front side.
         for(int i=0; i<4; i++) {
             String symbol=blackSquareSymbol;
             AnglePosition angle = AnglePosition.UP_LEFT;
@@ -448,32 +449,7 @@ public class TUI {
                 y=2;
                 break;
             }
-            switch (card.angleSymbols().get(angle)){
-                case Symbol.ANIMAL:
-                    symbol=animalSymbol;
-                    break;
-                case Symbol.FUNGI:
-                    symbol=fungiSymbol;
-                    break;
-                case Symbol.PLANT:
-                    symbol=plantSymbol;
-                    break;
-                case Symbol.INSECT:
-                    symbol=insectSymbol;
-                    break;
-                case Symbol.QUILL:
-                    symbol=quillSymbol;
-                    break;
-                case Symbol.MANUSCRIPT:
-                    symbol=manuscriptSymbol;
-                    break;
-                case Symbol.INKWELL:
-                    symbol=inkwellSymbol;
-                    break;
-                case Symbol.BLANK:
-                    symbol=whiteSquareSymbol;
-                    break;
-            }
+            symbol=FromSymbolToString(card.angleSymbols().get(angle));
             // if it is hidden I don't want to change emoji from the background color.
             if(card.angleSymbols().get(angle) != Symbol.HIDDEN) {
                 cardSketched[y][x] = symbol;
@@ -482,12 +458,64 @@ public class TUI {
         return cardSketched;
     }
 
+
+
     public String[][] sketchGoldenCard(CardSideInfo card) {
         String[][] cardSketched = new String[3][5];
-        cardSketched=sketchBackground(card.color());
+        cardSketched=sketchResourceCard(card); // Golden card doesn't differ from Golden Card In terms of angles
+        for(int i=0; i<card.requiredSymbols().size(); i++){
+            if(i==0) {
+                cardSketched[2][1] = FromSymbolToString(card.requiredSymbols().get(i));
+            }
+            else if(i==1) {
+                cardSketched[2][2] = FromSymbolToString(card.requiredSymbols().get(i));
+            }
+            else if(i==2) {
+                cardSketched[2][3] = FromSymbolToString(card.requiredSymbols().get(i));
+            }
+            else if(i==3) {
+                cardSketched[1][2] = FromSymbolToString(card.requiredSymbols().get(i));
+            }
+            else if(i==4) {
+                cardSketched[1][1] = FromSymbolToString(card.requiredSymbols().get(i));
+            }
+        }
 
         return cardSketched;
     }
+
+    public String FromSymbolToString(Symbol symbol){
+        String CharSymbol=blackSquareSymbol;
+        switch (symbol){
+            case Symbol.ANIMAL:
+                CharSymbol=animalSymbol;
+                break;
+            case Symbol.FUNGI:
+                CharSymbol=fungiSymbol;
+                break;
+            case Symbol.PLANT:
+                CharSymbol=plantSymbol;
+                break;
+            case Symbol.INSECT:
+                CharSymbol=insectSymbol;
+                break;
+            case Symbol.QUILL:
+                CharSymbol=quillSymbol;
+                break;
+            case Symbol.MANUSCRIPT:
+                CharSymbol=manuscriptSymbol;
+                break;
+            case Symbol.INKWELL:
+                CharSymbol=inkwellSymbol;
+                break;
+            case Symbol.BLANK:
+                CharSymbol=whiteSquareSymbol;
+                break;
+        }
+        return CharSymbol;
+    }
+
+
 
 
     public String[][] sketchObjectiveCard(ObjectiveInfo card){

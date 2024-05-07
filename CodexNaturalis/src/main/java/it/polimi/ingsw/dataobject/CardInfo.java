@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.card.CardOrientation;
 import java.io.Serializable;
 
 public record CardInfo(int id,
+                       CardColor color,
                        CardSideInfo front,
                        CardSideInfo back) implements Serializable {
     public CardSideInfo getSide(CardOrientation orientation){

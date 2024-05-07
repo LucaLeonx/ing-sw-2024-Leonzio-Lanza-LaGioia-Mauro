@@ -54,11 +54,11 @@ public abstract class InfoTranslator {
                 convertToFieldInfo(player.getField()));
     }
 
-    private static ObjectiveInfo convertToObjectiveInfo(ObjectiveCard secretObjective) {
+    public static ObjectiveInfo convertToObjectiveInfo(ObjectiveCard secretObjective) {
         return new ObjectiveInfo(secretObjective.getId());
     }
 
-    private static GameFieldInfo convertToFieldInfo(GameField field) {
+    public static GameFieldInfo convertToFieldInfo(GameField field) {
         HashMap<Point, CardCellInfo> cardCellInfoMap = new HashMap<>();
         HashMap<Point, AngleCellInfo> angleCellInfoMap = new HashMap<>();
 
@@ -91,8 +91,7 @@ public abstract class InfoTranslator {
     public static CardInfo convertToCardInfo(Card card, GameField field){
         CardSideInfo front = convertToCardSideInfo(card, FRONT, card.getSide(FRONT).getPlayingRequirements().isSatisfied(field));
         CardSideInfo back = convertToCardSideInfo(card, BACK, card.getSide(BACK).getPlayingRequirements().isSatisfied(field));
-
-        return new CardInfo(card.getId(), front, back);
+        return new CardInfo(card.getId(), card.getCardColor(), front, back);
     }
 
     public static CardSideInfo convertToCardSideInfo(Card card, CardOrientation orientation, boolean isPlayable){

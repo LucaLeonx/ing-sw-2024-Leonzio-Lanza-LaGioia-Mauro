@@ -17,6 +17,7 @@ public class TUITest extends TestCase {
     private List<Card> resourceCards;
     private List<Card> goldenCards;
     private List<Card> initialCards;
+    private List<ObjectiveCard> objectiveCards;
     private Player playerTestDiagonal;
     private Player M;
     private Player T;
@@ -28,6 +29,7 @@ public class TUITest extends TestCase {
             resourceCards = CardFactory.getResourceCards();
             goldenCards = CardFactory.getGoldCards();
             initialCards = CardFactory.getInitialCards();
+            objectiveCards = CardFactory.getObjectiveCards();
         } catch (Exception e){
             e.printStackTrace();
             fail();
@@ -94,37 +96,36 @@ public class TUITest extends TestCase {
 
     // To see the real image of the maps go to Notes-->ExampleMaps
     public void testTUIWithDiagonalMap(){
-        new GameFieldTest().checkInvariants(T.getField());
-        tui.drawMap(playerTestDiagonal);
+        new GameFieldTest().checkInvariants(playerTestDiagonal.getField());
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(playerTestDiagonal), InfoTranslator.convertToFieldInfo(playerTestDiagonal.getField()));
     }
 
     public void testTUIWithMinnieMap(){
         new GameFieldTest().checkInvariants(M.getField());
-        tui.drawMap(M);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(M), InfoTranslator.convertToFieldInfo(M.getField()));
     }
 
     public void testTUIWithPaperinaMap(){
-        tui.drawMap(P);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(P), InfoTranslator.convertToFieldInfo(P.getField()));
     }
 
 
     public void testTUIWithTopolinoMap(){
         new GameFieldTest().checkInvariants(T.getField());
-        tui.drawMap(T);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()));
     }
 
     public void testShowHand(){
         T.addCard(resourceCards.get(0));
         T.addCard(resourceCards.get(1));
-        T.addCard(resourceCards.get(2));
+        T.addCard(goldenCards.get(13));
+        T.setSecretObjective(objectiveCards.get(1));
         tui.showHand(InfoTranslator.convertToControlledPlayerInfo(T));
 
     }
 
     public void testShowCardsOnTable(){
-        //List cardsInHand =new ArrayList<CardInfo>();
-        //cardsInHand.add(new CardInfo(1,CardColor.RED,new CardSideInfo(),new CardSideInfo()));
-        //ControlledPlayerInfo Topolino = new ControlledPlayerInfo("Topolino", PlayerColor.RED, new ObjectiveInfo(1, "b"), );
+
     }
 
 
