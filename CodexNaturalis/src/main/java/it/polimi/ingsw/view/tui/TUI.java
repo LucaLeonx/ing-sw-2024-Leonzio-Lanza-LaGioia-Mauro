@@ -454,6 +454,10 @@ public class TUI {
                 cardSketched[y][x] = symbol;
             }
         }
+        if(card.reward() == RewardType.ONE_POINT) {
+            cardSketched[0][2]=onePointSymbol;
+        }
+
         return cardSketched;
     }
 
@@ -478,6 +482,39 @@ public class TUI {
             else if(i==4) {
                 cardSketched[1][1] = FromSymbolToString(card.requiredSymbols().get(i));
             }
+        }
+
+
+        switch (card.reward()) {
+            case RewardType.ONE_POINT:
+                cardSketched[0][2]=onePointSymbol;
+                break;
+            case RewardType.THREE_POINTS:
+                cardSketched[0][2]=threePointsSymbol;
+                break;
+            case RewardType.FIVE_POINTS:
+                cardSketched[0][2]=fivePointsSymbol;
+                break;
+            case RewardType.POINT_PER_QUILL:
+                cardSketched[0][1]=onePointSymbol;
+                cardSketched[0][2]=forEachSymbol;
+                cardSketched[0][3]=quillSymbol;
+                break;
+            case RewardType.POINT_PER_INKWELL:
+                cardSketched[0][1]=onePointSymbol;
+                cardSketched[0][2]=forEachSymbol;
+                cardSketched[0][3]=inkwellSymbol;
+                break;
+            case RewardType.POINT_PER_MANUSCRIPT:
+                cardSketched[0][1]=onePointSymbol;
+                cardSketched[0][2]=forEachSymbol;
+                cardSketched[0][3]=manuscriptSymbol;
+                break;
+            case RewardType.POINT_PER_COVEREDANGLE:
+                cardSketched[0][1]=twoPointsSymbol;
+                cardSketched[0][2]=forEachSymbol;
+                cardSketched[0][3]=coveredAnglesSymbol;
+                break;
         }
 
         return cardSketched;

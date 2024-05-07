@@ -127,7 +127,7 @@ public class TUITest extends TestCase {
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()));
     }
 
-    public void testShowHand(){
+    public void testShowHand1(){
         T.addCard(resourceCards.get(0));
         T.addCard(resourceCards.get(1));
         T.addCard(goldenCards.get(13));
@@ -137,7 +137,7 @@ public class TUITest extends TestCase {
     }
 
     public void testShowCardsOnTable() throws FileNotFoundException {
-       Game game = new Game(List.of("Pippo", "Paperino", "Pluto", "Clarabella"));
+       Game game = new Game(List.of("Pippo", "Paperino", "Pluto", "Clarabella"), );
        game.getVisibleCards().put(DrawChoice.DECK_GOLD, CardFactory.getResourceCards().get(10));
        DrawableCardsInfo drawableCards = InfoTranslator.convertToDrawableCardsInfo(game);
        //showDrawableCards(drawableCards);
