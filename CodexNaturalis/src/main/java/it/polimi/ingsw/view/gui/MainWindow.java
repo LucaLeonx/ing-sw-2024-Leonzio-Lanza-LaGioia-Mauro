@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.gui;
 import javax.swing.*;
 import java.awt.*;
 
-
 public class MainWindow extends JFrame {
     private static CardLayout cardLayout;
     private static JPanel cardPanel;
@@ -19,14 +18,13 @@ public class MainWindow extends JFrame {
         cardPanel = new JPanel(cardLayout);
 
         ChooseConnectionPanel chooseConnectionPanel = new ChooseConnectionPanel();
-        ChooseLoginPanel chooseloginPanel= new ChooseLoginPanel();
+        ChooseLoginPanel chooseLoginPanel= new ChooseLoginPanel();
         LoginPanel loginPanel = new LoginPanel();
         RegisterPanel registerPanel = new RegisterPanel();
-        cardPanel.add(chooseConnectionPanel);
-        cardPanel.add(chooseloginPanel);
-        cardPanel.add(loginPanel);
-        cardPanel.add(registerPanel);
-
+        cardPanel.add("chooseConnectionPanel",chooseConnectionPanel);
+        cardPanel.add("chooseLoginPanel",chooseLoginPanel);
+        cardPanel.add("loginPanel",loginPanel);
+        cardPanel.add("registerPanel",registerPanel);
         add(cardPanel);
 
     }
@@ -45,6 +43,10 @@ public class MainWindow extends JFrame {
 
     public static void goToPreviousWindow(){
         cardLayout.previous(cardPanel);
+    }
+
+    public static void goToWindow(String name) {
+        cardLayout.show(cardPanel, name);
     }
 
     public static void main(String[] args) {
