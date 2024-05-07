@@ -1,9 +1,6 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.controller.clientcontroller.CardInfo;
-import it.polimi.ingsw.controller.clientcontroller.ControlledPlayerInfo;
-import it.polimi.ingsw.controller.clientcontroller.ObjectiveInfo;
-import it.polimi.ingsw.controller.clientcontroller.OpponentInfo;
+import it.polimi.ingsw.controller.clientcontroller.*;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.*;
@@ -240,7 +237,7 @@ public class TUI {
         System.out.println("Player " + player.nickname() + " has "+ player.score() + " points");
     }
 
- /*   public void showHand(ControlledPlayerInfo player)
+   public void showHand(ControlledPlayerInfo player)
     {
         String[][] matrixHand = new String[3][23]; // 20 columns for 3 cards +3 cells for tabs
 
@@ -252,7 +249,7 @@ public class TUI {
 
         for(int i=0; i<3; i++) {
             String[][] currentCard = new String[3][5];
-            currentCard=sketchCard(player.cards().get(i));
+            currentCard=sketchCard(player.cardsInHand().get(i).front());
             for(int j=0; j<3; j++){
                 for(int k=0; k<5; k++) {
                     matrixHand[j][k+6*i]=currentCard[j][k];
@@ -276,16 +273,14 @@ public class TUI {
 
     }
 
-    public void showCardsOnTable(CardColor colorGoldDeck, CardColor colorResourceDeck)
+    public void showCardsOnTable(ObjectiveInfo objectiveCard1, ObjectiveInfo objectiveCard2, DrawableCardsInfo drawable)
     {
-
-        CardInfo resourceCard1=game.getDrawableCards().get(DrawChoice.RESOURCE_CARD_1);
-        CardInfo resourceCard2=game.getDrawableCards().get(DrawChoice.RESOURCE_CARD_2);
-        CardInfo goldenCard1=game.getDrawableCards().get(DrawChoice.GOLD_CARD_1);
-        CardInfo goldenCard2=game.getDrawableCards().get(DrawChoice.GOLD_CARD_2);
-        ObjectiveInfo objectiveCard1=game.getCommonObjectiveCards().get(0);
-        ObjectiveInfo objectiveCard2=game.getCommonObjectiveCards().get(1);
-
+        CardColor colorGoldDeck=drawable.drawableCards().get(DrawChoice.DECK_GOLD).color();
+        CardColor colorResourceDeck=drawable.drawableCards().get(DrawChoice.DECK_GOLD).color();
+        CardSideInfo resourceCard1=drawable.drawableCards().get(DrawChoice.RESOURCE_CARD_1);
+        CardSideInfo resourceCard2=drawable.drawableCards().get(DrawChoice.RESOURCE_CARD_2);
+        CardSideInfo goldenCard1=drawable.drawableCards().get(DrawChoice.GOLD_CARD_1);
+        CardSideInfo goldenCard2=drawable.drawableCards().get(DrawChoice.GOLD_CARD_2);
 
         String[][] decks = new String[3][11]; // 11 columns for 2 cards +1 cells for tabs
         String[][] drawableCards1 = new String[3][11]; // 1st row of card that are face up on the table to draw from
@@ -306,8 +301,8 @@ public class TUI {
         String[][] Card1 = new String[3][5];
         String[][] Card2 = new String[3][5];
 
-        Card1=sketchGoldenDeck();
-        Card2=sketchResourceDeck();
+        Card1=sketchGoldenDeck(colorGoldDeck);
+        Card2=sketchResourceDeck(colorResourceDeck);
 
         for(int j=0; j<3; j++){
             for(int k=0; k<5; k++) {
@@ -380,11 +375,11 @@ public class TUI {
         System.out.print("\n\n");
     }
 
-    public String[][] sketchCard(CardInfo card){
-        if(card.id()<=40) {
+    public String[][] sketchCard(CardSideInfo card){
+        if(card.Type()==CardType.RESOURCE) {
             return sketchResourceCard(card);
         }
-        else if(card.id()>40 && card.id()<=80) {
+        else if(card.Type()==CardType.GOLD) {
             return sketchGoldenCard(card);
         }
         else {
@@ -421,7 +416,7 @@ public class TUI {
         return  cardSketched;
     }
 
-    public String[][] sketchResourceCard(CardInfo card) {
+    public String[][] sketchResourceCard(CardSideInfo card) {
         String[][] cardSketched = new String[3][5];
         cardSketched=sketchBackground(card.color());
 
@@ -453,7 +448,7 @@ public class TUI {
                 y=2;
                 break;
             }
-            switch (card.getSide(CardOrientation.FRONT).angleSymbols().get(angle)){
+            switch (card.angleSymbols().get(angle)){
                 case Symbol.ANIMAL:
                     symbol=animalSymbol;
                     break;
@@ -480,15 +475,16 @@ public class TUI {
                     break;
             }
             // if it is hidden I don't want to change emoji from the background color.
-            if(card.getSide(CardOrientation.FRONT).angleSymbols().get(angle) != Symbol.HIDDEN) {
+            if(card.angleSymbols().get(angle) != Symbol.HIDDEN) {
                 cardSketched[y][x] = symbol;
             }
         }
         return cardSketched;
     }
 
-    public String[][] sketchGoldenCard(CardInfo card) {
+    public String[][] sketchGoldenCard(CardSideInfo card) {
         String[][] cardSketched = new String[3][5];
+        cardSketched=sketchBackground(card.color());
 
         return cardSketched;
     }
@@ -654,6 +650,6 @@ public class TUI {
         }
         sketchedCard[1][2]=symbol;
         return sketchedCard;
-    }*/
+    }
 
 }

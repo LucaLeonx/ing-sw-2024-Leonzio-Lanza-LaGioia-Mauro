@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.clientcontroller.CardInfo;
 import it.polimi.ingsw.controller.clientcontroller.CardSideInfo;
 import it.polimi.ingsw.controller.clientcontroller.ControlledPlayerInfo;
 import it.polimi.ingsw.controller.clientcontroller.ObjectiveInfo;
+import it.polimi.ingsw.controller.servercontroller.InfoTranslator;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.AngleCell;
@@ -23,7 +24,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.*;
 
-/*public class TUITest extends TestCase {
+public class TUITest extends TestCase {
 
     private List<Card> resourceCards;
     private List<Card> goldenCards;
@@ -43,15 +44,15 @@ import java.util.*;
             e.printStackTrace();
             fail();
         }
-        playerTestDiagonal=new Player("Diagonale", PlayerColor.RED, new ObjectiveCard(0, null));
+        playerTestDiagonal=new Player("Diagonale", PlayerColor.RED);
         playerTestDiagonal.getField().placeCard(initialCards.get(0), CardOrientation.BACK, new Point(0,0));
         playerTestDiagonal.getField().placeCard(resourceCards.get(0), CardOrientation.FRONT, new Point(2,2));
         playerTestDiagonal.getField().placeCard(resourceCards.get(1), CardOrientation.FRONT, new Point(4,4));
         //playerTestDiagonal.getField().placeCard(resourceCards.get(2), CardOrientation.FRONT, new Point(6,6));
 
-        T=new Player("Topolino", PlayerColor.RED, new ObjectiveCard(0, null));
-        M=new Player("Minnie", PlayerColor.BLUE, new ObjectiveCard(0, null));
-        P=new Player("Paperina", PlayerColor.YELLOW, new ObjectiveCard(0, null));
+        T=new Player("Topolino", PlayerColor.RED);
+        M=new Player("Minnie", PlayerColor.BLUE);
+        P=new Player("Paperina", PlayerColor.YELLOW);
 
         M.getField().placeCard(initialCards.get(2), CardOrientation.FRONT, new Point(0,0));
         M.getField().placeCard(resourceCards.get(18), CardOrientation.FRONT, new Point(2, -2));
@@ -125,9 +126,10 @@ import java.util.*;
     }
 
     public void testShowHand(){
-        //T.addCard(resourceCards.get(0));
-        //T.addCard(resourceCards.get(1));
-        //T.addCard(resourceCards.get(2));
+        T.addCard(resourceCards.get(0));
+        T.addCard(resourceCards.get(1));
+        T.addCard(resourceCards.get(2));
+        tui.showHand(InfoTranslator.convertToControlledPlayerInfo(T));
 
     }
 
@@ -139,4 +141,4 @@ import java.util.*;
 
 
 
-}*/
+}

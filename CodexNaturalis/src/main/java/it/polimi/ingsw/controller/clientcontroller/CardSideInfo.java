@@ -10,6 +10,7 @@ public record CardSideInfo(
                            HashSet<Symbol> centerSymbols,
                            CardColor color,
                            CardOrientation side,
+                           CardType Type,
                            boolean isPlayable,
                            ArrayList<Symbol> requiredSymbols) implements Serializable {
 }
