@@ -14,11 +14,10 @@ public class EndState extends GameState{
 
     public EndState(Game game, String controlledPlayer, RMIGameManagerImpl gameManager){
         super(game, controlledPlayer, gameManager);
-        for(Player player : game.getPlayers()){
-            player.incrementScore(player.getSecretObjective().getRewardFunction().getPoints(player.getField()));
-            player.incrementScore(game.getCommonObjectiveCards().getFirst().getRewardFunction().getPoints(player.getField()));
-            player.incrementScore(game.getCommonObjectiveCards().getLast().getRewardFunction().getPoints(player.getField()));
-        }
+        Player player = game.getPlayer(controlledPlayer);
+        player.incrementScore(player.getSecretObjective().getRewardFunction().getPoints(player.getField()));
+        player.incrementScore(game.getCommonObjectiveCards().getFirst().getRewardFunction().getPoints(player.getField()));
+        player.incrementScore(game.getCommonObjectiveCards().getLast().getRewardFunction().getPoints(player.getField()));
     }
     @Override
     public void transition() {

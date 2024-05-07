@@ -1,6 +1,7 @@
 package it.polimi.ingsw.networking;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public record LobbyInfo (int id,
