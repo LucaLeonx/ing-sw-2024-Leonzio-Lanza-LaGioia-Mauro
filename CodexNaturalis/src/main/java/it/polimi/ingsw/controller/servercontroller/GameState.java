@@ -69,13 +69,13 @@ abstract class GameState  extends ServerState{
                 throw new InvalidOperationException("The position " + placement + "is not available");
             }
 
-            if(!playedCard.getSide(orientation).getPlayingRequirements().isSatisfied(field)){
+            if(!playedCard.getSide(orientation).isPlayable(field)){
                 throw new InvalidOperationException("Cannot play card: " + cardId + "on "
                 + orientation + "side: requirements not satisfied");
             }
 
             field.placeCard(playedCard, orientation, placement);
-            player.incrementScore(playedCard.getSide(orientation).getPlayingReward().getPoints(field));
+            player.incrementScore(playedCard.getSide(orientation).getRewardPoints(field));
 
             Deck selectedDeck = switch(drawChoice){
                 case DECK_RESOURCE, RESOURCE_CARD_1, RESOURCE_CARD_2 -> game.getResourceCardDeck();

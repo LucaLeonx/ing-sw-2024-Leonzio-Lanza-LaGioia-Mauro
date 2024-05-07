@@ -10,6 +10,8 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import it.polimi.ingsw.model.Requirement;
+import it.polimi.ingsw.model.Reward;
 
 import static it.polimi.ingsw.model.card.GameFunctionFactory.*;
 
@@ -97,8 +99,8 @@ class ResourceCardAdapter extends TypeAdapter<Card[]>{
                             AnglePosition.UP_RIGHT, Symbol.BLANK,
                             AnglePosition.DOWN_LEFT, Symbol.BLANK,
                             AnglePosition.DOWN_RIGHT, Symbol.BLANK),
-                    createRequiredSymbolsFunction(new HashMap<Symbol,Integer>()),
-                    createPointsRewardFunction(0)
+                    new Requirement(new HashMap<Symbol,Integer>()),
+                    new Reward("NONE", createPointsRewardFunction(0))
             );
 
             reader.beginObject();
@@ -133,8 +135,8 @@ class ResourceCardAdapter extends TypeAdapter<Card[]>{
                 front = new CardSide(
                         new HashSet<Symbol>(),
                         angle,
-                        createRequiredSymbolsFunction(new HashMap<Symbol,Integer>()),
-                        createPointsRewardFunction(reward)
+                        new Requirement(new HashMap<Symbol,Integer>()),
+                        new Reward((reward == 0) ? "NONE" : "POINTS", createPointsRewardFunction(reward))
                 );
 
                 reader.endObject();
@@ -207,8 +209,8 @@ class InitialCardAdapter extends TypeAdapter<Card[]>{
                 front = new CardSide(
                         centerSymbols,
                         angle,
-                        createRequiredSymbolsFunction(new HashMap<Symbol,Integer>()),
-                        createPointsRewardFunction(0)
+                        new Requirement(new HashMap<Symbol,Integer>()),
+                        new Reward("NONE", createPointsRewardFunction(0))
                 );
 
                 reader.endObject();
@@ -231,8 +233,8 @@ class InitialCardAdapter extends TypeAdapter<Card[]>{
                 back = new CardSide(
                         new HashSet<Symbol>(),
                         angle,
-                        createRequiredSymbolsFunction(new HashMap<Symbol,Integer>()),
-                        createPointsRewardFunction(0)
+                        new Requirement(new HashMap<Symbol,Integer>()),
+                        new Reward("NONE", createPointsRewardFunction(0))
                 );
                 reader.endObject();
                 token = reader.peek();
@@ -274,8 +276,8 @@ class GoldCardAdapter extends TypeAdapter<Card[]>{
                             AnglePosition.UP_RIGHT, Symbol.BLANK,
                             AnglePosition.DOWN_LEFT, Symbol.BLANK,
                             AnglePosition.DOWN_RIGHT, Symbol.BLANK),
-                    createRequiredSymbolsFunction(new HashMap<Symbol, Integer>()),
-                    createPointsRewardFunction(0)
+                    new Requirement(new HashMap<>()),
+                    new Reward("NONE", createPointsRewardFunction(0))
             );
 
             reader.beginObject();
@@ -342,9 +344,8 @@ class GoldCardAdapter extends TypeAdapter<Card[]>{
                 front = new CardSide(
                         new HashSet<Symbol>(),
                         angle,
-                        createRequiredSymbolsFunction(requiredSymbols),
-                        reward
-                );
+                        new Requirement(requiredSymbols),
+                        new Reward(tipoReward, reward));
 
                 reader.endObject();
                 //typeName = reader.nextName();

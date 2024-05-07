@@ -1,6 +1,8 @@
 package it.polimi.ingsw.test.model.card;
 
 
+import it.polimi.ingsw.model.Requirement;
+import it.polimi.ingsw.model.Reward;
 import it.polimi.ingsw.model.card.AnglePosition;
 import it.polimi.ingsw.model.card.CardSide;
 import it.polimi.ingsw.model.card.GameFunctionFactory;
@@ -29,8 +31,8 @@ public class CardSideTest extends TestCase {
                            entry(DOWN_RIGHT, BLANK),
                            entry(DOWN_LEFT, BLANK)
                    ),
-                   GameFunctionFactory.createRequiredSymbolsFunction(new HashMap<>()),
-                   GameFunctionFactory.createPointsRewardFunction(0));
+                   new Requirement(new HashMap<>()),
+                   new Reward("NONE", GameFunctionFactory.createPointsRewardFunction(0)));
 
            initialCardSide = new CardSide(new HashSet<>(List.of(FUNGI, PLANT, ANIMAL)),
                    Map.ofEntries(
@@ -39,8 +41,8 @@ public class CardSideTest extends TestCase {
                         entry(DOWN_RIGHT, HIDDEN),
                         entry(DOWN_LEFT, HIDDEN)
         ),
-                GameFunctionFactory.createRequiredSymbolsFunction(new HashMap<>()),
-                GameFunctionFactory.createPointsRewardFunction(0));
+                   new Requirement(new HashMap<>()),
+                   new Reward("NONE", GameFunctionFactory.createPointsRewardFunction(0)));
 
         goldenCardSide = new CardSide(
                 new HashSet<>(List.of(ANIMAL)),
@@ -50,10 +52,10 @@ public class CardSideTest extends TestCase {
                         entry(DOWN_RIGHT, QUILL),
                         entry(DOWN_LEFT, BLANK)
                 ),
-                GameFunctionFactory.createRequiredSymbolsFunction(new HashMap<>(Map.ofEntries(
+                new Requirement(new HashMap<>(Map.ofEntries(
                         entry(FUNGI, 1)
                 ))),
-                GameFunctionFactory.createPointsRewardFunction(7));
+                new Reward("POINTS", GameFunctionFactory.createPointsRewardFunction(7)));
     }
 
     public void testGetCenterSymbols(){
@@ -95,10 +97,10 @@ public class CardSideTest extends TestCase {
 
         GameField field = new GameField(); // Empty GameField just to test the getters
 
-        assertTrue(resourceCardSide.getPlayingRequirements().isSatisfied(field));
-        assertEquals(resourceCardSide.getPlayingReward().getPoints(field), 0);
+        assertTrue(resourceCardSide.isPlayable(field));
+        assertEquals(resourceCardSide.getRewardPoints(field), 0);
 
-        assertFalse(goldenCardSide.getPlayingRequirements().isSatisfied(field));
-        assertEquals(goldenCardSide.getPlayingReward().getPoints(field), 7);
+        assertFalse(goldenCardSide.isPlayable(field));
+        assertEquals(goldenCardSide.getRewardPoints(field), 7);
     }
 }

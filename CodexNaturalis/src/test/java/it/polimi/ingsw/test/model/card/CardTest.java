@@ -1,5 +1,7 @@
 package it.polimi.ingsw.test.model.card;
 
+import it.polimi.ingsw.model.Requirement;
+import it.polimi.ingsw.model.Reward;
 import it.polimi.ingsw.model.card.*;
 import junit.framework.TestCase;
 import org.junit.*;
@@ -24,8 +26,8 @@ public class CardTest extends TestCase {
                         entry(DOWN_RIGHT, BLANK),
                         entry(DOWN_LEFT, BLANK)
                 ),
-                GameFunctionFactory.createRequiredSymbolsFunction(new HashMap<>()),
-                GameFunctionFactory.createPointsRewardFunction(0));
+                new Requirement(new HashMap<>()),
+                new Reward("NONE", GameFunctionFactory.createPointsRewardFunction(0)));
         CardSide frontSide = new CardSide(
                 new HashSet<>(List.of(ANIMAL)),
                 Map.ofEntries(
@@ -34,11 +36,11 @@ public class CardTest extends TestCase {
                         entry(DOWN_RIGHT, QUILL),
                         entry(DOWN_LEFT, BLANK)
                 ),
-                GameFunctionFactory.createRequiredSymbolsFunction(new HashMap<>(Map.ofEntries(
+                new Requirement(new HashMap<>(Map.ofEntries(
                         entry(ANIMAL, 2),
                         entry(INSECT, 1)
                 ))),
-                GameFunctionFactory.createPointsRewardFunction(3));
+                new Reward("POINTS", GameFunctionFactory.createPointsRewardFunction(3)));
 
         card = new Card(11, CardColor.SKYBLUE, frontSide, backSide);
     }
