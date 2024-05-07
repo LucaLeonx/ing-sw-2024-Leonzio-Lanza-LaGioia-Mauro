@@ -12,6 +12,7 @@ import junit.framework.TestCase;
 
 import java.util.*;
 
+import static it.polimi.ingsw.dataobject.RewardType.*;
 import static java.util.Map.entry;
 import static it.polimi.ingsw.model.card.Symbol.*;
 import static it.polimi.ingsw.model.card.AnglePosition.*;
@@ -32,7 +33,7 @@ public class CardSideTest extends TestCase {
                            entry(DOWN_LEFT, BLANK)
                    ),
                    new Requirement(new HashMap<>()),
-                   new Reward("NONE", GameFunctionFactory.createPointsRewardFunction(0)));
+                   new Reward(NONE, GameFunctionFactory.createPointsRewardFunction(0)));
 
            initialCardSide = new CardSide(new HashSet<>(List.of(FUNGI, PLANT, ANIMAL)),
                    Map.ofEntries(
@@ -42,7 +43,7 @@ public class CardSideTest extends TestCase {
                         entry(DOWN_LEFT, HIDDEN)
         ),
                    new Requirement(new HashMap<>()),
-                   new Reward("NONE", GameFunctionFactory.createPointsRewardFunction(0)));
+                   new Reward(NONE, GameFunctionFactory.createPointsRewardFunction(0)));
 
         goldenCardSide = new CardSide(
                 new HashSet<>(List.of(ANIMAL)),
@@ -55,7 +56,8 @@ public class CardSideTest extends TestCase {
                 new Requirement(new HashMap<>(Map.ofEntries(
                         entry(FUNGI, 1)
                 ))),
-                new Reward("POINTS", GameFunctionFactory.createPointsRewardFunction(7)));
+                // Obviously wrong
+                new Reward(ONE_POINT, GameFunctionFactory.createPointsRewardFunction(0)));
     }
 
     public void testGetCenterSymbols(){

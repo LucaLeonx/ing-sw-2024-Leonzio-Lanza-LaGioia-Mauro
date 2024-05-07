@@ -13,5 +13,6 @@ public record CardSideInfo(
                            CardOrientation side,
                            CardType Type,
                            boolean isPlayable,
-                           ArrayList<Symbol> requiredSymbols) implements Serializable {
+                           ArrayList<Symbol> requiredSymbols,
+                           RewardType reward) implements Serializable {
 }

@@ -10,9 +10,11 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import it.polimi.ingsw.dataobject.RewardType;
 import it.polimi.ingsw.model.Requirement;
 import it.polimi.ingsw.model.Reward;
 
+import static it.polimi.ingsw.dataobject.RewardType.*;
 import static it.polimi.ingsw.model.card.GameFunctionFactory.*;
 
 public abstract class CardFactory {
@@ -36,6 +38,24 @@ public abstract class CardFactory {
     private void setupObjective() throws FileNotFoundException{
 
     }
+
+    protected static RewardType getRewardEnum(String type, int points){
+        return switch(type){
+            case "DEFAULT" -> switch (points){
+                case 0 -> NONE;
+                case 1 -> ONE_POINT;
+                case 3 -> THREE_POINTS;
+                case 5 -> FIVE_POINTS;
+                default -> throw new IllegalStateException("Unexpected value: " + points);
+            };
+            case "QUILL" -> POINT_PER_QUILL;
+            case "INKWELL" -> POINT_PER_INKWELL;
+            case "MANUSCRIPT" -> POINT_PER_MANUSCRIPT;
+            case "COVEREDANGLES" -> POINTS_PER_COVERED_ANGLE;
+            default -> throw new IllegalStateException("Unexpected value: " + type);
+        };
+    }
+
     public static List<Card> getInitialCards() throws FileNotFoundException {
         FileReader reader= new FileReader("src/main/java/it/polimi/ingsw/model/card/JsonFiles/Initial.json");
         GsonBuilder builder = new GsonBuilder();
@@ -100,7 +120,7 @@ class ResourceCardAdapter extends TypeAdapter<Card[]>{
                             AnglePosition.DOWN_LEFT, Symbol.BLANK,
                             AnglePosition.DOWN_RIGHT, Symbol.BLANK),
                     new Requirement(new HashMap<Symbol,Integer>()),
-                    new Reward("NONE", createPointsRewardFunction(0))
+                    new Reward(NONE, createPointsRewardFunction(0))
             );
 
             reader.beginObject();
@@ -136,7 +156,7 @@ class ResourceCardAdapter extends TypeAdapter<Card[]>{
                         new HashSet<Symbol>(),
                         angle,
                         new Requirement(new HashMap<Symbol,Integer>()),
-                        new Reward((reward == 0) ? "NONE" : "POINTS", createPointsRewardFunction(reward))
+                        new Reward((reward == 0) ? NONE : CardFactory.getRewardEnum("DEFAULT", reward), createPointsRewardFunction(reward))
                 );
 
                 reader.endObject();
@@ -210,7 +230,7 @@ class InitialCardAdapter extends TypeAdapter<Card[]>{
                         centerSymbols,
                         angle,
                         new Requirement(new HashMap<Symbol,Integer>()),
-                        new Reward("NONE", createPointsRewardFunction(0))
+                        new Reward(NONE, createPointsRewardFunction(0))
                 );
 
                 reader.endObject();
@@ -234,7 +254,7 @@ class InitialCardAdapter extends TypeAdapter<Card[]>{
                         new HashSet<Symbol>(),
                         angle,
                         new Requirement(new HashMap<Symbol,Integer>()),
-                        new Reward("NONE", createPointsRewardFunction(0))
+                        new Reward(NONE, createPointsRewardFunction(0))
                 );
                 reader.endObject();
                 token = reader.peek();
@@ -277,7 +297,7 @@ class GoldCardAdapter extends TypeAdapter<Card[]>{
                             AnglePosition.DOWN_LEFT, Symbol.BLANK,
                             AnglePosition.DOWN_RIGHT, Symbol.BLANK),
                     new Requirement(new HashMap<>()),
-                    new Reward("NONE", createPointsRewardFunction(0))
+                    new Reward(NONE, createPointsRewardFunction(0))
             );
 
             reader.beginObject();
@@ -301,13 +321,15 @@ class GoldCardAdapter extends TypeAdapter<Card[]>{
                 reader.beginObject();
                 reader.nextName();//Rewardtype
                 String tipoReward = reader.nextString();
+                int pointsToAward = 0;
                 if(tipoReward.equals("COVEREDANGLES")){
                     reader.nextName();
                     reader.nextInt();
                     reward = createCoveredAnglesFunction(id);
                 } else if (tipoReward.equals("DEFAULT")) {
                     reader.nextName();
-                    reward = createPointsRewardFunction(reader.nextInt());
+                    pointsToAward = reader.nextInt();
+                    reward = createPointsRewardFunction(pointsToAward);
                 } else{
                     reward = createCountSymbolsFunction(Symbol.valueOf(tipoReward));
                     reader.nextName();
@@ -345,7 +367,7 @@ class GoldCardAdapter extends TypeAdapter<Card[]>{
                         new HashSet<Symbol>(),
                         angle,
                         new Requirement(requiredSymbols),
-                        new Reward(tipoReward, reward));
+                        new Reward(CardFactory.getRewardEnum(tipoReward, pointsToAward), reward));
 
                 reader.endObject();
                 //typeName = reader.nextName();

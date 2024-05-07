@@ -138,8 +138,15 @@ public class TUITest extends TestCase {
 
     public void testShowCardsOnTable() throws FileNotFoundException {
        Game game = new Game(List.of("Pippo", "Paperino", "Pluto", "Clarabella"));
-       game.getVisibleCards().put(DrawChoice.DECK_GOLD, CardFactory.getResourceCards().get(10));
+       game.getVisibleCards().put(DrawChoice.DECK_RESOURCE, CardFactory.getResourceCards().get(10));
+       game.getVisibleCards().put(DrawChoice.DECK_GOLD, CardFactory.getGoldCards().get(11));
+       game.getVisibleCards().put(DrawChoice.RESOURCE_CARD_1, CardFactory.getResourceCards().get(16));
+       game.getVisibleCards().put(DrawChoice.RESOURCE_CARD_2, CardFactory.getResourceCards().get(19));
+       game.getVisibleCards().put(DrawChoice.GOLD_CARD_1, CardFactory.getGoldCards().get(12));
+       game.getVisibleCards().put(DrawChoice.GOLD_CARD_2, CardFactory.getGoldCards().get(2));
+
        DrawableCardsInfo drawableCards = InfoTranslator.convertToDrawableCardsInfo(game);
+       System.out.println(drawableCards);
        //showDrawableCards(drawableCards);
     }
 

@@ -89,15 +89,15 @@ public abstract class InfoTranslator {
     }
 
     public static CardInfo convertToCardInfo(Card card, GameField field){
-        CardSideInfo front = convertToCardSideInfo(card, FRONT, card.getSide(FRONT).getPlayingRequirements().isSatisfied(field));
-        CardSideInfo back = convertToCardSideInfo(card, BACK, card.getSide(BACK).getPlayingRequirements().isSatisfied(field));
+        CardSideInfo front = convertToCardSideInfo(card, FRONT, card.getSide(FRONT).isPlayable(field));
+        CardSideInfo back = convertToCardSideInfo(card, BACK, card.getSide(BACK).isPlayable(field));
         return new CardInfo(card.getId(), card.getCardColor(), front, back);
     }
 
     public static CardSideInfo convertToCardSideInfo(Card card, CardOrientation orientation, boolean isPlayable){
         CardSide side = card.getSide(orientation);
         HashMap<AnglePosition, Symbol> angleSymbols = new HashMap<>();
-        CardType type=CardType.RESOURCE;
+        CardType type = CardType.RESOURCE;
 
         for(AnglePosition angle : AnglePosition.values()){
             angleSymbols.put(angle, side.getSymbolFromAngle(angle));
@@ -111,7 +111,13 @@ public abstract class InfoTranslator {
             type=CardType.INITIAL;
         }
 
-        return new CardSideInfo(angleSymbols, new HashSet<>(side.getCenterSymbols()), card.getCardColor(), orientation, type, isPlayable, new ArrayList<>());
+        return new CardSideInfo(angleSymbols,
+                new HashSet<>(side.getCenterSymbols()),
+                card.getCardColor(), orientation,
+                type,
+                isPlayable,
+                new ArrayList<>(side.getPlayingRequirements().getRequiredSymbols()),
+                side.getPlayingReward().type());
     }
 
     public static OpponentInfo convertToOpponentPlayerInfo(Player player) {

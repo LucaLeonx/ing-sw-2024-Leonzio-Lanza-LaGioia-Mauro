@@ -1,9 +1,7 @@
 package it.polimi.ingsw.networking;
 
-import it.polimi.ingsw.controller.clientcontroller.ControlledPlayerInfo;
-import it.polimi.ingsw.controller.clientcontroller.DrawableCardsInfo;
-import it.polimi.ingsw.controller.clientcontroller.OpponentInfo;
-import it.polimi.ingsw.controller.clientcontroller.PlayerSetupInfo;
+import it.polimi.ingsw.controller.servercontroller.Lobby;
+import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
