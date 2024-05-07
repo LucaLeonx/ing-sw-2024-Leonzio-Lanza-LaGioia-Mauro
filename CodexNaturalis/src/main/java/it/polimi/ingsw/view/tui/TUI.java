@@ -38,7 +38,7 @@ public class TUI {
     static String threePointsSymbol= "3️⃣";
 
     static String fivePointsSymbol = "5️⃣";
-    static String coveredAnglesSymbol = "\u25F0";
+    static String coveredAnglesSymbol = "\u25F0 ";
     static String forEachSymbol ="\u2755";
 
 // TODO:  Fix DrawCards On table based on the new structure in ClientController. (When we introduce a new class in client.Controller containing things regarding table)
@@ -277,8 +277,9 @@ public class TUI {
 
     public void showCardsOnTable(ObjectiveInfo objectiveCard1, ObjectiveInfo objectiveCard2, DrawableCardsInfo drawable)
     {
+        System.out.println("Cards on the table: ");
         CardColor colorGoldDeck=drawable.drawableCards().get(DrawChoice.DECK_GOLD).color();
-        CardColor colorResourceDeck=drawable.drawableCards().get(DrawChoice.DECK_GOLD).color();
+        CardColor colorResourceDeck=drawable.drawableCards().get(DrawChoice.DECK_RESOURCE).color();
         CardSideInfo resourceCard1=drawable.drawableCards().get(DrawChoice.RESOURCE_CARD_1);
         CardSideInfo resourceCard2=drawable.drawableCards().get(DrawChoice.RESOURCE_CARD_2);
         CardSideInfo goldenCard1=drawable.drawableCards().get(DrawChoice.GOLD_CARD_1);
@@ -303,13 +304,13 @@ public class TUI {
         String[][] Card1 = new String[3][5];
         String[][] Card2 = new String[3][5];
 
-        Card1=sketchGoldenDeck(colorGoldDeck);
-        Card2=sketchResourceDeck(colorResourceDeck);
+        Card1=sketchResourceDeck(colorResourceDeck);
+        Card2=sketchGoldenDeck(colorGoldDeck);
 
         for(int j=0; j<3; j++){
             for(int k=0; k<5; k++) {
                 decks[j][k]=Card1[j][k];
-                decks[j][k+6]=Card1[j][k];
+                decks[j][k+6]=Card2[j][k];
             }
         }
 
@@ -320,7 +321,7 @@ public class TUI {
         for(int j=0; j<3; j++){
             for(int k=0; k<5; k++) {
                 drawableCards1[j][k]=Card1[j][k];
-                drawableCards1[j][k+6]=Card1[j][k];
+                drawableCards1[j][k+6]=Card2[j][k];
             }
         }
 
@@ -329,7 +330,7 @@ public class TUI {
 
         for(int j=0; j<3; j++){
             for(int k=0; k<5; k++) {
-                drawableCards2[j][k]=Card2[j][k];
+                drawableCards2[j][k]=Card1[j][k];
                 drawableCards2[j][k+6]=Card2[j][k];
             }
         }
@@ -339,8 +340,8 @@ public class TUI {
 
         for(int j=0; j<3; j++){
             for(int k=0; k<5; k++) {
-                drawableCards2[j][k]=Card2[j][k];
-                drawableCards2[j][k+6]=Card2[j][k];
+                objectives[j][k]=Card1[j][k];
+                objectives[j][k+6]=Card2[j][k];
             }
         }
 
@@ -510,7 +511,7 @@ public class TUI {
                 cardSketched[0][2]=forEachSymbol;
                 cardSketched[0][3]=manuscriptSymbol;
                 break;
-            case RewardType.POINT_PER_COVEREDANGLE:
+            case RewardType.POINTS_PER_COVERED_ANGLE:
                 cardSketched[0][1]=twoPointsSymbol;
                 cardSketched[0][2]=forEachSymbol;
                 cardSketched[0][3]=coveredAnglesSymbol;
@@ -606,7 +607,7 @@ public class TUI {
                 cardSketched[0][4]=threePointsSymbol;
                 cardSketched[1][2]=blueSquareSymbol;
                 cardSketched[2][2]=blueSquareSymbol;
-                cardSketched[0][3]=purpleSquareSymbol;
+                cardSketched[0][3]=redSquareSymbol;
                 break;
             case 94:
                 cardSketched[0][4]=threePointsSymbol;
