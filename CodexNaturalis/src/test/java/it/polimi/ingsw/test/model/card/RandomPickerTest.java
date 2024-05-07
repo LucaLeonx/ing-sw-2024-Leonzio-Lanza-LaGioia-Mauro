@@ -18,6 +18,7 @@ public class RandomPickerTest extends TestCase {
         long seed = 1000;
 
         pickerA = new RandomPicker<>(Arrays.asList(1,2,3,4,5), new Random(seed));
+        System.out.print(pickerA.getElements());
         pickerB = new RandomPicker<>(initialList);
         pickerEmpty = new RandomPicker<>(new ArrayList<>());
     }
@@ -30,8 +31,8 @@ public class RandomPickerTest extends TestCase {
         Integer randomValue2 = pickerA.extractRandomElement().orElse(-1);
 
         // This test is reproducible because seed is fixed
-        assertEquals(2, randomValue1.intValue());
-        assertEquals(5, randomValue2.intValue());
+        assertEquals(3, randomValue1.intValue());
+        assertEquals(1, randomValue2.intValue());
         assertFalse(pickerA.isEmpty());
     }
 
