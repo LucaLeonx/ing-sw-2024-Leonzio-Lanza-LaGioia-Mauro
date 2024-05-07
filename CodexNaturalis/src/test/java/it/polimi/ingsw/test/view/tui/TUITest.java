@@ -1,10 +1,8 @@
 package it.polimi.ingsw.test.view.tui;
 
-import it.polimi.ingsw.controller.clientcontroller.CardInfo;
-import it.polimi.ingsw.controller.clientcontroller.CardSideInfo;
-import it.polimi.ingsw.controller.clientcontroller.ControlledPlayerInfo;
-import it.polimi.ingsw.controller.clientcontroller.ObjectiveInfo;
+import it.polimi.ingsw.controller.clientcontroller.*;
 import it.polimi.ingsw.controller.servercontroller.InfoTranslator;
+import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.AngleCell;
@@ -137,7 +135,10 @@ public class TUITest extends TestCase {
     }
 
     public void testShowCardsOnTable(){
-
+       Game game = new Game(List.of("Pippo", "Paperino", "Pluto", "Clarabella"));
+       game.getVisibleCards().put(DrawChoice.DECK_GOLD, CardFactory.getResourceCards().get(10));
+       DrawableCardsInfo drawableCards = InfoTranslator.convertToDrawableCardsInfo(game);
+       showDrawableCards(drawableCards);
     }
 
 
