@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
+import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;

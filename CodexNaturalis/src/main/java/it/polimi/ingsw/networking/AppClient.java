@@ -1,5 +1,9 @@
 package it.polimi.ingsw.networking;
 
+import it.polimi.ingsw.controller.servercontroller.Controller;
+import it.polimi.ingsw.controller.servercontroller.Lobby;
+import it.polimi.ingsw.networking.RMI.RMIController;
+
 import javax.naming.*;
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -16,7 +20,7 @@ public class AppClient {
         String[] e = registry.list();
         for (String s : e) System.out.println(s);
         String remoteObjectName = "Codex_Naturalis_server";
-        RMIController testController = (RMIController) registry.lookup("Codex_Naturalis_server");
+        Controller testController = (Controller) registry.lookup("Codex_Naturalis_server");
 
         String input;
         while (true){

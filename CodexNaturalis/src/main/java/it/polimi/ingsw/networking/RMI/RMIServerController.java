@@ -1,7 +1,10 @@
-package it.polimi.ingsw.networking;
+package it.polimi.ingsw.networking.RMI;
 
 
-import it.polimi.ingsw.controller.servercontroller.RMIGameManager;
+import it.polimi.ingsw.controller.servercontroller.Controller;
+import it.polimi.ingsw.controller.servercontroller.ServerController;
+import it.polimi.ingsw.controller.servercontroller.Lobby;
+import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -9,11 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RMIServer extends UnicastRemoteObject implements RMIController {
+public class RMIServerController extends ServerController implements Controller {
     private List<Lobby> lobbies;
 
-    public RMIServer() throws RemoteException {
+    public RMIServerController() throws RemoteException {
         this.lobbies = new ArrayList<>();
+        UnicastRemoteObject.exportObject(this, 0);
     }
 
     @Override
@@ -62,7 +66,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIController {
             return new LobbyInfo(selLobby.getId(),
                     selLobby.getName(),
                     selLobby.getCreatorUsername(),
-                    selLobby.getConnectedUser(),
+                    new ArrayList<>(selLobby.getConnectedUser()),
                     selLobby.getRequiredNumOfPlayers(),
                     selLobby.getNumOfWaitingPlayers());
         }

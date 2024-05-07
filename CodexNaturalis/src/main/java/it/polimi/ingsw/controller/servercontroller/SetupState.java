@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.map.Point;
 
 public class SetupState extends GameState{
 
-    public SetupState(String controlledPlayer, Game game, RMIGameManagerImpl gameManager){
+    public SetupState(String controlledPlayer, Game game, ServerController gameManager){
         super(game, controlledPlayer, gameManager);
     }
 
