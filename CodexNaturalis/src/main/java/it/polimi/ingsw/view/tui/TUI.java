@@ -45,8 +45,7 @@ public class TUI {
 // TODO:  implement TUI in case there is no deck or some drawable cards / Cards in hands are missing. (When we decide how to say there is some missing cards)
     //TODO:  testing. (When we fix infoTraslator)
     //TODO: SketchGoldenCard method (When we decide if it is possible to have a list of symbol as recquirements or if it is better to have a big switch statement similar to what we have for ObjectiveCards)
-    //TODO: Evaluate whether or not certain attribute like the name are needed in Objective card.
-    //TODO: change also DrawMap with new structure (When we are sure this infoTraslator works properly)
+
 
 
     public void drawMap(ControlledPlayerInfo player, GameFieldInfo gamefield) {
