@@ -41,7 +41,6 @@ public class TUI {
     static String coveredAnglesSymbol = "\u25F0 ";
     static String forEachSymbol ="\u2755";
 
-// TODO:  implement TUI in case there is no deck or some drawable cards / Cards in hands are missing. (When we decide how to say there is some missing cards)
 
 
 
@@ -248,13 +247,20 @@ public class TUI {
 
         for(int i=0; i<3; i++) {
             String[][] currentCard = new String[3][5];
-            currentCard=sketchCard(player.cardsInHand().get(i).front());
+            try {
+                currentCard = sketchCard(player.cardsInHand().get(i).front());
+            }
+            catch (IndexOutOfBoundsException e)
+            {
+                currentCard=sketchEmptyCard();
+            }
             for(int j=0; j<3; j++){
                 for(int k=0; k<5; k++) {
                     matrixHand[j][k+6*i]=currentCard[j][k];
                 }
             }
         }
+
         String[][] currentCard = new String[3][5];
         currentCard=sketchObjectiveCard(player.secretObjective());
         for(int j=0; j<3; j++){
@@ -272,11 +278,21 @@ public class TUI {
 
     }
 
+    private String[][] sketchEmptyCard() {
+        String[][] cardSketched = new String[3][5];
+        for(int i=0; i<3; i++){
+            for(int j=0; j<5; j++){
+                cardSketched[i][j]=blackSquareSymbol;
+            }
+        }
+        return cardSketched;
+    }
+
     public void showCardsOnTable(ObjectiveInfo objectiveCard1, ObjectiveInfo objectiveCard2, DrawableCardsInfo drawable)
     {
         System.out.println("Cards on the table: ");
-        CardColor colorGoldDeck=drawable.drawableCards().get(DrawChoice.DECK_GOLD).color();
-        CardColor colorResourceDeck=drawable.drawableCards().get(DrawChoice.DECK_RESOURCE).color();
+        CardSideInfo goldDeck=drawable.drawableCards().get(DrawChoice.DECK_GOLD);
+        CardSideInfo resourceDeck=drawable.drawableCards().get(DrawChoice.DECK_RESOURCE);
         CardSideInfo resourceCard1=drawable.drawableCards().get(DrawChoice.RESOURCE_CARD_1);
         CardSideInfo resourceCard2=drawable.drawableCards().get(DrawChoice.RESOURCE_CARD_2);
         CardSideInfo goldenCard1=drawable.drawableCards().get(DrawChoice.GOLD_CARD_1);
@@ -301,8 +317,19 @@ public class TUI {
         String[][] Card1 = new String[3][5];
         String[][] Card2 = new String[3][5];
 
-        Card1=sketchResourceDeck(colorResourceDeck);
-        Card2=sketchGoldenDeck(colorGoldDeck);
+        if(resourceDeck==null) {
+            Card1 = sketchEmptyCard();
+        }
+        else{
+            Card1=sketchResourceDeck(resourceDeck.color());
+        }
+
+        if(goldDeck==null) {
+            Card2 = sketchEmptyCard();
+        }
+        else{
+            Card2=sketchGoldenDeck(goldDeck.color());
+        }
 
         for(int j=0; j<3; j++){
             for(int k=0; k<5; k++) {
@@ -311,9 +338,19 @@ public class TUI {
             }
         }
 
+        if(resourceCard1==null) {
+            Card1 = sketchEmptyCard();
+        }
+        else{
+            Card1=sketchCard(resourceCard1);
+        }
 
-        Card1=sketchCard(resourceCard1);
-        Card2=sketchCard(goldenCard1);
+        if(goldenCard1==null) {
+            Card2 = sketchEmptyCard();
+        }
+        else{
+            Card2=sketchCard(goldenCard1);
+        }
 
         for(int j=0; j<3; j++){
             for(int k=0; k<5; k++) {
@@ -322,8 +359,19 @@ public class TUI {
             }
         }
 
-        Card1=sketchCard(resourceCard2);
-        Card2=sketchCard(goldenCard2);
+        if(resourceCard2==null) {
+            Card1 = sketchEmptyCard();
+        }
+        else{
+            Card1=sketchCard(resourceCard2);
+        }
+
+        if(goldenCard2==null) {
+            Card2 = sketchEmptyCard();
+        }
+        else{
+            Card2=sketchCard(goldenCard2);
+        }
 
         for(int j=0; j<3; j++){
             for(int k=0; k<5; k++) {
@@ -375,7 +423,7 @@ public class TUI {
         System.out.print("\n\n");
     }
 
-    public String[][] sketchCard(CardSideInfo card){
+    private String[][] sketchCard(CardSideInfo card){
         if(card.Type()==CardType.RESOURCE) {
             return sketchResourceCard(card);
         }
@@ -388,7 +436,7 @@ public class TUI {
         }
     }
 
-    public String[][] sketchBackground(CardColor color) {
+    private String[][] sketchBackground(CardColor color) {
         String[][] cardSketched = new String[3][5];
         String background=blackSquareSymbol;
         switch (color) {
@@ -416,7 +464,7 @@ public class TUI {
         return  cardSketched;
     }
 
-    public String[][] sketchResourceCard(CardSideInfo card) {
+    private String[][] sketchResourceCard(CardSideInfo card) {
         String[][] cardSketched = new String[3][5];
         cardSketched=sketchBackground(card.color());
         for(int i=0; i<4; i++) {
@@ -461,7 +509,7 @@ public class TUI {
 
 
 
-    public String[][] sketchGoldenCard(CardSideInfo card) {
+    private String[][] sketchGoldenCard(CardSideInfo card) {
         String[][] cardSketched = new String[3][5];
         cardSketched=sketchResourceCard(card); // Golden card doesn't differ from Golden Card In terms of angles
         for(int i=0; i<card.requiredSymbols().size(); i++){
@@ -518,7 +566,7 @@ public class TUI {
         return cardSketched;
     }
 
-    public String FromSymbolToString(Symbol symbol){
+    private String FromSymbolToString(Symbol symbol){
         String CharSymbol=blackSquareSymbol;
         switch (symbol){
             case Symbol.ANIMAL:
@@ -552,17 +600,13 @@ public class TUI {
 
 
 
-    public String[][] sketchObjectiveCard(ObjectiveInfo card){
+    private String[][] sketchObjectiveCard(ObjectiveInfo card){
         String[][] cardSketched = new String[3][5];
         // I set every cell to black (background) so I will change only the cells that I need to change. I can't use the
         // set background function since black is not on the "normal color card" but since every time the color
         // chosen for the objective card for the background is always black it is sufficient to implement a nested for as it follows:
 
-        for(int i=0; i<3; i++){
-            for(int j=0; j<5; j++){
-                cardSketched[i][j]=blackSquareSymbol;
-            }
-        }
+        cardSketched=sketchEmptyCard(); //since the bakground of an objective card is black I can use this method to draw objective background.
         switch (card.id()) {
             case 87:
                 cardSketched[0][4]=twoPointsSymbol;
@@ -664,7 +708,7 @@ public class TUI {
         return cardSketched;
     }
 
-    String[][] sketchGoldenDeck(CardColor colorDeck){
+    private String[][] sketchGoldenDeck(CardColor colorDeck){
         String[][] goldenDeck = new String[3][5];
         goldenDeck=sketchBackground(colorDeck);
         goldenDeck=addBlankAngles(goldenDeck);
@@ -676,7 +720,7 @@ public class TUI {
         return goldenDeck;
     }
 
-    String[][] sketchResourceDeck(CardColor colorDeck){
+    private String[][] sketchResourceDeck(CardColor colorDeck){
         String[][] resourceDeck = new String[3][5];
         resourceDeck=sketchBackground(colorDeck);
         resourceDeck=addBlankAngles(resourceDeck);
@@ -684,7 +728,7 @@ public class TUI {
         return resourceDeck; 
     }
 
-    String[][] addBlankAngles(String[][] sketchedCard) {
+    private String[][] addBlankAngles(String[][] sketchedCard) {
         sketchedCard[0][0]=whiteSquareSymbol;
         sketchedCard[0][4]=whiteSquareSymbol;
         sketchedCard[2][0]=whiteSquareSymbol;
@@ -692,7 +736,7 @@ public class TUI {
         return sketchedCard;
     }
 
-    String[][] addCentralSymbol(String[][] sketchedCard,CardColor color){
+    private String[][] addCentralSymbol(String[][] sketchedCard,CardColor color){
         String symbol = blackSquareSymbol;
         switch (color){
             case CardColor.SKYBLUE:

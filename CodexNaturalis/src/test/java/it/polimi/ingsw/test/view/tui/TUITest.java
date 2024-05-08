@@ -127,8 +127,8 @@ public class TUITest extends TestCase {
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()));
     }
 
-    public void testShowHand(){
-        T.addCard(resourceCards.get(8));
+    public void testShowHandAllPresent(){
+        T.addCard(resourceCards.get(9));
         T.addCard(resourceCards.get(8));
         T.addCard(goldenCards.get(8));
         T.setSecretObjective(objectiveCards.get(15));
@@ -136,7 +136,33 @@ public class TUITest extends TestCase {
 
     }
 
-    public void testShowCardsOnTable() throws FileNotFoundException {
+    public void testShowHandOneIsMissing(){
+        T.addCard(resourceCards.get(22));
+        T.addCard(resourceCards.get(34));
+        T.setSecretObjective(objectiveCards.get(15));
+        tui.showHand(InfoTranslator.convertToControlledPlayerInfo(T));
+
+    }
+
+    public void testShowHandTwoAreMissing(){
+        T.addCard(resourceCards.get(39));
+        T.setSecretObjective(objectiveCards.get(15));
+        tui.showHand(InfoTranslator.convertToControlledPlayerInfo(T));
+
+    }
+
+    public void testShowHandAllAreMissing(){
+        T.setSecretObjective(objectiveCards.get(15));
+        tui.showHand(InfoTranslator.convertToControlledPlayerInfo(T));
+    }
+
+    //Objective cards, once is chosen should always be there so it doesn't make sense to have a test where objective card is missing.
+    // so we print at screen the fact that something is wrong but the game doesn't crush.
+    public void testShowHandObjectiveIsMissing(){
+        tui.showHand(InfoTranslator.convertToControlledPlayerInfo(T));
+    }
+
+    public void testShowCardsOnTableAllPresent() throws FileNotFoundException {
        Game game = new Game(List.of("Pippo", "Paperino", "Pluto", "Clarabella"));
        game.setVisibleCard(DrawChoice.DECK_RESOURCE, resourceCards.get(0));
        game.setVisibleCard(DrawChoice.DECK_GOLD, goldenCards.get(22));
@@ -149,6 +175,19 @@ public class TUITest extends TestCase {
        //System.out.println(drawableCards);
        tui.showCardsOnTable(InfoTranslator.convertToObjectiveInfo(objectiveCards.get(3)),InfoTranslator.convertToObjectiveInfo(objectiveCards.get(12)),drawableCards);
     }
+
+    public void testShowCardsOnTableSomeMissing() throws FileNotFoundException {
+        Game game = new Game(List.of("Pippo", "Paperino", "Pluto", "Clarabella"));
+        game.setVisibleCard(DrawChoice.DECK_RESOURCE, resourceCards.get(0));
+        game.setVisibleCard(DrawChoice.RESOURCE_CARD_1, resourceCards.get(0));
+        game.setVisibleCard(DrawChoice.GOLD_CARD_2, goldenCards.get(33));
+
+        DrawableCardsInfo drawableCards = InfoTranslator.convertToDrawableCardsInfo(game);
+        //System.out.println(drawableCards);
+        tui.showCardsOnTable(InfoTranslator.convertToObjectiveInfo(objectiveCards.get(3)),InfoTranslator.convertToObjectiveInfo(objectiveCards.get(12)),drawableCards);
+    }
+
+
 
 
 
