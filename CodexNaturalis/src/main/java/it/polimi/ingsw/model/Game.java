@@ -1,6 +1,9 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.card.*;
+import it.polimi.ingsw.model.map.GameField;
+import it.polimi.ingsw.model.map.Point;
+import it.polimi.ingsw.model.player.InvalidCardException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 
@@ -13,6 +16,7 @@ public class Game {
     private final Deck resourceCardDeck;
     private final List<Player> players;
     private boolean isLastTurn;
+    private boolean isGameEnded;
     private Player currentPlayer;
     private final Map<DrawChoice, Card> visibleCards;
     private final List<ObjectiveCard> commonObjectiveCards;
@@ -25,7 +29,8 @@ public class Game {
                 Map<DrawChoice, Card> visibleCards,
                 List<ObjectiveCard> commonObjectiveCards,
                 Map<String, PlayerSetup> playerSetups,
-                boolean isLastTurn) {
+                boolean isLastTurn,
+                boolean isGameEnded) {
         this.goldCardDeck = goldCardDeck;
         this.resourceCardDeck = resourceCardDeck;
         this.players = players;
@@ -34,6 +39,7 @@ public class Game {
         this.commonObjectiveCards = commonObjectiveCards;
         this.playerSetups = playerSetups;
         this.isLastTurn = isLastTurn;
+        this.isGameEnded = isGameEnded;
     }
 
     public Game(List<String> playerNames){
@@ -62,7 +68,7 @@ public class Game {
         for(String playerName : playerNames){
 
             Player newPlayer = new Player(playerName, colorPicker.extractRandomElement().get());
-            // Generate end cards
+            // Generate hand cards
             newPlayer.addCard(resourceCardDeck.draw());
             newPlayer.addCard(resourceCardDeck.draw());
             newPlayer.addCard(goldCardDeck.draw());
@@ -89,6 +95,7 @@ public class Game {
         // Setup variables to start
         currentPlayer = players.getFirst();
         isLastTurn = false;
+        isGameEnded = false;
     }
 
 
@@ -143,12 +150,24 @@ public class Game {
     }
 
     public synchronized void changeCurrentPlayer(){
+        if(isLastPlayerOfRound()) {
+            if(isLastTurn){
+                setGameEnded(true);
+                // Notify game ending
+            } else {
+                setLastTurn(
+                        (getResourceCardDeck().isEmpty() && getGoldenCardDeck().isEmpty())
+                                || getPlayers().stream().anyMatch((participant) -> participant.getScore() >= 20));
+            }
+        }
         currentPlayer = players.get((players.indexOf(currentPlayer) + 1) % players.size());
     }
 
-    public synchronized void setLastTurn(boolean newValue){
-        isLastTurn = newValue;
+    public synchronized void setLastTurn(boolean isLastTurn){
+        this.isLastTurn = isLastTurn;
     }
+
+    public synchronized void setGameEnded(boolean isGameEnded) { this.isGameEnded = isGameEnded; }
 
     public synchronized PlayerSetup getPlayerSetup(String playerName){
         return playerSetups.get(playerName);
@@ -160,5 +179,60 @@ public class Game {
 
     public Deck getGoldenCardDeck(){
         return goldCardDeck;
+    }
+
+    public Player getPlayerByName(String playerName){
+        return players.stream().filter((player -> player.getNickname().equals(playerName))).findFirst().orElseThrow(() -> new InvalidOperationException("Player " + playerName + " not fount"));
+    }
+
+    public Card getPlayerCardById(Player player, int cardId) {
+        return player.getCardsInHand().stream().filter((card) -> card.getId() == cardId).findFirst().orElseThrow(() -> new InvalidOperationException("Card with ID " + cardId + " not found in hand of + " + player.getNickname()));
+    }
+
+    public synchronized void makePlayerPlaceCard(Player player, int cardId, Point position, CardOrientation orientation)  {
+        Card removedCard = null;
+        GameField field = player.getField();
+
+        try {
+            removedCard = player.removeCard(cardId);
+        } catch (InvalidCardException e) {
+            throw new InvalidOperationException(e.getMessage());
+        }
+
+
+        field.placeCard(removedCard, orientation, position);
+        player.incrementScore(removedCard.getSide(orientation).getRewardPoints(field));
+    }
+
+    public synchronized void makePlayerDraw(Player player, DrawChoice drawChoice){
+        Deck selectedDeck = switch(drawChoice){
+            case DECK_RESOURCE, RESOURCE_CARD_1, RESOURCE_CARD_2 -> getResourceCardDeck();
+            case DECK_GOLD, GOLD_CARD_1, GOLD_CARD_2 -> getGoldenCardDeck();
+        };
+
+        switch(drawChoice){
+            case DECK_RESOURCE, DECK_GOLD: {
+                player.addCard(selectedDeck.draw());
+                break;
+            }
+            case RESOURCE_CARD_1, RESOURCE_CARD_2, GOLD_CARD_1, GOLD_CARD_2:
+                player.addCard(getVisibleCard(drawChoice));
+                getVisibleCards().remove(drawChoice);
+                getVisibleCards().put(drawChoice, selectedDeck.draw());
+                break;
+        }
+    }
+
+    public synchronized void calculateFinalReward(Player player){
+        player.incrementScore(player.getSecretObjective().getRewardFunction().getPoints(player.getField()));
+        for(ObjectiveCard objective : commonObjectiveCards){
+            player.incrementScore(objective.getRewardFunction().getPoints(player.getField()));
+        }
+    }
+
+    public synchronized List<Player> getLeaderBoard(){
+            List<Player> leaderboard = getPlayers();
+            leaderboard.sort((p1, p2) -> (p1.getScore() > p2.getScore()) ? 1 : -1);
+            return leaderboard;
     }
 }
