@@ -70,15 +70,14 @@ abstract class InternalServerLayer {
     + getJoinedLobby(user : User) : Lobby
     + subscribeToLobbyUpdates(user : User, lobby : Lobby)
     + getCurrentPlayer(user : User, game : Game) : String
-    + getPlayer(Game : game, name : String)
+    + getPlayer(Game : game, name : String) : Player
     + getPlayerSetup(Game : Game, playerName : String) : PlayerSetup
     + getDrawableCards(user : User, game : Game) : Map<DrawChoice, Card>
-    + getPlayerSetup(user : User, game : Game) : PlayerSetupInfo
     + isLastTurn(game : Game) : boolean
     + hasGameEnded(game : Game) : boolean
     + registerPlayerSetup(game : Game, playerName : String, objectiveCardId : int, initialCardSide : CardOrientation)
-    + registerPlayerMove(game : Game, playerName : String int placedCardId, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException;
-    + getWinnerName(Game : game) : String
+    + registerPlayerMove(game : Game, playerName : String, placedCardId : int, placementPoint : Point, chosenSide : CardOrientation, drawChoice : DrawChoice)
+    + getLeaderboard(Game : game) : List<Player>
     + subscribeToGameUpdates(user : User, Game : game)
 }
 
