@@ -24,7 +24,7 @@ interface Controller {
     + joinLobby(lobbyId : int)
     + exitFromJoinedLobby()
     + getLobbies() : LobbyInfo[]
-    + getLobbyInfo(lobbyId : int) : LobbyInfo
+    + getJoinedLobbyInfo() : LobbyInfo
     '+ subscribeToLobbyUpdates(lobbyId : int) Automatically done?
     ' Game management
     + getCurrentPlayer() : String
@@ -34,8 +34,7 @@ interface Controller {
     + getPlayerSetup() : PlayerSetupInfo
     + isLastTurn() : boolean
     + hasGameEnded() throws RemoteException;
-    + registerPlayerSetup(objectiveCardId : int, initialCardSide : CardOrientation)
-    + registerPlayerMove(int placedCardId, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException;
+    + registerPlayerMove(int placedCardId, Point placementPoint, chosenSide : CardOrientation, drawChoice : DrawChoice) throws RemoteException;
     + getWinnerName() : String
     '+ subscribeToGameUpdates() Automatically done? TBD
 }
@@ -45,9 +44,9 @@ abstract class FrontierServerLayer{
     ' Lobby management
     + createLobby(user : User, String lobbyName, int playersNumber) : int
     + joinLobby(user : User, lobbyId : int)
-    + exitFromJoinedLobby(user : User)
-    + getLobbyInfo(user : User) : LobbyInfo[]
-    + getLobbyInfo(user : User, lobbyId : int) : LobbyInfo
+    + exitFromLobby(user : User)
+    + getLobbies(user : User) : LobbyInfo[]
+    + getJoinedLobbyInfo(user : User) : LobbyInfo
     + subscribeToLobbyUpdates(lobbyId : int)
     ' Game management
     + getCurrentPlayer(user : User) : String
@@ -58,7 +57,7 @@ abstract class FrontierServerLayer{
     + isLastTurn(user : User) : boolean
     + hasGameEnded(user : User) : boolean
     + registerPlayerSetup(user : User, objectiveCardId : int, initialCardSide : CardOrientation)
-    + registerPlayerMove(user : User, int placedCardId, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException;
+    + registerPlayerMove(user : User, placedCardId : int, placementPoint : Point, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException;
     + getWinnerName(user : User) : String
     + subscribeToGameUpdates(user : User)
 }
