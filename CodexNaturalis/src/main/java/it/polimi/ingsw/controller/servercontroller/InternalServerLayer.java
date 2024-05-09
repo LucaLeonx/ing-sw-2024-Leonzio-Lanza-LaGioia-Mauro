@@ -70,11 +70,6 @@ public abstract class InternalServerLayer {
         return nextLayers[0].getLeaderboard(game);
     }
 
-
-
-
-
-
-
-
+    // TODO: choose observer methods
+    // TODO: add method to exit from game
 }
