@@ -230,6 +230,10 @@ public class Game {
         }
     }
 
+    public boolean isEnded() {
+        return isGameEnded;
+    }
+
     public synchronized List<Player> getLeaderBoard(){
             List<Player> leaderboard = getPlayers();
             leaderboard.sort((p1, p2) -> (p1.getScore() > p2.getScore()) ? 1 : -1);
