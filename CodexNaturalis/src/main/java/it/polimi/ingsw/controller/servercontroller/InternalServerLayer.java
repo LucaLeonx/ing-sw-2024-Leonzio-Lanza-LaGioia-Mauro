@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.servercontroller;
 
+import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.PlayerSetup;
@@ -18,12 +19,12 @@ public abstract class InternalServerLayer {
         this.nextLayers = nextLayers;
     }
 
-    public int createLobby(User creator, String lobbyName, int playersNumber){
+    public Lobby createLobby(User creator, String lobbyName, int playersNumber){
         return nextLayers[0].createLobby(creator, lobbyName, playersNumber);
     }
 
-    public Lobby addUserToLobby(User user, Lobby lobby){
-        return nextLayers[0].addUserToLobby(user, lobby);
+    public Lobby addUserToLobby(User user, int lobbyId){
+        return nextLayers[0].addUserToLobby(user, lobbyId);
     }
 
     public void removeUserFromLobby(User user, Lobby lobby){
@@ -38,16 +39,16 @@ public abstract class InternalServerLayer {
         return nextLayers[0].getCurrentPlayer(game);
     }
 
-    public Player getPlayer(String playerName){
-        return nextLayers[0].getPlayer(playerName);
+    public Player getPlayer(Game game, String playerName){
+        return nextLayers[0].getPlayer(game, playerName);
     }
 
-    public PlayerSetup getPlayerSetup(String playerName){
-        return nextLayers[0].getPlayerSetup(playerName);
+    public PlayerSetup getPlayerSetup(Game game, String playerName){
+        return nextLayers[0].getPlayerSetup(game, playerName);
     }
 
-    public Map<DrawChoice, Card> getDrawableCards(User user, Game game){
-        return nextLayers[0].getDrawableCards(user, game);
+    public Map<DrawChoice, Card> getDrawableCards(Game game){
+        return nextLayers[0].getDrawableCards(game);
     }
 
     public boolean isLastTurn(Game game){
@@ -68,6 +69,10 @@ public abstract class InternalServerLayer {
 
     public List<Player> getLeaderboard(Game game){
         return nextLayers[0].getLeaderboard(game);
+    }
+
+    public List<Lobby> getLobbies() {
+        return nextLayers[0].getLobbies();
     }
 
     // TODO: choose observer methods

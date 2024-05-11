@@ -1,6 +1,8 @@
 package it.polimi.ingsw.dataobject;
 
 import it.polimi.ingsw.controller.clientcontroller.*;
+import it.polimi.ingsw.controller.servercontroller.Lobby;
+import it.polimi.ingsw.controller.servercontroller.User;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.PlayerSetup;
@@ -33,6 +35,22 @@ public abstract class InfoTranslator {
 
         for(Map.Entry<DrawChoice, Card> visibleCardEntry : game.getVisibleCards().entrySet()){
             convertedInfo.put(visibleCardEntry.getKey(), convertToCardSideInfo(visibleCardEntry.getValue(), FRONT, true));
+        }
+
+        return new DrawableCardsInfo(convertedInfo);
+    }
+
+    public static DrawableCardsInfo convertToDrawableCardsInfo(Map<DrawChoice, Card> drawableCards){
+        Map<DrawChoice, CardSideInfo> convertedInfo = new HashMap<>();
+
+        for(Map.Entry<DrawChoice, Card> entry : drawableCards.entrySet()){
+
+            CardOrientation chosenOrientation = switch(entry.getKey()){
+                case DECK_RESOURCE, DECK_GOLD -> BACK;
+                default -> FRONT;
+            };
+
+            convertedInfo.put(entry.getKey(), convertToCardSideInfo(entry.getValue(), chosenOrientation, true));
         }
 
         return new DrawableCardsInfo(convertedInfo);
@@ -128,5 +146,14 @@ public abstract class InfoTranslator {
         }
 
         return new OpponentInfo(player.getNickname(), player.getColor(), player.getScore(), opponentHand, convertToFieldInfo(player.getField()));
+    }
+
+    public static LobbyInfo convertToLobbyInfo(Lobby lobby) {
+        return new LobbyInfo(lobby.getId(),
+                lobby.getName(),
+                lobby.getCreatorUsername(),
+                new ArrayList<>(lobby.getConnectedUser()),
+                lobby.getRequiredNumOfPlayers(),
+                lobby.getNumOfWaitingPlayers());
     }
 }

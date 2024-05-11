@@ -12,8 +12,10 @@ import java.util.List;
 
 public abstract class FrontierServerLayer {
     private final FrontierServerLayer[] nextLayers;
+    private final LobbyList lobbyList;
 
-    public FrontierServerLayer(FrontierServerLayer... nextLayers) {
+    public FrontierServerLayer(LobbyList lobbyList, FrontierServerLayer... nextLayers) {
+        this.lobbyList = lobbyList;
         this.nextLayers = nextLayers;
     }
 

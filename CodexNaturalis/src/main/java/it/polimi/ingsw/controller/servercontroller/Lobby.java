@@ -14,7 +14,7 @@ public class Lobby implements Serializable {
     private List<String> waitingPlayers;
     private final int requiredNumOfPlayers;
 
-    public Lobby(int id,String creatorUser,int numOfPlayers,String lobbyName){
+    public Lobby(int id, String creatorUser,int numOfPlayers,String lobbyName){
         this.id = id;
         this.name = lobbyName;
         this.creatorUsername = creatorUser;
