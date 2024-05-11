@@ -18,9 +18,6 @@ public class ServerController implements Controller {
     private ServerState state;
 
 
-
-
-
     @Override
     public String getCurrentPlayer() throws RemoteException {
         return state.getCurrentPlayer();

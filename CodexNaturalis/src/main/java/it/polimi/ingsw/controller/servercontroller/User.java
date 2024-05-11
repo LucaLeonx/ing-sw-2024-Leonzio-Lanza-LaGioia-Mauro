@@ -17,7 +17,6 @@ public class User {
     }
 
     public void connectUser(){ this.isConnected = true; }
-
     public void givePass(Integer pass){ this.tempPassword = Optional.of(pass); }
     public boolean isConnected(){ return this.isConnected; }
     public String getUsername(){ return this.username; }
