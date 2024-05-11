@@ -1,6 +1,5 @@
 package it.polimi.ingsw.test.server;
 
-import it.polimi.ingsw.controller.servercontroller.ServerController;
 import it.polimi.ingsw.model.Game;
 
 import java.rmi.RemoteException;

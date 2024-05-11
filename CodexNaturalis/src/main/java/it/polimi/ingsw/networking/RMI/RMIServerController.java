@@ -2,7 +2,6 @@ package it.polimi.ingsw.networking.RMI;
 
 
 import it.polimi.ingsw.controller.servercontroller.Controller;
-import it.polimi.ingsw.controller.servercontroller.ServerController;
 import it.polimi.ingsw.controller.servercontroller.Lobby;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
