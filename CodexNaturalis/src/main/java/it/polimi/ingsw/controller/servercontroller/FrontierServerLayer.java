@@ -3,11 +3,8 @@ package it.polimi.ingsw.controller.servercontroller;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
-import it.polimi.ingsw.model.card.ObjectiveCard;
 import it.polimi.ingsw.model.map.Point;
 
-import javax.print.AttributeException;
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class FrontierServerLayer {
@@ -19,7 +16,7 @@ public abstract class FrontierServerLayer {
         this.nextLayers = nextLayers;
     }
 
-    public int createLobby(User user, String lobbyName, int requiredPlayersNum){
+    public LobbyInfo createLobby(User user, String lobbyName, int requiredPlayersNum){
         return nextLayers[0].createLobby(user, lobbyName, requiredPlayersNum);
     }
 

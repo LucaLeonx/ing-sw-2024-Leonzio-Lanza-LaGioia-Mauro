@@ -23,7 +23,7 @@ public class IntegrityLayer extends FrontierServerLayer {
     }
 
     @Override
-    public int createLobby(User user, String lobbyName, int requiredPlayersNum) {
+    public LobbyInfo createLobby(User user, String lobbyName, int requiredPlayersNum) {
 
         if(user.getStatus() != LOBBY_CHOICE){
             throw new InvalidOperationException("Cannot create Lobby when not choosing one");

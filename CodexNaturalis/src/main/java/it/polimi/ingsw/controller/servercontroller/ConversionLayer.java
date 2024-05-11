@@ -7,6 +7,8 @@ import it.polimi.ingsw.model.map.Point;
 
 import java.util.List;
 
+import static it.polimi.ingsw.dataobject.InfoTranslator.convertToLobbyInfo;
+
 public class ConversionLayer extends FrontierServerLayer {
     private final InternalServerLayer internalServerLayer;
 
@@ -16,8 +18,8 @@ public class ConversionLayer extends FrontierServerLayer {
     }
 
     @Override
-    public int createLobby(User user, String lobbyName, int requiredPlayersNum) {
-        return internalServerLayer.createLobby(user, lobbyName, requiredPlayersNum).getId();
+    public LobbyInfo createLobby(User user, String lobbyName, int requiredPlayersNum) {
+        return convertToLobbyInfo(internalServerLayer.createLobby(user, lobbyName, requiredPlayersNum));
     }
 
     @Override
@@ -39,7 +41,7 @@ public class ConversionLayer extends FrontierServerLayer {
 
     @Override
     public LobbyInfo getJoinedLobbyInfo(User user) {
-        return InfoTranslator.convertToLobbyInfo(internalServerLayer.getJoinedLobby(user));
+        return convertToLobbyInfo(internalServerLayer.getJoinedLobby(user));
     }
 
     @Override

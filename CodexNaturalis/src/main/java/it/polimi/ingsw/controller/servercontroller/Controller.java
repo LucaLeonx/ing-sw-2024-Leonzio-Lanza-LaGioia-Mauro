@@ -23,11 +23,9 @@ public interface Controller extends Remote {
     public boolean hasGameEnded() throws RemoteException;
     public void registerPlayerSetupChoice(int chosenObjectiveId, CardOrientation initialCardOrientation) throws RemoteException;
     public void registerPlayerMove(int placedCardId, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException;
-    public void addLobby(String creator, String name, int playersNumber) throws RemoteException;
-    public  void addUserToLobby(int lobbyId, String username) throws RemoteException;
-    public List<Lobby> getLobbies() throws RemoteException;
-    public List<String> getLobbiesNames() throws RemoteException;
-    public List<String> getUsersFromLobby(int lobbyId) throws RemoteException;
-    public LobbyInfo getLobbyInfo(int lobbyId) throws RemoteException;
+    public LobbyInfo addLobby(String name, int playersNumber) throws RemoteException;
+    public void joinLobby(int lobbyId) throws RemoteException;
+    public List<LobbyInfo> getLobbies() throws RemoteException;
+    public LobbyInfo getJoinedLobbyInfo() throws RemoteException;
     public String test() throws RemoteException;
 }
