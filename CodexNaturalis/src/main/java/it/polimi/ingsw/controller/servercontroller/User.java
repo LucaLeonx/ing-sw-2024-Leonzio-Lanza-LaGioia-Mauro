@@ -32,7 +32,6 @@ public class User {
     public void setStatus(UserStatus status){
         this.status.set(status);
     }
-
     public String getUsername(){ return this.username; }
     public boolean checkPass(Integer pass){
         return tempPassword.orElse(-1).equals(pass);

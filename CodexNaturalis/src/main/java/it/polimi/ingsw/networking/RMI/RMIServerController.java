@@ -53,7 +53,7 @@ public class RMIServerController extends ServerController implements Controller 
     public List<String> getUsersFromLobby(int lobbyId) throws RemoteException {
         for (Lobby l : lobbies) {
             if (l.getId() == lobbyId) {
-                return l.getConnectedUser();
+                return l.getConnectedUsers();
             }
         }
         return null;
@@ -66,7 +66,7 @@ public class RMIServerController extends ServerController implements Controller 
             return new LobbyInfo(selLobby.getId(),
                     selLobby.getName(),
                     selLobby.getCreatorUsername(),
-                    new ArrayList<>(selLobby.getConnectedUser()),
+                    new ArrayList<>(selLobby.getConnectedUsers()),
                     selLobby.getRequiredNumOfPlayers(),
                     selLobby.getNumOfWaitingPlayers());
         }

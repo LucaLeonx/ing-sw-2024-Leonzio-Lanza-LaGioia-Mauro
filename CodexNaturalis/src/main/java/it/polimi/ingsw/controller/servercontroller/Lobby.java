@@ -11,47 +11,62 @@ public class Lobby implements Serializable {
     private final int id;
     private String name;
     private final String creatorUsername;
-    private List<String> waitingPlayers;
+    private List<User> waitingPlayers;
     private final int requiredNumOfPlayers;
 
-    public Lobby(int id, String creatorUser,int numOfPlayers,String lobbyName){
+    public Lobby(int id, User creatorUser,int numOfPlayers,String lobbyName){
         this.id = id;
         this.name = lobbyName;
-        this.creatorUsername = creatorUser;
+        this.creatorUsername = creatorUser.getUsername();
         this.waitingPlayers = new ArrayList<>();
         this.waitingPlayers.add(creatorUser);
         this.requiredNumOfPlayers = numOfPlayers;
     }
 
-    public synchronized void addUser(String username) {
+    public synchronized void addUser(User user) {
         if(waitingPlayers.size() < requiredNumOfPlayers){
-            waitingPlayers.add(username);
+            waitingPlayers.add(user);
+            user.setJoinedLobby(this);
         }
     }
 
     public synchronized void removeUser(String username){
-        waitingPlayers.remove(username);
+        User removedUser = waitingPlayers.stream().filter((user) -> user.getUsername().equals(username)).findFirst().get();
+        removedUser.setJoinedLobby(null);
+        waitingPlayers.remove(removedUser);
     }
 
     public boolean readyToStart(){ return waitingPlayers.size() == requiredNumOfPlayers; }
 
-    public List<String> getConnectedUser(){ return new ArrayList<>(waitingPlayers); }
+    public List<String> getConnectedUsers(){
+        return waitingPlayers.stream().map(User::getUsername).toList();
+    }
 
-    public int getRequiredNumOfPlayers(){ return this.requiredNumOfPlayers; }
+    public int getRequiredNumOfPlayers(){
+        return this.requiredNumOfPlayers;
+    }
 
-    public int getNumOfWaitingPlayers(){ return this.waitingPlayers.size(); }
+    public int getNumOfWaitingPlayers(){
+        return this.waitingPlayers.size();
+    }
 
-    public int getId(){ return this.id; }
+    public int getId(){
+        return this.id;
+    }
 
-    public String getName(){ return this.name; }
+    public String getName(){
+        return this.name;
+    }
 
-    public String getCreatorUsername(){ return this.creatorUsername; }
+    public String getCreatorUsername(){
+        return this.creatorUsername;
+    }
 
     public LobbyInfo getLobbyInfo(){
         return new LobbyInfo(id,
                 name,
                 creatorUsername,
-                new ArrayList<>(waitingPlayers),
+                new ArrayList<>(getConnectedUsers()),
                 requiredNumOfPlayers,
                 waitingPlayers.size());
     }

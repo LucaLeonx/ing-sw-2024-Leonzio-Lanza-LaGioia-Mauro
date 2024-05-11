@@ -153,6 +153,9 @@ public class Game {
         if(isLastPlayerOfRound()) {
             if(isLastTurn){
                 setGameEnded(true);
+                for(Player player : players){
+                    calculateFinalReward(player);
+                }
                 // Notify game ending
             } else {
                 setLastTurn(

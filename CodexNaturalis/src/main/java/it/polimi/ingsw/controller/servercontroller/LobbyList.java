@@ -1,6 +1,8 @@
 package it.polimi.ingsw.controller.servercontroller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -25,13 +27,13 @@ public class LobbyList {
         return lobbies.get(lobbyId);
     }
 
-    public Set<Lobby> getLobbies(){
-        return new HashSet<>(lobbies.values());
+    public List<Lobby> getLobbies(){
+        return new ArrayList<>(lobbies.values());
     }
 
     public Lobby createLobby(User creator, String lobbyName, int requiredPlayersNum){
         int newId = idGenerator.getAndUpdate((value) -> (value + 1) % MAX_AVAILABLE_ID_NUM);
-        Lobby createdLobby = new Lobby(newId, lobbyName, requiredPlayersNum, creator.getUsername());
+        Lobby createdLobby = new Lobby(newId, creator, requiredPlayersNum, lobbyName);
         lobbies.put(newId, createdLobby);
         return createdLobby;
     }

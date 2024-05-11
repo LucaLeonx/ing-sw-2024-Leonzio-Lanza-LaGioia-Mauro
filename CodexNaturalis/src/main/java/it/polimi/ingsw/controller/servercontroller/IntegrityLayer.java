@@ -4,8 +4,11 @@ import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.InvalidOperationException;
+import it.polimi.ingsw.model.card.Card;
 import it.polimi.ingsw.model.card.CardOrientation;
+import it.polimi.ingsw.model.map.GameField;
 import it.polimi.ingsw.model.map.Point;
+import it.polimi.ingsw.model.player.Player;
 
 import java.util.List;
 
@@ -149,14 +152,33 @@ public class IntegrityLayer extends FrontierServerLayer {
 
     @Override
     public void registerPlayerMove(User user, int placedCardId, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) {
-
         if(user.getStatus() != IN_GAME){
             throw new InvalidOperationException("The user is not in any game");
         }
 
-        if(!user.getUsername().equals(user.getJoinedGame().getCurrentPlayerNickname())){
+        Game joinedGame = user.getJoinedGame();
+
+        if(!user.getUsername().equals(joinedGame.getCurrentPlayerNickname())){
             throw new InvalidOperationException("It is not the turn of the player");
         }
+
+        if(joinedGame.isEnded()){
+            throw new InvalidOperationException("The game has ended, cannot move");
+        }
+
+        Player userPlayer = joinedGame.getPlayer(user.getUsername());
+        GameField field = userPlayer.getField();
+
+        if(!field.getAvailablePositions().contains(placementPoint)){
+            throw new InvalidOperationException("The provided position is not among available ones");
+        }
+
+        Card placedCard = userPlayer.getCardsInHand().stream().filter((card) -> card.getId() == placedCardId).findFirst().orElseThrow(() -> new InvalidOperationException("Card with id: " + placedCardId + "is not existent"));
+
+        if(!placedCard.getSide(chosenSide).isPlayable(field)){
+            throw new InvalidOperationException("The card with id " + placedCard + "is not currently playable on the " + chosenSide);
+        }
+
 
         super.registerPlayerMove(user, placedCardId, placementPoint, chosenSide, drawChoice);
     }

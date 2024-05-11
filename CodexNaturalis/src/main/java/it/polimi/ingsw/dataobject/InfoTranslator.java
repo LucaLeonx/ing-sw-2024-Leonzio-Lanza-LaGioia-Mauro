@@ -2,7 +2,6 @@ package it.polimi.ingsw.dataobject;
 
 import it.polimi.ingsw.controller.clientcontroller.*;
 import it.polimi.ingsw.controller.servercontroller.Lobby;
-import it.polimi.ingsw.controller.servercontroller.User;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.PlayerSetup;
@@ -152,7 +151,7 @@ public abstract class InfoTranslator {
         return new LobbyInfo(lobby.getId(),
                 lobby.getName(),
                 lobby.getCreatorUsername(),
-                new ArrayList<>(lobby.getConnectedUser()),
+                new ArrayList<>(lobby.getConnectedUsers()),
                 lobby.getRequiredNumOfPlayers(),
                 lobby.getNumOfWaitingPlayers());
     }
