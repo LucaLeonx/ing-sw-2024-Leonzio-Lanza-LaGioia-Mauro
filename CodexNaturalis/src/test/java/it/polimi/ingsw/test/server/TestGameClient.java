@@ -1,7 +1,11 @@
 package it.polimi.ingsw.test.server;
 
 public class TestGameClient {
-/*
+
+
+
+
+    /*
     public static void main(String[] args) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry();
         System.out.println("RMI registry bindings: ");
@@ -17,4 +21,5 @@ public class TestGameClient {
         System.out.println(gameManager.getControlledPlayerInfo());
 
     }
-*/}
+*/
+}

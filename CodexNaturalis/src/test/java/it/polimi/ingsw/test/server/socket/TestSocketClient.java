@@ -6,6 +6,7 @@ import it.polimi.ingsw.dataobject.MessageType;
 import it.polimi.ingsw.networking.socket.SocketClient;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class TestSocketClient {
     public static void main(String[] args) {
@@ -15,7 +16,16 @@ public class TestSocketClient {
             Message msg = new Message(MessageType.CREATE_LOBBY,
                     new LobbyInfo(1,"Seconda Lobby di Prova","Luca",new ArrayList<>(),4,0));
             client.startClientConnection();
-            client.sendMessage((Object) msg);
+
+            System.out.println("Type 'send' for send an info, Type 'quit' for close the client ");
+            Scanner scanner = new Scanner(System.in);
+            while(true) {
+                String line = scanner.nextLine();
+                if(line.equals("quit")) {break; }
+                else if (line.equals("send")) {
+                    client.sendMessage((Object) msg);
+                }
+            }
         }
         catch(Exception e){
             System.err.println(e.getMessage());

@@ -22,7 +22,7 @@ public class SocketServer {
             System.err.println(e.getMessage());
             return;
         }
-        System.out.println("Server ready");
+        System.out.println("Server ready to listen from Socket");
         while (true) {
             try {
                 Socket socket = serverSocket.accept();

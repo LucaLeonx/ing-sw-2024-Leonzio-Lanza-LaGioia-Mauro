@@ -1,46 +1,17 @@
-package it.polimi.ingsw.networking;
+package it.polimi.ingsw.test.server;
 
 import it.polimi.ingsw.controller.servercontroller.Controller;
 import it.polimi.ingsw.controller.servercontroller.Lobby;
-import it.polimi.ingsw.dataobject.LobbyInfo;
-import it.polimi.ingsw.dataobject.Message;
-import it.polimi.ingsw.dataobject.MessageType;
-import it.polimi.ingsw.networking.RMI.RMIController;
-import it.polimi.ingsw.networking.socket.SocketClient;
 
-import javax.naming.*;
-import java.io.IOException;
 import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class AppClient {
-    public static void main(String[] args) throws NamingException, IOException, NotBoundException {
-
-        System.out.println("Welcome to Codex Naturalis!!\n");
-
-        Scanner scanner = new Scanner(System.in);
-        String input;
-        do{
-            System.out.println("Please choose between RMI and Socket connection");
-            System.out.println("1. RMI");
-            System.out.println("2. Socket");
-            input = scanner.nextLine();
-            if(input.equals("1")){
-                startRMI();
-            } else if (input.equals("2")) {
-                startSocket();
-            }else {
-                System.out.println("Character non valid!! Please try again ");
-            }
-        }while(!input.equals("1") && !input.equals("2"));
-
-    }
-
-    private static void startRMI() throws IOException, NotBoundException {
+public class TestClientRMI {
+    public static void main(String[] args) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry();
         System.out.println("RMI registry bindings: ");
         String[] e = registry.list();
@@ -81,28 +52,5 @@ public class AppClient {
         }
 
         System.out.println(testController.getLobbiesNames());
-    }
-
-    private static void startSocket() throws IOException, NotBoundException {
-        SocketClient client = new SocketClient(6660);
-
-        try{
-            Message msg = new Message(MessageType.CREATE_LOBBY,
-                    new LobbyInfo(1,"Seconda Lobby di Prova","Luca",new ArrayList<>(),4,0));
-            client.startClientConnection();
-
-            System.out.println("Type 'send' for send an info, Type 'quit' for close the client ");
-            Scanner scanner = new Scanner(System.in);
-            while(true) {
-                String line = scanner.nextLine();
-                if(line.equals("quit")) {break; }
-                else if (line.equals("send")) {
-                    client.sendMessage((Object) msg);
-                }
-            }
-        }
-        catch(Exception e){
-            System.err.println(e.getMessage());
-        }
     }
 }
