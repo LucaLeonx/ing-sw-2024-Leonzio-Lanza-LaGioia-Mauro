@@ -20,7 +20,7 @@ public class AuthenticatedSession implements Controller{
 
     @Override
     public String getCurrentPlayer() throws RemoteException {
-        enteringServerLayer.getCurrentPlayer(user);
+        return enteringServerLayer.getCurrentPlayer(user);
     }
 
     @Override
