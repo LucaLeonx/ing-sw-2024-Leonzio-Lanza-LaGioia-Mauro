@@ -48,6 +48,23 @@ public class ExecutionLayer extends InternalServerLayer{
     public Lobby addUserToLobby(User user, int lobbyId) {
         Lobby lobby = lobbyList.getLobbyById(lobbyId);
         lobby.addUser(user);
+
+
+
+
+        if(lobby.readyToStart()){
+
+            Game startedGame = new Game(lobby.getConnectedUserNames());
+            games.add(startedGame);                                    
+
+            for(User lobbyUser: lobby.getConnectedUsers()){
+                lobbyUser.setStatus(UserStatus.IN_GAME);
+                lobbyUser.setJoinedLobby(null);
+                lobbyUser.setJoinedGame(startedGame);
+            }
+
+            lobbyList.removeLobby(lobbyId);
+        }
         return lobby;
     }
 
@@ -133,5 +150,11 @@ public class ExecutionLayer extends InternalServerLayer{
     @Override
     public void logout(User user){
         userList.removeUser(user);
+    }
+
+    @Override
+    public void exitGame(User user){
+        user.setStatus(UserStatus.LOBBY_CHOICE);
+        user.setJoinedGame(null);
     }
 }

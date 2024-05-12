@@ -26,6 +26,8 @@ public class IntegrityLayer extends FrontierServerLayer {
 
         if(user.getStatus() != LOBBY_CHOICE){
             throw new InvalidOperationException("Cannot create Lobby when not choosing one");
+        } else if (requiredPlayersNum < 2 || requiredPlayersNum > 4){
+            throw new InvalidOperationException("Invalid number of required players");
         }
 
         return super.createLobby(user, lobbyName, requiredPlayersNum);
@@ -223,5 +225,16 @@ public class IntegrityLayer extends FrontierServerLayer {
         }
 
         return super.getLeaderboard(user);
+    }
+
+    @Override
+    public void exitGame(User user){
+        if(user.getStatus() != IN_GAME){
+            throw new InvalidOperationException("The user is not in any game");
+        } else if(!user.getJoinedGame().isEnded()){
+            throw new InvalidOperationException("Cannot exit from the game, it has not ended yet");
+        }
+
+        super.exitGame(user);
     }
 }

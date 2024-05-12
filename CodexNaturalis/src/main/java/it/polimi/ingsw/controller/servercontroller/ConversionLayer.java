@@ -103,4 +103,9 @@ public class ConversionLayer extends FrontierServerLayer {
     public List<String> getPlayerNames(User user){
         return internalServerLayer.getPlayerNames(user.getJoinedGame());
     }
+
+    @Override
+    public void exitGame(User user){
+        internalServerLayer.exitGame(user);
+    }
 }

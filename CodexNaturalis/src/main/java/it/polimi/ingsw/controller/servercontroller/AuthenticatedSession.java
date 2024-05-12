@@ -105,4 +105,8 @@ public class AuthenticatedSession implements Controller{
     public List<String> getPlayerNames(){
         return enteringServerLayer.getPlayerNames(user);
     }
+
+    public void exitGame() {
+        enteringServerLayer.exitGame(user);
+    }
 }
