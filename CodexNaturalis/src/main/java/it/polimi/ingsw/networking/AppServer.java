@@ -1,4 +1,5 @@
-package it.polimi.ingsw.networking;
+
+/*package it.polimi.ingsw.networking;
 
 import it.polimi.ingsw.networking.RMI.RMIServerController;
 import it.polimi.ingsw.networking.socket.SocketServer;
@@ -9,7 +10,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class AppServer {
-    public static void main(String[] args) throws RemoteException, AlreadyBoundException {
+    /*public static void main(String[] args) throws RemoteException, AlreadyBoundException {
         System.out.println("Building server");
 
         RMIServerController rmiServer = new RMIServerController();
@@ -23,4 +24,4 @@ public class AppServer {
         server.startServer();
 
     }
-}
+}*/

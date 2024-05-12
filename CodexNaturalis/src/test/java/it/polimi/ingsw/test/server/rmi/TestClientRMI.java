@@ -1,4 +1,4 @@
-package it.polimi.ingsw.test.server;
+package it.polimi.ingsw.test.server.rmi;
 
 import it.polimi.ingsw.controller.servercontroller.Controller;
 import it.polimi.ingsw.controller.servercontroller.Lobby;
