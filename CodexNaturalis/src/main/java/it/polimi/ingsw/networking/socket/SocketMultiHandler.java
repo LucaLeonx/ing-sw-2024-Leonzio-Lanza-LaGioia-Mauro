@@ -14,12 +14,15 @@ public class SocketMultiHandler implements Runnable {
 
     public void run() {
         try {
-            InputStream in = socket.getInputStream();
             //PrintWriter out = new PrintWriter(socket.getOutputStream());
-            ObjectInputStream ois = new ObjectInputStream(in);
-            Message msg = (Message) ois.readObject();
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            Message InMsg = (Message) ois.readObject();
 
-            System.out.println("Object received:\n\t"+ msg.getObj());
+            //Message OutMsg =  MessageTranslator.processMessage(InMsg)
+            //oos.writeObject(OutMsg)
+            //oos.flush()
+            System.out.println("Object received:\n\t"+ InMsg.getObj());
 
         } catch (IOException e) {
             System.err.println(e.getMessage());

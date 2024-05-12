@@ -1,11 +1,9 @@
 package it.polimi.ingsw.networking.socket;
 
 import it.polimi.ingsw.dataobject.LobbyInfo;
+import it.polimi.ingsw.dataobject.Message;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -28,6 +26,7 @@ public class SocketClient {
 
         try{
             socketOut.writeObject(obj);
+            socketOut.flush();
             System.out.println("message sent");
         }catch(NoSuchElementException e) {
             System.out.println("Connection closed");
@@ -35,5 +34,10 @@ public class SocketClient {
             socketOut.close();
             this.socket.close();
         }
+    }
+
+    public Message receiveMessage(Object obj) throws IOException, ClassNotFoundException {
+        ObjectInputStream socketIn = new ObjectInputStream(socket.getInputStream());
+        return (Message) socketIn.readObject();
     }
 }
