@@ -129,4 +129,9 @@ public class ExecutionLayer extends InternalServerLayer{
     public List<Lobby> getLobbies() {
         return lobbyList.getLobbies();
     }
+
+    @Override
+    public void logout(User user){
+        userList.removeUser(user);
+    }
 }

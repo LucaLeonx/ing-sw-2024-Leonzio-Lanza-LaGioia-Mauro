@@ -13,8 +13,7 @@ public class AppServer {
 
         RMIServerController rmiServer = new RMIServerController();
 
-        LocateRegistry.createRegistry(1099);
-        Registry reg = LocateRegistry.getRegistry();
+        Registry reg = LocateRegistry.createRegistry(1099);
         reg.rebind("Codex_Naturalis_server", rmiServer);
 
         System.out.println("Registry bound, ready to listen for clients");

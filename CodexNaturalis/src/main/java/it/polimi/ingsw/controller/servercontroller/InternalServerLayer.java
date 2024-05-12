@@ -75,6 +75,14 @@ public abstract class InternalServerLayer {
         return nextLayers[0].getLobbies();
     }
 
+    public void logout(User user){
+        nextLayers[0].logout(user);
+    }
+
+    public List<String> getPlayerNames(Game joinedGame) {
+        return joinedGame.getPlayersNicknames();
+    }
+
     // TODO: choose observer methods
-    // TODO: add method to exit from game
+
 }

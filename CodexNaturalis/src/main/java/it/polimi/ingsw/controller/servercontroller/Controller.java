@@ -15,6 +15,7 @@ import java.util.List;
 
 public interface Controller extends Remote {
     public String getCurrentPlayer() throws RemoteException;
+    public List<String> getPlayerNames();
     public ControlledPlayerInfo getControlledPlayerInfo() throws RemoteException;
     public OpponentInfo getOpponentInfo(String name) throws RemoteException;
     public DrawableCardsInfo getDrawableCardsInfo() throws RemoteException;
@@ -23,9 +24,15 @@ public interface Controller extends Remote {
     public boolean hasGameEnded() throws RemoteException;
     public void registerPlayerSetupChoice(int chosenObjectiveId, CardOrientation initialCardOrientation) throws RemoteException;
     public void registerPlayerMove(int placedCardId, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException;
-    public LobbyInfo addLobby(String name, int playersNumber) throws RemoteException;
+
+    public List<ControlledPlayerInfo> getLeaderboard();
+
+    LobbyInfo addLobby(String name, int playersNumber) throws RemoteException;
     public void joinLobby(int lobbyId) throws RemoteException;
+    public void exitFromLobby() throws RemoteException;
     public List<LobbyInfo> getLobbies() throws RemoteException;
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException;
     public String test() throws RemoteException;
+    public void logout();
+
 }

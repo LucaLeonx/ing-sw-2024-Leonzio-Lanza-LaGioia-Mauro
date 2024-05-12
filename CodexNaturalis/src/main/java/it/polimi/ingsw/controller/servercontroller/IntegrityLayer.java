@@ -15,7 +15,6 @@ import java.util.List;
 import static it.polimi.ingsw.controller.servercontroller.UserStatus.*;
 
 public class IntegrityLayer extends FrontierServerLayer {
-
     private LobbyList lobbyList;
 
     public IntegrityLayer(LobbyList lobbyList, FrontierServerLayer... nextLayers) {
@@ -193,5 +192,36 @@ public class IntegrityLayer extends FrontierServerLayer {
         }
 
         return super.getWinnerName(user);
+    }
+
+    @Override
+    public void logout(User user){
+        if(user.getStatus() == IN_GAME){
+            throw new InvalidOperationException("Cannot logout during a game");
+        } else if (user.getStatus() == WAITING_TO_START){
+            throw new InvalidOperationException("Cannot logout when in a lobby");
+        } else if(user.getStatus() != LOBBY_CHOICE){
+            throw new InvalidOperationException("Cannot logout when performing other actions");
+        }
+
+        super.logout(user);
+    }
+
+    @Override
+    public List<String> getPlayersNames(User user){
+        if(user.getStatus() != IN_GAME){
+            throw new InvalidOperationException("The user is not in any game");
+        }
+
+        return super.getPlayerNames(user);
+    }
+
+    @Override
+    public List<ControlledPlayerInfo> getLeaderboard(User user){
+        if(!user.getJoinedGame().isEnded()){
+            throw new InvalidOperationException("The game has not ended. Cannot provide a leaderboard");
+        }
+
+        return super.getLeaderboard(user);
     }
 }

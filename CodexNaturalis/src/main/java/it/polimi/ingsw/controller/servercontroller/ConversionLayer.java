@@ -89,8 +89,18 @@ public class ConversionLayer extends FrontierServerLayer {
         internalServerLayer.registerPlayerMove(user.getJoinedGame(), user.getUsername(), placedCardId, placementPoint, chosenSide, drawChoice);
     }
 
+    @Deprecated
     @Override
     public String getWinnerName(User user) {
         return internalServerLayer.getLeaderboard(user.getJoinedGame()).getFirst().getNickname();
+    }
+
+    public List<ControlledPlayerInfo> getLeaderboard(User user) {
+        return internalServerLayer.getLeaderboard(user.getJoinedGame()).stream().map(InfoTranslator::convertToControlledPlayerInfo).toList();
+    }
+
+    @Override
+    public List<String> getPlayerNames(User user){
+        return internalServerLayer.getPlayerNames(user.getJoinedGame());
     }
 }

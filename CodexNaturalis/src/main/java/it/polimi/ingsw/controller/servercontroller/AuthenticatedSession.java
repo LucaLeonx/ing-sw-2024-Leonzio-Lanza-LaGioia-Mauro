@@ -64,6 +64,11 @@ public class AuthenticatedSession implements Controller{
     }
 
     @Override
+    public List<ControlledPlayerInfo> getLeaderboard() {
+        return enteringServerLayer.getLeaderboard(user);
+    }
+
+    @Override
     public LobbyInfo addLobby(String name, int playersNumber) throws RemoteException {
         return enteringServerLayer.createLobby(user, name, playersNumber);
     }
@@ -86,5 +91,18 @@ public class AuthenticatedSession implements Controller{
     @Override
     public String test() throws RemoteException {
         return "Ciao";
+    }
+
+    @Override
+    public void logout() {
+        enteringServerLayer.logout(user);
+    }
+
+    public void exitFromLobby() {
+        enteringServerLayer.exitFromLobby(user);
+    }
+
+    public List<String> getPlayerNames(){
+        return enteringServerLayer.getPlayerNames(user);
     }
 }
