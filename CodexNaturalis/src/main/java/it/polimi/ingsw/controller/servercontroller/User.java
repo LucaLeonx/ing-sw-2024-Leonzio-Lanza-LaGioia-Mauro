@@ -4,9 +4,13 @@ import it.polimi.ingsw.model.Game;
 
 import java.rmi.RemoteException;
 import java.util.Optional;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class User {
+
+    private static final int MAX_TEMPCODE_VAL = 1_000_000;
     private final String username;
 
     // TODO: remove optional: we can give it immediately after connection
@@ -24,7 +28,11 @@ public class User {
         joinedGame = Optional.empty();
     }
 
-    public void givePass(Integer pass){ this.tempPassword = Optional.of(pass); }
+    public int generateNewPass(){
+        tempPassword = Optional.of(ThreadLocalRandom.current().nextInt(0, MAX_TEMPCODE_VAL));
+        return tempPassword.get();
+    }
+
     public UserStatus getStatus(){
         return status.get();
     }

@@ -32,6 +32,10 @@ public class UserList {
         return this.users.get(username);
     }
 
+    public boolean isUserRegistered(String username){
+        return users.containsKey(username);
+    }
+
     public Set<User> getUsers(){
         return new HashSet<>(users.values());
     }
