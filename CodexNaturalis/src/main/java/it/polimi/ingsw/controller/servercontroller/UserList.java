@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.servercontroller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,6 +15,10 @@ public class UserList {
         for(User user : users){
             addUser(user);
         }
+    }
+
+    public UserList() {
+        this(new ArrayList<>());
     }
 
     public void addUser(User user){

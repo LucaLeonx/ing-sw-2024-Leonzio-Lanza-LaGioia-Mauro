@@ -12,7 +12,7 @@ import static it.polimi.ingsw.dataobject.InfoTranslator.convertToLobbyInfo;
 public class ConversionLayer extends FrontierServerLayer {
     private final InternalServerLayer internalServerLayer;
 
-    public ConversionLayer(LobbyList lobbyList, InternalServerLayer internalServerLayer, LobbyList lobbyList1) {
+    public ConversionLayer(LobbyList lobbyList, InternalServerLayer internalServerLayer) {
         super(lobbyList);
         this.internalServerLayer = internalServerLayer;
     }
