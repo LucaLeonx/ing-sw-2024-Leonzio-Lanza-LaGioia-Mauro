@@ -2,6 +2,7 @@ package it.polimi.ingsw.test.server;
 
 import it.polimi.ingsw.controller.servercontroller.Controller;
 import it.polimi.ingsw.controller.servercontroller.Lobby;
+import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -9,6 +10,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
 import java.util.Scanner;
+
 
 public class TestClientRMI {
     public static void main(String[] args) throws RemoteException, NotBoundException {
@@ -30,13 +32,12 @@ public class TestClientRMI {
             if(input.equals("1")){
                 System.out.println("Give the lobby name");
                 String lobbyname = stdin.nextLine();
-                //System.out.println("Give the number of player needed");
-                //int num = stdin.nextInt();
-                System.out.println("Give your name");
-                testController.addLobby(stdin.nextLine(),lobbyname,4);
+                System.out.println("Give the number of player needed");
+                int num = stdin.nextInt();
+                testController.addLobby(lobbyname, num);
                 System.out.println("These are the registered lobbies");
-                List<Lobby> lobbies = testController.getLobbies();
-                for(Lobby l : lobbies){
+                List<LobbyInfo> lobbies = testController.getLobbies();
+                for(LobbyInfo l : lobbies){
                     System.out.println(l);
                 }
             } else if (input.equals("2")) {
@@ -44,13 +45,13 @@ public class TestClientRMI {
                 String userName = stdin.nextLine();
                 System.out.println("Give the lobby id where you want to enter: ");
                 int lobbyid = stdin.nextInt();
-                testController.addUserToLobby(lobbyid,userName);
+                testController.joinLobby(lobbyid);
             } else if (input.equals("3")) {
                 testController.getLobbies().forEach(System.out::println);
             }
 
         }
 
-        System.out.println(testController.getLobbiesNames());
+        System.out.println(testController.getLobbies().stream().map(LobbyInfo::name).toList());
     }
 }

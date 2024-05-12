@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/*
 public class RMIServerController extends ServerController implements Controller {
     private List<Lobby> lobbies;
     private List<User> users;
@@ -77,4 +78,4 @@ public class RMIServerController extends ServerController implements Controller 
         }
     }
 
-}
+}*/

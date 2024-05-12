@@ -15,10 +15,9 @@ public interface ClientController {
     public void login(String username, int tempCode) throws RemoteException;
     public void logout();
     public List<LobbyInfo> getLobbyList() throws RemoteException;
+    public LobbyInfo createLobby(String lobbyName, int requiredPlayers) throws RemoteException;
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException;
-
     void joinLobby(int lobbyId) throws RemoteException;
-
     public void exitFromLobby();
     // public subscribeToLobbyListUpdates(ControllerObserver observer);
     // public subscribeToJoinedLobbyUpdates(ControllerObserver observer);

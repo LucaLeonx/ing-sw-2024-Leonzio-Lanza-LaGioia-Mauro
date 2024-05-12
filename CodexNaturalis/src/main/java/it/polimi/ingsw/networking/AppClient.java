@@ -1,5 +1,7 @@
 package it.polimi.ingsw.networking;
 
+import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
 import it.polimi.ingsw.controller.servercontroller.Controller;
 import it.polimi.ingsw.controller.servercontroller.Lobby;
 import it.polimi.ingsw.dataobject.LobbyInfo;
@@ -46,7 +48,9 @@ public class AppClient {
         String[] e = registry.list();
         for (String s : e) System.out.println(s);
         String remoteObjectName = "Codex_Naturalis_server";
-        Controller testController = (Controller) registry.lookup("Codex_Naturalis_server");
+        ClientController controller = new RMIClientController();
+        int tempCode = controller.register("Luca");
+        controller.login("Luca", tempCode);
 
         String input;
         while (true){
@@ -59,13 +63,13 @@ public class AppClient {
             if(input.equals("1")){
                 System.out.println("Give the lobby name");
                 String lobbyname = stdin.nextLine();
-                //System.out.println("Give the number of player needed");
-                //int num = stdin.nextInt();
+                System.out.println("Give the number of player needed");
+                int num = stdin.nextInt();
                 System.out.println("Give your name");
-                testController.addLobby(stdin.nextLine(),lobbyname,4);
+                controller.createLobby(lobbyname,4);
                 System.out.println("These are the registered lobbies");
-                List<Lobby> lobbies = testController.getLobbies();
-                for(Lobby l : lobbies){
+                List<LobbyInfo> lobbies = controller.getLobbyList();
+                for(LobbyInfo l : lobbies){
                     System.out.println(l);
                 }
             } else if (input.equals("2")) {
@@ -73,14 +77,12 @@ public class AppClient {
                 String userName = stdin.nextLine();
                 System.out.println("Give the lobby id where you want to enter: ");
                 int lobbyid = stdin.nextInt();
-                testController.addUserToLobby(lobbyid,userName);
+                controller.joinLobby(lobbyid);
             } else if (input.equals("3")) {
-                testController.getLobbies().forEach(System.out::println);
+                controller.getLobbyList().forEach(System.out::println);
             }
 
         }
-
-        System.out.println(testController.getLobbiesNames());
     }
 
     private static void startSocket() throws IOException, NotBoundException {

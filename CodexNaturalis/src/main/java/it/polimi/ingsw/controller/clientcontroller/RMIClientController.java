@@ -68,6 +68,12 @@ public class RMIClientController implements ClientController{
     }
 
     @Override
+    public LobbyInfo createLobby(String lobbyName, int requiredPlayers) throws RemoteException {
+        checkLogin();
+        return session.addLobby(lobbyName, requiredPlayers);
+    }
+
+    @Override
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
         checkLogin();
         return session.getJoinedLobbyInfo();
