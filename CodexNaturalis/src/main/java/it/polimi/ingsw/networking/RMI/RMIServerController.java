@@ -3,6 +3,7 @@ package it.polimi.ingsw.networking.RMI;
 
 import it.polimi.ingsw.controller.servercontroller.Controller;
 import it.polimi.ingsw.controller.servercontroller.Lobby;
+import it.polimi.ingsw.controller.servercontroller.User;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.rmi.RemoteException;
@@ -13,9 +14,11 @@ import java.util.Random;
 
 public class RMIServerController extends ServerController implements Controller {
     private List<Lobby> lobbies;
+    private List<User> users;
 
     public RMIServerController() throws RemoteException {
         this.lobbies = new ArrayList<>();
+        this.users = new ArrayList<>();
         UnicastRemoteObject.exportObject(this, 0);
     }
 
@@ -74,7 +77,4 @@ public class RMIServerController extends ServerController implements Controller 
         }
     }
 
-    public String test() throws RemoteException {
-        return "hello";
-    }
 }
