@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.PlayerColor;
 
+import java.rmi.RemoteException;
+import java.util.Scanner;
+
 import static java.lang.Math.abs;
 
 
@@ -332,6 +335,181 @@ public class TUI {
     public void showBegginningOfGame(){
         printStylishMessage("                          WELCOME TO CODEX NATURALIS                            ", "\u001B[32m", "\u001B[31m");
         printMushroom();
+        try {
+            // Sleep for 100 milliseconds (0.1 seconds) between characters
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        /*System.out.print("\033[H\033[2J");
+        System.out.flush();
+        System.out.println("Screen has been cleared!");*/
+        for(int i=0; i<100000; i++){
+            System.out.println();
+        }
+        TUILoginOrRegister();
+    }
+
+
+    public static void TUILoginOrRegister() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Welcome!");
+        while (true) {
+            System.out.println("1. Login");
+            System.out.println("2. Register");
+            System.out.println("3. Exit");
+            System.out.print("Please choose an option: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    TUIlogin(scanner);
+                    break;
+                case 2:
+                    TUIregister(scanner);
+                    break;
+                case 3:
+                    System.out.println("Goodbye!");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private static void TUIlogin(Scanner scanner) {
+        System.out.println("\n-- Login --");
+        System.out.print("Enter your username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter the secret code: ");
+        int code = scanner.nextInt();
+        try {
+            ClientController.login(username, code);
+        }
+        catch (RemoteException RE) {
+            System.out.println("It seems that your username and or code are wrong, chose");
+            while(true){
+                System.out.println("1. Try again");
+                System.out.println("2. Go back");
+
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+
+                switch (choice) {
+                    case 1:
+                        TUIlogin(scanner);
+                        break;
+                    case 2:
+                        TUILoginOrRegister();
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                }
+            }
+        }
+        System.out.println("Hello "+username +"\n\n");
+        TUICreateNewLobbyOrJoinLobby(scanner);
+    }
+
+    private static void TUIregister(Scanner scanner) {
+        System.out.println("\n-- Register --");
+        System.out.print("Choose a username: ");
+        String username = scanner.nextLine();
+        int code;
+        try {
+            code=ClientController.register(username);
+
+        }
+        catch (RemoteException RE) {
+            System.out.println("It seems that your username is already in use, chose");
+            while (true) {
+                System.out.println("1. Chose another nickname");
+                System.out.println("2. Go back");
+
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+
+                switch (choice) {
+                    case 1:
+                        TUIregister(scanner);
+                        break;
+                    case 2:
+                        TUILoginOrRegister();
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                }
+            }
+        }
+        System.out.println("Hello "+username+ " you secret code is " +code +" please remember it next time you login\n\n");
+        TUICreateNewLobbyOrJoinLobby(scanner);
+    }
+
+    private static void TUICreateNewLobbyOrJoinLobby(Scanner scanner) {
+        while(true) {
+            System.out.println("1. Create new lobby ");
+            System.out.println("2. Show existing lobby: ");
+            System.out.println("3. logout ");
+            System.out.print("Please choose an option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            switch (choice) {
+                case 1:
+                    TUICreateNewLobby(scanner);
+                    break;
+                case 2:
+                    TUIJoinLobby(scanner);
+                    break;
+                case 3:
+                    TUILoginOrRegister();
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+
+    }
+
+    private static void TUIJoinLobby(Scanner scanner) {
+        if(ClientController.getLobbyList().size()>0) {
+            for (int i; i < ClientController.getLobbyList().size(); i++) {
+                System.out.println(i+1 + ". " + ClientController.getLobbyList().get(i));
+            }
+            System.out.println("Select the lobby you want to join or 0 to go back");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            if(choice==0){
+                TUICreateNewLobbyOrJoinLobby(scanner);
+            }
+            try{
+                ClientController.joinLobby(ClientController.getLobbyList().get(choice-1).id());
+            }
+            catch(RemoteException RE){
+                System.out.println("It seeems like the lobby you are trying to enter doesn't exists, make another choice");
+                TUIJoinLobby(scanner);
+            }
+        }
+        else{
+            System.out.println("No lobby present right now we are sorry, try creating one by yourself");
+            TUICreateNewLobbyOrJoinLobby(scanner);
+        }
+    }
+
+    private static void TUICreateNewLobby(Scanner scanner) {
+        int numberOfPartecipants;
+        System.out.print("chose name of the new lobby: ");
+        String lobbyName = scanner.nextLine();
+        do {
+            System.out.print("chose number of the partecipants (between 2 and 4): ");
+            numberOfPartecipants = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            if(numberOfPartecipants<2 || numberOfPartecipants>4){
+                System.out.println("please select a number of partecipants between 2 and 4");
+            }
+        }while (numberOfPartecipants<2 || numberOfPartecipants>4);
+        ClientController.createLobby(lobbyName, numberOfPartecipants);
     }
 
 
@@ -389,5 +567,7 @@ public class TUI {
         System.out.println("\u001B[31m"+"\t\t\t\t\t\t        :       :");
         System.out.println("\u001B[31m"+"\t\t\t\t\t\t       `._____.'");
         System.out.println("\u001B[32m"+"_______\\|/_____________\\|/_________________________\\|/_________________\\|/__________");
+        // Reset colors after printing
+        System.out.print("\u001B[0m");
     }
 }
