@@ -1,6 +1,6 @@
 package it.polimi.ingsw.test.server.socket;
 
-import it.polimi.ingsw.networking.socket.SocketServer;
+import it.polimi.ingsw.controller.socket.SocketServer;
 
 public class TestSocketServer {
     public static void main(String[] args) {
