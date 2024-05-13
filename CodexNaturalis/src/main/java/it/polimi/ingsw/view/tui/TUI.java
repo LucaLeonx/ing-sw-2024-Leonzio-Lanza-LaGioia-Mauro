@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.PlayerColor;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
@@ -332,7 +333,7 @@ public class TUI {
         System.out.print("\n\n");
     }
 
-    public void showBegginningOfGame(){
+    public static void showBegginningOfGame() {
         printStylishMessage("                          WELCOME TO CODEX NATURALIS                            ", "\u001B[32m", "\u001B[31m");
         printMushroom();
         try {
@@ -341,19 +342,20 @@ public class TUI {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        /*System.out.print("\033[H\033[2J");
-        System.out.flush();
-        System.out.println("Screen has been cleared!");*/
-        for(int i=0; i<100000; i++){
-            System.out.println();
+        try {
+            ClientController controller = new RMIClientController();
+            TUILoginOrRegister(controller);
         }
-        TUILoginOrRegister();
+        catch(Exception e)
+        {
+            System.out.println("We are sorry something went wrong but it is not your fault");
+            showBegginningOfGame();
+        }
     }
 
 
-    public static void TUILoginOrRegister() {
+    public static void TUILoginOrRegister(ClientController controller) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Welcome!");
         while (true) {
             System.out.println("1. Login");
             System.out.println("2. Register");
@@ -365,10 +367,10 @@ public class TUI {
 
             switch (choice) {
                 case 1:
-                    TUIlogin(scanner);
+                    TUIlogin(scanner, controller);
                     break;
                 case 2:
-                    TUIregister(scanner);
+                    TUIregister(scanner, controller);
                     break;
                 case 3:
                     System.out.println("Goodbye!");
@@ -380,14 +382,14 @@ public class TUI {
         }
     }
 
-    private static void TUIlogin(Scanner scanner) {
+    private static void TUIlogin(Scanner scanner, ClientController controller) {
         System.out.println("\n-- Login --");
         System.out.print("Enter your username: ");
         String username = scanner.nextLine();
         System.out.print("Enter the secret code: ");
         int code = scanner.nextInt();
         try {
-            ClientController.login(username, code);
+            controller.login(username, code);
         }
         catch (RemoteException RE) {
             System.out.println("It seems that your username and or code are wrong, chose");
@@ -400,10 +402,10 @@ public class TUI {
 
                 switch (choice) {
                     case 1:
-                        TUIlogin(scanner);
+                        TUIlogin(scanner, controller);
                         break;
                     case 2:
-                        TUILoginOrRegister();
+                        TUILoginOrRegister(controller);
                         break;
                     default:
                         System.out.println("Invalid choice. Please try again.");
@@ -411,16 +413,16 @@ public class TUI {
             }
         }
         System.out.println("Hello "+username +"\n\n");
-        TUICreateNewLobbyOrJoinLobby(scanner);
+        TUICreateNewLobbyOrJoinLobby(scanner, controller);
     }
 
-    private static void TUIregister(Scanner scanner) {
+    private static void TUIregister(Scanner scanner, ClientController controller) {
         System.out.println("\n-- Register --");
         System.out.print("Choose a username: ");
         String username = scanner.nextLine();
         int code;
         try {
-            code=ClientController.register(username);
+            code=controller.register(username);
 
         }
         catch (RemoteException RE) {
@@ -434,10 +436,10 @@ public class TUI {
 
                 switch (choice) {
                     case 1:
-                        TUIregister(scanner);
+                        TUIregister(scanner, controller);
                         break;
                     case 2:
-                        TUILoginOrRegister();
+                        TUILoginOrRegister(controller);
                         break;
                     default:
                         System.out.println("Invalid choice. Please try again.");
@@ -445,10 +447,10 @@ public class TUI {
             }
         }
         System.out.println("Hello "+username+ " you secret code is " +code +" please remember it next time you login\n\n");
-        TUICreateNewLobbyOrJoinLobby(scanner);
+        TUICreateNewLobbyOrJoinLobby(scanner, controller);
     }
 
-    private static void TUICreateNewLobbyOrJoinLobby(Scanner scanner) {
+    private static void TUICreateNewLobbyOrJoinLobby(Scanner scanner, ClientController controller) {
         while(true) {
             System.out.println("1. Create new lobby ");
             System.out.println("2. Show existing lobby: ");
@@ -458,13 +460,13 @@ public class TUI {
             scanner.nextLine(); // Consume newline
             switch (choice) {
                 case 1:
-                    TUICreateNewLobby(scanner);
+                    TUICreateNewLobby(scanner, controller);
                     break;
                 case 2:
-                    TUIJoinLobby(scanner);
+                    TUIJoinLobby(scanner, controller);
                     break;
                 case 3:
-                    TUILoginOrRegister();
+                    TUILoginOrRegister(controller);
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
@@ -472,32 +474,36 @@ public class TUI {
 
     }
 
-    private static void TUIJoinLobby(Scanner scanner) {
-        if(ClientController.getLobbyList().size()>0) {
-            for (int i; i < ClientController.getLobbyList().size(); i++) {
-                System.out.println(i+1 + ". " + ClientController.getLobbyList().get(i));
-            }
-            System.out.println("Select the lobby you want to join or 0 to go back");
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-            if(choice==0){
-                TUICreateNewLobbyOrJoinLobby(scanner);
-            }
-            try{
-                ClientController.joinLobby(ClientController.getLobbyList().get(choice-1).id());
-            }
-            catch(RemoteException RE){
-                System.out.println("It seeems like the lobby you are trying to enter doesn't exists, make another choice");
-                TUIJoinLobby(scanner);
+    private static void TUIJoinLobby(Scanner scanner, ClientController controller) {
+        try {
+            if (controller.getLobbyList().size() > 0) {
+                for (int i=0 ; i < controller.getLobbyList().size(); i++) {
+                    System.out.println(i + 1 + ". " + controller.getLobbyList().get(i));
+                }
+                System.out.println("Select the lobby you want to join or 0 to go back");
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+                if (choice == 0) {
+                    TUICreateNewLobbyOrJoinLobby(scanner, controller);
+                }
+                try {
+                    controller.joinLobby(controller.getLobbyList().get(choice - 1).id());
+                } catch (RemoteException RE) {
+                    System.out.println("It seeems like the lobby you are trying to enter doesn't exists, make another choice");
+                    TUIJoinLobby(scanner, controller);
+                }
+            } else {
+                System.out.println("No lobby present right now we are sorry, try creating one by yourself");
+                TUICreateNewLobbyOrJoinLobby(scanner, controller);
             }
         }
-        else{
-            System.out.println("No lobby present right now we are sorry, try creating one by yourself");
-            TUICreateNewLobbyOrJoinLobby(scanner);
+        catch(Exception e) {
+            System.out.println("We are sorry something went wrong but it is not your fault");
+            showBegginningOfGame();
         }
     }
 
-    private static void TUICreateNewLobby(Scanner scanner) {
+    private static void TUICreateNewLobby(Scanner scanner, ClientController controller) {
         int numberOfPartecipants;
         System.out.print("chose name of the new lobby: ");
         String lobbyName = scanner.nextLine();
@@ -509,7 +515,13 @@ public class TUI {
                 System.out.println("please select a number of partecipants between 2 and 4");
             }
         }while (numberOfPartecipants<2 || numberOfPartecipants>4);
-        ClientController.createLobby(lobbyName, numberOfPartecipants);
+        try {
+            controller.createLobby(lobbyName, numberOfPartecipants);
+        }
+        catch (Exception e) {
+            System.out.println("We are sorry something went wrong but it is not your fault");
+            showBegginningOfGame();
+        }
     }
 
 
