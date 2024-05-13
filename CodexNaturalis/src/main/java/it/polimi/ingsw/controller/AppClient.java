@@ -5,7 +5,6 @@ import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.dataobject.Message;
 import it.polimi.ingsw.dataobject.MessageType;
-import it.polimi.ingsw.networking.RMI.RMIController;
 import it.polimi.ingsw.controller.socket.SocketClient;
 
 import javax.naming.*;
