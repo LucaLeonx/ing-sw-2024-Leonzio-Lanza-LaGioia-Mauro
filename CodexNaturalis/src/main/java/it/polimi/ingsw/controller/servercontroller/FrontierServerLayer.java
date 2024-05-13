@@ -89,4 +89,8 @@ public abstract class FrontierServerLayer {
     public List<ControlledPlayerInfo> getLeaderboard(User user) {
         return nextLayers[0].getLeaderboard(user);
     }
+
+    public void exitGame(User user) {
+        nextLayers[0].exitFromLobby(user);
+    }
 }

@@ -80,7 +80,11 @@ public abstract class InternalServerLayer {
     }
 
     public List<String> getPlayerNames(Game joinedGame) {
-        return joinedGame.getPlayersNicknames();
+        return nextLayers[0].getPlayerNames(joinedGame);
+    }
+
+    public void exitGame(User user) {
+        nextLayers[0].exitGame(user);
     }
 
     // TODO: choose observer methods

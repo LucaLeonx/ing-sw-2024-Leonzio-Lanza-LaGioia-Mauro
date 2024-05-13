@@ -12,7 +12,7 @@ import static it.polimi.ingsw.dataobject.InfoTranslator.convertToLobbyInfo;
 public class ConversionLayer extends FrontierServerLayer {
     private final InternalServerLayer internalServerLayer;
 
-    public ConversionLayer(LobbyList lobbyList, InternalServerLayer internalServerLayer, LobbyList lobbyList1) {
+    public ConversionLayer(LobbyList lobbyList, InternalServerLayer internalServerLayer) {
         super(lobbyList);
         this.internalServerLayer = internalServerLayer;
     }
@@ -102,5 +102,10 @@ public class ConversionLayer extends FrontierServerLayer {
     @Override
     public List<String> getPlayerNames(User user){
         return internalServerLayer.getPlayerNames(user.getJoinedGame());
+    }
+
+    @Override
+    public void exitGame(User user){
+        internalServerLayer.exitGame(user);
     }
 }

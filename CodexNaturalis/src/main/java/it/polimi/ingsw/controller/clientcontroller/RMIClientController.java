@@ -161,8 +161,14 @@ public class RMIClientController implements ClientController{
     }
 
     @Override
-    public void makeMove(CardInfo card, Point placementPoint, CardOrientation chosenSide, DrawChoice drawchoice) throws RemoteException {
+    public void makeMove(CardInfo card, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException {
         checkLogin();
-        session.registerPlayerMove(card.id(), placementPoint, chosenSide, drawchoice);
+        session.registerPlayerMove(card.id(), placementPoint, chosenSide, drawChoice);
+    }
+
+    @Override
+    public void exitGame() throws InvalidOperationException {
+        checkLogin();
+        session.exitGame();
     }
 }

@@ -38,10 +38,13 @@ public class Lobby implements Serializable {
 
     public boolean readyToStart(){ return waitingPlayers.size() == requiredNumOfPlayers; }
 
-    public List<String> getConnectedUsers(){
-        return waitingPlayers.stream().map(User::getUsername).toList();
+    public List<User> getConnectedUsers(){
+        return waitingPlayers;
     }
 
+    public List<String> getConnectedUserNames(){
+        return waitingPlayers.stream().map(User::getUsername).toList();
+    }
     public int getRequiredNumOfPlayers(){
         return this.requiredNumOfPlayers;
     }
@@ -66,7 +69,7 @@ public class Lobby implements Serializable {
         return new LobbyInfo(id,
                 name,
                 creatorUsername,
-                new ArrayList<>(getConnectedUsers()),
+                new ArrayList<>(getConnectedUserNames()),
                 requiredNumOfPlayers,
                 waitingPlayers.size());
     }
