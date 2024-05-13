@@ -49,17 +49,8 @@ public interface ClientController {
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException;
     public void exitFromLobby() throws RemoteException;
 
-    // public subscribeToLobbyListUpdates(ControllerObserver observer);
-    // public subscribeToJoinedLobbyUpdates(ControllerObserver observer);
-    // public subscribeToGameUpdates(ControllerObserver observer);
-
-    // class LobbyDialog implements ControllerObserver {
-    // @Override
-    // public void onJoinedLobbyUpdates(){
-    // ... Print lobbyInfo again
-    // }
-    // ...
-    // subscribeToJoinedLobbyUpdates(lobbyDialog);
+    public void subscribeToLobbyUpdates(LobbyObserver observer);
+    public void subscribeToGameUpdates(GameObserver observer);
 
     public String getCurrentPlayerName() throws RemoteException;
     public List<String> getPlayerNames();
