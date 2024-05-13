@@ -12,7 +12,7 @@ public class AppServer {
     public static void main(String[] args) throws RemoteException, AlreadyBoundException {
         System.out.println("Building server");
 
-        RMIServerController rmiServer = new RMIServerController();
+        //RMIServerController rmiServer = new RMIServerController();
 
         Registry reg = LocateRegistry.createRegistry(1099);
         reg.rebind("Codex_Naturalis_server", rmiServer);

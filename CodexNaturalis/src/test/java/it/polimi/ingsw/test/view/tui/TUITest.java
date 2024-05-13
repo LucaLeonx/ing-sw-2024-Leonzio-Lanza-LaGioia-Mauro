@@ -179,6 +179,9 @@ public class TUITest extends TestCase {
         tui.showCardsOnTable(InfoTranslator.convertToObjectiveInfo(objectiveCards.get(3)),InfoTranslator.convertToObjectiveInfo(objectiveCards.get(12)),drawableCards);
     }
 
+    public void testShowBeginningOfGame(){
+        tui.showBegginningOfGame();
+    }
 
 
 
