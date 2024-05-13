@@ -3,7 +3,7 @@ package it.polimi.ingsw.test.server.socket;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.dataobject.Message;
 import it.polimi.ingsw.dataobject.MessageType;
-import it.polimi.ingsw.networking.socket.SocketClient;
+import it.polimi.ingsw.controller.socket.SocketClient;
 
 import java.util.ArrayList;
 import java.util.Scanner;

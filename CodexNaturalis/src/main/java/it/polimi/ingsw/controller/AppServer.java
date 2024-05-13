@@ -1,9 +1,8 @@
-
-package it.polimi.ingsw.networking;
+package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.servercontroller.*;
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.networking.socket.SocketServer;
+import it.polimi.ingsw.controller.socket.SocketServer;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
@@ -17,7 +16,15 @@ public class AppServer {
     public static void main(String[] args) throws RemoteException, AlreadyBoundException {
         System.out.println("Building server");
 
-        AuthenticationManager authenticator = getAuthenticationManager();
+        List<Game> gameList = Collections.synchronizedList(new LinkedList<>());
+        UserList userList = new UserList();
+        LobbyList lobbyList = new LobbyList();
+
+        ExecutionLayer executionLayer = new ExecutionLayer(lobbyList, userList, gameList);
+        ConversionLayer conversionLayer = new ConversionLayer(lobbyList, executionLayer);
+        IntegrityLayer integrityLayer = new IntegrityLayer(lobbyList, conversionLayer);
+
+        AuthenticationManager authenticator = new AuthenticationManagerImpl(integrityLayer, userList);
 
         LocateRegistry.createRegistry(1099);
         Registry reg = LocateRegistry.getRegistry();
@@ -28,18 +35,5 @@ public class AppServer {
         server.startServer();
         System.out.println("Game server ready");
 
-    }
-
-    private static AuthenticationManager getAuthenticationManager() throws RemoteException {
-        List<Game> gameList = Collections.synchronizedList(new LinkedList<>());
-        UserList userList = new UserList();
-        LobbyList lobbyList = new LobbyList();
-
-        ExecutionLayer executionLayer = new ExecutionLayer(lobbyList, userList, gameList);
-        ConversionLayer conversionLayer = new ConversionLayer(lobbyList, executionLayer);
-        IntegrityLayer integrityLayer = new IntegrityLayer(lobbyList, conversionLayer);
-
-        AuthenticationManager authenticator = new AuthenticationManagerImpl(integrityLayer, userList);
-        return authenticator;
     }
 }

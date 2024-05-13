@@ -1,14 +1,11 @@
-package it.polimi.ingsw.networking;
+package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
-import it.polimi.ingsw.controller.servercontroller.Controller;
-import it.polimi.ingsw.controller.servercontroller.Lobby;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.dataobject.Message;
 import it.polimi.ingsw.dataobject.MessageType;
-import it.polimi.ingsw.networking.RMI.RMIController;
-import it.polimi.ingsw.networking.socket.SocketClient;
+import it.polimi.ingsw.controller.socket.SocketClient;
 
 import javax.naming.*;
 import java.io.IOException;
