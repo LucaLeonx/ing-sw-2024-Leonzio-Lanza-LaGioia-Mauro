@@ -50,7 +50,7 @@ public class User {
     }
 
     public synchronized void setJoinedLobby(Lobby joinedLobby){
-        this.joinedLobby = Optional.of(joinedLobby);
+        this.joinedLobby = Optional.ofNullable(joinedLobby);
     }
 
     public synchronized Game getJoinedGame(){

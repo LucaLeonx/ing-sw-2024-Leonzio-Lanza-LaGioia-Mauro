@@ -15,15 +15,15 @@ import java.util.List;
 import static it.polimi.ingsw.controller.servercontroller.UserStatus.*;
 
 public class IntegrityLayer extends FrontierServerLayer {
-    private LobbyList lobbyList;
+    private final LobbyList lobbyList;
 
     public IntegrityLayer(LobbyList lobbyList, FrontierServerLayer... nextLayers) {
-        super(lobbyList, nextLayers);
+        super(nextLayers);
+        this.lobbyList = lobbyList;
     }
 
     @Override
     public LobbyInfo createLobby(User user, String lobbyName, int requiredPlayersNum) {
-
         if(user.getStatus() != LOBBY_CHOICE){
             throw new InvalidOperationException("Cannot create Lobby when not choosing one");
         } else if (requiredPlayersNum < 2 || requiredPlayersNum > 4){
@@ -35,13 +35,12 @@ public class IntegrityLayer extends FrontierServerLayer {
 
     @Override
     public void joinLobby(User user, int lobbyId) {
-
         if(user.getStatus() != LOBBY_CHOICE){
             throw new InvalidOperationException("Cannot join lobby when already in one");
-        } else if(lobbyList.getLobbyById(lobbyId).readyToStart()){
-            throw new InvalidOperationException("Cannot join full lobby");
         } else if(lobbyList.getLobbyById(lobbyId) == null){
             throw new InvalidOperationException("Lobby is non-existent");
+        } else if(lobbyList.getLobbyById(lobbyId).readyToStart()) {
+            throw new InvalidOperationException("Cannot join full lobby");
         }
 
         super.joinLobby(user, lobbyId);

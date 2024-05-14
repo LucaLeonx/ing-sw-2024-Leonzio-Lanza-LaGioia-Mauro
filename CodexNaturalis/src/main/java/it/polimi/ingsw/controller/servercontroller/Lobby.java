@@ -14,7 +14,7 @@ public class Lobby implements Serializable {
     private List<User> waitingPlayers;
     private final int requiredNumOfPlayers;
 
-    public Lobby(int id, User creatorUser,int numOfPlayers,String lobbyName){
+    public Lobby(int id, User creatorUser, int numOfPlayers, String lobbyName){
         this.id = id;
         this.name = lobbyName;
         this.creatorUsername = creatorUser.getUsername();
@@ -36,36 +36,36 @@ public class Lobby implements Serializable {
         waitingPlayers.remove(removedUser);
     }
 
-    public boolean readyToStart(){ return waitingPlayers.size() == requiredNumOfPlayers; }
+    public synchronized boolean readyToStart(){ return waitingPlayers.size() == requiredNumOfPlayers; }
 
-    public List<User> getConnectedUsers(){
+    public synchronized List<User> getConnectedUsers(){
         return waitingPlayers;
     }
 
-    public List<String> getConnectedUserNames(){
+    public synchronized List<String> getConnectedUserNames(){
         return waitingPlayers.stream().map(User::getUsername).toList();
     }
-    public int getRequiredNumOfPlayers(){
+    public synchronized int getRequiredNumOfPlayers(){
         return this.requiredNumOfPlayers;
     }
 
-    public int getNumOfWaitingPlayers(){
+    public synchronized int getNumOfWaitingPlayers(){
         return this.waitingPlayers.size();
     }
 
-    public int getId(){
+    public synchronized int getId(){
         return this.id;
     }
 
-    public String getName(){
+    public synchronized String getName(){
         return this.name;
     }
 
-    public String getCreatorUsername(){
+    public synchronized String getCreatorUsername(){
         return this.creatorUsername;
     }
 
-    public LobbyInfo getLobbyInfo(){
+    public synchronized LobbyInfo getLobbyInfo(){
         return new LobbyInfo(id,
                 name,
                 creatorUsername,
@@ -75,7 +75,7 @@ public class Lobby implements Serializable {
     }
 
     @Override
-    public String toString() {
-        return "id :"+ id + " Lobby: " + name + " ||Created by: " + creatorUsername + "|| " + waitingPlayers.size() + "/" + requiredNumOfPlayers + " Players";
+    public synchronized String toString() {
+        return "id :"+ id + " Lobby: " + name + " || Created by: " + creatorUsername + " || " + waitingPlayers.size() + "/" + requiredNumOfPlayers + " Players";
     }
 }

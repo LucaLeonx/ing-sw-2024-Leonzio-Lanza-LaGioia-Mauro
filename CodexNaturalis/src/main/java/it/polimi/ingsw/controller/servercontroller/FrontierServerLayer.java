@@ -5,15 +5,12 @@ import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 
-import java.io.Serializable;
 import java.util.List;
 
 public abstract class FrontierServerLayer{
     private final FrontierServerLayer[] nextLayers;
-    private final LobbyList lobbyList;
 
-    public FrontierServerLayer(LobbyList lobbyList, FrontierServerLayer... nextLayers) {
-        this.lobbyList = lobbyList;
+    public FrontierServerLayer(FrontierServerLayer... nextLayers) {
         this.nextLayers = nextLayers;
     }
 
