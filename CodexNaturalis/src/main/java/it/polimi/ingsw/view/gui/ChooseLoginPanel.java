@@ -12,7 +12,7 @@ public class ChooseLoginPanel extends ButtonListPanel {
 
     private void buildPanel(){
         this.setLayout(new GridBagLayout());
-        JLabel incipitTextArea = new JLabel("Choose your connection:\n");
+        JLabel incipitTextArea = new JLabel("Choose your authentication:\n");
 
         JButton login= new JButton("Login");
         JButton register= new JButton("Register");

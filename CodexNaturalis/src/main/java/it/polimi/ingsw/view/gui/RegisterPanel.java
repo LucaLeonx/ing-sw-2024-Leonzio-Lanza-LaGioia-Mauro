@@ -44,7 +44,7 @@ public class RegisterPanel extends ButtonListPanel implements LobbyObserver {
         createLobby.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                MainWindow.goToWindow("createNewLobbyPanel");
             }
         });
 
