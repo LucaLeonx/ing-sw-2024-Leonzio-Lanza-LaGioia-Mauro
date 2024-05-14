@@ -40,7 +40,7 @@ public class TUIMethods {
 
         //if I need to show also avaiable position it is possible that the map enlarges by a little bit.
         if(IsWithAvaiablePosition){
-            for (Point p : gamefield.placedCards().keySet()) {
+            for (Point p : gamefield.availablePositions()) {
                 if (p.x() < minX) {
                     minX = p.x();
                 }
