@@ -88,7 +88,7 @@ public abstract class InfoTranslator {
             angleCellInfoMap.put(angleCell.getKey(), convertToAngleCellInfo(angleCell.getValue()));
         }
 
-        return new GameFieldInfo(cardCellInfoMap, angleCellInfoMap, new HashSet<>(field.getAvailablePositions()));
+        return new GameFieldInfo(cardCellInfoMap, angleCellInfoMap, new ArrayList<>(field.getAvailablePositions()));
 
     }
 

@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.PlayerColor;
 
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Scanner;
 
 import static java.lang.Math.abs;
@@ -46,7 +47,6 @@ public class TUIMethods {
                 }
                 if (p.x() > maxX) {
                     maxX = p.x();
-                    maxX = p.x();
                 }
                 if (p.y() < minY) {
                     minY = p.y();
@@ -55,11 +55,6 @@ public class TUIMethods {
                     maxY = p.y();
                 }
             }
-        }
-
-
-        for(Point p: gamefield.availablePositions()) {
-            System.out.println(p);
         }
 
 
@@ -111,6 +106,35 @@ public class TUIMethods {
             matrixMap[p.y() + abs(minY)][p.x() + abs(minX) + 1] = cardColor;
             matrixMap[p.y() + abs(minY) - 1][p.x() + abs(minX)] = cardColor;
             matrixMap[p.y() + abs(minY)][p.x() + abs(minX) - 1] = cardColor;
+        }
+
+        //Also add background of possible card and available cells.
+        if(IsWithAvaiablePosition){
+            for (int i=0; i<gamefield.availablePositions().size(); i++) {
+                Point p= gamefield.availablePositions().get(i);
+                matrixMap[p.y() + abs(minY) + 1][p.x() + abs(minX)] = Symbol_String.YELLOW_SQUARE_SYMBOL;
+                matrixMap[p.y() + abs(minY) + 1][p.x() + abs(minX)+ 1] = Symbol_String.YELLOW_SQUARE_SYMBOL;
+                matrixMap[p.y() + abs(minY) ][p.x() + abs(minX) + 1] = Symbol_String.YELLOW_SQUARE_SYMBOL;
+                matrixMap[p.y() + abs(minY) + 1][p.x() + abs(minX) -1] = Symbol_String.YELLOW_SQUARE_SYMBOL;
+                matrixMap[p.y() + abs(minY) - 1][p.x() + abs(minX) + 1] = Symbol_String.YELLOW_SQUARE_SYMBOL;
+                matrixMap[p.y() + abs(minY) ][p.x() + abs(minX) -1] = Symbol_String.YELLOW_SQUARE_SYMBOL;
+                matrixMap[p.y() + abs(minY) - 1][p.x() + abs(minX)] = Symbol_String.YELLOW_SQUARE_SYMBOL;
+                matrixMap[p.y() + abs(minY) - 1][p.x() + abs(minX) -1] = Symbol_String.YELLOW_SQUARE_SYMBOL;
+                List<String> Number= Symbol_String.FromIntToEmoji(i);
+                if(i<10){
+                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX)] = Number.getFirst() ;
+                }
+                else if(i>=10 && i<100){
+                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) -1] = Number.getFirst();
+                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) ] = Number.get(1);
+                }
+                else if(i>100 && i<1000){
+                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) -1] = Number.getFirst();
+                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) ] = Number.get(1);
+                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) +1] = Number.get(2);
+                }
+                // we assumed it is impossible to have more than 1000 choice to position a card in a game.
+            }
         }
 
 

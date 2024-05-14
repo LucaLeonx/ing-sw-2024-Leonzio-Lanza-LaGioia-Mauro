@@ -9,13 +9,13 @@ import it.polimi.ingsw.model.card.*;
 public class GameField{
     private final Map<Point, CardCell> cards;
     private final Map<Point, AngleCell> angles;
-    private final Set<Point> availableCells;
+    private final List<Point> availableCells;
     private final Map<Symbol, Integer> symbolCounters;
     public GameField(){
         this.cards = new HashMap<>();
         this.angles = new HashMap<>();
         this.symbolCounters = new HashMap<>();
-        this.availableCells = new HashSet<>();
+        this.availableCells = new ArrayList<>();
         this.availableCells.add(new Point(0,0));
         // Add the position for initial card
 
@@ -29,7 +29,7 @@ public class GameField{
     public GameField(GameField other){
         this.cards = new HashMap<>(other.cards);
         this.angles = new HashMap<>(other.angles);
-        this.availableCells = new HashSet<>(other.availableCells);
+        this.availableCells = new ArrayList<>(other.availableCells);
         this.symbolCounters = new HashMap<>(other.symbolCounters);
     }
 
@@ -161,17 +161,36 @@ public class GameField{
      * @param cardPosition - point of the place in which the player wants to place the card
      */
     private void updateAvailableCells(Card card, CardOrientation cardOrientation, Point cardPosition){
-        availableCells.remove(cardPosition);
+        removeAllFromAvaiableCells(cardPosition);
         for(AnglePosition angle : AnglePosition.values()){
             if(isPlaceable(cardPosition.sum(angle.getRelativePosition().scale(2))))
             {
+                /*if(cardPosition.equals(new Point(0,8)) && cardPosition.sum(angle.getRelativePosition().scale(2)).equals(new Point(-2,6)))
+                    System.out.println(getCardCells().containsKey(new Point(-2,6)));*/
                 availableCells.add(cardPosition.sum(angle.getRelativePosition().scale(2)));
+            }
+            else{
+                removeAllFromAvaiableCells(cardPosition.sum(angle.getRelativePosition().scale(2)));
+            }
+        }
+    }
+
+    public void removeAllFromAvaiableCells(Point p){
+        for(int i=0; i<availableCells.size(); i++){
+            if(availableCells.get(i).equals(p)){
+                availableCells.remove(i);
             }
         }
     }
 
     private boolean isPlaceable(Point p){
         boolean OK=true;
+        /*if(p.equals(new Point(-2,6))) {
+            System.out.println("sto controllando il punto");
+            if(getCardCells().containsKey(p)){
+                System.out.println("e il punto c'è");
+            }
+        }*/
         if(getCardCells().containsKey(p)){
             OK=false;
         }

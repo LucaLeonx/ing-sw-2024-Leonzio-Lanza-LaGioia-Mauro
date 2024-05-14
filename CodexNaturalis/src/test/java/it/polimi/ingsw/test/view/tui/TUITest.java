@@ -102,12 +102,14 @@ public class TUITest extends TestCase {
     // To see the real image of the maps go to Notes-->ExampleMaps
     public void testTUIWithDiagonalMap(){
         new GameFieldTest().checkInvariants(playerTestDiagonal.getField());
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(playerTestDiagonal), InfoTranslator.convertToFieldInfo(playerTestDiagonal.getField()),false );
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(playerTestDiagonal), InfoTranslator.convertToFieldInfo(playerTestDiagonal.getField()),true );
     }
 
     public void testTUIWithMinnieMap(){
         new GameFieldTest().checkInvariants(M.getField());
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(M), InfoTranslator.convertToFieldInfo(M.getField()), true  );
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(M), InfoTranslator.convertToFieldInfo(M.getField()), false  );
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(M), InfoTranslator.convertToFieldInfo(M.getField()), true   );
     }
 
     public void testTUIWithPaperinaMap(){
@@ -117,6 +119,7 @@ public class TUITest extends TestCase {
 
     public void testTUIWithTopolinoMap(){
         new GameFieldTest().checkInvariants(T.getField());
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()), true);
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()), false);
     }
 
