@@ -161,26 +161,32 @@ public class GameField{
      * @param cardPosition - point of the place in which the player wants to place the card
      */
     private void updateAvailableCells(Card card, CardOrientation cardOrientation, Point cardPosition){
+
         availableCells.remove(cardPosition);
-        for(AnglePosition angle : AnglePosition.values()){
-            if(isPlaceable(cardPosition.sum(angle.getRelativePosition().scale(2))))
-            {
-                availableCells.add(cardPosition.sum(angle.getRelativePosition().scale(2)));
+
+        for(Point adjacentCardPosition : Point.getAdjacentPositions(cardPosition, 2)){
+            if(isPlaceable(adjacentCardPosition)) {
+                availableCells.add(adjacentCardPosition);
             }
         }
     }
 
-    private boolean isPlaceable(Point p){
-        boolean OK=true;
-        if(getCardCells().containsKey(p)){
-            OK=false;
+    private boolean isPlaceable(Point placementPoint){
+
+        if(getCardCells().containsKey(placementPoint)){
+            return false;
         }
-        for(AnglePosition angle : AnglePosition.values()){
-            if(!(getAngleCells().get(p.sum(angle.getRelativePosition()))== null || getAngleCells().get(p.sum(angle.getRelativePosition())).topSymbol() != Symbol.HIDDEN)){
-                OK=false;
+
+        for(Point adjacentAnglePosition : Point.getAdjacentPositions(placementPoint)){
+
+            AngleCell adjacentAngleCell = getAngleCells().get(adjacentAnglePosition);
+
+            if(adjacentAngleCell != null && adjacentAngleCell.topSymbol() == Symbol.HIDDEN){
+                return false;
             }
         }
-        return OK;
+
+        return true;
     }
 
     private void incrementCounter(Symbol symbol){
