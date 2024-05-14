@@ -9,7 +9,6 @@ public class ButtonListPanel extends JPanel {
     public JButton addButton(JPanel panel, String name) {
         JButton button = new JButton(name);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setBackground(Color.BLUE); // Personalizza il colore di sfondo
         button.setForeground(Color.BLACK); // Personalizza il colore del testo
         button.setFocusPainted(false); // Rimuovi il bordo attorno al testo
         button.setFont(button.getFont().deriveFont(Font.BOLD)); // Rendi il testo in grassetto

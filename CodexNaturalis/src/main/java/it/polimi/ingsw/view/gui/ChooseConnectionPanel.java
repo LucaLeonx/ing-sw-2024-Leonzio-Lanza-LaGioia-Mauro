@@ -4,35 +4,46 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 public class ChooseConnectionPanel extends ButtonListPanel {
+
     public ChooseConnectionPanel() {
         buildPanel();
     }
 
     private void buildPanel() {
-        JPanel buttonsPanel= new JPanel();
-        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        this.setLayout(new GridBagLayout());
 
-        this.setLayout(new BorderLayout());
-
-        JButton socketButton= addButton(buttonsPanel,"Socket");
-        JButton rmiButton= addButton(buttonsPanel,"RMI");
+        JButton socketButton= new JButton("Socket");
+        JButton rmiButton= new JButton("RMI");
+        socketButton.setAlignmentY(Component.CENTER_ALIGNMENT);
+        rmiButton.setAlignmentY(Component.CENTER_ALIGNMENT);
 
         //JTextArea connectionTextArea = new JTextArea();
         JLabel incipitTextArea = new JLabel("Choose your connection:");
+        incipitTextArea.setBackground(Color.white);
         incipitTextArea.setHorizontalAlignment(SwingConstants.CENTER);
 
-        socketButton.addActionListener(new ActionListener() {
+        rmiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {//performed method after pushing a button
-               // connectionTextArea.append("Socket connection selected\n");
+                try {
+                    MainWindow.setRMIController();
+                } catch (NotBoundException | RemoteException ex) {
+                    return;
+                }
+
                 MainWindow.goToWindow("chooseLoginPanel");
             }
+
+
             }
         );
-        rmiButton.addActionListener(new ActionListener() {
+        socketButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {//performed method after pushing a button
                // connectionTextArea.append("RMI connection selected\n");
@@ -40,12 +51,31 @@ public class ChooseConnectionPanel extends ButtonListPanel {
             }
         });
 
-        add(incipitTextArea, BorderLayout.PAGE_START);
-      //  add(connectionTextArea, BorderLayout.SOUTH);
-        add(buttonsPanel, BorderLayout.CENTER);
-       // add(text, BorderLayout.CENTER);
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        add(incipitTextArea, gbc);
+
+        gbc.gridy = 1;
+        add(socketButton, gbc);
+
+        gbc.gridy = 2;
+        add(rmiButton, gbc);
 
     }
 
 
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Image image = null;
+        try {
+             image = new ImageIcon("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/codex-naturalis.png").getImage();
+        }
+        catch (Exception e){
+            System.out.println("Path non rilevato");
+        }
+        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+    }
 }

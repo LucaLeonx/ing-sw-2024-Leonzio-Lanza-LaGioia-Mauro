@@ -1,17 +1,22 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
+
 import javax.swing.*;
 import java.awt.*;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 public class MainWindow extends JFrame {
     private static CardLayout cardLayout;
     private static JPanel cardPanel;
-
+    private static ClientController clientController;
     public MainWindow()
     {
         setTitle("Codex Naturalis");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 600);
+        setSize(1400, 800);
         setVisible(true);
 
         cardLayout = new CardLayout();
@@ -21,10 +26,12 @@ public class MainWindow extends JFrame {
         ChooseLoginPanel chooseLoginPanel= new ChooseLoginPanel();
         LoginPanel loginPanel = new LoginPanel();
         RegisterPanel registerPanel = new RegisterPanel();
+        CreateNewLobbyPanel createNewLobbyPanel = new CreateNewLobbyPanel();
         cardPanel.add("chooseConnectionPanel",chooseConnectionPanel);
         cardPanel.add("chooseLoginPanel",chooseLoginPanel);
         cardPanel.add("loginPanel",loginPanel);
         cardPanel.add("registerPanel",registerPanel);
+        cardPanel.add("createNewLobbyPanel", createNewLobbyPanel);
         add(cardPanel);
 
     }
@@ -35,6 +42,20 @@ public class MainWindow extends JFrame {
 
     public static JPanel getJPanel(){
         return cardPanel;
+    }
+
+    public static ClientController getClientController(){
+        return clientController;
+    }
+
+    public static void setRMIController() throws NotBoundException, RemoteException {
+        clientController = new RMIClientController();
+    }
+
+    public static ClientController setSocketController(){
+      //  return clientController = new SocketClientController();
+        //waiting for socketcontroller implementation
+        return null;
     }
 
     public static void goToNextWindow(){

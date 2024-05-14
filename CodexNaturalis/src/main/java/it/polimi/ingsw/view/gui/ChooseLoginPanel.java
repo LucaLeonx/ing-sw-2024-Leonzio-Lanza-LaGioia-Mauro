@@ -11,20 +11,13 @@ public class ChooseLoginPanel extends ButtonListPanel {
     }
 
     private void buildPanel(){
-        JPanel buttonsPanel= new JPanel();
-        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        this.setLayout(new GridBagLayout());
+        JLabel incipitTextArea = new JLabel("Choose your authentication:\n");
 
-        JLabel incipitTextArea = new JLabel("Choose your connection:\n");
-
-        this.setLayout(new BorderLayout());
-
-        JButton login= addButton(buttonsPanel,"Login");
-        JButton register= addButton(buttonsPanel,"Register");
+        JButton login= new JButton("Login");
+        JButton register= new JButton("Register");
 
         JTextArea connectionTextArea = new JTextArea();
-
-        //addBottomFrame();
 
         login.addActionListener(new ActionListener() {
             @Override
@@ -43,9 +36,18 @@ public class ChooseLoginPanel extends ButtonListPanel {
             }
         });
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(incipitTextArea, gbc);
 
-        add(incipitTextArea, BorderLayout.NORTH);
-        add(buttonsPanel, BorderLayout.CENTER);
+        gbc.gridy = 1;
+        add(login, gbc);
+
+        gbc.gridy = 2;
+        add(register, gbc);
 
     }
 }
