@@ -1,4 +1,4 @@
 package it.polimi.ingsw.view.tui;
 
-public class TUi {
+public class TUIObjects {
 }

@@ -99,7 +99,7 @@ public final class UtilityClassCardSketcher {
             }
         }
         if(card.reward() == RewardType.ONE_POINT) {
-            cardSketched[0][2]=Symbol_String.ONE_POINT_SYMBOL;
+            cardSketched[0][2]=Symbol_String.ONE_SYMBOL;
         }
 
         return cardSketched;
@@ -131,31 +131,31 @@ public final class UtilityClassCardSketcher {
 
         switch (card.reward()) {
             case RewardType.ONE_POINT:
-                cardSketched[0][2]=Symbol_String.ONE_POINT_SYMBOL;
+                cardSketched[0][2]=Symbol_String.ONE_SYMBOL;
                 break;
             case RewardType.THREE_POINTS:
-                cardSketched[0][2]=Symbol_String.THREE_POINTS_SYMBOL;
+                cardSketched[0][2]=Symbol_String.THREE_SYMBOL;
                 break;
             case RewardType.FIVE_POINTS:
-                cardSketched[0][2]=Symbol_String.FIVE_POINTS_SYMBOL;
+                cardSketched[0][2]=Symbol_String.FIVE_SYMBOL;
                 break;
             case RewardType.POINT_PER_QUILL:
-                cardSketched[0][1]=Symbol_String.ONE_POINT_SYMBOL;
+                cardSketched[0][1]=Symbol_String.ONE_SYMBOL;
                 cardSketched[0][2]=Symbol_String.FOR_EACH_SYMBOL;
                 cardSketched[0][3]=Symbol_String.QUILL_SYMBOL;
                 break;
             case RewardType.POINT_PER_INKWELL:
-                cardSketched[0][1]=Symbol_String.ONE_POINT_SYMBOL;
+                cardSketched[0][1]=Symbol_String.ONE_SYMBOL;
                 cardSketched[0][2]=Symbol_String.FOR_EACH_SYMBOL;
                 cardSketched[0][3]=Symbol_String.INKWELL_SYMBOL;
                 break;
             case RewardType.POINT_PER_MANUSCRIPT:
-                cardSketched[0][1]=Symbol_String.ONE_POINT_SYMBOL;
+                cardSketched[0][1]=Symbol_String.ONE_SYMBOL;
                 cardSketched[0][2]=Symbol_String.FOR_EACH_SYMBOL;
                 cardSketched[0][3]=Symbol_String.MANUSCRIPT_SYMBOL;
                 break;
             case RewardType.POINTS_PER_COVERED_ANGLE:
-                cardSketched[0][1]=Symbol_String.TWO_POINTS_SYMBOL;
+                cardSketched[0][1]=Symbol_String.TWO_SYMBOL;
                 cardSketched[0][2]=Symbol_String.FOR_EACH_SYMBOL;
                 cardSketched[0][3]=Symbol_String.COVERED_ANGLES_SYMBOL;
                 break;
@@ -207,95 +207,95 @@ public final class UtilityClassCardSketcher {
         cardSketched=sketchEmptyCard(); //since the bakground of an objective card is black I can use this method to draw objective background.
         switch (card.id()) {
             case 87:
-                cardSketched[0][4]=Symbol_String.TWO_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.TWO_SYMBOL;
                 cardSketched[0][3]=Symbol_String.RED_SQUARE_SYMBOL;
                 cardSketched[1][2]=Symbol_String.RED_SQUARE_SYMBOL;
                 cardSketched[2][1]=Symbol_String.RED_SQUARE_SYMBOL;
                 break;
             case 88:
-                cardSketched[0][4]=Symbol_String.TWO_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.TWO_SYMBOL;
                 cardSketched[0][1]=Symbol_String.GREEN_SQUARE_SYMBOL;
                 cardSketched[1][2]=Symbol_String.GREEN_SQUARE_SYMBOL;
                 cardSketched[2][3]=Symbol_String.GREEN_SQUARE_SYMBOL;
                 break;
             case 89:
-                cardSketched[0][4]=Symbol_String.TWO_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.TWO_SYMBOL;
                 cardSketched[0][3]=Symbol_String.BLUE_SQUARE_SYMBOL;
                 cardSketched[1][2]=Symbol_String.BLUE_SQUARE_SYMBOL;
                 cardSketched[2][1]=Symbol_String.BLUE_SQUARE_SYMBOL;
                 break;
             case 90:
-                cardSketched[0][4]=Symbol_String.TWO_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.TWO_SYMBOL;
                 cardSketched[0][1]=Symbol_String.PURPLE_SQUARE_SYMBOL;
                 cardSketched[1][2]=Symbol_String.PURPLE_SQUARE_SYMBOL;
                 cardSketched[2][3]=Symbol_String.PURPLE_SQUARE_SYMBOL;
                 break;
             case 91:
-                cardSketched[0][4]=Symbol_String.THREE_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.THREE_SYMBOL;
                 cardSketched[0][2]=Symbol_String.RED_SQUARE_SYMBOL;
                 cardSketched[1][2]=Symbol_String.RED_SQUARE_SYMBOL;
                 cardSketched[2][3]=Symbol_String.GREEN_SQUARE_SYMBOL;
                 break;
             case 92:
-                cardSketched[0][4]=Symbol_String.THREE_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.THREE_SYMBOL;
                 cardSketched[0][2]=Symbol_String.GREEN_SQUARE_SYMBOL;
                 cardSketched[1][2]=Symbol_String.GREEN_SQUARE_SYMBOL;
                 cardSketched[2][1]=Symbol_String.PURPLE_SQUARE_SYMBOL;
                 break;
             case 93:
-                cardSketched[0][4]=Symbol_String.THREE_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.THREE_SYMBOL;
                 cardSketched[1][2]=Symbol_String.BLUE_SQUARE_SYMBOL;
                 cardSketched[2][2]=Symbol_String.BLUE_SQUARE_SYMBOL;
                 cardSketched[0][3]=Symbol_String.RED_SQUARE_SYMBOL;
                 break;
             case 94:
-                cardSketched[0][4]=Symbol_String.THREE_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.THREE_SYMBOL;
                 cardSketched[1][2]=Symbol_String.PURPLE_SQUARE_SYMBOL;
                 cardSketched[2][2]=Symbol_String.PURPLE_SQUARE_SYMBOL;
                 cardSketched[0][1]=Symbol_String.BLUE_SQUARE_SYMBOL;
                 break;
             case 95:
-                cardSketched[0][4]=Symbol_String.TWO_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.TWO_SYMBOL;
                 cardSketched[1][1]=Symbol_String.FUNGI_SYMBOL;
                 cardSketched[1][2]=Symbol_String.FUNGI_SYMBOL;
                 cardSketched[1][3]=Symbol_String.FUNGI_SYMBOL;
                 break;
             case 96:
-                cardSketched[0][4]=Symbol_String.TWO_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.TWO_SYMBOL;
                 cardSketched[1][1]=Symbol_String.PLANT_SYMBOL;
                 cardSketched[1][2]=Symbol_String.PLANT_SYMBOL;
                 cardSketched[1][3]=Symbol_String.PLANT_SYMBOL;
                 break;
             case 97:
-                cardSketched[0][4]=Symbol_String.TWO_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.TWO_SYMBOL;
                 cardSketched[1][1]=Symbol_String.ANIMAL_SYMBOL;
                 cardSketched[1][2]=Symbol_String.ANIMAL_SYMBOL;
                 cardSketched[1][3]=Symbol_String.ANIMAL_SYMBOL;
                 break;
             case 98:
-                cardSketched[0][4]=Symbol_String.TWO_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.TWO_SYMBOL;
                 cardSketched[1][1]=Symbol_String.INSECT_SYMBOL;
                 cardSketched[1][2]=Symbol_String.INSECT_SYMBOL;
                 cardSketched[1][3]=Symbol_String.INSECT_SYMBOL;
                 break;
             case 99:
-                cardSketched[0][4]=Symbol_String.THREE_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.THREE_SYMBOL;
                 cardSketched[1][1]=Symbol_String.QUILL_SYMBOL;
                 cardSketched[1][2]=Symbol_String.INKWELL_SYMBOL;
                 cardSketched[1][3]=Symbol_String.MANUSCRIPT_SYMBOL;
                 break;
             case 100:
-                cardSketched[0][4]=Symbol_String.TWO_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.TWO_SYMBOL;
                 cardSketched[1][1]=Symbol_String.MANUSCRIPT_SYMBOL;
                 cardSketched[1][2]=Symbol_String.MANUSCRIPT_SYMBOL;
                 break;
             case 101:
-                cardSketched[0][4]=Symbol_String.TWO_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.TWO_SYMBOL;
                 cardSketched[1][1]=Symbol_String.INKWELL_SYMBOL;
                 cardSketched[1][2]=Symbol_String.INKWELL_SYMBOL;
                 break;
             case 102:
-                cardSketched[0][4]=Symbol_String.TWO_POINTS_SYMBOL;
+                cardSketched[0][4]=Symbol_String.TWO_SYMBOL;
                 cardSketched[1][1]=Symbol_String.QUILL_SYMBOL;
                 cardSketched[1][2]=Symbol_String.QUILL_SYMBOL;
                 break;

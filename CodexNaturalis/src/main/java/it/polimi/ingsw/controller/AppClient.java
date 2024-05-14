@@ -8,6 +8,7 @@ import it.polimi.ingsw.dataobject.Message;
 import it.polimi.ingsw.dataobject.MessageType;
 import it.polimi.ingsw.controller.socket.SocketClient;
 import it.polimi.ingsw.model.InvalidOperationException;
+import it.polimi.ingsw.view.tui.TUI;
 
 import javax.naming.*;
 import java.io.IOException;
@@ -19,7 +20,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AppClient {
-    public static void main(String[] args) throws NamingException, IOException, NotBoundException {
+
+    public static void main(String[] args){
+        TUI tui = new TUI();
+        tui.display();
+    }
+
+    public static void oldMain(String[] args) throws NamingException, IOException, NotBoundException {
 
         System.out.println("Welcome to Codex Naturalis!!\n");
 
