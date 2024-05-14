@@ -44,6 +44,7 @@ public class AppClient {
     private static void startRMI() throws IOException, NotBoundException {
         Scanner stdin = new Scanner(System.in);
         ClientController controller = new RMIClientController();
+
         System.out.println("Choose action: ");
         System.out.println("1. Login");
         System.out.println("2. Register");
