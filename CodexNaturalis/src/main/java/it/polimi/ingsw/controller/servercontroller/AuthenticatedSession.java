@@ -5,15 +5,17 @@ import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
-public class AuthenticatedSession implements Controller{
-
+public class AuthenticatedSession extends UnicastRemoteObject implements ServerController {
     private final FrontierServerLayer enteringServerLayer;
     private final User user;
 
-    public AuthenticatedSession(User user, FrontierServerLayer enteringServerLayer) {
+    public AuthenticatedSession(User user, FrontierServerLayer enteringServerLayer) throws RemoteException {
+        super();
         this.enteringServerLayer = enteringServerLayer;
         this.user = user;
     }

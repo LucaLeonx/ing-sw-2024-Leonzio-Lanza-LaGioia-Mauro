@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.controller.clientcontroller.ConnectionDefaultSettings;
 import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.dataobject.Message;
@@ -40,11 +41,6 @@ public class AppClient {
     }
 
     private static void startRMI() throws IOException, NotBoundException {
-        Registry registry = LocateRegistry.getRegistry();
-        System.out.println("RMI registry bindings: ");
-        String[] e = registry.list();
-        for (String s : e) System.out.println(s);
-        String remoteObjectName = "Codex_Naturalis_server";
         ClientController controller = new RMIClientController();
         int tempCode = controller.register("Luca");
         controller.login("Luca", tempCode);
@@ -83,7 +79,7 @@ public class AppClient {
     }
 
     private static void startSocket() throws IOException, NotBoundException {
-        SocketClient client = new SocketClient(6660);
+        SocketClient client = new SocketClient(ConnectionDefaultSettings.SocketServerPort);
 
         try{
             Message msg = new Message(MessageType.CREATE_LOBBY,

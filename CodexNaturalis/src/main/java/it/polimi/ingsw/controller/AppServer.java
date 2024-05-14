@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.controller.clientcontroller.ConnectionDefaultSettings;
 import it.polimi.ingsw.controller.servercontroller.*;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.controller.socket.SocketServer;
@@ -26,12 +27,12 @@ public class AppServer {
 
         AuthenticationManager authenticator = new AuthenticationManagerImpl(integrityLayer, userList);
 
-        LocateRegistry.createRegistry(1099);
+        LocateRegistry.createRegistry(ConnectionDefaultSettings.RMIRegistryPort);
         Registry reg = LocateRegistry.getRegistry();
-        reg.rebind("Codex_Naturalis_server", authenticator);
+        reg.rebind(ConnectionDefaultSettings.RMIServerName, authenticator);
         System.out.println("Registry bound, ready to listen for clients from RMI");
 
-        SocketServer server = new SocketServer(6660);
+        SocketServer server = new SocketServer(ConnectionDefaultSettings.SocketServerPort);
         server.startServer();
         System.out.println("Game server ready");
 

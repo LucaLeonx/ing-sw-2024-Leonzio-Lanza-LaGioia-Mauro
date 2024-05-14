@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 

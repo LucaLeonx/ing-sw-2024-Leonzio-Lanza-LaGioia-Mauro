@@ -40,7 +40,7 @@ public class ExecutionLayer extends InternalServerLayer{
     @Override
     public Lobby createLobby(User creator, String lobbyName, int playersNumber) {
         Lobby newLobby = lobbyList.createLobby(creator, lobbyName, playersNumber);
-        nextLayers[0].createLobby(creator, lobbyName, playersNumber);
+        // nextLayers[0].createLobby(creator, lobbyName, playersNumber);
         return newLobby;
     }
 
@@ -48,9 +48,6 @@ public class ExecutionLayer extends InternalServerLayer{
     public Lobby addUserToLobby(User user, int lobbyId) {
         Lobby lobby = lobbyList.getLobbyById(lobbyId);
         lobby.addUser(user);
-
-
-
 
         if(lobby.readyToStart()){
 

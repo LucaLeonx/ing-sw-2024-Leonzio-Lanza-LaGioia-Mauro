@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller.clientcontroller;
 
 import it.polimi.ingsw.controller.servercontroller.AuthenticatedSession;
 import it.polimi.ingsw.controller.servercontroller.AuthenticationManager;
+import it.polimi.ingsw.controller.servercontroller.ServerController;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.InvalidOperationException;
@@ -20,7 +21,7 @@ public class RMIClientController implements ClientController{
 
     private final Registry registry;
     private AuthenticationManager authenticator;
-    private AuthenticatedSession session = null;
+    private ServerController session = null;
 
     public RMIClientController(String host, int port, String serverName) throws RemoteException, NotBoundException {
         registry = LocateRegistry.getRegistry(host, port);
@@ -52,11 +53,11 @@ public class RMIClientController implements ClientController{
 
     @Override
     public void login(String username, int tempCode) throws RemoteException {
-        session = authenticator.login(username, tempCode);
+        session = (ServerController) authenticator.login(username, tempCode);
     }
 
     @Override
-    public void logout() {
+    public void logout() throws RemoteException {
         session.logout();
         session = null;
     }
@@ -86,7 +87,7 @@ public class RMIClientController implements ClientController{
     }
 
     @Override
-    public void exitFromLobby() {
+    public void exitFromLobby() throws RemoteException {
         checkLogin();
         session.exitFromLobby();
     }
@@ -102,7 +103,7 @@ public class RMIClientController implements ClientController{
     }
 
     @Override
-    public List<String> getPlayerNames() {
+    public List<String> getPlayerNames() throws RemoteException {
         checkLogin();
         return session.getPlayerNames();
     }
@@ -153,13 +154,13 @@ public class RMIClientController implements ClientController{
     public String getWinner() {
         try {
             return getLeaderboard().getFirst().nickname();
-        } catch (InvalidOperationException e){
+        } catch (InvalidOperationException | RemoteException e){
             throw new InvalidOperationException("The game has not ended yet. Cannot find a winner");
         }
     }
 
     @Override
-    public List<ControlledPlayerInfo> getLeaderboard() {
+    public List<ControlledPlayerInfo> getLeaderboard() throws RemoteException {
         checkLogin();
         return session.getLeaderboard();
     }
@@ -179,6 +180,6 @@ public class RMIClientController implements ClientController{
     @Override
     public void exitGame() throws InvalidOperationException {
         checkLogin();
-        session.exitGame();
+        //session.exitGame();
     }
 }

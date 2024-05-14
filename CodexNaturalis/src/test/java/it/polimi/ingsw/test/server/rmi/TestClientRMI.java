@@ -1,6 +1,6 @@
 package it.polimi.ingsw.test.server.rmi;
 
-import it.polimi.ingsw.controller.servercontroller.Controller;
+import it.polimi.ingsw.controller.servercontroller.ServerController;
 import it.polimi.ingsw.controller.servercontroller.Lobby;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
@@ -18,7 +18,7 @@ public class TestClientRMI {
         System.out.println("RMI registry bindings: ");
         String[] e = registry.list();
         for (String s : e) System.out.println(s);
-        Controller testController = (Controller) registry.lookup("codex_naturalis_server");
+        ServerController testController = (ServerController) registry.lookup("codex_naturalis_server");
 
         String input;
         while (true){

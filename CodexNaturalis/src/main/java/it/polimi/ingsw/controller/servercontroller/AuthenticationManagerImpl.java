@@ -19,7 +19,7 @@ public class AuthenticationManagerImpl extends UnicastRemoteObject implements Au
     @Override
     public int register(String username){
         if(userList.isUserRegistered(username)){
-            throw new InvalidOperationException("Username " + username + "is already in use");
+            throw new InvalidOperationException("Username " + username + " is already in use");
         }
 
         User newUser = new User(username);
@@ -29,7 +29,7 @@ public class AuthenticationManagerImpl extends UnicastRemoteObject implements Au
     }
 
     @Override
-    public AuthenticatedSession login(String username, int tempCode) throws RemoteException {
+    public ServerController login(String username, int tempCode) throws RemoteException {
         if(!userList.isUserRegistered(username)){
             throw new InvalidOperationException("Wrong username or password");
         }

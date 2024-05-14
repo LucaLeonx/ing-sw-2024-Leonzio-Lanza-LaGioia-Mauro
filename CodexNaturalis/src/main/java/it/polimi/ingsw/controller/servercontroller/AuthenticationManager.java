@@ -5,5 +5,5 @@ import java.rmi.RemoteException;
 
 public interface AuthenticationManager extends Remote {
     public int register(String username) throws RemoteException;
-    public AuthenticatedSession login(String username, int tempCode) throws RemoteException;
+    public ServerController login(String username, int tempCode) throws RemoteException;
 }

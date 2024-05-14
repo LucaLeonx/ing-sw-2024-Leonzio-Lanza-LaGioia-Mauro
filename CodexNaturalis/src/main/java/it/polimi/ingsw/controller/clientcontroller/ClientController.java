@@ -21,7 +21,7 @@ public interface ClientController {
      */
     public int register(String username) throws RemoteException;
     public void login(String username, int tempCode) throws RemoteException;
-    public void logout();
+    public void logout() throws RemoteException;
 
     /**
      *
@@ -52,7 +52,7 @@ public interface ClientController {
     public void subscribeToGameUpdates(GameObserver observer);
 
     public String getCurrentPlayerName() throws RemoteException;
-    public List<String> getPlayerNames();
+    public List<String> getPlayerNames() throws RemoteException;
     public PlayerSetupInfo getPlayerSetup() throws RemoteException;
     public ControlledPlayerInfo getControlledPlayerInformation() throws RemoteException;
     public OpponentInfo getOpponentInformation(String opponentName) throws RemoteException;

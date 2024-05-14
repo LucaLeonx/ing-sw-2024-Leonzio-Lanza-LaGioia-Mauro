@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-// import it.polimi.ingsw.controller.servercontroller.InternalGameObserver;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.GameField;
 import it.polimi.ingsw.model.map.Point;
@@ -23,7 +22,6 @@ public class Game {
     private Player currentPlayer;
     private boolean isLastTurn;
     private boolean isGameEnded;
-    // private final List<InternalGameObserver> gameObservers = Collections.synchronizedList(new LinkedList<>());
 
     public Game(Deck goldCardDeck,
                 Deck resourceCardDeck,
@@ -44,6 +42,7 @@ public class Game {
         this.isLastTurn = isLastTurn;
         this.isGameEnded = isGameEnded;
     }
+
 
     public Game(List<String> playerNames){
         // Create decks and random pickers
@@ -99,6 +98,7 @@ public class Game {
         currentPlayer = players.getFirst();
         isLastTurn = false;
         isGameEnded = false;
+
     }
 
     public List<Player> getPlayers(){
@@ -124,7 +124,6 @@ public class Game {
     public boolean isEnded() {
         return isGameEnded;
     }
-
 
     public synchronized PlayerSetup getPlayerSetup(String playerName){
         return playerSetups.get(playerName);
