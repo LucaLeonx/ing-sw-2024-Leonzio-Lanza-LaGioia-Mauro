@@ -13,7 +13,7 @@ import java.util.Scanner;
 import static java.lang.Math.abs;
 
 
-public class TUI {
+public class TUIMethods {
     public void drawMap(ControlledPlayerInfo player, GameFieldInfo gamefield) {
 
         System.out.flush();
@@ -358,9 +358,14 @@ public class TUI {
             System.out.println("2. Register");
             System.out.println("3. Exit");
             System.out.print("Please choose an option: ");
-
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            try {
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+            }
+            catch(Exception e){
+                System.out.println(e.getMessage());
+                TUILoginOrRegister(controller);
+            }
 
             switch (choice) {
                 case 1:

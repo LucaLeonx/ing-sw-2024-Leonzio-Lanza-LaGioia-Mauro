@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.view.tui.TUI;
+import it.polimi.ingsw.view.tui.TUIMethods;
 import junit.framework.TestCase;
 import it.polimi.ingsw.test.model.map.GameFieldTest;
 
@@ -27,7 +27,7 @@ public class TUITest extends TestCase {
     private Player T;
     private Player P;
 
-    private TUI tui=new TUI();
+    private TUIMethods tui=new TUIMethods();
     public void setUp(){
         try {
             resourceCards = CardFactory.getResourceCards();
