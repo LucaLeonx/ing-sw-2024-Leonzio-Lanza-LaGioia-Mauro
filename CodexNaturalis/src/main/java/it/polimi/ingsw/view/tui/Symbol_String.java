@@ -36,39 +36,41 @@ public class Symbol_String {
 
     public static String FromIntToEmoji(int n){
         String temp = String.valueOf(n);
-        StringBuilder result= null;
+        StringBuilder result= new StringBuilder(new String());
         for(int i=0; i<temp.length(); i++){
             switch (temp.charAt(i)){
-                case 0:
+                case '0':
                     result.append(ZERO_SYMBOL);
                     break;
-                case 1:
+                case '1':
                     result.append(ONE_SYMBOL);
                     break;
-                case 2:
+                case '2':
                     result.append(TWO_SYMBOL);
                     break;
-                case 3:
+                case '3':
                     result.append(THREE_SYMBOL);
                     break;
-                case 4:
+                case '4':
                     result.append(FOUR_SYMBOL);
                     break;
-                case 5:
+                case '5':
                     result.append(FIVE_SYMBOL);
                     break;
-                case 6:
+                case '6':
                     result.append(SIX_SYMBOL);
                     break;
-                case 7:
+                case '7':
                     result.append(SEVEN_SYMBOL);
                     break;
-                case 8:
+                case '8':
                     result.append(EIGHT_SYMBOL);
                     break;
-                case 9:
+                case '9':
                     result.append(NINE_SYMBOL);
                     break;
+                default:
+                    System.out.println("Error in FromIntToEmoji. We are sorry");
             }
         }
         return result.toString();

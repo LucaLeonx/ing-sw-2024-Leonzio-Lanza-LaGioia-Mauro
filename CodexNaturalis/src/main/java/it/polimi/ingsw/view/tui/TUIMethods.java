@@ -14,9 +14,7 @@ import static java.lang.Math.abs;
 
 
 public class TUIMethods {
-    public void drawMap(ControlledPlayerInfo player, GameFieldInfo gamefield) {
-
-        System.out.flush();
+    public void drawMap(ControlledPlayerInfo player, GameFieldInfo gamefield, boolean IsWithAvaiablePosition) {
 
         // 1 find the max and min row and column in order to create a matrix of the right dimension
         int minX = 0; // x of the leftmost cell
@@ -39,6 +37,31 @@ public class TUIMethods {
                 maxY = p.y();
             }
         }
+
+        //if I need to show also avaiable position it is possible that the map enlarges by a little bit.
+        if(IsWithAvaiablePosition){
+            for (Point p : gamefield.placedCards().keySet()) {
+                if (p.x() < minX) {
+                    minX = p.x();
+                }
+                if (p.x() > maxX) {
+                    maxX = p.x();
+                    maxX = p.x();
+                }
+                if (p.y() < minY) {
+                    minY = p.y();
+                }
+                if (p.y() > maxY) {
+                    maxY = p.y();
+                }
+            }
+        }
+
+
+        for(Point p: gamefield.availablePositions()) {
+            System.out.println(p);
+        }
+
 
         // we need to consider maxX+1 because the rightmost card also needs to have a right edge, same is true for minX, minY, maxY
         maxX++;
@@ -84,7 +107,6 @@ public class TUIMethods {
             } else {
                 matrixMap[p.y() + abs(minY)][p.x() + abs(minX)] = centralSymbol;
             }
-
             matrixMap[p.y() + abs(minY) + 1][p.x() + abs(minX)] = cardColor;
             matrixMap[p.y() + abs(minY)][p.x() + abs(minX) + 1] = cardColor;
             matrixMap[p.y() + abs(minY) - 1][p.x() + abs(minX)] = cardColor;
@@ -122,7 +144,7 @@ public class TUIMethods {
                 } else if (gamefield.placedCards().get(TopPositionCard).card().color() == CardColor.RED) {
                     symbol = Symbol_String.RED_SQUARE_SYMBOL;
                 } else if (gamefield.placedCards().get(TopPositionCard).card().color() == CardColor.PURPLE) {
-                    symbol = Symbol_String.RED_SQUARE_SYMBOL;
+                    symbol = Symbol_String.PURPLE_SQUARE_SYMBOL;
                 }
             }
             matrixMap[p.y() + abs(minY)][p.x() + abs(minX)] = symbol;

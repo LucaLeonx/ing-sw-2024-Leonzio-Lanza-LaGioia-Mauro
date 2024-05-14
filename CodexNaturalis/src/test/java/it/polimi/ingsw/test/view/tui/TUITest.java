@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.view.tui.Symbol_String;
 import it.polimi.ingsw.view.tui.TUIMethods;
 import junit.framework.TestCase;
 import it.polimi.ingsw.test.model.map.GameFieldTest;
@@ -101,22 +102,22 @@ public class TUITest extends TestCase {
     // To see the real image of the maps go to Notes-->ExampleMaps
     public void testTUIWithDiagonalMap(){
         new GameFieldTest().checkInvariants(playerTestDiagonal.getField());
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(playerTestDiagonal), InfoTranslator.convertToFieldInfo(playerTestDiagonal.getField()));
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(playerTestDiagonal), InfoTranslator.convertToFieldInfo(playerTestDiagonal.getField()),true );
     }
 
     public void testTUIWithMinnieMap(){
         new GameFieldTest().checkInvariants(M.getField());
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(M), InfoTranslator.convertToFieldInfo(M.getField()));
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(M), InfoTranslator.convertToFieldInfo(M.getField()), true  );
     }
 
     public void testTUIWithPaperinaMap(){
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(P), InfoTranslator.convertToFieldInfo(P.getField()));
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(P), InfoTranslator.convertToFieldInfo(P.getField()), true  );
     }
 
 
     public void testTUIWithTopolinoMap(){
         new GameFieldTest().checkInvariants(T.getField());
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()));
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()), false);
     }
 
     public void testShowHandAllPresent(){
@@ -178,6 +179,13 @@ public class TUITest extends TestCase {
         //System.out.println(drawableCards);
         tui.showCardsOnTable(InfoTranslator.convertToObjectiveInfo(objectiveCards.get(3)),InfoTranslator.convertToObjectiveInfo(objectiveCards.get(12)),drawableCards);
     }
+
+
+    public void testIntToEmoji(){
+        System.out.println(Symbol_String.FromIntToEmoji(76));
+    }
+
+
 
 
 
