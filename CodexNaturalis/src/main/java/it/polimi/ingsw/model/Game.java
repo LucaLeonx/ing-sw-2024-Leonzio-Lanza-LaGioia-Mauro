@@ -121,9 +121,10 @@ public class Game {
         return isLastTurn;
     }
 
-    private synchronized boolean isLastPlayerOfRound(){
-        return currentPlayer.getNickname().equals(players.getLast().getNickname());
+    public boolean isEnded() {
+        return isGameEnded;
     }
+
 
     public synchronized PlayerSetup getPlayerSetup(String playerName){
         return playerSetups.get(playerName);
@@ -137,19 +138,12 @@ public class Game {
         return goldCardDeck;
     }
 
-
-
     public List<ObjectiveCard> getCommonObjectiveCards() {
         return new ArrayList<>(commonObjectiveCards);
     }
 
     public synchronized Map<DrawChoice, Card> getVisibleCards(){
         return new HashMap<>(visibleCards);
-    }
-
-    @Deprecated
-    public synchronized void setVisibleCard(DrawChoice choice, Card card){
-        visibleCards.put(choice, card);
     }
 
     public synchronized void changeCurrentPlayer(){
@@ -169,7 +163,13 @@ public class Game {
         currentPlayer = players.get((players.indexOf(currentPlayer) + 1) % players.size());
     }
 
-
+    public synchronized void registerPlayerSetup(String playerName, int objectiveCardId, CardOrientation initialCardSide){
+        Player player = getPlayer(playerName);
+        PlayerSetup setup = getPlayerSetup(playerName);
+        ObjectiveCard chosenObjective = (objectiveCardId == setup.objective1().getId()) ? setup.objective1() : setup.objective2();
+        player.setSecretObjective(chosenObjective);
+        player.getField().placeCard(setup.initialCard(), initialCardSide, new Point(0,0));
+    }
 
     public synchronized void makePlayerPlaceCard(Player player, int cardId, Point position, CardOrientation orientation)  {
         Card removedCard = null;
@@ -205,6 +205,16 @@ public class Game {
         }
     }
 
+    public synchronized List<Player> getLeaderBoard(){
+            List<Player> leaderboard = getPlayers();
+            leaderboard.sort((p1, p2) -> (p1.getScore() > p2.getScore()) ? 1 : -1);
+            return leaderboard;
+    }
+
+    private synchronized boolean isLastPlayerOfRound(){
+        return currentPlayer.getNickname().equals(players.getLast().getNickname());
+    }
+
     private synchronized void calculateFinalReward(Player player){
         player.incrementScore(player.getSecretObjective().getRewardFunction().getPoints(player.getField()));
         for(ObjectiveCard objective : commonObjectiveCards){
@@ -212,21 +222,9 @@ public class Game {
         }
     }
 
-    public boolean isEnded() {
-        return isGameEnded;
+    @Deprecated
+    public synchronized void setVisibleCard(DrawChoice choice, Card card){
+        visibleCards.put(choice, card);
     }
 
-    public synchronized List<Player> getLeaderBoard(){
-            List<Player> leaderboard = getPlayers();
-            leaderboard.sort((p1, p2) -> (p1.getScore() > p2.getScore()) ? 1 : -1);
-            return leaderboard;
-    }
-
-    public synchronized void registerPlayerSetup(String playerName, int objectiveCardId, CardOrientation initialCardSide){
-        Player player = getPlayer(playerName);
-        PlayerSetup setup = getPlayerSetup(playerName);
-        ObjectiveCard chosenObjective = (objectiveCardId == setup.objective1().getId()) ? setup.objective1() : setup.objective2();
-        player.setSecretObjective(chosenObjective);
-        player.getField().placeCard(setup.initialCard(), initialCardSide, new Point(0,0));
-    }
 }
