@@ -20,14 +20,61 @@ public class Symbol_String {
     public static final String GREEN_CIRCLE_SYMBOL= "\uD83D\uDFE2";
     public static final String YELLOW_CIRCLE_SYMBOL= "\uD83D\uDFE1";
     public static final String RED_CIRCLE_SYMBOL= "\uD83D\uDD34";
-    public static final String ONE_POINT_SYMBOL= "1️⃣";
-    public static final String TWO_POINTS_SYMBOL= "2️⃣";
+    public static final String ZERO_SYMBOL = "0️⃣";
+    public static final String ONE_SYMBOL = "1️⃣";
+    public static final String TWO_SYMBOL = "2️⃣";
+    public static final String THREE_SYMBOL = "3️⃣";
+    public static final String FOUR_SYMBOL = "4️⃣";
+    public static final String FIVE_SYMBOL = "5️⃣";
+    public static final String SIX_SYMBOL = "6️⃣";
+    public static final String SEVEN_SYMBOL = "7️⃣";
+    public static final String EIGHT_SYMBOL = "8️⃣";
+    public static final String NINE_SYMBOL = "9️⃣";
 
-    public static final String THREE_POINTS_SYMBOL= "3️⃣";
-
-    public static final String FIVE_POINTS_SYMBOL = "5️⃣";
     public static final String COVERED_ANGLES_SYMBOL = "\u25F0 ";
     public static final String FOR_EACH_SYMBOL ="\u2755";
+
+    public static String FromIntToEmoji(int n){
+        String temp = String.valueOf(n);
+        StringBuilder result= new StringBuilder(new String());
+        for(int i=0; i<temp.length(); i++){
+            switch (temp.charAt(i)){
+                case '0':
+                    result.append(ZERO_SYMBOL);
+                    break;
+                case '1':
+                    result.append(ONE_SYMBOL);
+                    break;
+                case '2':
+                    result.append(TWO_SYMBOL);
+                    break;
+                case '3':
+                    result.append(THREE_SYMBOL);
+                    break;
+                case '4':
+                    result.append(FOUR_SYMBOL);
+                    break;
+                case '5':
+                    result.append(FIVE_SYMBOL);
+                    break;
+                case '6':
+                    result.append(SIX_SYMBOL);
+                    break;
+                case '7':
+                    result.append(SEVEN_SYMBOL);
+                    break;
+                case '8':
+                    result.append(EIGHT_SYMBOL);
+                    break;
+                case '9':
+                    result.append(NINE_SYMBOL);
+                    break;
+                default:
+                    System.out.println("Error in FromIntToEmoji. We are sorry");
+            }
+        }
+        return result.toString();
+    }
 
 
 }

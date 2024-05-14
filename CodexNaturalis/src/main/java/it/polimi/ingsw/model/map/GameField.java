@@ -161,11 +161,26 @@ public class GameField{
      * @param cardPosition - point of the place in which the player wants to place the card
      */
     private void updateAvailableCells(Card card, CardOrientation cardOrientation, Point cardPosition){
+        availableCells.remove(cardPosition);
         for(AnglePosition angle : AnglePosition.values()){
-            if(card.getSide(cardOrientation).getSymbolFromAngle(angle) != Symbol.HIDDEN){
+            if(isPlaceable(cardPosition.sum(angle.getRelativePosition().scale(2))))
+            {
                 availableCells.add(cardPosition.sum(angle.getRelativePosition().scale(2)));
             }
         }
+    }
+
+    private boolean isPlaceable(Point p){
+        boolean OK=true;
+        if(getCardCells().containsKey(p)){
+            OK=false;
+        }
+        for(AnglePosition angle : AnglePosition.values()){
+            if(!(getAngleCells().get(p.sum(angle.getRelativePosition()))== null || getAngleCells().get(p.sum(angle.getRelativePosition())).topSymbol() != Symbol.HIDDEN)){
+                OK=false;
+            }
+        }
+        return OK;
     }
 
     private void incrementCounter(Symbol symbol){
