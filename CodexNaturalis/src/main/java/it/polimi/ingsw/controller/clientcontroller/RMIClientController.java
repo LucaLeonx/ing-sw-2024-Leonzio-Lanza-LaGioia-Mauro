@@ -92,6 +92,16 @@ public class RMIClientController implements ClientController{
     }
 
     @Override
+    public void subscribeToLobbyUpdates(LobbyObserver observer) {
+
+    }
+
+    @Override
+    public void subscribeToGameUpdates(GameObserver observer) {
+
+    }
+
+    @Override
     public List<String> getPlayerNames() {
         checkLogin();
         return session.getPlayerNames();
