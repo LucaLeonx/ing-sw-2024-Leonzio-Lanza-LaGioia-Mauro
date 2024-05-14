@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.List;
 
 public class RegisterPanel extends ButtonListPanel implements LobbyObserver {
@@ -44,6 +45,12 @@ public class RegisterPanel extends ButtonListPanel implements LobbyObserver {
         createLobby.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    onLobbyListUpdate(MainWindow.getClientController().getLobbyList());
+                }
+                catch (RemoteException exp){
+                    System.out.println("Exception list");
+                }
                 MainWindow.goToWindow("createNewLobbyPanel");
             }
         });
@@ -74,6 +81,7 @@ public class RegisterPanel extends ButtonListPanel implements LobbyObserver {
         for (LobbyInfo L: lobbies) {
             listModel.addElement(L.toString());
         }
+        listModel.addElement("Prova");
     }
 
     @Override

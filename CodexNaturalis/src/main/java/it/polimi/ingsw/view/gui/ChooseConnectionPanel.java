@@ -39,6 +39,8 @@ public class ChooseConnectionPanel extends ButtonListPanel {
 
                 MainWindow.goToWindow("chooseLoginPanel");
             }
+
+
             }
         );
         socketButton.addActionListener(new ActionListener() {

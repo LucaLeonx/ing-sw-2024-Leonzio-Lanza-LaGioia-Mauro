@@ -44,6 +44,10 @@ public class MainWindow extends JFrame {
         return cardPanel;
     }
 
+    public static ClientController getClientController(){
+        return clientController;
+    }
+
     public static void setRMIController() throws NotBoundException, RemoteException {
         clientController = new RMIClientController();
     }
