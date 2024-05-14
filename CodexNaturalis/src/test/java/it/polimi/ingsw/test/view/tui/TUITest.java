@@ -180,7 +180,7 @@ public class TUITest extends TestCase {
     }
 
     public void testShowBeginningOfGame(){
-        tui.showBegginningOfGame();
+        tui.showBeginningOfGame();
     }
 
 

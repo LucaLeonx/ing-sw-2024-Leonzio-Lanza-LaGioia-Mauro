@@ -40,7 +40,6 @@ public interface ClientController {
      */
     public LobbyInfo createLobby(String lobbyName, int requiredPlayers) throws RemoteException;
     void joinLobby(int lobbyId) throws RemoteException;
-
     /**
      *
      * @return

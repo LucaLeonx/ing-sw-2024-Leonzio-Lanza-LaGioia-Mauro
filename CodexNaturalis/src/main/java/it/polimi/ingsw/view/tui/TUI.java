@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.PlayerColor;
 
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
@@ -15,8 +14,6 @@ import static java.lang.Math.abs;
 
 
 public class TUI {
-
-
     public void drawMap(ControlledPlayerInfo player, GameFieldInfo gamefield) {
 
         System.out.flush();
@@ -283,8 +280,8 @@ public class TUI {
             Card2 = UtilityClassCardSketcher.sketchCard(goldenCard2);
         }
 
-        for (int j = 0; j < 3; j++) {
-            for (int k = 0; k < 5; k++) {
+        for(int j = 0; j < 3; j++) {
+            for(int k = 0; k < 5; k++) {
                 drawableCards2[j][k] = Card1[j][k];
                 drawableCards2[j][k + 6] = Card2[j][k];
             }
@@ -293,14 +290,14 @@ public class TUI {
         Card1 = UtilityClassCardSketcher.sketchObjectiveCard(objectiveCard1);
         Card2 = UtilityClassCardSketcher.sketchObjectiveCard(objectiveCard2);
 
-        for (int j = 0; j < 3; j++) {
+        for(int j = 0; j < 3; j++) {
             for (int k = 0; k < 5; k++) {
                 objectives[j][k] = Card1[j][k];
                 objectives[j][k + 6] = Card2[j][k];
             }
         }
 
-        for (int i = 0; i < 3; i++) {
+        for(int i = 0; i < 3; i++) {
             for (int j = 0; j < 11; j++) {
                 System.out.print(decks[i][j]);
             }
@@ -316,7 +313,7 @@ public class TUI {
         }
         System.out.print("\n\n");
 
-        for (int i = 0; i < 3; i++) {
+        for(int i = 0; i < 3; i++) {
             for (int j = 0; j < 11; j++) {
                 System.out.print(drawableCards2[i][j]);
             }
@@ -333,7 +330,7 @@ public class TUI {
         System.out.print("\n\n");
     }
 
-    public static void showBegginningOfGame() {
+    public static void showBeginningOfGame() {
         printStylishMessage("                          WELCOME TO CODEX NATURALIS                            ", "\u001B[32m", "\u001B[31m");
         printMushroom();
         try {
@@ -349,7 +346,7 @@ public class TUI {
         catch(Exception e)
         {
             System.out.println("We are sorry something went wrong but it is not your fault");
-            showBegginningOfGame();
+            showBeginningOfGame();
         }
     }
 
@@ -370,7 +367,7 @@ public class TUI {
                     TUIlogin(scanner, controller);
                     break;
                 case 2:
-                    TUIregister(scanner, controller);
+                    registerUser(scanner, controller);
                     break;
                 case 3:
                     System.out.println("Goodbye!");
@@ -416,7 +413,7 @@ public class TUI {
         TUICreateNewLobbyOrJoinLobby(scanner, controller);
     }
 
-    private static void TUIregister(Scanner scanner, ClientController controller) {
+    private static void registerUser(Scanner scanner, ClientController controller) {
         System.out.println("\n-- Register --");
         System.out.print("Choose a username: ");
         String username = scanner.nextLine();
@@ -436,7 +433,7 @@ public class TUI {
 
                 switch (choice) {
                     case 1:
-                        TUIregister(scanner, controller);
+                        registerUser(scanner, controller);
                         break;
                     case 2:
                         TUILoginOrRegister(controller);
@@ -454,7 +451,7 @@ public class TUI {
         while(true) {
             System.out.println("1. Create new lobby ");
             System.out.println("2. Show existing lobby: ");
-            System.out.println("3. logout ");
+            System.out.println("3. Logout ");
             System.out.print("Please choose an option: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
@@ -489,7 +486,7 @@ public class TUI {
                 try {
                     controller.joinLobby(controller.getLobbyList().get(choice - 1).id());
                 } catch (RemoteException RE) {
-                    System.out.println("It seeems like the lobby you are trying to enter doesn't exists, make another choice");
+                    System.out.println("It seems like the lobby you are trying to enter doesn't exists, make another choice");
                     TUIJoinLobby(scanner, controller);
                 }
             } else {
@@ -499,28 +496,28 @@ public class TUI {
         }
         catch(Exception e) {
             System.out.println("We are sorry something went wrong but it is not your fault");
-            showBegginningOfGame();
+            showBeginningOfGame();
         }
     }
 
     private static void TUICreateNewLobby(Scanner scanner, ClientController controller) {
         int numberOfPartecipants;
-        System.out.print("chose name of the new lobby: ");
+        System.out.print("Choose name of the new lobby: ");
         String lobbyName = scanner.nextLine();
         do {
-            System.out.print("chose number of the partecipants (between 2 and 4): ");
+            System.out.print("Choose number of the participants (between 2 and 4): ");
             numberOfPartecipants = scanner.nextInt();
             scanner.nextLine(); // Consume newline
             if(numberOfPartecipants<2 || numberOfPartecipants>4){
-                System.out.println("please select a number of partecipants between 2 and 4");
+                System.out.println("Please, select a number of participants between 2 and 4");
             }
-        }while (numberOfPartecipants<2 || numberOfPartecipants>4);
+        } while (numberOfPartecipants<2 || numberOfPartecipants>4);
         try {
             controller.createLobby(lobbyName, numberOfPartecipants);
         }
         catch (Exception e) {
             System.out.println("We are sorry something went wrong but it is not your fault");
-            showBegginningOfGame();
+            showBeginningOfGame();
         }
     }
 

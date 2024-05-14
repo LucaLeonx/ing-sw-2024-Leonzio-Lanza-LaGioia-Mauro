@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.player;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import it.polimi.ingsw.model.map.*;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.player.InvalidCardException;
@@ -8,17 +10,17 @@ import it.polimi.ingsw.model.player.InvalidCardException;
 
 public class Player {
     private final String nickname;
-    private int score;
-    private final GameField field;
     private final PlayerColor color;
-    private ObjectiveCard secretObjective;
+    private final AtomicInteger score = new AtomicInteger();
+    private final GameField field;
     private final List<Card> cardsInHand;
+    private ObjectiveCard secretObjective;
 
-    public Player(String nickname, PlayerColor color, ObjectiveCard secretObjective, List<Card> cardsInHand, GameField field) {
+    public Player(String nickname, PlayerColor color, int score, ObjectiveCard secretObjective, List<Card> cardsInHand, GameField field) {
         this.nickname = nickname;
         this.color = color;
         this.secretObjective = secretObjective;
-        this.score = 0;  // initial score is 0
+        this.score.set(score);
         this.field = new GameField(field);
         this.cardsInHand = new ArrayList<>(cardsInHand);
     }
@@ -27,13 +29,13 @@ public class Player {
         this.nickname = other.nickname;
         this.color = other.color;
         this.secretObjective = other.secretObjective;
-        this.score = other.score;
+        this.score.set(other.getScore());
         this.cardsInHand = new ArrayList<>(other.cardsInHand);
         this.field = new GameField(other.field);
     }
 
     public Player(String nickname, PlayerColor color){
-        this(nickname, color, null, new ArrayList<>(), new GameField());
+        this(nickname, color, 0, null, new ArrayList<>(), new GameField());
     }
 
     public String getNickname() {
@@ -44,23 +46,43 @@ public class Player {
         return color;
     }
 
+    public int getScore() {
+        return score.get();
+    }
+
+    public void incrementScore(int increment) {
+        score.getAndAdd(increment);
+    }
+
+    public synchronized boolean hasSecretObjective(){
+        return secretObjective != null;
+    }
+
     public synchronized ObjectiveCard getSecretObjective() {
-        if(secretObjective != null) {
-            return secretObjective;
-        } else {
-            throw new NullPointerException("Secret Objective is null");
-        }
+        return secretObjective;
     }
     public void setSecretObjective(ObjectiveCard secretObjective) {
         this.secretObjective = secretObjective;
     }
 
     public List<Card> getCardsInHand() {
-        return new ArrayList<>(cardsInHand);
+        synchronized (cardsInHand) {
+            return new ArrayList<>(cardsInHand);
+        }
     }
 
     public void addCard(Card newCard) {
-       this.cardsInHand.add(newCard);
+        synchronized (cardsInHand) {
+            cardsInHand.add(newCard);
+        }
+    }
+
+    public Card getCard(int cardId){
+        synchronized (cardsInHand) {
+            return cardsInHand.stream()
+                    .filter(card -> card.getId() == cardId)
+                    .findFirst().orElseThrow(NoSuchElementException::new);
+        }
     }
 
     /**
@@ -70,25 +92,16 @@ public class Player {
      * @throws InvalidCardException called when the player doesn't have the card he was supposed to play
      */
     public Card removeCard(int cardId) throws InvalidCardException {
-        Card removedCard = null;
+        Card removedCard = getCard(cardId);
         synchronized (cardsInHand) {
-            removedCard = cardsInHand.stream()
-                    .filter(card -> card.getId() == cardId)
-                    .findFirst().orElseThrow(() -> new InvalidCardException(cardId));
             cardsInHand.remove(removedCard);
         }
         return removedCard;
     }
 
-    public synchronized int getScore() {
-        return score;
-    }
-
-    public synchronized void incrementScore(int increment) {
-        this.score += increment;
-    }
-
     public GameField getField() {
-        return field;
+        synchronized (field) {
+            return field;
+        }
     }
 }

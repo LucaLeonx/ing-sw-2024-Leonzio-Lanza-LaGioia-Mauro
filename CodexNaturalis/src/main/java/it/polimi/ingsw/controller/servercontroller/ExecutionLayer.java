@@ -122,11 +122,7 @@ public class ExecutionLayer extends InternalServerLayer{
 
     @Override
     public void registerPlayerSetup(Game game, String playerName, int objectiveCardId, CardOrientation initialCardSide) {
-        Player player = game.getPlayer(playerName);
-        PlayerSetup setup = game.getPlayerSetup(playerName);
-        ObjectiveCard chosenObjective = (objectiveCardId == setup.objective1().getId()) ? setup.objective1() : setup.objective2();
-        player.setSecretObjective(chosenObjective);
-        player.getField().placeCard(setup.initialCard(), initialCardSide, new Point(0,0));
+        game.registerPlayerSetup(playerName, objectiveCardId, initialCardSide);
     }
 
     @Override
