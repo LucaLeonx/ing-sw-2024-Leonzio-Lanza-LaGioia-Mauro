@@ -177,7 +177,7 @@ public class GameScreen extends TUIState implements GameObserver{
             }
             if(newPlayer==controller.getControlledPlayerInformation().nickname()){
                 //It is the turn of me so I would need to make the choice
-                int cardChoice = 0;
+                int cardChoice = -1;
                 int cardOrientation = 0;
                 int chosenPoint=-1;
                 String stringDrawChoice = "";
@@ -188,7 +188,7 @@ public class GameScreen extends TUIState implements GameObserver{
                 TUIMethods.drawMap(controller.getControlledPlayerInformation(), controller.getControlledPlayerInformation().field(), true);
                 TUIMethods.showHand(controller.getControlledPlayerInformation());
                 do {
-                    System.out.println("Select the card you want to play (1 for first card etc...): ");
+                    System.out.println("Select the card you want to play (1 for first card etc...), 0 to exit game: ");
                     try {
                         cardChoice = scanner.nextInt();
                         scanner.nextLine(); // Consume newline
@@ -198,6 +198,9 @@ public class GameScreen extends TUIState implements GameObserver{
                     }
                     if(controller.getControlledPlayerInformation().cardsInHand().get(cardChoice-1)!=null){
                         break;
+                    }
+                    else if(cardChoice==0) {
+                        controller.exitGame();
                     }
                     else{
                         System.out.println("Invalid choice. Please try again.");
@@ -298,7 +301,7 @@ public class GameScreen extends TUIState implements GameObserver{
 
     @Override
     public void onTurnSkipped(String skippedPlayer) {
-        System.out.println("Player " + skippedPlayer + " skipped the turn since there is no possible move he/she can do from his/her current position");
+        System.out.println("Player " + skippedPlayer + " skipped the turn since player is disconnected");
 
     }
 
