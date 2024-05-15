@@ -57,7 +57,7 @@ public class BeginningOfGameScreen extends TUIState implements GameObserver{
 
         try {
             System.out.println("Chose your secret objective card: ");
-            TUIMethods.show2ObjectivesCards(controller.getPlayerSetup().objective1(), controller.getPlayerSetup().objective2());
+            //TUIMethods.show2ObjectivesCards(controller.getPlayerSetup().objective1(), controller.getPlayerSetup().objective2());
             System.out.println("press 1 or 2: ");
             int choiceObjective;
             while(true) {
