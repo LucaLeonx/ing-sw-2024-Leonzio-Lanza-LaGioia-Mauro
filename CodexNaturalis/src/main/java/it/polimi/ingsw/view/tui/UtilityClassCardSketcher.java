@@ -50,6 +50,8 @@ public final class UtilityClassCardSketcher {
             case CardColor.SKYBLUE:
                 background = Symbol_String.BLUE_SQUARE_SYMBOL;
                 break;
+            case CardColor.WHITE:
+                background = Symbol_String.BROWN_SQUARE_SYMBOL;
             default:
                 System.out.println("Error");
                 break;
@@ -92,13 +94,13 @@ public final class UtilityClassCardSketcher {
                     y=2;
                     break;
             }
-            symbol=FromSymbolToString(card.angleSymbols().get(angle));
+            symbol=Symbol_String.FromSymbolToString(card.angleSymbols().get(angle));
             // if it is hidden I don't want to change emoji from the background color.
             if(card.angleSymbols().get(angle) != Symbol.HIDDEN) {
                 cardSketched[y][x] = symbol;
             }
         }
-        if(card.reward() == RewardType.ONE_POINT) {
+        if(card.reward() != null && card.reward() == RewardType.ONE_POINT) {
             cardSketched[0][2]=Symbol_String.ONE_SYMBOL;
         }
 
@@ -112,19 +114,19 @@ public final class UtilityClassCardSketcher {
         cardSketched=sketchResourceCard(card); // Golden card doesn't differ from Golden Card In terms of angles
         for(int i=0; i<card.requiredSymbols().size(); i++){
             if(i==0) {
-                cardSketched[2][1] = FromSymbolToString(card.requiredSymbols().get(i));
+                cardSketched[2][1] = Symbol_String.FromSymbolToString(card.requiredSymbols().get(i));
             }
             else if(i==1) {
-                cardSketched[2][2] = FromSymbolToString(card.requiredSymbols().get(i));
+                cardSketched[2][2] = Symbol_String.FromSymbolToString(card.requiredSymbols().get(i));
             }
             else if(i==2) {
-                cardSketched[2][3] = FromSymbolToString(card.requiredSymbols().get(i));
+                cardSketched[2][3] = Symbol_String.FromSymbolToString(card.requiredSymbols().get(i));
             }
             else if(i==3) {
-                cardSketched[1][2] = FromSymbolToString(card.requiredSymbols().get(i));
+                cardSketched[1][2] = Symbol_String.FromSymbolToString(card.requiredSymbols().get(i));
             }
             else if(i==4) {
-                cardSketched[1][1] = FromSymbolToString(card.requiredSymbols().get(i));
+                cardSketched[1][1] = Symbol_String.FromSymbolToString(card.requiredSymbols().get(i));
             }
         }
 
@@ -164,36 +166,7 @@ public final class UtilityClassCardSketcher {
         return cardSketched;
     }
 
-    public static String FromSymbolToString(Symbol symbol){
-        String CharSymbol=Symbol_String.BLACK_SQUARE_SYMBOL;
-        switch (symbol){
-            case Symbol.ANIMAL:
-                CharSymbol=Symbol_String.ANIMAL_SYMBOL;
-                break;
-            case Symbol.FUNGI:
-                CharSymbol=Symbol_String.FUNGI_SYMBOL;
-                break;
-            case Symbol.PLANT:
-                CharSymbol=Symbol_String.PLANT_SYMBOL;
-                break;
-            case Symbol.INSECT:
-                CharSymbol=Symbol_String.INSECT_SYMBOL;
-                break;
-            case Symbol.QUILL:
-                CharSymbol=Symbol_String.QUILL_SYMBOL;
-                break;
-            case Symbol.MANUSCRIPT:
-                CharSymbol=Symbol_String.MANUSCRIPT_SYMBOL;
-                break;
-            case Symbol.INKWELL:
-                CharSymbol=Symbol_String.INKWELL_SYMBOL;
-                break;
-            case Symbol.BLANK:
-                CharSymbol=Symbol_String.WHITE_SQUARE_SYMBOL;
-                break;
-        }
-        return CharSymbol;
-    }
+   
 
 
 

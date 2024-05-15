@@ -3,6 +3,9 @@ package it.polimi.ingsw.view.tui;
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.clientcontroller.GameObserver;
 import it.polimi.ingsw.dataobject.InfoTranslator;
+import it.polimi.ingsw.dataobject.ObjectiveInfo;
+import it.polimi.ingsw.model.card.CardOrientation;
+import it.polimi.ingsw.model.card.ObjectiveCard;
 
 import java.util.Objects;
 import java.util.Scanner;
@@ -49,22 +52,31 @@ public class BeginningOfGameScreen extends TUIState implements GameObserver{
 
         try {
             InfoTranslator infoTraslator = null;
-            //TUIMethods.showCardsOnTable(null, null, infoTraslator.convertToDrawableCardsInfo(controller.getDrawableCards()));
+            TUIMethods.showCardsOnTable(null, null, controller.getDrawableCards());
         }
         catch(Exception e){
             System.out.println(e.getMessage());
         }
 
         try {
-            System.out.println("Chose your secret objective card: ");
-            //TUIMethods.show2ObjectivesCards(controller.getPlayerSetup().objective1(), controller.getPlayerSetup().objective2());
-            System.out.println("press 1 or 2: ");
             int choiceObjective;
+            int choiceFrontOrBack;
+            ObjectiveInfo chosenCard=controller.getPlayerSetup().objective1(); // initialization to a random one because if not compiler complains.
+            CardOrientation chosenOrientation=CardOrientation.FRONT;
+
             while(true) {
+                System.out.println("Chose your secret objective card: ");
+                TUIMethods.show2Objectives(controller.getPlayerSetup().objective1(), controller.getPlayerSetup().objective2());
+                System.out.println("press 1 or 2: ");
                 try {
                     choiceObjective = scanner.nextInt();
                     scanner.nextLine(); // Consume newline
-                    if(choiceObjective==1 || choiceObjective==2) {
+                    if(choiceObjective==1) {
+                        chosenCard=controller.getPlayerSetup().objective1();
+                        break;
+                    }
+                    else if(choiceObjective==2){
+                        chosenCard=controller.getPlayerSetup().objective2();
                         break;
                     }
                 } catch (Exception e) {
@@ -73,12 +85,33 @@ public class BeginningOfGameScreen extends TUIState implements GameObserver{
                 }
             }
 
+            while(true) {
+                System.out.println("Chose the orientation of your initial card:  ");
+                TUIMethods.showInitialCard(controller.getPlayerSetup().initialCard());
+                System.out.println("press 1 for Front 2 for Back: ");
+                try {
+                    choiceFrontOrBack = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+                    if(choiceFrontOrBack==1) {
+                        chosenOrientation=CardOrientation.FRONT;
+                        break;
+                    }
+                    else if(choiceFrontOrBack==2){
+                        chosenOrientation=CardOrientation.BACK;
+                        break;
+                    }
+                } catch (Exception e) {
+                    scanner.nextLine(); // Consume newline
+                    System.out.println(e.getMessage());
+                }
+            }
+            controller.setPlayerSetup(chosenCard,chosenOrientation);
+
         }
         catch(Exception e){
             System.out.println(e.getMessage());
         }
 
-        System.out.println(" Chose your initial objective card");
     }
 
     public static void printWolf(){
