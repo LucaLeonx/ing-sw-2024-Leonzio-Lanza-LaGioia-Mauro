@@ -28,6 +28,7 @@ public class JoinLobby extends TUIState implements LobbyObserver {
                     scanner.nextLine(); // Consume newline
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
+                    scanner.nextLine(); // Consume newline
                     transitionState(new JoinLobby(tui, scanner, controller));
                 }
                 if (choice == 0) {

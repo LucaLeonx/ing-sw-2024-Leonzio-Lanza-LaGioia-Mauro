@@ -16,7 +16,6 @@ public class InitialScreen extends TUIState{
         printStylishMessage("                          WELCOME TO CODEX NATURALIS                            ", "\u001B[32m", "\u001B[31m");
         printMushroom();
         try {
-            // Sleep for 100 milliseconds (0.1 seconds) between characters
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();

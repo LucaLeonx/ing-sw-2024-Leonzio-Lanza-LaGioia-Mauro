@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
-import it.polimi.ingsw.controller.clientcontroller.LobbyObserver;
 
 import java.util.Scanner;
 

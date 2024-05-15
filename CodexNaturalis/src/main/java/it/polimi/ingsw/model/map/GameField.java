@@ -185,12 +185,6 @@ public class GameField{
 
     private boolean isPlaceable(Point p){
         boolean OK=true;
-        /*if(p.equals(new Point(-2,6))) {
-            System.out.println("sto controllando il punto");
-            if(getCardCells().containsKey(p)){
-                System.out.println("e il punto c'è");
-            }
-        }*/
         if(getCardCells().containsKey(p)){
             OK=false;
         }
