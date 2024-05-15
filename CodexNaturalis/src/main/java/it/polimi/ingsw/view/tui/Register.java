@@ -32,6 +32,7 @@ public class Register extends TUIState{
                     scanner.nextLine(); // Consume newline
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
+                    scanner.nextLine(); // Consume newline
                     transitionState(new Register(tui, scanner, controller));
                 }
 

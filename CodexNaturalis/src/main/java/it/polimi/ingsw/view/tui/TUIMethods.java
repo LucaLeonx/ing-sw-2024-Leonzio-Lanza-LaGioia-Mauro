@@ -12,7 +12,7 @@ import static java.lang.Math.abs;
 
 
 public class TUIMethods {
-    public void drawMap(ControlledPlayerInfo player, GameFieldInfo gameField, boolean isWithAvailablePosition) {
+    public static void drawMap(ControlledPlayerInfo player, GameFieldInfo gameField, boolean isWithAvailablePosition) {
 
         // 1 find the max and min row and column in order to create a matrix of the right dimension
         int minX = 0; // x of the leftmost cell
@@ -204,11 +204,11 @@ public class TUIMethods {
         System.out.println("list of the symbol in the middle of the starting card: " + gameField.placedCards().get(origin).card().getSide(initialCardOrientation).centerSymbols());
     }
 
-    public void showPoints(OpponentInfo player) {
+    public static void showPoints(OpponentInfo player) {
         System.out.println("Player " + player.nickname() + " has " + player.score() + " points");
     }
 
-    public void showHand(ControlledPlayerInfo player) {
+    public static void showHand(ControlledPlayerInfo player) {
         System.out.println("Your hand: ");
         String[][] matrixHand = new String[3][23]; // 20 columns for 3 cards +3 cells for tabs
 
@@ -249,9 +249,40 @@ public class TUIMethods {
         }
 
     }
+    public  static void show2Objectives(ObjectiveInfo objectiveCard1, ObjectiveInfo objectiveCard2){
+        String[][] objectives = new String[3][11];
+        //I add the space between the card.
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 11; j++) {
+                objectives[i][j] = "\t\t";
+            }
+        }
+
+        String[][] Card1 = new String[3][5];
+        String[][] Card2 = new String[3][5];
+
+        Card1 = UtilityClassCardSketcher.sketchObjectiveCard(objectiveCard1);
+        Card2 = UtilityClassCardSketcher.sketchObjectiveCard(objectiveCard2);
+
+        for(int j = 0; j < 3; j++) {
+            for (int k = 0; k < 5; k++) {
+                objectives[j][k] = Card1[j][k];
+                objectives[j][k + 6] = Card2[j][k];
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 11; j++) {
+                System.out.print(objectives[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.print("\n\n");
+
+    }
 
 
-    public void showCardsOnTable(ObjectiveInfo objectiveCard1, ObjectiveInfo objectiveCard2, DrawableCardsInfo drawable) {
+    public static void showCardsOnTable(ObjectiveInfo objectiveCard1, ObjectiveInfo objectiveCard2, DrawableCardsInfo drawable) {
         System.out.println("Cards on the table: ");
         CardSideInfo goldDeck = drawable.drawableCards().get(DrawChoice.DECK_GOLD);
         CardSideInfo resourceDeck = drawable.drawableCards().get(DrawChoice.DECK_RESOURCE);
@@ -263,7 +294,7 @@ public class TUIMethods {
         String[][] decks = new String[3][11]; // 11 columns for 2 cards +1 cells for tabs
         String[][] drawableCards1 = new String[3][11]; // 1st row of card that are face up on the table to draw from
         String[][] drawableCards2 = new String[3][11];
-        String[][] objectives = new String[3][11];
+
 
 
         //I add the space between the card.
@@ -272,7 +303,6 @@ public class TUIMethods {
                 decks[i][j] = "\t\t";
                 drawableCards1[i][j] = "\t\t";
                 drawableCards2[i][j] = "\t\t";
-                objectives[i][j] = "\t\t";
             }
         }
 
@@ -336,16 +366,6 @@ public class TUIMethods {
             }
         }
 
-        Card1 = UtilityClassCardSketcher.sketchObjectiveCard(objectiveCard1);
-        Card2 = UtilityClassCardSketcher.sketchObjectiveCard(objectiveCard2);
-
-        for(int j = 0; j < 3; j++) {
-            for (int k = 0; k < 5; k++) {
-                objectives[j][k] = Card1[j][k];
-                objectives[j][k + 6] = Card2[j][k];
-            }
-        }
-
         for(int i = 0; i < 3; i++) {
             for (int j = 0; j < 11; j++) {
                 System.out.print(decks[i][j]);
@@ -369,14 +389,8 @@ public class TUIMethods {
             System.out.println();
         }
         System.out.print("\n\n");
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 11; j++) {
-                System.out.print(objectives[i][j]);
-            }
-            System.out.println();
-        }
-        System.out.print("\n\n");
+        show2Objectives(objectiveCard1, objectiveCard2);
     }
+
 
 }

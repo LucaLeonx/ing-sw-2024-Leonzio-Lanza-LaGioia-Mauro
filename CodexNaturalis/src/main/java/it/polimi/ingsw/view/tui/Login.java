@@ -36,6 +36,7 @@ public class Login extends TUIState{
                     choice = scanner.nextInt();
                     scanner.nextLine(); // Consume newline
                 } catch (Exception e) {
+                    scanner.nextLine(); // Consume newline
                     System.out.println(e.getMessage());
                 }
 
@@ -48,6 +49,7 @@ public class Login extends TUIState{
                         break;
                     default:
                         System.out.println("Invalid choice. Please try again.");
+                        transitionState(new Login(tui, scanner, controller));
                 }
             }
         }
