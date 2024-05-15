@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.tui;
 
+import it.polimi.ingsw.model.card.Symbol;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,5 +81,36 @@ public class Symbol_String {
         return result;
     }
 
+
+    public static String FromSymbolToString(Symbol symbol){
+        String CharSymbol=Symbol_String.BLACK_SQUARE_SYMBOL;
+        switch (symbol){
+            case Symbol.ANIMAL:
+                CharSymbol=Symbol_String.ANIMAL_SYMBOL;
+                break;
+            case Symbol.FUNGI:
+                CharSymbol=Symbol_String.FUNGI_SYMBOL;
+                break;
+            case Symbol.PLANT:
+                CharSymbol=Symbol_String.PLANT_SYMBOL;
+                break;
+            case Symbol.INSECT:
+                CharSymbol=Symbol_String.INSECT_SYMBOL;
+                break;
+            case Symbol.QUILL:
+                CharSymbol=Symbol_String.QUILL_SYMBOL;
+                break;
+            case Symbol.MANUSCRIPT:
+                CharSymbol=Symbol_String.MANUSCRIPT_SYMBOL;
+                break;
+            case Symbol.INKWELL:
+                CharSymbol=Symbol_String.INKWELL_SYMBOL;
+                break;
+            case Symbol.BLANK:
+                CharSymbol=Symbol_String.WHITE_SQUARE_SYMBOL;
+                break;
+        }
+        return CharSymbol;
+    }
 
 }

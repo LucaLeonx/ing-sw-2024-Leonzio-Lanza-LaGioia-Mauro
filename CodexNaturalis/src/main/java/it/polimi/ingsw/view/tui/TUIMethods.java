@@ -393,4 +393,47 @@ public class TUIMethods {
     }
 
 
+    public static void showInitialCard(CardInfo card){
+        String[][] Front = new String[5][3];
+        String[][] Back = new String[5][3];
+        Front=UtilityClassCardSketcher.sketchResourceCard(card.front()); // I initially sketch it as a resource card and then I will add the center symbol
+        Back=UtilityClassCardSketcher.sketchResourceCard(card.back());
+        // Now to the front we need also to add the (at max 3) center symbols.
+        int i=0;
+        for(Symbol s: card.front().centerSymbols()){
+            if(i==0){
+                Front[1][2]=Symbol_String.FromSymbolToString(s);
+            }
+            else if(i==1){
+                Front[0][2]=Symbol_String.FromSymbolToString(s);
+            }
+            else if(i==2){
+                Front[2][2]=Symbol_String.FromSymbolToString(s);
+            }
+            else{
+                System.out.println("We have an error, it seems like there is an initial card with more than 3 center Symbols");
+            }
+            i++;
+        }
+        System.out.println("Front of the objective card: ");
+        for (int k = 0; k < 3; k++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(Front[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.print("\n");
+
+
+        System.out.println("Back of the objective card: ");
+        for (int k = 0; k < 3; k++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(Back[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.print("\n");
+    }
+
+
 }
