@@ -133,9 +133,9 @@ public class RMIClientController implements ClientController{
     }
 
     @Override
-    public Map<DrawChoice, CardSideInfo> getDrawableCards() throws RemoteException {
+    public DrawableCardsInfo getDrawableCards() throws RemoteException {
         checkLogin();
-        return session.getDrawableCardsInfo().drawableCards();
+        return session.getDrawableCardsInfo();
     }
 
     @Override

@@ -220,10 +220,4 @@ public class Game {
             player.incrementScore(objective.getRewardFunction().getPoints(player.getField()));
         }
     }
-
-    @Deprecated
-    public synchronized void setVisibleCard(DrawChoice choice, Card card){
-        visibleCards.put(choice, card);
-    }
-
 }

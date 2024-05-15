@@ -63,7 +63,7 @@ public interface ClientController {
      * an entry for each value in DrawChoice enum. If it is missing, it means that no card
      * can be drawn from that position.
      */
-    public Map<DrawChoice, CardSideInfo> getDrawableCards() throws RemoteException;
+    public DrawableCardsInfo getDrawableCards() throws RemoteException;
     public boolean isLastTurn() throws RemoteException;
     public boolean hasGameEnded() throws RemoteException;
     public String getWinner() throws RemoteException;
