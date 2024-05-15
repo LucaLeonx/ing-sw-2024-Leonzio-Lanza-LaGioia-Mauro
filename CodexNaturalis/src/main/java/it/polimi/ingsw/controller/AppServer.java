@@ -26,13 +26,14 @@ public class AppServer {
         IntegrityLayer integrityLayer = new IntegrityLayer(lobbyList, conversionLayer);
 
         AuthenticationManager authenticator = new AuthenticationManagerImpl(integrityLayer, userList);
+        // MessageTranslator translator = MessageTranslator.init(integrityLayer);
 
         LocateRegistry.createRegistry(ConnectionDefaultSettings.RMIRegistryPort);
         Registry reg = LocateRegistry.getRegistry();
         reg.rebind(ConnectionDefaultSettings.RMIServerName, authenticator);
         System.out.println("Registry bound, ready to listen for clients from RMI");
 
-        SocketServer server = new SocketServer(ConnectionDefaultSettings.SocketServerPort);
+        SocketServer server = new SocketServer(ConnectionDefaultSettings.SocketServerPort,authenticator);
         server.startServer();
         System.out.println("Game server ready");
 
