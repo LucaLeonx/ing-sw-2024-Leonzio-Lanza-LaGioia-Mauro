@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.InvalidOperationException;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -16,13 +17,23 @@ public class SocketClientController implements ClientController {
     private ServerController session = null;
     private SocketClient client ;
 
-    public SocketClientController(){
+    public SocketClientController() throws IOException {
         this.client = new SocketClient(ConnectionDefaultSettings.SocketServerPort);
+        this.client.startClientConnection();
     }
 
     @Override
     public int register(String username) throws RemoteException {
-        return 0;
+        Message msg = new Message(MessageType.REGISTER_USER,username);
+        client.sendMessage(msg);
+
+        Message receivedMsg = client.receiveMessage();
+        if(receivedMsg.getObj() instanceof Integer){
+            return (Integer) receivedMsg.getObj();
+        }
+        else{
+            throw new InvalidOperationException("Username " + username + " is already in use");
+        }
     }
 
     @Override
@@ -138,5 +149,9 @@ public class SocketClientController implements ClientController {
     @Override
     public void exitGame() throws InvalidOperationException {
 
+    }
+
+    public void closeSocket() throws IOException {
+        client.closeConnection();
     }
 }

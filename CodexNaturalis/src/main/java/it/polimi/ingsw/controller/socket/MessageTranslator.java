@@ -8,6 +8,7 @@ import it.polimi.ingsw.controller.servercontroller.Lobby;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.dataobject.Message;
 import it.polimi.ingsw.dataobject.MessageType;
+import it.polimi.ingsw.model.InvalidOperationException;
 
 import javax.management.InstanceAlreadyExistsException;
 import java.rmi.RemoteException;
@@ -37,7 +38,12 @@ public class MessageTranslator {
                 if(isAuthenticated()){
                     session.logout();
                 }
-                int tempCode = manager.register((String) message.getObj());
+                int tempCode;
+                try{
+                    tempCode = manager.register((String) message.getObj());
+                }catch (InvalidOperationException e){
+                    return new Message(null,(String) "Username already exists");
+                }
                 return new Message(MessageType.TEMP_CODE,tempCode);
             }
             case CREATE_LOBBY -> {

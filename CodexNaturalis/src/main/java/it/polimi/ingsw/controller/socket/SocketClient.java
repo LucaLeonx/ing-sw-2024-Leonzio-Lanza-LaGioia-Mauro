@@ -25,18 +25,23 @@ public class SocketClient {
         socketIn = new ObjectInputStream(socket.getInputStream());
     }
 
-    public void sendMessage(Object obj) throws IOException {
+    public void sendMessage(Object obj){
         try{
             socketOut.writeObject(obj);
             socketOut.flush();
-            System.out.println("message sent");
-        }catch(NoSuchElementException e) {
-            System.out.println("Connection closed");
+            //System.out.println("message sent");
+        }catch(NoSuchElementException | IOException e) {
+            System.out.println("Connection closed "+e.getMessage());
         }
     }
 
-    public Message receiveMessage(Object obj) throws IOException, ClassNotFoundException {
-        return (Message) socketIn.readObject();
+    public Message receiveMessage()  {
+        try {
+            return (Message) socketIn.readObject();
+        }
+        catch(IOException |ClassNotFoundException e) {
+            return null;
+        }
     }
 
     public void closeConnection() throws IOException {

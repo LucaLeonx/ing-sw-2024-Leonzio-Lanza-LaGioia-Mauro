@@ -26,11 +26,11 @@ public class SocketMultiHandler implements Runnable {
             //Here we cloud start another thread (Server side) which his purpose is to send message to the client whenever you want
             while (true) {
                 Message InMsg = (Message) ois.readObject();
+                System.out.println("Object received:\t"+ InMsg.getObj());
 
-                //Message OutMsg =  MessageTranslator.processMessage(InMsg);
-                //oos.writeObject(OutMsg);
-                //oos.flush();
-                System.out.println("Object received:\n\t"+ InMsg.getObj());
+                Message OutMsg =  MessageTranslator.processMessage(InMsg);
+                oos.writeObject(OutMsg);
+                oos.flush();
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
