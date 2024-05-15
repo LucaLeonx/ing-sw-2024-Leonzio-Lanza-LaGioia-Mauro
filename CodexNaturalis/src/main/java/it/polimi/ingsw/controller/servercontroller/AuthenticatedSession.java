@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 
-import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
@@ -43,6 +42,11 @@ public class AuthenticatedSession extends UnicastRemoteObject implements ServerC
     @Override
     public PlayerSetupInfo getPlayerSetup() throws RemoteException {
         return enteringServerLayer.getPlayerSetupInfo(user);
+    }
+
+    @Override
+    public List<ObjectiveInfo> getCommonObjectives() throws RemoteException {
+        return enteringServerLayer.getCommonObjectives(user);
     }
 
     @Override

@@ -91,4 +91,8 @@ public abstract class FrontierServerLayer{
     public void exitGame(User user) {
         nextLayers[0].exitFromLobby(user);
     }
+
+    public List<ObjectiveInfo> getCommonObjectives(User user) {
+        return nextLayers[0].getCommonObjectives(user);
+    }
 }

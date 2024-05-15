@@ -115,6 +115,12 @@ public class RMIClientController implements ClientController{
     }
 
     @Override
+    public List<ObjectiveInfo> getCommonObjectives() throws RemoteException {
+        checkLogin();
+        return session.getCommonObjectives();
+    }
+
+    @Override
     public ControlledPlayerInfo getControlledPlayerInformation() throws RemoteException {
         checkLogin();
         return session.getControlledPlayerInfo();
@@ -180,6 +186,6 @@ public class RMIClientController implements ClientController{
     @Override
     public void exitGame() throws InvalidOperationException {
         checkLogin();
-        //session.exitGame();
+        // session.exitGame();
     }
 }

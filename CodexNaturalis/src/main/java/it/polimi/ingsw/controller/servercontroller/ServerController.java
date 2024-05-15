@@ -1,13 +1,9 @@
 package it.polimi.ingsw.controller.servercontroller;
 
-import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
-import it.polimi.ingsw.dataobject.DrawableCardsInfo;
-import it.polimi.ingsw.dataobject.OpponentInfo;
-import it.polimi.ingsw.dataobject.PlayerSetupInfo;
+import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
-import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -20,6 +16,8 @@ public interface ServerController extends Remote {
     public OpponentInfo getOpponentInfo(String name) throws RemoteException;
     public DrawableCardsInfo getDrawableCardsInfo() throws RemoteException;
     public PlayerSetupInfo getPlayerSetup() throws RemoteException;
+
+    public List<ObjectiveInfo> getCommonObjectives() throws RemoteException;
     public boolean isLastTurn() throws RemoteException;
     public boolean hasGameEnded() throws RemoteException;
     public void registerPlayerSetupChoice(int chosenObjectiveId, CardOrientation initialCardOrientation) throws RemoteException;
@@ -30,7 +28,9 @@ public interface ServerController extends Remote {
     public void exitFromLobby() throws RemoteException;
     public List<LobbyInfo> getLobbies() throws RemoteException;
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException;
+    //public void subscribe(NotificationSubscriber subscriber);
     public String test() throws RemoteException;
     public void logout() throws RemoteException;
+
     // public void exitGame();
 }

@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 import static it.polimi.ingsw.dataobject.InfoTranslator.convertToLobbyInfo;
@@ -119,5 +120,10 @@ public class ConversionLayer extends FrontierServerLayer {
     @Override
     public void exitGame(User user){
         internalServerLayer.exitGame(user);
+    }
+
+    @Override
+    public List<ObjectiveInfo> getCommonObjectives(User user){
+        return internalServerLayer.getCommonObjectives(user.getJoinedGame()).stream().map(InfoTranslator::convertToObjectiveInfo).toList();
     }
 }

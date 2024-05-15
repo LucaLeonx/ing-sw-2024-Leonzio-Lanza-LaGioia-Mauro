@@ -16,7 +16,9 @@ import it.polimi.ingsw.test.model.map.GameFieldTest;
 
 
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TUITest extends TestCase {
 
@@ -171,28 +173,30 @@ public class TUITest extends TestCase {
     }
 
     public void testShowCardsOnTableAllPresent() throws FileNotFoundException {
-       Game game = new Game(List.of("Pippo", "Paperino", "Pluto", "Clarabella"));
-       game.setVisibleCard(DrawChoice.DECK_RESOURCE, resourceCards.get(0));
-       game.setVisibleCard(DrawChoice.DECK_GOLD, goldenCards.get(22));
-       game.setVisibleCard(DrawChoice.RESOURCE_CARD_1, resourceCards.get(0));
-       game.setVisibleCard(DrawChoice.RESOURCE_CARD_2, resourceCards.get(12));
-       game.setVisibleCard(DrawChoice.GOLD_CARD_1, goldenCards.get(1));
-       game.setVisibleCard(DrawChoice.GOLD_CARD_2, goldenCards.get(33));
+       Map<DrawChoice, Card> drawableCards = new HashMap<>();
 
-       DrawableCardsInfo drawableCards = InfoTranslator.convertToDrawableCardsInfo(game);
+       drawableCards.put(DrawChoice.DECK_RESOURCE, resourceCards.get(0));
+       drawableCards.put(DrawChoice.DECK_GOLD, goldenCards.get(22));
+       drawableCards.put(DrawChoice.RESOURCE_CARD_1, resourceCards.get(0));
+       drawableCards.put(DrawChoice.RESOURCE_CARD_2, resourceCards.get(12));
+       drawableCards.put(DrawChoice.GOLD_CARD_1, goldenCards.get(1));
+       drawableCards.put(DrawChoice.GOLD_CARD_2, goldenCards.get(33));
+
+       DrawableCardsInfo drawableCardsInfo = InfoTranslator.convertToDrawableCardsInfo(drawableCards);
        //System.out.println(drawableCards);
-       tui.showCardsOnTable(InfoTranslator.convertToObjectiveInfo(objectiveCards.get(3)),InfoTranslator.convertToObjectiveInfo(objectiveCards.get(12)),drawableCards);
+       tui.showCardsOnTable(InfoTranslator.convertToObjectiveInfo(objectiveCards.get(3)),InfoTranslator.convertToObjectiveInfo(objectiveCards.get(12)), drawableCardsInfo);
     }
 
     public void testShowCardsOnTableSomeMissing() throws FileNotFoundException {
-        Game game = new Game(List.of("Pippo", "Paperino", "Pluto", "Clarabella"));
-        game.setVisibleCard(DrawChoice.DECK_RESOURCE, resourceCards.get(0));
-        game.setVisibleCard(DrawChoice.RESOURCE_CARD_1, resourceCards.get(0));
-        game.setVisibleCard(DrawChoice.GOLD_CARD_2, goldenCards.get(33));
+        Map<DrawChoice, Card> drawableCards = new HashMap<>();
 
-        DrawableCardsInfo drawableCards = InfoTranslator.convertToDrawableCardsInfo(game);
+        drawableCards.put(DrawChoice.DECK_RESOURCE, resourceCards.get(0));
+        drawableCards.put(DrawChoice.RESOURCE_CARD_1, resourceCards.get(0));
+        drawableCards.put(DrawChoice.GOLD_CARD_2, goldenCards.get(33));
+
+        DrawableCardsInfo drawableCardsInfo = InfoTranslator.convertToDrawableCardsInfo(drawableCards);
         //System.out.println(drawableCards);
-        tui.showCardsOnTable(InfoTranslator.convertToObjectiveInfo(objectiveCards.get(3)),InfoTranslator.convertToObjectiveInfo(objectiveCards.get(12)),drawableCards);
+        tui.showCardsOnTable(InfoTranslator.convertToObjectiveInfo(objectiveCards.get(3)),InfoTranslator.convertToObjectiveInfo(objectiveCards.get(12)),drawableCardsInfo);
     }
 
 

@@ -20,25 +20,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class InfoTranslator {
-    public static DrawableCardsInfo convertToDrawableCardsInfo(Game game){
-        Map<DrawChoice, CardSideInfo> convertedInfo = new HashMap<>();
-
-        if(!game.getResourceCardDeck().isEmpty()) {
-            Card resourceTopCard = game.getResourceCardDeck().getTopCard();
-            convertedInfo.put(DECK_RESOURCE, convertToCardSideInfo(resourceTopCard, BACK, true));
-        }
-
-        if(!game.getResourceCardDeck().isEmpty()) {
-            Card goldTopCard = game.getResourceCardDeck().getTopCard();
-            convertedInfo.put(DECK_GOLD, convertToCardSideInfo(goldTopCard, BACK, true));
-        }
-
-        for(Map.Entry<DrawChoice, Card> visibleCardEntry : game.getVisibleCards().entrySet()){
-            convertedInfo.put(visibleCardEntry.getKey(), convertToCardSideInfo(visibleCardEntry.getValue(), FRONT, true));
-        }
-
-        return new DrawableCardsInfo(convertedInfo);
-    }
 
     public static DrawableCardsInfo convertToDrawableCardsInfo(Map<DrawChoice, Card> drawableCards){
         Map<DrawChoice, CardSideInfo> convertedInfo = new HashMap<>();
