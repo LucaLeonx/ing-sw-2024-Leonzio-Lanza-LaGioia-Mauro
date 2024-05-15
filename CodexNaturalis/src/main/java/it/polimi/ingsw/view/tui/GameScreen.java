@@ -4,8 +4,12 @@ import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.clientcontroller.GameObserver;
 import it.polimi.ingsw.dataobject.InfoTranslator;
 import it.polimi.ingsw.dataobject.ObjectiveInfo;
+import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
 
+import java.rmi.RemoteException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class GameScreen extends TUIState implements GameObserver{
@@ -166,16 +170,144 @@ public class GameScreen extends TUIState implements GameObserver{
 
     @Override
     public void onCurrentPlayerChange(String newPlayer) {
+        try {
+            TUIMethods.showCardsOnTable(controller.getCommonObjectives().get(0),controller.getCommonObjectives().get(1), controller.getDrawableCards());
+            if(controller.isLastTurn()){
+                System.out.println("ATTENTION: this is going to be the last turn");
+            }
+            if(newPlayer==controller.getControlledPlayerInformation().nickname()){
+                //It is the turn of me so I would need to make the choice
+                int cardChoice = 0;
+                int cardOrientation = 0;
+                int chosenPoint=-1;
+                String stringDrawChoice = "";
+                List<String> options = Arrays.asList("rd", "gd", "rc1", "rc2", "gc1", "gc2");
+                DrawChoice drawChoice=DrawChoice.DECK_GOLD;
+                CardOrientation orientationChosen=CardOrientation.FRONT;
 
+                TUIMethods.drawMap(controller.getControlledPlayerInformation(), controller.getControlledPlayerInformation().field(), true);
+                TUIMethods.showHand(controller.getControlledPlayerInformation());
+                do {
+                    System.out.println("Select the card you want to play (1 for first card etc...): ");
+                    try {
+                        cardChoice = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        scanner.nextLine();
+                    }
+                    if(controller.getControlledPlayerInformation().cardsInHand().get(cardChoice-1)!=null){
+                        break;
+                    }
+                    else{
+                        System.out.println("Invalid choice. Please try again.");
+                    }
+                }while(true);
+
+                do {
+                    System.out.println("Select the orientation of the card to play (1 for front, 2 for back): ");
+                    try {
+                        cardOrientation = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        scanner.nextLine();
+                    }
+                    if(cardOrientation==1){
+                        orientationChosen=CardOrientation.FRONT;
+                        break;
+                    }
+                    else if(cardOrientation==2){
+                        orientationChosen=CardOrientation.BACK;
+                        break;
+                    }
+                    else{
+                        System.out.println("Invalid choice. Please try again.");
+                    }
+                }while(true);
+
+                do {
+                    System.out.println("Select the position in the map where you want to place your card: ");
+                    try {
+                        chosenPoint = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        scanner.nextLine();
+                    }
+                    if(controller.getControlledPlayerInformation().field().availablePositions().get(chosenPoint)!=null){
+                        break;
+                    }
+                    else{
+                        System.out.println("Invalid choice. Please try again.");
+                    }
+                }while(true);
+
+
+                do {
+                    System.out.println("Select the card you want to draw:  ");
+                    System.out.println("Rd: Resource Deck");
+                    System.out.println("Gd: Golden Deck");
+                    System.out.println("Rc1: Resource Card 1");
+                    System.out.println("Rc2: Resource Card 2");
+                    System.out.println("Gc1: Golden Card 1");
+                    System.out.println("Gc2: Golden Card 1");
+                    String choice = scanner.nextLine().trim().toLowerCase(); // Read user input and trim whitespace
+
+                    // Validate user input against the list of options
+                    if (options.contains(choice)) {
+                        stringDrawChoice = choice;
+                        break; // Valid choice, exit the loop
+                    } else {
+                        System.out.println("Invalid choice. Please try again.");
+                    }
+                }while(true);
+                switch(stringDrawChoice){
+                    case "rd":
+                        drawChoice=DrawChoice.DECK_RESOURCE;
+                        break;
+                    case "gd":
+                        drawChoice=DrawChoice.DECK_GOLD;
+                        break;
+                    case "rc1":
+                        drawChoice=DrawChoice.RESOURCE_CARD_1;
+                        break;
+                    case "rc2":
+                        drawChoice=DrawChoice.RESOURCE_CARD_2;
+                        break;
+                    case "gc1":
+                        drawChoice=DrawChoice.GOLD_CARD_1;
+                        break;
+                    case "gc2":
+                        drawChoice=DrawChoice.GOLD_CARD_2;
+                        break;
+
+                }
+
+                controller.makeMove(controller.getControlledPlayerInformation().cardsInHand().get(cardChoice-1), controller.getControlledPlayerInformation().field().availablePositions().get(chosenPoint) ,orientationChosen, drawChoice);
+            }
+            else{
+                // when it is not my turn I still want to watch my map but without next position hint in order to (maybe) see it in a more clear way.
+                TUIMethods.drawMap(controller.getControlledPlayerInformation(), controller.getControlledPlayerInformation().field(), false);
+                TUIMethods.showHand(controller.getControlledPlayerInformation());
+            }
+        } catch (RemoteException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
     public void onTurnSkipped(String skippedPlayer) {
+        System.out.println("Player " + skippedPlayer + " skipped the turn since there is no possible move he/she can do from his/her current position");
 
     }
 
     @Override
     public void onGameEnded() {
-
+        try {
+            InitialScreen.printStylishMessage("Congratulation player " + controller.getWinner() + " has won", "\u001B[31m", "\u001B[33m");
+        } catch (RemoteException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

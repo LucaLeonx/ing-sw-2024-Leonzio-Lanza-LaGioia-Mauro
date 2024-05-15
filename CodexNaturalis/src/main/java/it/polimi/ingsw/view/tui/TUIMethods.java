@@ -366,6 +366,7 @@ public class TUIMethods {
             }
         }
 
+        System.out.println("ResourceDeck \tGoldDeck");
         for(int i = 0; i < 3; i++) {
             for (int j = 0; j < 11; j++) {
                 System.out.print(decks[i][j]);
@@ -374,6 +375,7 @@ public class TUIMethods {
         }
         System.out.print("\n\n");
 
+        System.out.println("ResourceCard1   GoldCard1");
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 11; j++) {
                 System.out.print(drawableCards1[i][j]);
@@ -382,6 +384,7 @@ public class TUIMethods {
         }
         System.out.print("\n\n");
 
+        System.out.println("ResourceCard2   GoldCard2");
         for(int i = 0; i < 3; i++) {
             for (int j = 0; j < 11; j++) {
                 System.out.print(drawableCards2[i][j]);
@@ -389,6 +392,8 @@ public class TUIMethods {
             System.out.println();
         }
         System.out.print("\n\n");
+
+        System.out.println("Objective1      Objective2");
         show2Objectives(objectiveCard1, objectiveCard2);
     }
 

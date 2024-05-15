@@ -31,7 +31,9 @@ public class LobbyWaiting extends TUIState implements LobbyObserver {
                         transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
                     }
                 }
-
+                if(ReachedCorrectNumberOfPlayer()){
+                    transitionState(new GameScreen(tui, scanner, controller));
+                }
             }
         });
 
