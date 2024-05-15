@@ -19,12 +19,11 @@ import java.util.Map;
 
 public class RMIClientController implements ClientController{
 
-    private final Registry registry;
-    private AuthenticationManager authenticator;
+    private final AuthenticationManager authenticator;
     private ServerController session = null;
 
     public RMIClientController(String host, int port, String serverName) throws RemoteException, NotBoundException {
-        registry = LocateRegistry.getRegistry(host, port);
+        Registry registry = LocateRegistry.getRegistry(host, port);
         this.authenticator = (AuthenticationManager) registry.lookup(serverName);
     }
 

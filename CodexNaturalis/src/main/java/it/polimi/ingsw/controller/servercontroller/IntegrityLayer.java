@@ -58,17 +58,21 @@ public class IntegrityLayer extends FrontierServerLayer {
 
     @Override
     public List<LobbyInfo> getLobbies(User user) {
+
         return super.getLobbies(user);
     }
 
     @Override
     public LobbyInfo getJoinedLobbyInfo(User user) {
+        if(user.getStatus() != WAITING_TO_START) {
+            throw new InvalidOperationException("The user is not in any lobby");
+        }
+
         return super.getJoinedLobbyInfo(user);
     }
 
     @Override
     public String getCurrentPlayer(User user) {
-
         if(user.getStatus() != IN_GAME){
             throw new InvalidOperationException("The user is not in any game");
         }
