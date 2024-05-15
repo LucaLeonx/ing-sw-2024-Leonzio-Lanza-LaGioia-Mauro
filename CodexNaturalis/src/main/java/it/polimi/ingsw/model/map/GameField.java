@@ -9,13 +9,13 @@ import it.polimi.ingsw.model.card.*;
 public class GameField{
     private final Map<Point, CardCell> cards;
     private final Map<Point, AngleCell> angles;
-    private final Set<Point> availableCells;
+    private final SequencedSet<Point> availableCells;
     private final Map<Symbol, Integer> symbolCounters;
     public GameField(){
         this.cards = new HashMap<>();
         this.angles = new HashMap<>();
         this.symbolCounters = new HashMap<>();
-        this.availableCells = new HashSet<>();
+        this.availableCells = new LinkedHashSet<>();
         this.availableCells.add(new Point(0,0));
         // Add the position for initial card
 
@@ -29,7 +29,7 @@ public class GameField{
     public GameField(GameField other){
         this.cards = new HashMap<>(other.cards);
         this.angles = new HashMap<>(other.angles);
-        this.availableCells = new HashSet<>(other.availableCells);
+        this.availableCells = new LinkedHashSet<>(other.availableCells);
         this.symbolCounters = new HashMap<>(other.symbolCounters);
     }
 
@@ -83,8 +83,8 @@ public class GameField{
      *
      * @return the available positions where it's possible to place the cards
      */
-    public synchronized Set<Point> getAvailablePositions() {
-        return Set.copyOf(availableCells);
+    public synchronized SequencedSet<Point> getAvailablePositions() {
+        return new LinkedHashSet<>(availableCells);
     }
 
     /**
@@ -166,7 +166,7 @@ public class GameField{
 
         for(Point adjacentCardPosition : Point.getAdjacentPositions(cardPosition, 2)){
             if(isPlaceable(adjacentCardPosition)) {
-                availableCells.add(adjacentCardPosition);
+                availableCells.addLast(adjacentCardPosition);
             }
         }
     }

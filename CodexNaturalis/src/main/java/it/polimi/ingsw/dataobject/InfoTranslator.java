@@ -88,7 +88,7 @@ public abstract class InfoTranslator {
             angleCellInfoMap.put(angleCell.getKey(), convertToAngleCellInfo(angleCell.getValue()));
         }
 
-        return new GameFieldInfo(cardCellInfoMap, angleCellInfoMap, new HashSet<>(field.getAvailablePositions()));
+        return new GameFieldInfo(cardCellInfoMap, angleCellInfoMap, field.getAvailablePositions());
 
     }
 
@@ -115,18 +115,20 @@ public abstract class InfoTranslator {
     public static CardSideInfo convertToCardSideInfo(Card card, CardOrientation orientation, boolean isPlayable){
         CardSide side = card.getSide(orientation);
         HashMap<AnglePosition, Symbol> angleSymbols = new HashMap<>();
-        CardType type = CardType.RESOURCE;
 
         for(AnglePosition angle : AnglePosition.values()){
             angleSymbols.put(angle, side.getSymbolFromAngle(angle));
         }
+
+        CardType type = CardType.RESOURCE;
+
         if(card.getId()>=1 && card.getId()<=40){
-            type=CardType.RESOURCE;
+            type = CardType.RESOURCE;
         }
         else if(card.getId()<=80 && card.getId()>=41) {
-            type=CardType.GOLD;
+            type = CardType.GOLD;
         } else if (card.getId()>=81 && card.getId()<=86) {
-            type=CardType.INITIAL;
+            type = CardType.INITIAL;
         }
 
         return new CardSideInfo(angleSymbols,
