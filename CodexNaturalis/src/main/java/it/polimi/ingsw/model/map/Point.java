@@ -59,10 +59,7 @@ public record Point(int x, int y) implements Serializable {
                 .map((angle) -> angle.getRelativePosition().scale(scaleFactor))
                 .map((relativePosition) -> Point.sum(position, relativePosition))
                 .collect(Collectors.toUnmodifiableSet());
-
     }
-
-
 
     public static Set<Point> getAdjacentPositions(Point position){
         return getAdjacentPositions(position, 1);

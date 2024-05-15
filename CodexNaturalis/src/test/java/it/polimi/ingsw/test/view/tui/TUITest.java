@@ -5,6 +5,7 @@ import it.polimi.ingsw.dataobject.InfoTranslator;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.*;
+import it.polimi.ingsw.model.map.GameField;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -104,6 +105,7 @@ public class TUITest extends TestCase {
         new GameFieldTest().checkInvariants(playerTestDiagonal.getField());
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(playerTestDiagonal), InfoTranslator.convertToFieldInfo(playerTestDiagonal.getField()),false );
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(playerTestDiagonal), InfoTranslator.convertToFieldInfo(playerTestDiagonal.getField()),true );
+        System.out.println(playerTestDiagonal.getField().getAvailablePositions());
     }
 
     public void testTUIWithMinnieMap(){
@@ -122,6 +124,16 @@ public class TUITest extends TestCase {
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()), true);
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()), false);
     }
+
+    public void testConsistencyOfAvailablePositionsNumberingAcrossTurns(){
+        GameField field = T.getField();
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T),InfoTranslator.convertToFieldInfo(field), true);
+        field.placeCard(resourceCards.get(2), CardOrientation.BACK, new Point(6,6));
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T),InfoTranslator.convertToFieldInfo(field), true);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T),InfoTranslator.convertToFieldInfo(field), true);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T),InfoTranslator.convertToFieldInfo(field), true);
+    }
+
 
     public void testShowHandAllPresent(){
         T.addCard(resourceCards.get(9));

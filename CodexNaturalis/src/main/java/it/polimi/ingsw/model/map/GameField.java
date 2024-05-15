@@ -9,7 +9,7 @@ import it.polimi.ingsw.model.card.*;
 public class GameField{
     private final Map<Point, CardCell> cards;
     private final Map<Point, AngleCell> angles;
-    private final SequencedSet<Point> availableCells;
+    private final Set<Point> availableCells;
     private final Map<Symbol, Integer> symbolCounters;
     public GameField(){
         this.cards = new HashMap<>();
@@ -83,7 +83,7 @@ public class GameField{
      *
      * @return the available positions where it's possible to place the cards
      */
-    public synchronized SequencedSet<Point> getAvailablePositions() {
+    public synchronized Set<Point> getAvailablePositions() {
         return new LinkedHashSet<>(availableCells);
     }
 
@@ -166,7 +166,7 @@ public class GameField{
 
         for(Point adjacentCardPosition : Point.getAdjacentPositions(cardPosition, 2)){
             if(isPlaceable(adjacentCardPosition)) {
-                availableCells.addLast(adjacentCardPosition);
+                availableCells.add(adjacentCardPosition);
             }
         }
     }

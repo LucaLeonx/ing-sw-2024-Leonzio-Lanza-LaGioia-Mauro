@@ -1,21 +1,18 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.controller.clientcontroller.*;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.PlayerColor;
 
-import java.rmi.RemoteException;
 import java.util.List;
-import java.util.Scanner;
 
 import static java.lang.Math.abs;
 
 
 public class TUIMethods {
-    public void drawMap(ControlledPlayerInfo player, GameFieldInfo gamefield, boolean IsWithAvaiablePosition) {
+    public void drawMap(ControlledPlayerInfo player, GameFieldInfo gameField, boolean isWithAvailablePosition) {
 
         // 1 find the max and min row and column in order to create a matrix of the right dimension
         int minX = 0; // x of the leftmost cell
@@ -24,7 +21,7 @@ public class TUIMethods {
         int maxY = 0; // y of the topmost  cell
 
         //
-        for (Point p : gamefield.placedCards().keySet()) {
+        for (Point p : gameField.placedCards().keySet()) {
             if (p.x() < minX) {
                 minX = p.x();
             }
@@ -40,8 +37,8 @@ public class TUIMethods {
         }
 
         //if I need to show also avaiable position it is possible that the map enlarges by a little bit.
-        if(IsWithAvaiablePosition){
-            for (Point p : gamefield.availablePositions()) {
+        if(isWithAvailablePosition){
+            for (Point p : gameField.availablePositions()) {
                 if (p.x() < minX) {
                     minX = p.x();
                 }
@@ -79,25 +76,25 @@ public class TUIMethods {
 
 
         //3 Populate maps with the correct card color and add central symbol if the orientation of the card is back
-        for (Point p : gamefield.placedCards().keySet()) {
+        for (Point p : gameField.placedCards().keySet()) {
             String centralSymbol = Symbol_String.ANIMAL_SYMBOL; //We need this to keep track of what we need to put in the central cell of the card in case the card is plaued on the back.
             String cardColor = Symbol_String.ANIMAL_SYMBOL;
-            if (gamefield.placedCards().get(p).card().color() == CardColor.SKYBLUE) {
+            if (gameField.placedCards().get(p).card().color() == CardColor.SKYBLUE) {
                 cardColor = Symbol_String.BLUE_SQUARE_SYMBOL;
                 centralSymbol = Symbol_String.ANIMAL_SYMBOL;
-            } else if (gamefield.placedCards().get(p).card().color() == CardColor.RED) {
+            } else if (gameField.placedCards().get(p).card().color() == CardColor.RED) {
                 cardColor = Symbol_String.RED_SQUARE_SYMBOL;
                 centralSymbol = Symbol_String.FUNGI_SYMBOL;
-            } else if (gamefield.placedCards().get(p).card().color() == CardColor.GREEN) {
+            } else if (gameField.placedCards().get(p).card().color() == CardColor.GREEN) {
                 cardColor = Symbol_String.GREEN_SQUARE_SYMBOL;
                 centralSymbol = Symbol_String.PLANT_SYMBOL;
-            } else if (gamefield.placedCards().get(p).card().color() == CardColor.PURPLE) {
+            } else if (gameField.placedCards().get(p).card().color() == CardColor.PURPLE) {
                 cardColor = Symbol_String.PURPLE_SQUARE_SYMBOL;
                 centralSymbol = Symbol_String.INSECT_SYMBOL;
-            } else if (gamefield.placedCards().get(p).card().color() == CardColor.WHITE) {
+            } else if (gameField.placedCards().get(p).card().color() == CardColor.WHITE) {
                 cardColor = Symbol_String.BROWN_SQUARE_SYMBOL; // initial card
             }
-            if (gamefield.placedCards().get(p).orientation().equals(CardOrientation.FRONT)) {
+            if (gameField.placedCards().get(p).orientation().equals(CardOrientation.FRONT)) {
                 matrixMap[p.y() + abs(minY)][p.x() + abs(minX)] = cardColor;
             } else {
                 matrixMap[p.y() + abs(minY)][p.x() + abs(minX)] = centralSymbol;
@@ -109,9 +106,11 @@ public class TUIMethods {
         }
 
         //Also add background of possible card and available cells.
-        if(IsWithAvaiablePosition){
-            for (int i=0; i<gamefield.availablePositions().size(); i++) {
-                Point p= gamefield.availablePositions().get(i);
+        if(isWithAvailablePosition){
+
+            int availablePositionCount = 1;
+
+            for(Point p : gameField.availablePositions()) {
                 matrixMap[p.y() + abs(minY) + 1][p.x() + abs(minX)] = Symbol_String.YELLOW_SQUARE_SYMBOL;
                 matrixMap[p.y() + abs(minY) + 1][p.x() + abs(minX)+ 1] = Symbol_String.YELLOW_SQUARE_SYMBOL;
                 matrixMap[p.y() + abs(minY) ][p.x() + abs(minX) + 1] = Symbol_String.YELLOW_SQUARE_SYMBOL;
@@ -120,54 +119,58 @@ public class TUIMethods {
                 matrixMap[p.y() + abs(minY) ][p.x() + abs(minX) -1] = Symbol_String.YELLOW_SQUARE_SYMBOL;
                 matrixMap[p.y() + abs(minY) - 1][p.x() + abs(minX)] = Symbol_String.YELLOW_SQUARE_SYMBOL;
                 matrixMap[p.y() + abs(minY) - 1][p.x() + abs(minX) -1] = Symbol_String.YELLOW_SQUARE_SYMBOL;
-                List<String> Number= Symbol_String.FromIntToEmoji(i);
-                if(i<10){
-                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX)] = Number.getFirst() ;
+
+                List<String> numberAsEmojis = Symbol_String.FromIntToEmoji(availablePositionCount);
+
+                if(availablePositionCount < 10){
+                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX)] = numberAsEmojis.getFirst() ;
                 }
-                else if(i>=10 && i<100){
-                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) -1] = Number.getFirst();
-                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) ] = Number.get(1);
+                else if(availablePositionCount < 100){
+                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) -1] = numberAsEmojis.getFirst();
+                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) ] = numberAsEmojis.get(1);
                 }
-                else if(i>100 && i<1000){
-                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) -1] = Number.getFirst();
-                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) ] = Number.get(1);
-                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) +1] = Number.get(2);
+                else if(availablePositionCount < 1000){
+                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) -1] = numberAsEmojis.getFirst();
+                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) ] = numberAsEmojis.get(1);
+                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) +1] = numberAsEmojis.get(2);
                 }
                 // we assumed it is impossible to have more than 1000 choice to position a card in a game.
+
+                availablePositionCount++;
             }
         }
 
 
         //4 Populate maps with the correct symbol.
-        for (Point p : gamefield.placedAngles().keySet()) {
+        for (Point p : gameField.placedAngles().keySet()) {
             String symbol = Symbol_String.WHITE_SQUARE_SYMBOL;
-            if (gamefield.placedAngles().get(p).topSymbol() == Symbol.ANIMAL) {
+            if (gameField.placedAngles().get(p).topSymbol() == Symbol.ANIMAL) {
                 symbol = Symbol_String.ANIMAL_SYMBOL;
-            } else if (gamefield.placedAngles().get(p).topSymbol() == Symbol.PLANT) {
+            } else if (gameField.placedAngles().get(p).topSymbol() == Symbol.PLANT) {
                 symbol = Symbol_String.PLANT_SYMBOL;
-            } else if (gamefield.placedAngles().get(p).topSymbol() == Symbol.INSECT) {
+            } else if (gameField.placedAngles().get(p).topSymbol() == Symbol.INSECT) {
                 symbol = Symbol_String.INSECT_SYMBOL;
-            } else if (gamefield.placedAngles().get(p).topSymbol() == Symbol.FUNGI) {
+            } else if (gameField.placedAngles().get(p).topSymbol() == Symbol.FUNGI) {
                 symbol = Symbol_String.FUNGI_SYMBOL;
-            } else if (gamefield.placedAngles().get(p).topSymbol() == Symbol.INKWELL) {
+            } else if (gameField.placedAngles().get(p).topSymbol() == Symbol.INKWELL) {
                 symbol = Symbol_String.INKWELL_SYMBOL;
-            } else if (gamefield.placedAngles().get(p).topSymbol() == Symbol.MANUSCRIPT) {
+            } else if (gameField.placedAngles().get(p).topSymbol() == Symbol.MANUSCRIPT) {
                 symbol = Symbol_String.MANUSCRIPT_SYMBOL;
-            } else if (gamefield.placedAngles().get(p).topSymbol() == Symbol.QUILL) {
+            } else if (gameField.placedAngles().get(p).topSymbol() == Symbol.QUILL) {
                 symbol = Symbol_String.QUILL_SYMBOL;
-            } else if (gamefield.placedAngles().get(p).topSymbol() == Symbol.BLANK) {
+            } else if (gameField.placedAngles().get(p).topSymbol() == Symbol.BLANK) {
                 symbol = Symbol_String.WHITE_SQUARE_SYMBOL;
-            } else if (gamefield.placedAngles().get(p).topSymbol() == Symbol.HIDDEN) {
-                Point TopPositionCard = gamefield.placedAngles().get(p).topCardPosition();
-                if (gamefield.placedCards().get(TopPositionCard).card().color() == CardColor.WHITE) {
+            } else if (gameField.placedAngles().get(p).topSymbol() == Symbol.HIDDEN) {
+                Point TopPositionCard = gameField.placedAngles().get(p).topCardPosition();
+                if (gameField.placedCards().get(TopPositionCard).card().color() == CardColor.WHITE) {
                     symbol = Symbol_String.BROWN_SQUARE_SYMBOL;
-                } else if (gamefield.placedCards().get(TopPositionCard).card().color() == CardColor.SKYBLUE) {
+                } else if (gameField.placedCards().get(TopPositionCard).card().color() == CardColor.SKYBLUE) {
                     symbol = Symbol_String.BLUE_SQUARE_SYMBOL;
-                } else if (gamefield.placedCards().get(TopPositionCard).card().color() == CardColor.GREEN) {
+                } else if (gameField.placedCards().get(TopPositionCard).card().color() == CardColor.GREEN) {
                     symbol = Symbol_String.GREEN_SQUARE_SYMBOL;
-                } else if (gamefield.placedCards().get(TopPositionCard).card().color() == CardColor.RED) {
+                } else if (gameField.placedCards().get(TopPositionCard).card().color() == CardColor.RED) {
                     symbol = Symbol_String.RED_SQUARE_SYMBOL;
-                } else if (gamefield.placedCards().get(TopPositionCard).card().color() == CardColor.PURPLE) {
+                } else if (gameField.placedCards().get(TopPositionCard).card().color() == CardColor.PURPLE) {
                     symbol = Symbol_String.PURPLE_SQUARE_SYMBOL;
                 }
             }
@@ -197,8 +200,8 @@ public class TUIMethods {
 
         //7 We print out what's underneath the starting symbol
         Point origin = new Point(0, 0);
-        CardOrientation initialCardOrientation = gamefield.placedCards().get(origin).orientation();
-        System.out.println("list of the symbol in the middle of the starting card: " + gamefield.placedCards().get(origin).card().getSide(initialCardOrientation).centerSymbols());
+        CardOrientation initialCardOrientation = gameField.placedCards().get(origin).orientation();
+        System.out.println("list of the symbol in the middle of the starting card: " + gameField.placedCards().get(origin).card().getSide(initialCardOrientation).centerSymbols());
     }
 
     public void showPoints(OpponentInfo player) {
