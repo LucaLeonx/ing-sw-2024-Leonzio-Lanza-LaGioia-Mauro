@@ -40,7 +40,7 @@ public class ExecutionLayer extends InternalServerLayer{
     @Override
     public Lobby createLobby(User creator, String lobbyName, int playersNumber) {
         Lobby newLobby = lobbyList.createLobby(creator, lobbyName, playersNumber);
-        creator.setStatus(UserStatus.WAITING_TO_START);
+        creator.setJoinedLobby(newLobby);
         // nextLayers[0].createLobby(creator, lobbyName, playersNumber);
         return newLobby;
     }
@@ -154,7 +154,6 @@ public class ExecutionLayer extends InternalServerLayer{
 
     @Override
     public void exitGame(User user){
-        user.setStatus(UserStatus.LOBBY_CHOICE);
         user.setJoinedGame(null);
     }
 }

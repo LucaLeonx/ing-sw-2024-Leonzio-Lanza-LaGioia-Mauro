@@ -48,7 +48,6 @@ public class IntegrityLayer extends FrontierServerLayer {
 
     @Override
     public void exitFromLobby(User user) {
-
         if(user.getStatus() != WAITING_TO_START){
             throw new InvalidOperationException("Cannot exit a lobby if not in one");
         }

@@ -51,6 +51,11 @@ public class User {
 
     public synchronized void setJoinedLobby(Lobby joinedLobby){
         this.joinedLobby = Optional.ofNullable(joinedLobby);
+        if(joinedLobby == null){
+            setStatus(UserStatus.LOBBY_CHOICE);
+        } else {
+            setStatus(UserStatus.WAITING_TO_START);
+        }
     }
 
     public synchronized Game getJoinedGame(){
@@ -58,6 +63,12 @@ public class User {
     }
 
     public synchronized void setJoinedGame(Game joinedGame){
-        this.joinedGame = Optional.of(joinedGame);
+        this.joinedGame = Optional.ofNullable(joinedGame);
+
+        if(joinedGame == null){
+            setStatus(UserStatus.LOBBY_CHOICE);
+        } else {
+            setStatus(UserStatus.IN_GAME);
+        }
     }
 }
