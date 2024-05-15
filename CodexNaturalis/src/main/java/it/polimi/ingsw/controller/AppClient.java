@@ -21,12 +21,12 @@ import java.util.Scanner;
 
 public class AppClient {
 
-    public static void main(String[] args){
+    public static void Oldmain(String[] args){
         TUI tui = new TUI();
         tui.display();
     }
 
-    public static void oldMain(String[] args) throws NamingException, IOException, NotBoundException {
+    public static void main(String[] args) throws NamingException, IOException, NotBoundException {
 
         System.out.println("Welcome to Codex Naturalis!!\n");
 
@@ -157,6 +157,7 @@ public class AppClient {
                     client.sendMessage((Object) msg);
                 }
             }
+            client.closeConnection();
         }
         catch(Exception e){
             System.err.println(e.getMessage());
