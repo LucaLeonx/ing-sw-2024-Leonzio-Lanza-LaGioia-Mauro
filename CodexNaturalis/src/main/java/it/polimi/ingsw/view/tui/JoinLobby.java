@@ -8,10 +8,9 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Scanner;
 
-public class JoinLobby extends TUIState implements LobbyObserver {
+public class JoinLobby extends TUIState{
     public JoinLobby(TUI tui, Scanner scanner, ClientController controller){
         super(tui, scanner, controller);
-        controller.subscribeToLobbyUpdates(this);
     }
 
     @Override
@@ -50,15 +49,6 @@ public class JoinLobby extends TUIState implements LobbyObserver {
             System.out.println(e.getMessage());
             transitionState(new InitialScreen(tui, scanner, controller));
         }
-    }
-
-    @Override
-    public synchronized void onLobbyListUpdate(List<LobbyInfo> lobbies) {
-        transitionState(new JoinLobby(tui, scanner, controller));
-    }
-
-    @Override
-    public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
-        // nothing
+        transitionState(new LobbyWaiting(tui, scanner, controller));
     }
 }

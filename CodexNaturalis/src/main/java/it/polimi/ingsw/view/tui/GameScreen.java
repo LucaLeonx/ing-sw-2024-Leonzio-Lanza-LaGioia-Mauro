@@ -5,17 +5,17 @@ import it.polimi.ingsw.controller.clientcontroller.GameObserver;
 import it.polimi.ingsw.dataobject.InfoTranslator;
 import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.model.card.CardOrientation;
-import it.polimi.ingsw.model.card.ObjectiveCard;
 
-import java.util.Objects;
 import java.util.Scanner;
 
-public class BeginningOfGameScreen extends TUIState implements GameObserver{
+public class GameScreen extends TUIState implements GameObserver{
 
-    Objects lockHasGameStarted;
+    Object lockHasGameStarted;
+    Object lockIsSetUpFinished;
     boolean hasGameStarted;
+    boolean isSetUpFinished;
     InfoTranslator infoTranslator;
-    public BeginningOfGameScreen(TUI tui, Scanner scanner, ClientController controller) {
+    public GameScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
     }
 
@@ -35,7 +35,7 @@ public class BeginningOfGameScreen extends TUIState implements GameObserver{
                 } catch (InterruptedException IE) {
                     try{
                         controller.exitGame();
-                        System.out.println("Sei uscito dal gioco");
+                        System.out.println("You exited from the game ");
                     }
                     catch(Exception e){
                         System.out.println(IE.getMessage());
@@ -110,6 +110,22 @@ public class BeginningOfGameScreen extends TUIState implements GameObserver{
         }
         catch(Exception e){
             System.out.println(e.getMessage());
+        }
+
+        synchronized (lockIsSetUpFinished){
+            while(!isSetUpFinished) {
+                try {
+                    lockIsSetUpFinished.wait();
+                } catch (InterruptedException IE) {
+                    try{
+                        controller.exitGame();
+                        System.out.println("You exited from the game ");
+                    }
+                    catch(Exception e){
+                        System.out.println(IE.getMessage());
+                    }
+                }
+            }
         }
 
     }
