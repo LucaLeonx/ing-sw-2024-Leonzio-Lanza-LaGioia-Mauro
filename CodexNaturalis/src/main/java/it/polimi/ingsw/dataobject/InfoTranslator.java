@@ -20,25 +20,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class InfoTranslator {
-    public static DrawableCardsInfo convertToDrawableCardsInfo(Game game){
-        Map<DrawChoice, CardSideInfo> convertedInfo = new HashMap<>();
-
-        if(!game.getResourceCardDeck().isEmpty()) {
-            Card resourceTopCard = game.getResourceCardDeck().getTopCard();
-            convertedInfo.put(DECK_RESOURCE, convertToCardSideInfo(resourceTopCard, BACK, true));
-        }
-
-        if(!game.getResourceCardDeck().isEmpty()) {
-            Card goldTopCard = game.getResourceCardDeck().getTopCard();
-            convertedInfo.put(DECK_GOLD, convertToCardSideInfo(goldTopCard, BACK, true));
-        }
-
-        for(Map.Entry<DrawChoice, Card> visibleCardEntry : game.getVisibleCards().entrySet()){
-            convertedInfo.put(visibleCardEntry.getKey(), convertToCardSideInfo(visibleCardEntry.getValue(), FRONT, true));
-        }
-
-        return new DrawableCardsInfo(convertedInfo);
-    }
 
     public static DrawableCardsInfo convertToDrawableCardsInfo(Map<DrawChoice, Card> drawableCards){
         Map<DrawChoice, CardSideInfo> convertedInfo = new HashMap<>();
@@ -115,18 +96,20 @@ public abstract class InfoTranslator {
     public static CardSideInfo convertToCardSideInfo(Card card, CardOrientation orientation, boolean isPlayable){
         CardSide side = card.getSide(orientation);
         HashMap<AnglePosition, Symbol> angleSymbols = new HashMap<>();
-        CardType type = CardType.RESOURCE;
 
         for(AnglePosition angle : AnglePosition.values()){
             angleSymbols.put(angle, side.getSymbolFromAngle(angle));
         }
+
+        CardType type = CardType.RESOURCE;
+
         if(card.getId()>=1 && card.getId()<=40){
-            type=CardType.RESOURCE;
+            type = CardType.RESOURCE;
         }
         else if(card.getId()<=80 && card.getId()>=41) {
-            type=CardType.GOLD;
+            type = CardType.GOLD;
         } else if (card.getId()>=81 && card.getId()<=86) {
-            type=CardType.INITIAL;
+            type = CardType.INITIAL;
         }
 
         return new CardSideInfo(angleSymbols,

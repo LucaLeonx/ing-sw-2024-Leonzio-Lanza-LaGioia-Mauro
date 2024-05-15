@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.PlayerSetup;
 import it.polimi.ingsw.model.card.Card;
 import it.polimi.ingsw.model.card.CardOrientation;
+import it.polimi.ingsw.model.card.ObjectiveCard;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;
 
@@ -50,6 +51,9 @@ public abstract class InternalServerLayer {
 
     public Map<DrawChoice, Card> getDrawableCards(Game game){
         return nextLayers[0].getDrawableCards(game);
+    }
+    public List<ObjectiveCard> getCommonObjectives(Game game) {
+        return nextLayers[0].getCommonObjectives(game);
     }
 
     public boolean isLastTurn(Game game){

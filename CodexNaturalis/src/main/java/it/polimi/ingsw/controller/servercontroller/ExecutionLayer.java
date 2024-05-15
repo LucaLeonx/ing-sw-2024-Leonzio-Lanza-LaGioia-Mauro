@@ -110,6 +110,11 @@ public class ExecutionLayer extends InternalServerLayer{
     }
 
     @Override
+    public List<ObjectiveCard> getCommonObjectives(Game game) {
+        return game.getCommonObjectiveCards();
+    }
+
+    @Override
     public boolean isLastTurn(Game game) {
         return game.isLastTurn();
     }

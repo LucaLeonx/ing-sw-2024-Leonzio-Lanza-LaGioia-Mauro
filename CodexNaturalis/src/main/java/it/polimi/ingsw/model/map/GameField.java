@@ -9,13 +9,13 @@ import it.polimi.ingsw.model.card.*;
 public class GameField{
     private final Map<Point, CardCell> cards;
     private final Map<Point, AngleCell> angles;
-    private final List<Point> availableCells;
+    private final Set<Point> availableCells;
     private final Map<Symbol, Integer> symbolCounters;
     public GameField(){
         this.cards = new HashMap<>();
         this.angles = new HashMap<>();
         this.symbolCounters = new HashMap<>();
-        this.availableCells = new ArrayList<>();
+        this.availableCells = new LinkedHashSet<>();
         this.availableCells.add(new Point(0,0));
         // Add the position for initial card
 
@@ -29,7 +29,7 @@ public class GameField{
     public GameField(GameField other){
         this.cards = new HashMap<>(other.cards);
         this.angles = new HashMap<>(other.angles);
-        this.availableCells = new ArrayList<>(other.availableCells);
+        this.availableCells = new LinkedHashSet<>(other.availableCells);
         this.symbolCounters = new HashMap<>(other.symbolCounters);
     }
 
@@ -84,7 +84,7 @@ public class GameField{
      * @return the available positions where it's possible to place the cards
      */
     public synchronized Set<Point> getAvailablePositions() {
-        return Set.copyOf(availableCells);
+        return new LinkedHashSet<>(availableCells);
     }
 
     /**
@@ -161,39 +161,32 @@ public class GameField{
      * @param cardPosition - point of the place in which the player wants to place the card
      */
     private void updateAvailableCells(Card card, CardOrientation cardOrientation, Point cardPosition){
-        removeAllFromAvaiableCells(cardPosition);
-        for(AnglePosition angle : AnglePosition.values()){
-            if(isPlaceable(cardPosition.sum(angle.getRelativePosition().scale(2))))
-            {
-                /*if(cardPosition.equals(new Point(0,8)) && cardPosition.sum(angle.getRelativePosition().scale(2)).equals(new Point(-2,6)))
-                    System.out.println(getCardCells().containsKey(new Point(-2,6)));*/
-                availableCells.add(cardPosition.sum(angle.getRelativePosition().scale(2)));
-            }
-            else{
-                removeAllFromAvaiableCells(cardPosition.sum(angle.getRelativePosition().scale(2)));
+
+        availableCells.remove(cardPosition);
+
+        for(Point adjacentCardPosition : Point.getAdjacentPositions(cardPosition, 2)){
+            if(isPlaceable(adjacentCardPosition)) {
+                availableCells.add(adjacentCardPosition);
             }
         }
     }
 
-    public void removeAllFromAvaiableCells(Point p){
-        for(int i=0; i<availableCells.size(); i++){
-            if(availableCells.get(i).equals(p)){
-                availableCells.remove(i);
-            }
-        }
-    }
+    private boolean isPlaceable(Point placementPoint){
 
-    private boolean isPlaceable(Point p){
-        boolean OK=true;
-        if(getCardCells().containsKey(p)){
-            OK=false;
+        if(getCardCells().containsKey(placementPoint)){
+            return false;
         }
-        for(AnglePosition angle : AnglePosition.values()){
-            if(!(getAngleCells().get(p.sum(angle.getRelativePosition()))== null || getAngleCells().get(p.sum(angle.getRelativePosition())).topSymbol() != Symbol.HIDDEN)){
-                OK=false;
+
+        for(Point adjacentAnglePosition : Point.getAdjacentPositions(placementPoint)){
+
+            AngleCell adjacentAngleCell = getAngleCells().get(adjacentAnglePosition);
+
+            if(adjacentAngleCell != null && adjacentAngleCell.topSymbol() == Symbol.HIDDEN){
+                return false;
             }
         }
-        return OK;
+
+        return true;
     }
 
     private void incrementCounter(Symbol symbol){

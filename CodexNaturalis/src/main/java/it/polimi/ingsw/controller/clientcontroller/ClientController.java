@@ -54,6 +54,8 @@ public interface ClientController {
     public String getCurrentPlayerName() throws RemoteException;
     public List<String> getPlayerNames() throws RemoteException;
     public PlayerSetupInfo getPlayerSetup() throws RemoteException;
+
+    public List<ObjectiveInfo> getCommonObjectives() throws RemoteException;
     public ControlledPlayerInfo getControlledPlayerInformation() throws RemoteException;
     public OpponentInfo getOpponentInformation(String opponentName) throws RemoteException;
     /**

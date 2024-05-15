@@ -236,4 +236,13 @@ public class IntegrityLayer extends FrontierServerLayer {
 
         super.exitGame(user);
     }
+
+    @Override
+    public List<ObjectiveInfo> getCommonObjectives(User user) {
+        if(user.getStatus() != IN_GAME){
+            throw new InvalidOperationException("The user is not in any game");
+        }
+
+        return super.getCommonObjectives(user);
+    }
 }
