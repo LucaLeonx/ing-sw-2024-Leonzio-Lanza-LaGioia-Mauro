@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
+import it.polimi.ingsw.controller.clientcontroller.SocketClientController;
 
 import java.util.Scanner;
 
@@ -38,8 +39,7 @@ public class InitialScreen extends TUIState{
 
             switch(choice) {
                 case 1:
-                    //TODO: when socket will be implemented just use socket constructor here.
-                    controller = new RMIClientController();
+                    controller = new SocketClientController();
                     transitionState(new LoginOrRegister(tui, scanner, controller));
                     break;
                 case 2:
