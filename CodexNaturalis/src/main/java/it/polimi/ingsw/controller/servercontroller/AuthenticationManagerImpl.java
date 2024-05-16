@@ -6,20 +6,21 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class AuthenticationManagerImpl extends UnicastRemoteObject implements AuthenticationManager {
-
-    private final FrontierServerLayer serverReference;
+    private final CoreServer internalServer;
     private final UserList userList;
 
-    public AuthenticationManagerImpl(FrontierServerLayer serverReference, UserList userList) throws RemoteException {
+    public AuthenticationManagerImpl(CoreServer internalServer, UserList userList) throws RemoteException {
         super();
-        this.serverReference = serverReference;
+        this.internalServer = internalServer;
         this.userList = userList;
     }
 
     @Override
     public int register(String username){
-        if(userList.isUserRegistered(username)){
-            throw new InvalidOperationException("Username " + username + " is already in use");
+        synchronized (userList){
+            if(userList.isUserRegistered(username)){
+                throw new InvalidOperationException("Username " + username + " is already in use");
+            }
         }
 
         User newUser = new User(username);
@@ -29,14 +30,21 @@ public class AuthenticationManagerImpl extends UnicastRemoteObject implements Au
     }
 
     @Override
-    public ServerController login(String username, int tempCode) throws RemoteException {
-        if(!userList.isUserRegistered(username)){
-            throw new InvalidOperationException("Wrong username or password");
+    public ServerController login(String username, int tempCode, NotificationSubscriber subscriber) throws RemoteException {
+
+        User loginUser;
+
+        synchronized (userList) {
+            if (!userList.isUserRegistered(username)) {
+                throw new InvalidOperationException("Wrong username or password");
+            }
+
+            loginUser = userList.getUserByUsername(username);
         }
 
-        User loggedUser = userList.getUserByUsername(username);
-        if(loggedUser.checkPass(tempCode)){
-            return new AuthenticatedSession(loggedUser, serverReference);
+        if(loginUser.checkPass(tempCode)){
+            loginUser.setNotificationSubscriber(subscriber);
+            return new AuthenticatedSession(loginUser, internalServer);
         } else {
             throw new InvalidOperationException("Wrong username or tempCode");
         }

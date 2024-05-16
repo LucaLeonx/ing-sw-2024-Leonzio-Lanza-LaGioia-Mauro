@@ -31,19 +31,24 @@ public class CoreServer {
         this.activeGames = activeGames;
     }
 
+    public CoreServer(){
+        this(new UserList(), new LobbyList(), new GameList());
+    }
+
     public void logout(User user){
+        synchronized (userList) {
+            UserStatus status = user.getStatus();
 
-        UserStatus status = user.getStatus();
+            if (status != LOBBY_CHOICE) {
+                throw switch (status) {
+                    case WAITING_TO_START -> new WrongPhaseException("Cannot logout when in a lobby");
+                    case IN_GAME -> new WrongPhaseException("Cannot logout when in game");
+                    default -> new WrongPhaseException();
+                };
+            }
 
-        if(status != LOBBY_CHOICE) {
-            throw switch (status) {
-                case WAITING_TO_START -> new WrongPhaseException("Cannot logout when in a lobby");
-                case IN_GAME -> new WrongPhaseException("Cannot logout when in game");
-                default -> new WrongPhaseException();
-            };
+            userList.removeUser(user);
         }
-
-        userList.removeUser(user);
     }
 
     public void addNotificationSubscriber(User user, NotificationSubscriber subscriber){
