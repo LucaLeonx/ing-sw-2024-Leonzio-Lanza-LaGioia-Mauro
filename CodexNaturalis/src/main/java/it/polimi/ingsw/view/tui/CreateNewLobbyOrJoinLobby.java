@@ -22,6 +22,7 @@ public class CreateNewLobbyOrJoinLobby extends TUIState {
         }
         catch(Exception e)
         {
+            scanner.nextLine();
             System.out.println(e.getMessage());
         }
         switch (choice) {
@@ -33,6 +34,7 @@ public class CreateNewLobbyOrJoinLobby extends TUIState {
                 break;
             case 3:
                 transitionState(new LoginOrRegister(tui, scanner, controller));
+                break;
             default:
                 System.out.println("Invalid choice. Please try again.");
                 transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
