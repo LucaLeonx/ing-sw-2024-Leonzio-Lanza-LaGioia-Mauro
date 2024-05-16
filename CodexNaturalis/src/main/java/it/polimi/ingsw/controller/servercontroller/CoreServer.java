@@ -31,10 +31,6 @@ public class CoreServer {
         this.activeGames = activeGames;
     }
 
-    public CoreServer(){
-        this(new UserList(), new LobbyList(), new GameList());
-    }
-
     public void logout(User user){
         synchronized (userList) {
             UserStatus status = user.getStatus();

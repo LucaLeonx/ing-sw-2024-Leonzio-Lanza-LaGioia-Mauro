@@ -15,27 +15,22 @@ import java.util.List;
 
 public class AppServer {
     public static void main(String[] args) throws RemoteException, AlreadyBoundException {
-        System.out.println("Building server");
+        System.out.println("CODEX NATURALIS - SERVER");
 
-        List<Game> gameList = Collections.synchronizedList(new LinkedList<>());
         UserList userList = new UserList();
         LobbyList lobbyList = new LobbyList();
+        GameList gameList = new GameList();
 
-        ExecutionLayer executionLayer = new ExecutionLayer(lobbyList, userList, gameList);
-        ConversionLayer conversionLayer = new ConversionLayer(lobbyList, executionLayer);
-        IntegrityLayer integrityLayer = new IntegrityLayer(lobbyList, conversionLayer);
-
-        AuthenticationManager authenticator = new AuthenticationManagerImpl(integrityLayer, userList);
-        // MessageTranslator translator = MessageTranslator.init(integrityLayer);
+        CoreServer server = new CoreServer(userList, lobbyList, gameList);
+        AuthenticationManager authenticator = new AuthenticationManagerImpl(server, userList);
 
         LocateRegistry.createRegistry(ConnectionDefaultSettings.RMIRegistryPort);
         Registry reg = LocateRegistry.getRegistry();
         reg.rebind(ConnectionDefaultSettings.RMIServerName, authenticator);
         System.out.println("Registry bound, ready to listen for clients from RMI");
 
-        SocketServer server = new SocketServer(ConnectionDefaultSettings.SocketServerPort,authenticator);
-        server.startServer();
+        SocketServer socketServer = new SocketServer(ConnectionDefaultSettings.SocketServerPort,authenticator);
+        socketServer.startServer();
         System.out.println("Game server ready");
-
     }
 }

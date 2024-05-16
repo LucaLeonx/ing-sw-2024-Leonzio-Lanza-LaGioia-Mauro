@@ -5,6 +5,7 @@ import it.polimi.ingsw.controller.servercontroller.AuthenticatedSession;
 import it.polimi.ingsw.controller.servercontroller.AuthenticationManager;
 import it.polimi.ingsw.controller.servercontroller.NotificationSubscriber;
 import it.polimi.ingsw.controller.servercontroller.ServerController;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.InvalidOperationException;
@@ -196,10 +197,18 @@ public class RMIClientController implements ClientController, NotificationSubscr
     }
 
     @Override
-    public void onLobbyListUpdate() throws RemoteException {
-        List<LobbyInfo> updatedLobbyList = getLobbyList();
+    public void onLobbyListUpdate(){
+        List<LobbyInfo> updatedLobbyList;
+
+        try {
+            updatedLobbyList = getLobbyList();
+        } catch (RemoteException e) {
+            throw new WrongPhaseException(e.getMessage());
+        }
+
+        List<LobbyInfo> finalUpdatedLobbyList = updatedLobbyList;
         lobbyObservers.forEach((observer) ->
-            observer.onLobbyListUpdate(updatedLobbyList));
+            observer.onLobbyListUpdate(finalUpdatedLobbyList));
     }
 
     @Override

@@ -14,16 +14,12 @@ import java.util.concurrent.ConcurrentSkipListSet;
 public class TestGameServer {
     public static void main(String[] args) throws RemoteException {
 
-        List<Game> gameList = Collections.synchronizedList(new LinkedList<>());
         UserList userList = new UserList();
         LobbyList lobbyList = new LobbyList();
+        GameList gameList = new GameList();
 
-        ExecutionLayer executionLayer = new ExecutionLayer(lobbyList, userList, gameList);
-        ConversionLayer conversionLayer = new ConversionLayer(lobbyList, executionLayer);
-        IntegrityLayer integrityLayer = new IntegrityLayer(lobbyList, conversionLayer);
-
-        AuthenticationManager authenticator = new AuthenticationManagerImpl(integrityLayer, userList);
-
+        CoreServer server = new CoreServer(userList, lobbyList, gameList);
+        AuthenticationManager authenticator = new AuthenticationManagerImpl(server, userList);
 
         LocateRegistry.createRegistry(1099);
         Registry reg = LocateRegistry.getRegistry();

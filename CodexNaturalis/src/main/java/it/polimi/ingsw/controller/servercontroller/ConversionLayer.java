@@ -9,6 +9,7 @@ import java.util.List;
 
 import static it.polimi.ingsw.dataobject.InfoTranslator.convertToLobbyInfo;
 
+/*
 public class ConversionLayer extends FrontierServerLayer {
     private final InternalServerLayer internalServerLayer;
     private final LobbyList lobbyList;
@@ -125,4 +126,4 @@ public class ConversionLayer extends FrontierServerLayer {
     public List<ObjectiveInfo> getCommonObjectives(User user){
         return internalServerLayer.getCommonObjectives(user.getJoinedGame()).stream().map(InfoTranslator::convertToObjectiveInfo).toList();
     }
-}
+}*/

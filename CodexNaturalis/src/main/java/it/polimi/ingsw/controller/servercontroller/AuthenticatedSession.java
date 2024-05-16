@@ -97,7 +97,7 @@ public class AuthenticatedSession extends UnicastRemoteObject implements ServerC
     }
 
     @Override
-    public void exitFromGame(User user) throws RemoteException {
+    public void exitFromGame() throws RemoteException {
         server.exitFromGame(user);
     }
 

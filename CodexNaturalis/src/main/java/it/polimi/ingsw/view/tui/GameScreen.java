@@ -306,6 +306,11 @@ public class GameScreen extends TUIState implements GameObserver{
     }
 
     @Override
+    public void onLastTurnReached() {
+        return;
+    }
+
+    @Override
     public void onGameEnded() {
         try {
             InitialScreen.printStylishMessage("Congratulation player " + controller.getWinner() + " has won", "\u001B[31m", "\u001B[33m");
@@ -313,4 +318,6 @@ public class GameScreen extends TUIState implements GameObserver{
             System.out.println(e.getMessage());
         }
     }
+
+
 }
