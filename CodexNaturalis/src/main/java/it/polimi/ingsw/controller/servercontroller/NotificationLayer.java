@@ -32,8 +32,7 @@ public class NotificationLayer extends InternalServerLayer {
     @Override
     public Lobby createLobby(User creator, String lobbyName, int playersNumber) {
         for(NotificationSubscriber subscriber : userSubscriptions.values()){
-            subscriber.onLobbyListUpdate(lobbyList.getLobbies().stream().map(InfoTranslator::convertToLobbyInfo).toList());
-        }
+            subscriber.onLobbyListUpdate();
         return super.createLobby(creator, lobbyName, playersNumber);
     }
 

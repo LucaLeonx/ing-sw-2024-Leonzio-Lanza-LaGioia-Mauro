@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.servercontroller;
 
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.ElementNotFoundException;
 import it.polimi.ingsw.model.Game;
 
 import java.rmi.RemoteException;
@@ -17,16 +18,16 @@ public class User {
     // TODO: use proper hashing for passwords (see https://www.baeldung.com/java-password-hashing)
     // We can create a class for password
     private Optional<Integer> tempPassword;
-    private final AtomicReference<UserStatus> status;
-    private Optional<Lobby> joinedLobby;
-    private Optional<Game> joinedGame;
+    private UserStatus status;
+    private Optional<Integer> joinedLobbyId;
+    private Optional<Integer> joinedGameId;
     private NotificationSubscriber notificationSubscriber;
 
     public User(String nickname){
         this.username = nickname;
-        status = new AtomicReference<>(UserStatus.LOBBY_CHOICE);
-        joinedLobby = Optional.empty();
-        joinedGame = Optional.empty();
+        status = UserStatus.LOBBY_CHOICE;
+        joinedLobbyId = Optional.empty();
+        joinedGameId = Optional.empty();
         notificationSubscriber = null;
     }
 
@@ -35,46 +36,55 @@ public class User {
         return tempPassword.get();
     }
 
-    public synchronized void addNotificationSubscriber(NotificationSubscriber subscriber){
-        this.notificationSubscriber = notificationSubscriber;
+    public synchronized NotificationSubscriber getNotificationSubscriber(){
+        return this.notificationSubscriber;
     }
 
-    public UserStatus getStatus(){
-        return status.get();
+    public void setNotificationSubscriber(NotificationSubscriber subscriber) {
+        this.notificationSubscriber = subscriber;
     }
 
-    public void setStatus(UserStatus status){
-        this.status.set(status);
+    public synchronized UserStatus getStatus(){
+        return status;
+    }
+
+    public synchronized void setStatus(UserStatus status){
+        this.status = status;
     }
     public String getUsername(){ return this.username; }
     public synchronized boolean checkPass(Integer pass){
         return tempPassword.orElse(-1).equals(pass);
     }
 
-    public synchronized Lobby getJoinedLobby(){
-        return joinedLobby.get();
+    public synchronized int getJoinedLobbyId(){
+        return joinedLobbyId.orElseThrow(ElementNotFoundException::new);
     }
 
-    public synchronized void setJoinedLobby(Lobby joinedLobby){
-        this.joinedLobby = Optional.ofNullable(joinedLobby);
-        if(joinedLobby == null){
-            setStatus(UserStatus.LOBBY_CHOICE);
-        } else {
-            setStatus(UserStatus.WAITING_TO_START);
-        }
+    public synchronized void setJoinedLobbyId(int joinedLobbyId){
+        this.joinedLobbyId = Optional.of(joinedLobbyId);
     }
 
-    public synchronized Game getJoinedGame(){
-        return joinedGame.get();
+    public synchronized int getJoinedGameId(){
+        return joinedGameId.orElseThrow(ElementNotFoundException::new);
     }
 
-    public synchronized void setJoinedGame(Game joinedGame){
-        this.joinedGame = Optional.ofNullable(joinedGame);
+    public synchronized void removeJoinedLobby(){
+        this.joinedLobbyId = Optional.empty();
+    }
 
-        if(joinedGame == null){
-            setStatus(UserStatus.LOBBY_CHOICE);
-        } else {
-            setStatus(UserStatus.IN_GAME);
-        }
+    public synchronized boolean hasJoinedLobbyId() {
+        return this.joinedLobbyId.isPresent();
+    }
+
+    public synchronized void setJoinedGameId(int joinedGameId){
+        this.joinedGameId = Optional.of(joinedGameId);
+    }
+
+    public synchronized void removeJoinedGame(){
+        this.joinedGameId = Optional.empty();
+    }
+
+    public synchronized boolean hasJoinedGameId() {
+        return this.joinedGameId.isPresent();
     }
 }

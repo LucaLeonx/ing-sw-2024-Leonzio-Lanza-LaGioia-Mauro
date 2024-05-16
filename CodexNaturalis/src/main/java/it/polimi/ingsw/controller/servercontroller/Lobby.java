@@ -1,5 +1,7 @@
 package it.polimi.ingsw.controller.servercontroller;
 
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCommandException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.io.Serializable;
@@ -19,24 +21,31 @@ public class Lobby implements Serializable {
         this.name = lobbyName;
         this.creatorUsername = creatorUser.getUsername();
         this.waitingPlayers = new ArrayList<>();
-        this.waitingPlayers.add(creatorUser);
         this.requiredNumOfPlayers = numOfPlayers;
+        this.waitingPlayers.add(creatorUser);
     }
 
     public synchronized void addUser(User user) {
         if(waitingPlayers.size() < requiredNumOfPlayers){
             waitingPlayers.add(user);
-            user.setJoinedLobby(this);
+            user.setJoinedLobbyId(id);
+        } else {
+            throw new InvalidCommandException("The lobby is already full");
         }
     }
 
-    public synchronized void removeUser(String username){
-        User removedUser = waitingPlayers.stream().filter((user) -> user.getUsername().equals(username)).findFirst().get();
-        removedUser.setJoinedLobby(null);
-        waitingPlayers.remove(removedUser);
+    public synchronized void removeUser(User user){
+        if(readyToStart()){
+            throw new WrongPhaseException("Cannot exit from full lobby");
+        }
+        user.setStatus(UserStatus.LOBBY_CHOICE);
+        user.removeJoinedLobby();
+        waitingPlayers.remove(user);
     }
 
-    public synchronized boolean readyToStart(){ return waitingPlayers.size() == requiredNumOfPlayers; }
+    public synchronized boolean readyToStart(){
+        return waitingPlayers.size() == requiredNumOfPlayers;
+    }
 
     public synchronized List<User> getConnectedUsers(){
         return waitingPlayers;
@@ -45,7 +54,7 @@ public class Lobby implements Serializable {
     public synchronized List<String> getConnectedUserNames(){
         return waitingPlayers.stream().map(User::getUsername).toList();
     }
-    public synchronized int getRequiredNumOfPlayers(){
+    public int getRequiredNumOfPlayers(){
         return this.requiredNumOfPlayers;
     }
 
@@ -53,7 +62,7 @@ public class Lobby implements Serializable {
         return this.waitingPlayers.size();
     }
 
-    public synchronized int getId(){
+    public int getId(){
         return this.id;
     }
 
@@ -61,7 +70,7 @@ public class Lobby implements Serializable {
         return this.name;
     }
 
-    public synchronized String getCreatorUsername(){
+    public String getCreatorUsername(){
         return this.creatorUsername;
     }
 
@@ -76,6 +85,6 @@ public class Lobby implements Serializable {
 
     @Override
     public synchronized String toString() {
-        return "id :"+ id + " Lobby: " + name + " || Created by: " + creatorUsername + " || " + waitingPlayers.size() + "/" + requiredNumOfPlayers + " Players";
+        return "id :" + id + " Lobby: " + name + " || Created by: " + creatorUsername + " || " + waitingPlayers.size() + "/" + requiredNumOfPlayers + " Players";
     }
 }

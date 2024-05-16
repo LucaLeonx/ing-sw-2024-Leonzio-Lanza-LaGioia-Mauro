@@ -1,5 +1,7 @@
 package it.polimi.ingsw.controller.servercontroller;
 
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.ElementNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +24,17 @@ public class LobbyList {
     }
 
     public synchronized Lobby getLobbyById(Integer lobbyId){
-        return lobbies.get(lobbyId);
+        Lobby lobby = lobbies.get(lobbyId);
+
+        if(lobby == null){
+            throw new ElementNotFoundException("The lobby " + lobbyId + " is not available");
+        }
+
+        return lobby;
+    }
+
+    public synchronized boolean containsLobby(Integer lobbyId){
+        return lobbies.containsKey(lobbyId);
     }
 
     public synchronized List<Lobby> getLobbies(){
@@ -33,12 +45,10 @@ public class LobbyList {
         int newId = idGenerator.updateAndGet((value) -> (value + 1) % MAX_AVAILABLE_ID_NUM);
         Lobby createdLobby = new Lobby(newId, creator, requiredPlayersNum, lobbyName);
         lobbies.put(newId, createdLobby);
-        lobbies.forEach((key, value) -> System.out.println("Id: " + key + "Lobby: " + value));
-        System.out.println(newId);
         return createdLobby;
     }
 
-    public synchronized void removeLobby(int lobbyId){
-        lobbies.remove(lobbyId);
+    public synchronized Lobby removeLobby(int lobbyId){
+        return lobbies.remove(lobbyId);
     }
 }

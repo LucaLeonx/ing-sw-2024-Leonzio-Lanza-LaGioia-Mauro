@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.map;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCommandException;
+import it.polimi.ingsw.model.InvalidOperationException;
 import it.polimi.ingsw.model.card.*;
 
 
@@ -96,6 +98,12 @@ public class GameField{
      */
     public synchronized void placeCard(Card card, CardOrientation cardOrientation, Point position)
     {
+        if(!availableCells.contains(position)) {
+            throw new InvalidCommandException("Position " + position + "not among available ones");
+        } else if(card.getSide(cardOrientation).isPlayable(this)){
+            throw new InvalidCommandException("Cannot play card " + card.getId() + "on " + cardOrientation + " side");
+        }
+
         registerCard(card, cardOrientation, position);
         updateAngles(card, cardOrientation, position);
         updateCounters(card, cardOrientation, position);

@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.Game;
 import java.util.List;
 
 public interface NotificationSubscriber {
-    public void onLobbyListUpdate(List<LobbyInfo> lobbies);
+    public void onLobbyListUpdate();
     public void onJoinedLobbyUpdate(LobbyInfo joinedLobby);
     public void onSetupPhaseFinished();
     public void onGameStarted();

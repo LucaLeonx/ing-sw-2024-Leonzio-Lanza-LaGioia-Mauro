@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.ElementNotFoundException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCommandException;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.GameField;
 import it.polimi.ingsw.model.map.Point;
@@ -20,6 +22,7 @@ public class Game {
     private final List<ObjectiveCard> commonObjectiveCards;
     private final Map<String, PlayerSetup> playerSetups;
     private Player currentPlayer;
+
     private boolean isLastTurn;
     private boolean isGameEnded;
 
@@ -108,7 +111,8 @@ public class Game {
     public Player getPlayer(String nickname) throws NoSuchElementException {
         Player playerInformation = players.stream()
                 .filter((player) -> player.getNickname().equals(nickname))
-                .findFirst().orElseThrow(NoSuchElementException::new);
+                .findFirst()
+                .orElseThrow(() -> new ElementNotFoundException("Player " + nickname + " not found"));
 
         return playerInformation;
     }
@@ -148,44 +152,69 @@ public class Game {
     public synchronized void changeCurrentPlayer(){
         if(isLastPlayerOfRound()) {
             if(isLastTurn){
-                isGameEnded = true;
-                for(Player player : players){
-                    calculateFinalReward(player);
-                }
-                // Notify game ending
+                endGame();
             } else {
                 isLastTurn =
                         (getResourceCardDeck().isEmpty() && getGoldenCardDeck().isEmpty())
                                 || getPlayers().stream().anyMatch((participant) -> participant.getScore() >= 20);
             }
         }
-        currentPlayer = players.get((players.indexOf(currentPlayer) + 1) % players.size());
+        updateCurrentPlayer();
+    }
+
+    public void endGame() {
+        isGameEnded = true;
+        for(Player player : players){
+            calculateFinalReward(player);
+        }
+    }
+
+    public synchronized boolean allPlayersHaveSetup(){
+        return getPlayers().stream().allMatch(Player::hasSecretObjective);
+    }
+
+    public synchronized boolean canPlayerPlay(String playerName){
+        return !getPlayer(playerName).getField().getAvailablePositions().isEmpty();
     }
 
     public synchronized void registerPlayerSetup(String playerName, int objectiveCardId, CardOrientation initialCardSide){
         Player player = getPlayer(playerName);
         PlayerSetup setup = getPlayerSetup(playerName);
-        ObjectiveCard chosenObjective = (objectiveCardId == setup.objective1().getId()) ? setup.objective1() : setup.objective2();
-        player.setSecretObjective(chosenObjective);
+
+        ObjectiveCard chosenObjective;
+
+        if(player.hasSecretObjective()){
+            throw new InvalidCommandException("Setup already chosen");
+        }
+
+        if(objectiveCardId == setup.objective1().getId()){
+           chosenObjective = setup.objective1();
+        } else if(objectiveCardId == setup.objective2().getId()){
+            chosenObjective = setup.objective2();
+        } else {
+            throw new ElementNotFoundException("Cannot choose objective card with ID " + objectiveCardId);
+        }
+
         player.getField().placeCard(setup.initialCard(), initialCardSide, new Point(0,0));
     }
 
-    public synchronized void makePlayerPlaceCard(Player player, int cardId, Point position, CardOrientation orientation)  {
+    public synchronized void makePlayerPlaceCard(String playerName, int cardId, Point position, CardOrientation orientation)  {
+        Player player = getPlayer(playerName);
         Card removedCard = null;
         GameField field = player.getField();
-
-        try {
-            removedCard = player.removeCard(cardId);
-        } catch (InvalidCardException e) {
-            throw new InvalidOperationException(e.getMessage());
-        }
-
-
+        removedCard = player.removeCard(cardId);
         field.placeCard(removedCard, orientation, position);
         player.incrementScore(removedCard.getSide(orientation).getRewardPoints(field));
     }
 
-    public synchronized void makePlayerDraw(Player player, DrawChoice drawChoice){
+    public synchronized void makePlayerDraw(String playerName, DrawChoice drawChoice){
+
+        Player player = getPlayer(playerName);
+
+        if(!visibleCards.containsKey(drawChoice)){
+            throw new ElementNotFoundException("Cannot draw non-existent card from " + drawChoice + " position");
+        }
+
         Deck selectedDeck = switch(drawChoice){
             case DECK_RESOURCE, RESOURCE_CARD_1, RESOURCE_CARD_2 -> getResourceCardDeck();
             case DECK_GOLD, GOLD_CARD_1, GOLD_CARD_2 -> getGoldenCardDeck();
@@ -193,7 +222,11 @@ public class Game {
 
         switch(drawChoice){
             case DECK_RESOURCE, DECK_GOLD: {
-                player.addCard(selectedDeck.draw());
+                try {
+                    player.addCard(selectedDeck.draw());
+                } catch (EmptyDeckException e){
+                     throw new ElementNotFoundException("Cannot draw non-existent card from " + drawChoice);
+                }
                 break;
             }
             case RESOURCE_CARD_1, RESOURCE_CARD_2, GOLD_CARD_1, GOLD_CARD_2:
@@ -202,6 +235,10 @@ public class Game {
                 visibleCards.put(drawChoice, selectedDeck.draw());
                 break;
         }
+    }
+
+    public synchronized void skipTurn(){
+        updateCurrentPlayer();
     }
 
     public synchronized List<Player> getLeaderBoard(){
@@ -219,5 +256,9 @@ public class Game {
         for(ObjectiveCard objective : commonObjectiveCards){
             player.incrementScore(objective.getRewardFunction().getPoints(player.getField()));
         }
+    }
+
+    private void updateCurrentPlayer() {
+        currentPlayer = players.get((players.indexOf(currentPlayer) + 1) % players.size());
     }
 }

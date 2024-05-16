@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.player;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.ElementNotFoundException;
 import it.polimi.ingsw.model.map.*;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.player.InvalidCardException;
@@ -81,7 +82,7 @@ public class Player {
         synchronized (cardsInHand) {
             return cardsInHand.stream()
                     .filter(card -> card.getId() == cardId)
-                    .findFirst().orElseThrow(NoSuchElementException::new);
+                    .findFirst().orElseThrow(() -> new ElementNotFoundException("Card with id " + cardId + " is not in hand of " + nickname));
         }
     }
 
@@ -91,7 +92,7 @@ public class Player {
      * @param cardId
      * @throws InvalidCardException called when the player doesn't have the card he was supposed to play
      */
-    public Card removeCard(int cardId) throws InvalidCardException {
+    public Card removeCard(int cardId){
         Card removedCard = getCard(cardId);
         synchronized (cardsInHand) {
             cardsInHand.remove(removedCard);

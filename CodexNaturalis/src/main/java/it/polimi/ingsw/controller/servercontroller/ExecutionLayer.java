@@ -14,7 +14,7 @@ import java.util.Map;
 
 import static it.polimi.ingsw.model.DrawChoice.DECK_GOLD;
 import static it.polimi.ingsw.model.DrawChoice.DECK_RESOURCE;
-
+/*
 public class ExecutionLayer extends InternalServerLayer{
     private final LobbyList lobbyList;
     private final UserList userList;
@@ -29,6 +29,9 @@ public class ExecutionLayer extends InternalServerLayer{
 
     @Override
     public Lobby createLobby(User creator, String lobbyName, int playersNumber) {
+
+
+
         Lobby newLobby = lobbyList.createLobby(creator, lobbyName, playersNumber);
         creator.setJoinedLobby(newLobby);
         super.createLobby(creator, lobbyName, playersNumber);
@@ -150,7 +153,7 @@ public class ExecutionLayer extends InternalServerLayer{
 
     @Override
     public void logout(User user){
-        userList.removeUser(user);
+
     }
 
     @Override
@@ -158,4 +161,4 @@ public class ExecutionLayer extends InternalServerLayer{
         user.setJoinedGame(null);
         super.exitGame(user);
     }
-}
+}*/

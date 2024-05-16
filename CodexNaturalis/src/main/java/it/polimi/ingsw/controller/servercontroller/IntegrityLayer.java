@@ -13,7 +13,7 @@ import it.polimi.ingsw.model.player.Player;
 import java.util.List;
 
 import static it.polimi.ingsw.controller.servercontroller.UserStatus.*;
-
+/*
 public class IntegrityLayer extends FrontierServerLayer {
     private final LobbyList lobbyList;
 
@@ -254,4 +254,4 @@ public class IntegrityLayer extends FrontierServerLayer {
 
         return super.getCommonObjectives(user);
     }
-}
+}*/
