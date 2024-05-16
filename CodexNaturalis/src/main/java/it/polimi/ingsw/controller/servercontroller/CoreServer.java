@@ -253,7 +253,7 @@ public class CoreServer {
                 .toList();
     }
 
-    public void exitGame(User user) {
+    public void exitFromGame(User user) {
         Integer gameId = user.getJoinedGameId();
         activeGames.exitFromJoinedGame(user);
         if(activeGames.areAllUsersDisconnected(gameId)){
@@ -273,5 +273,9 @@ public class CoreServer {
                 .map(User::getNotificationSubscriber)
                 .parallel()
                 .forEach(notificationToSend);
+    }
+
+    public String ping() {
+        return "Server ready";
     }
 }

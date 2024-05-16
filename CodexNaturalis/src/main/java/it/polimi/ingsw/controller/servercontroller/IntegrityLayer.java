@@ -236,14 +236,14 @@ public class IntegrityLayer extends FrontierServerLayer {
     }
 
     @Override
-    public void exitGame(User user){
+    public void exitFromGame(User user){
         if(user.getStatus() != IN_GAME){
             throw new InvalidOperationException("The user is not in any game");
         } else if(!user.getJoinedGame().isEnded()){
             throw new InvalidOperationException("Cannot exit from the game, it has not ended yet");
         }
 
-        super.exitGame(user);
+        super.exitFromGame(user);
     }
 
     @Override

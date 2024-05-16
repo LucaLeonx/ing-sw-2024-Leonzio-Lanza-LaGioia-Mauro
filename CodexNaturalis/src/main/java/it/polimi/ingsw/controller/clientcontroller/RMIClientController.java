@@ -185,6 +185,6 @@ public class RMIClientController implements ClientController{
     @Override
     public void exitGame() throws InvalidOperationException {
         checkLogin();
-        // session.exitGame();
+        // session.exitFromGame();
     }
 }

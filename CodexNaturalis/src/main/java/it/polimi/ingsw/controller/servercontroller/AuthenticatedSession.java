@@ -10,109 +10,109 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 public class AuthenticatedSession extends UnicastRemoteObject implements ServerController {
-    private final FrontierServerLayer enteringServerLayer;
+    private final CoreServer server;
     private final User user;
 
-    public AuthenticatedSession(User user, FrontierServerLayer enteringServerLayer) throws RemoteException {
+    public AuthenticatedSession(User user, CoreServer server) throws RemoteException {
         super();
-        this.enteringServerLayer = enteringServerLayer;
+        this.server = server;
         this.user = user;
     }
 
     @Override
-    public String getCurrentPlayer() throws RemoteException {
-        return enteringServerLayer.getCurrentPlayer(user);
-    }
-
-    @Override
-    public ControlledPlayerInfo getControlledPlayerInfo() throws RemoteException {
-        return enteringServerLayer.getControlledPlayerInfo(user);
-    }
-
-    @Override
-    public OpponentInfo getOpponentInfo(String name) throws RemoteException {
-        return enteringServerLayer.getOpponentInfo(user, name);
-    }
-
-    @Override
-    public DrawableCardsInfo getDrawableCardsInfo() throws RemoteException {
-        return enteringServerLayer.getDrawableCardsInfo(user);
-    }
-
-    @Override
-    public PlayerSetupInfo getPlayerSetup() throws RemoteException {
-        return enteringServerLayer.getPlayerSetupInfo(user);
-    }
-
-    @Override
-    public List<ObjectiveInfo> getCommonObjectives() throws RemoteException {
-        return enteringServerLayer.getCommonObjectives(user);
-    }
-
-    @Override
-    public boolean isLastTurn() throws RemoteException {
-        return enteringServerLayer.isLastTurn(user);
-    }
-
-    @Override
-    public boolean hasGameEnded() throws RemoteException {
-        return enteringServerLayer.hasGameEnded(user);
-    }
-
-    @Override
-    public void registerPlayerSetupChoice(int chosenObjectiveId, CardOrientation initialCardOrientation) throws RemoteException {
-        enteringServerLayer.registerPlayerSetup(user, chosenObjectiveId, initialCardOrientation);
-    }
-
-    @Override
-    public void registerPlayerMove(int placedCardId, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException {
-        enteringServerLayer.registerPlayerMove(user, placedCardId, placementPoint, chosenSide, drawChoice);
-    }
-
-    @Override
-    public List<ControlledPlayerInfo> getLeaderboard() {
-        return enteringServerLayer.getLeaderboard(user);
-    }
-
-    @Override
-    public LobbyInfo addLobby(String name, int playersNumber) throws RemoteException {
-        return enteringServerLayer.createLobby(user, name, playersNumber);
-    }
-
-    @Override
-    public void joinLobby(int lobbyId) throws RemoteException {
-        enteringServerLayer.joinLobby(user, lobbyId);
-    }
-
-    @Override
     public List<LobbyInfo> getLobbies() throws RemoteException {
-        return enteringServerLayer.getLobbies(user);
+        return server.getLobbies(user);
     }
 
     @Override
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
-        return enteringServerLayer.getJoinedLobbyInfo(user);
+        return server.getJoinedLobbyInfo(user);
     }
 
     @Override
-    public String test() throws RemoteException {
-        return "Ciao";
+    public LobbyInfo addLobby(String name, int playersNumber) throws RemoteException {
+        return server.createLobby(user, name, playersNumber);
+    }
+
+    @Override
+    public void joinLobby(int lobbyId) throws RemoteException {
+        server.joinLobby(user, lobbyId);
+    }
+
+    public void exitFromLobby() {
+        server.exitFromLobby(user);
+    }
+
+    public List<String> getPlayerNames(){
+        return server.getPlayerNames(user);
+    }
+    @Override
+    public String getCurrentPlayer() throws RemoteException {
+        return server.getCurrentPlayer(user);
+    }
+
+    @Override
+    public ControlledPlayerInfo getControlledPlayerInfo() throws RemoteException {
+        return server.getControlledPlayerInfo(user);
+    }
+
+    @Override
+    public OpponentInfo getOpponentInfo(String name) throws RemoteException {
+        return server.getOpponentInfo(user, name);
+    }
+
+    @Override
+    public DrawableCardsInfo getDrawableCardsInfo() throws RemoteException {
+        return server.getDrawableCardsInfo(user);
+    }
+
+    @Override
+    public PlayerSetupInfo getPlayerSetup() throws RemoteException {
+        return server.getPlayerSetupInfo(user);
+    }
+
+    @Override
+    public List<ObjectiveInfo> getCommonObjectives() throws RemoteException {
+        return server.getCommonObjectives(user);
+    }
+
+    @Override
+    public boolean isLastTurn() throws RemoteException {
+        return server.isLastTurn(user);
+    }
+
+    @Override
+    public boolean hasGameEnded() throws RemoteException {
+        return server.hasGameEnded(user);
+    }
+
+    @Override
+    public void registerPlayerSetupChoice(int chosenObjectiveId, CardOrientation initialCardOrientation) throws RemoteException {
+        server.registerPlayerSetup(user, chosenObjectiveId, initialCardOrientation);
+    }
+
+    @Override
+    public void registerPlayerMove(int placedCardId, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException {
+        server.registerPlayerMove(user, placedCardId, placementPoint, chosenSide, drawChoice);
+    }
+
+    @Override
+    public void exitFromGame(User user) throws RemoteException {
+        server.exitFromGame(user);
+    }
+
+    @Override
+    public List<ControlledPlayerInfo> getLeaderboard() {
+        return server.getLeaderboard(user);
     }
 
     @Override
     public void logout() {
-        enteringServerLayer.logout(user);
+        server.logout(user);
     }
 
-    public void exitFromLobby() {
-        enteringServerLayer.exitFromLobby(user);
-    }
-
-    public List<String> getPlayerNames(){
-        return enteringServerLayer.getPlayerNames(user);
-    }
-
-    public void exitGame() {
-        enteringServerLayer.exitGame(user);
+    @Override
+    public String ping() throws RemoteException {
+        return server.ping();
     }
 }

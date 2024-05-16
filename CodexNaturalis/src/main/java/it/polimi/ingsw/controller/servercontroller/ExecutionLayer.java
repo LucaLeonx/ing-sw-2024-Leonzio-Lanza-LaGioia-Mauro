@@ -157,8 +157,8 @@ public class ExecutionLayer extends InternalServerLayer{
     }
 
     @Override
-    public void exitGame(User user){
+    public void exitFromGame(User user){
         user.setJoinedGame(null);
-        super.exitGame(user);
+        super.exitFromGame(user);
     }
 }*/
