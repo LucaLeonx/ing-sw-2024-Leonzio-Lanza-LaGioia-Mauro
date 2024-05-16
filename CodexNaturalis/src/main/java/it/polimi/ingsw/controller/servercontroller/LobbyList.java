@@ -3,7 +3,9 @@ package it.polimi.ingsw.controller.servercontroller;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.ElementNotFoundException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,16 +13,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class LobbyList {
 
     private static final int MAX_AVAILABLE_ID_NUM = 1_000_000;
-    private final ConcurrentMap<Integer, Lobby> lobbies;
+    private final Map<Integer, Lobby> lobbies;
     private final AtomicInteger idGenerator;
 
-    public LobbyList(ConcurrentMap<Integer, Lobby> lobbies) {
+    public LobbyList(Map<Integer, Lobby> lobbies) {
         this.lobbies = lobbies;
         this.idGenerator = new AtomicInteger(lobbies.keySet().stream().max(Integer::compareTo).orElse(0));
     }
 
     public LobbyList(){
-        this(new ConcurrentHashMap<>());
+        this(new HashMap<>());
     }
 
     public synchronized Lobby getLobbyById(Integer lobbyId){

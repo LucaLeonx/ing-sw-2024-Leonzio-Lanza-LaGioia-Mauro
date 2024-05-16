@@ -16,7 +16,6 @@ public class LobbyWaiting extends TUIState implements LobbyObserver {
     }
     @Override
     public void display() {
-
         Thread waiterThread = new Thread(() -> {
             synchronized (lock) {
                 while (!ReachedCorrectNumberOfPlayer()) {

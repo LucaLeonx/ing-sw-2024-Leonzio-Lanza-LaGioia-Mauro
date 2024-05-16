@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.clientcontroller.ConnectionDefaultSettings;
+import it.polimi.ingsw.controller.clientcontroller.LobbyObserver;
 import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.dataobject.Message;
@@ -163,4 +164,7 @@ public class AppClient {
             System.err.println(e.getMessage());
         }
     }
+
 }
+
+

@@ -29,6 +29,7 @@ public class Lobby implements Serializable {
         if(waitingPlayers.size() < requiredNumOfPlayers){
             waitingPlayers.add(user);
             user.setJoinedLobbyId(id);
+            user.setStatus(UserStatus.WAITING_TO_START);
         } else {
             throw new InvalidCommandException("The lobby is already full");
         }

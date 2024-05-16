@@ -74,7 +74,15 @@ public class CoreServer {
         }
 
         Lobby newLobby = lobbyList.createLobby(creator, lobbyName, requiredPlayersNum);
-        creator.setStatus(WAITING_TO_START);
+        for(User other : userList.getUsers()){
+            if(!other.equals(creator)){
+                try {
+                    other.getNotificationSubscriber().onLobbyListUpdate();
+                } catch (RemoteException e){
+                    continue;
+                }
+            }
+        }
 
         return newLobby.getLobbyInfo();
     }
@@ -123,6 +131,14 @@ public class CoreServer {
                         continue;
                     }
                 }
+            }
+        }
+
+        for(User other : userList.getUsers()){
+            try {
+                other.getNotificationSubscriber().onLobbyListUpdate();
+            } catch (RemoteException e){
+                continue;
             }
         }
     }
