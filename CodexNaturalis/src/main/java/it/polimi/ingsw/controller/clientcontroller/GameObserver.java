@@ -5,5 +5,6 @@ public interface GameObserver {
     public void onSetupPhaseFinished();
     public void onCurrentPlayerChange(String newPlayer);
     public void onTurnSkipped(String skippedPlayer);
+    public void onLastTurnReached();
     public void onGameEnded();
 }

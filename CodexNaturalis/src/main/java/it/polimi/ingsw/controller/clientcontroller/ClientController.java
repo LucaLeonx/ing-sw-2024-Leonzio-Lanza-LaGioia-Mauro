@@ -20,6 +20,14 @@ public interface ClientController {
      * @throws RemoteException If the username is already in use
      */
     public int register(String username) throws RemoteException;
+
+    /**
+     * Login to the game as user. WARNING: for now, a user cannot
+     * log in from two different terminals at the same time.
+     * @param username
+     * @param tempCode
+     * @throws RemoteException
+     */
     public void login(String username, int tempCode) throws RemoteException;
     public void logout() throws RemoteException;
 
@@ -47,10 +55,8 @@ public interface ClientController {
      */
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException;
     public void exitFromLobby() throws RemoteException;
-
     public void subscribeToLobbyUpdates(LobbyObserver observer);
     public void subscribeToGameUpdates(GameObserver observer);
-
     public String getCurrentPlayerName() throws RemoteException;
     public List<String> getPlayerNames() throws RemoteException;
     public PlayerSetupInfo getPlayerSetup() throws RemoteException;
@@ -69,6 +75,6 @@ public interface ClientController {
     public List<ControlledPlayerInfo> getLeaderboard() throws RemoteException;
     public void setPlayerSetup(ObjectiveInfo chosenObjective, CardOrientation initialCardSide) throws RemoteException;
     public void makeMove(CardInfo card, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException;
-    public void exitGame() throws InvalidOperationException;
+    public void exitGame() throws InvalidOperationException, RemoteException;
 }
 

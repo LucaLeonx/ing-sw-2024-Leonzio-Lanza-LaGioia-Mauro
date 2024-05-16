@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller.clientcontroller;
 
 import it.polimi.ingsw.controller.servercontroller.AuthenticatedSession;
 import it.polimi.ingsw.controller.servercontroller.AuthenticationManager;
+import it.polimi.ingsw.controller.servercontroller.NotificationSubscriber;
 import it.polimi.ingsw.controller.servercontroller.ServerController;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
@@ -14,17 +15,23 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class RMIClientController implements ClientController{
+public class RMIClientController implements ClientController, NotificationSubscriber {
 
     private final AuthenticationManager authenticator;
     private ServerController session = null;
 
+    private final List<GameObserver> gameObservers;
+    private final List<LobbyObserver> lobbyObservers;
+
     public RMIClientController(String host, int port, String serverName) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(host, port);
         this.authenticator = (AuthenticationManager) registry.lookup(serverName);
+        this.gameObservers = new LinkedList<>();
+        this.lobbyObservers = new LinkedList<>();
     }
 
     public RMIClientController() throws RemoteException, NotBoundException {
@@ -52,7 +59,7 @@ public class RMIClientController implements ClientController{
 
     @Override
     public void login(String username, int tempCode) throws RemoteException {
-        session = (ServerController) authenticator.login(username, tempCode);
+        session = (ServerController) authenticator.login(username, tempCode, this);
     }
 
     @Override
@@ -93,12 +100,12 @@ public class RMIClientController implements ClientController{
 
     @Override
     public void subscribeToLobbyUpdates(LobbyObserver observer) {
-
+        lobbyObservers.add(observer);
     }
 
     @Override
     public void subscribeToGameUpdates(GameObserver observer) {
-
+        gameObservers.add(observer);
     }
 
     @Override
@@ -183,8 +190,50 @@ public class RMIClientController implements ClientController{
     }
 
     @Override
-    public void exitGame() throws InvalidOperationException {
+    public void exitGame() throws RemoteException {
         checkLogin();
-        // session.exitFromGame();
+        session.exitFromGame();
+    }
+
+    @Override
+    public void onLobbyListUpdate() throws RemoteException {
+        List<LobbyInfo> updatedLobbyList = getLobbyList();
+        lobbyObservers.forEach((observer) ->
+            observer.onLobbyListUpdate(updatedLobbyList));
+    }
+
+    @Override
+    public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
+        lobbyObservers.forEach(observer -> observer.onJoinedLobbyUpdate(joinedLobby));
+    }
+
+    @Override
+    public void onGameStarted() {
+        gameObservers.forEach(GameObserver::onGameStarted);
+    }
+
+    @Override
+    public void onSetupPhaseFinished() {
+        gameObservers.forEach(GameObserver::onSetupPhaseFinished);
+    }
+
+    @Override
+    public void onCurrentPlayerChange(String newPlayerName) {
+        gameObservers.forEach(observer -> observer.onCurrentPlayerChange(newPlayerName));
+    }
+
+    @Override
+    public void onTurnSkipped(String skippedPlayerName) {
+        gameObservers.forEach(observer -> observer.onTurnSkipped(skippedPlayerName));
+    }
+
+    @Override
+    public void onLastTurnReached() {
+        gameObservers.forEach(GameObserver::onLastTurnReached);
+    }
+
+    @Override
+    public void onGameEnded() {
+        gameObservers.forEach(GameObserver::onLastTurnReached);
     }
 }
