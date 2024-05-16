@@ -1,16 +1,12 @@
 package it.polimi.ingsw.controller.socket;
 
-import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
 import it.polimi.ingsw.controller.servercontroller.AuthenticatedSession;
 import it.polimi.ingsw.controller.servercontroller.AuthenticationManager;
-import it.polimi.ingsw.controller.servercontroller.FrontierServerLayer;
-import it.polimi.ingsw.controller.servercontroller.Lobby;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.dataobject.Message;
 import it.polimi.ingsw.dataobject.MessageType;
 import it.polimi.ingsw.model.InvalidOperationException;
 
-import javax.management.InstanceAlreadyExistsException;
 import java.rmi.RemoteException;
 
 /**
