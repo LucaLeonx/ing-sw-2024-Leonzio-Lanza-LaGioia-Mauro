@@ -219,6 +219,7 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
 
     @Override
     public void onGameStarted() {
+        lobbyObservers.forEach(LobbyObserver::onGameStarted);
         gameObservers.forEach(GameObserver::onGameStarted);
     }
 

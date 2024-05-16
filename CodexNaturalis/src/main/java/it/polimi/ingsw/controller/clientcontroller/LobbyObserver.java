@@ -7,5 +7,6 @@ import java.util.List;
 public interface LobbyObserver {
     public void onLobbyListUpdate(List<LobbyInfo> lobbies);
     public void onJoinedLobbyUpdate(LobbyInfo joinedLobby);
+    public void onGameStarted();
 }
 

@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 import java.sql.ClientInfoStatus;
 import java.util.List;
 
-public class TestLobbyEventsClient implements LobbyObserver {
+public class TestLobbyEventsClient{
 
     public static void main(String args[]) throws RemoteException {
         ClientController controller = null;
@@ -25,18 +25,6 @@ public class TestLobbyEventsClient implements LobbyObserver {
         controller.login("LobbyObserver", tempCode);
         System.out.println("Lobby updates");
     }
-
-    @Override
-    public void onLobbyListUpdate(List<LobbyInfo> lobbies) {
-        lobbies.stream().forEach(System.out::println);
-    }
-
-    @Override
-    public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
-        return;
-    }
-
-
 }
 
 class LobbyUpdater implements LobbyObserver{
@@ -57,5 +45,10 @@ class LobbyUpdater implements LobbyObserver{
     @Override
     public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
         return;
+    }
+
+    @Override
+    public void onGameStarted() {
+
     }
 }

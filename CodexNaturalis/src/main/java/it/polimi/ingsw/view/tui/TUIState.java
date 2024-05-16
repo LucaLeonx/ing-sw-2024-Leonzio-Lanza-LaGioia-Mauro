@@ -15,7 +15,7 @@ public abstract class TUIState {
         this.controller = controller;
     }
 
-    public void transitionState(TUIState state){
+    public synchronized void transitionState(TUIState state){
         tui.setState(state);
     }
     public abstract void display();

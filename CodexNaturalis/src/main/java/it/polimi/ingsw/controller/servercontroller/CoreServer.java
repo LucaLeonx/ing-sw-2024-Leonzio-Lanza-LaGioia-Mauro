@@ -66,14 +66,8 @@ public class CoreServer {
     }
 
     public LobbyInfo createLobby(User creator, String lobbyName, int requiredPlayersNum) {
-
-        if (requiredPlayersNum < 2 || requiredPlayersNum > 4){
-            throw new InvalidCommandException("Invalid number of required players");
-        } else if(creator.getStatus() != LOBBY_CHOICE){
-            throw new WrongPhaseException("Cannot create Lobby when not choosing one");
-        }
-
         Lobby newLobby = lobbyList.createLobby(creator, lobbyName, requiredPlayersNum);
+
         for(User other : userList.getUsers()){
             if(!other.equals(creator)){
                 try {
@@ -108,28 +102,30 @@ public class CoreServer {
             }
         }
 
+        System.out.println("Are yo ready? " + lobbyToJoin.readyToStart());
+
         if(lobbyToJoin.readyToStart()){
             activeGames.addGameFromLobby(lobbyToJoin);
-            for(User other : lobbyToJoin.getConnectedUsers()){
-                if(!other.equals(user)){
-                    try {
-                        other.getNotificationSubscriber().onGameStarted();
-                    } catch (RemoteException e){
-                        continue;
-                    }
+            List<User> connectedUsers = lobbyToJoin.getConnectedUsers();
+            connectedUsers.forEach((u) -> System.out.println(u.getUsername()));
+
+            for(User other : connectedUsers){
+                try {
+                    other.getNotificationSubscriber().onGameStarted();
+                    System.out.println("Notification sent to " + other.getUsername());
+                } catch (RemoteException e){
+                    System.out.println("Notification not sent to " + other.getUsername());
+                    continue;
                 }
             }
-
         } else {
             LobbyInfo lobbyInfo = lobbyToJoin.getLobbyInfo();
             // TODO: avoid the repetition of this loop for RemoteException handling
             for(User other : lobbyToJoin.getConnectedUsers()){
-                if(!other.equals(user)){
-                    try {
-                        other.getNotificationSubscriber().onJoinedLobbyUpdate(lobbyToJoin.getLobbyInfo());
-                    } catch (RemoteException e){
-                        continue;
-                    }
+                try {
+                    other.getNotificationSubscriber().onJoinedLobbyUpdate(lobbyInfo);
+                } catch (RemoteException e){
+                    continue;
                 }
             }
         }

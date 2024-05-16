@@ -1,6 +1,8 @@
 package it.polimi.ingsw.controller.servercontroller;
 
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.ElementNotFoundException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCommandException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +11,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static it.polimi.ingsw.controller.servercontroller.UserStatus.LOBBY_CHOICE;
 
 public class LobbyList {
 
@@ -44,8 +48,19 @@ public class LobbyList {
     }
 
     public synchronized Lobby createLobby(User creator, String lobbyName, int requiredPlayersNum){
+        if (requiredPlayersNum < 2 || requiredPlayersNum > 4){
+            throw new InvalidCommandException("Invalid number of required players");
+        } else if(creator.getStatus() != LOBBY_CHOICE){
+            throw new WrongPhaseException("Cannot create Lobby when not choosing one");
+        }
+
+        System.out.println("Status before creation: " + creator.getStatus());
+
         int newId = idGenerator.updateAndGet((value) -> (value + 1) % MAX_AVAILABLE_ID_NUM);
         Lobby createdLobby = new Lobby(newId, creator, requiredPlayersNum, lobbyName);
+        createdLobby.addUser(creator);
+        System.out.println("Status after creation: " + creator.getStatus());
+
         lobbies.put(newId, createdLobby);
         return createdLobby;
     }

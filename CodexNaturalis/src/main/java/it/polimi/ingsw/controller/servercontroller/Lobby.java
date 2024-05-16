@@ -22,7 +22,6 @@ public class Lobby implements Serializable {
         this.creatorUsername = creatorUser.getUsername();
         this.waitingPlayers = new ArrayList<>();
         this.requiredNumOfPlayers = numOfPlayers;
-        this.waitingPlayers.add(creatorUser);
     }
 
     public synchronized void addUser(User user) {

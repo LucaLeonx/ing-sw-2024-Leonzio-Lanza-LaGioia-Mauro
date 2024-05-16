@@ -25,6 +25,7 @@ public class GameScreen extends TUIState implements GameObserver{
 
     @Override
     public void display() {
+        System.out.println("I am in the starting state, but probably it is broken");
         synchronized (lockHasGameStarted) {
             InitialScreen.printStylishMessage("THE GAME IS STARTING...                                                            ","\u001B[32m", "\u001B[34m");
             printWolf();

@@ -86,6 +86,11 @@ public class RegisterPanel extends ButtonListPanel implements LobbyObserver {
 
     @Override
     public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
+        // nothing
+    }
 
+    @Override
+    public void onGameStarted() {
+        // nothing
     }
 }
