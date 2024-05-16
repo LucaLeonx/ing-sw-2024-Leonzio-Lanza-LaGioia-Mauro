@@ -19,32 +19,37 @@ public class LobbyWaiting extends TUIState implements LobbyObserver {
 
         Thread waiterThread = new Thread(() -> {
             synchronized (lock) {
-                while (!ReachedCorrectNumberOfPlayer()) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException IE) {
-                        try {
-                            controller.exitFromLobby();
-                        } catch (RemoteException e) {
-                            System.out.println(e.getMessage());
-                        }
+                try {
+                    while (!ReachedCorrectNumberOfPlayer()) {
+                        lock.wait(); // Wait until condition is met or interrupted
+                    }
+                    // Condition met: transition to game screen
+                    transitionState(new GameScreen(tui, scanner, controller));
+                } catch (InterruptedException e) {
+                    // Thread interrupted, handle clean exit
+                    Thread.currentThread().interrupt(); // Reset interrupt status
+                    System.out.println("Thread interrupted, returning to menu.");
+                    try{
+                        controller.exitFromLobby();
+                    }
+                    catch (RemoteException RE) {
+                        // Handle RemoteException from controller.exitFromLobby()
+                        System.out.println("Remote exception occurred: " + RE.getMessage());
                         transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
                     }
-                }
-                if(ReachedCorrectNumberOfPlayer()){
-                    transitionState(new GameScreen(tui, scanner, controller));
+                    transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
                 }
             }
         });
 
         waiterThread.start();
 
-        // Now start a separate thread for handling user input
+        // Thread for handling user input
         Thread userInputThread = new Thread(() -> {
-            System.out.println("We will notify you when new players join. Wait or press 'q' to come back...");
+            System.out.println("Waiting for players. Press 'q' to return to menu...");
             while (true) {
-                String userInput = scanner.nextLine();
-                if ("q".equalsIgnoreCase(userInput.trim())) {
+                String userInput = scanner.nextLine().trim();
+                if ("q".equalsIgnoreCase(userInput)) {
                     // User wants to return to menu, interrupt the waiting thread
                     waiterThread.interrupt();
                     break; // Exit the loop
