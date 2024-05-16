@@ -13,7 +13,7 @@ public class LoginOrRegister extends TUIState{
     public void display() {
         System.out.println("1. Login");
         System.out.println("2. Register");
-        System.out.println("3. Exit");
+        System.out.println("3. Go back");
         System.out.print("Please choose an option: ");
         int choice = 0;
         try {
@@ -33,9 +33,7 @@ public class LoginOrRegister extends TUIState{
                 transitionState(new Register(tui, scanner, controller));
                 break;
             case 3:
-                System.out.println("Goodbye!");
-                scanner.close();
-                System.exit(0);
+                transitionState(new InitialScreen(tui, scanner, null));
             default:
                 System.out.println("Invalid choice. Please try again.");
                 transitionState(new LoginOrRegister(tui, scanner, controller));

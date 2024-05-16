@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
+import it.polimi.ingsw.controller.clientcontroller.SocketClientController;
 
 import java.util.Scanner;
 
@@ -15,14 +16,44 @@ public class InitialScreen extends TUIState{
     public void display() {
         printStylishMessage("                          WELCOME TO CODEX NATURALIS                            ", "\u001B[32m", "\u001B[31m");
         printMushroom();
+        ClientController controller = null;
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         try {
-            ClientController controller = new RMIClientController();
-            transitionState(new LoginOrRegister(tui, scanner, controller));
+            System.out.println("\n1. Socket");
+            System.out.println("2. RMI");
+            System.out.println("3. Exit");
+            System.out.print("Please choose an option: ");
+            int choice = 0;
+            try {
+                choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                scanner.nextLine();
+                transitionState(new InitialScreen(tui, scanner, controller));
+            }
+
+            switch(choice) {
+                case 1:
+                    controller = new SocketClientController();
+                    transitionState(new LoginOrRegister(tui, scanner, controller));
+                    break;
+                case 2:
+                    controller = new RMIClientController();
+                    transitionState(new LoginOrRegister(tui, scanner, controller));
+                    break;
+                case 3:
+                    System.out.println("Goodbye!");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    transitionState(new InitialScreen(tui, scanner, controller));
+            }
         }
         catch(Exception e)
         {

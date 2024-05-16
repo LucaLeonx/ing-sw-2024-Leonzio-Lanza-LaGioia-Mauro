@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.clientcontroller.LobbyObserver;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.rmi.RemoteException;
@@ -17,40 +16,84 @@ public class LobbyWaiting extends TUIState implements LobbyObserver {
     }
     @Override
     public void display() {
-        System.out.println("Waiting for players to join... Press 'q' to stop waiting");
 
-        // Asking for input from scanner is already a blocking call
-        // No need to create an additional thread
-        // https://stackoverflow.com/questions/30249324/how-to-get-java-to-wait-for-user-input
-        String input = scanner.nextLine().trim();
-        if(input.equals("q")){
-            try {
-                System.out.println("Exiting...");
-                controller.exitFromLobby();
-                transitionState(new JoinLobby(tui, scanner, controller));
-            } catch (RemoteException | WrongPhaseException e){
-                System.out.println("Unable to exit - game already started");
+        Thread waiterThread = new Thread(() -> {
+            synchronized (lock) {
+                try {
+                    while (!ReachedCorrectNumberOfPlayer()) {
+                        lock.wait(); // Wait until condition is met or interrupted
+                    }
+                    // Condition met: transition to game screen
+                    transitionState(new GameScreen(tui, scanner, controller));
+                } catch (InterruptedException e) {
+                    // Thread interrupted, handle clean exit
+                    Thread.currentThread().interrupt(); // Reset interrupt status
+                    System.out.println("Thread interrupted, returning to menu.");
+                    try{
+                        controller.exitFromLobby();
+                    }
+                    catch (RemoteException RE) {
+                        // Handle RemoteException from controller.exitFromLobby()
+                        System.out.println("Remote exception occurred: " + RE.getMessage());
+                        transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
+                    }
+                    transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
+                }
             }
-        } else {
-            transitionState(this);
+        });
+
+        waiterThread.start();
+
+        // Thread for handling user input
+        Thread userInputThread = new Thread(() -> {
+            System.out.println("Waiting for players. Press 'q' to return to menu...");
+            while (true) {
+                String userInput = scanner.nextLine().trim();
+                if ("q".equalsIgnoreCase(userInput)) {
+                    // User wants to return to menu, interrupt the waiting thread
+                    waiterThread.interrupt();
+                    break; // Exit the loop
+                }
+            }
+        });
+
+        userInputThread.start();
+    }
+
+    public boolean ReachedCorrectNumberOfPlayer(){
+        int desiredNumber;
+        int currentNumber;
+        try {
+            desiredNumber = controller.getJoinedLobbyInfo().reqPlayers();
+            currentNumber = controller.getJoinedLobbyInfo().currNumPlayers();
+            if(desiredNumber==currentNumber){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        catch(RemoteException RE){
+            System.out.println("It seems like the lobby you joined doesn't exists anymore");
+            System.out.println(RE.getMessage());
+            return false;
         }
     }
 
-
     @Override
     public void onLobbyListUpdate(List<LobbyInfo> lobbies) {
-        // nothing
+        //nothing
     }
 
     @Override
-    public synchronized void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
+    public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
         System.out.println(joinedLobby);
+        lock.notifyAll();
     }
 
     @Override
-    public synchronized void onGameStarted() {
-        System.out.println("Number of players reached - Game starting...");
-        transitionState(new GameScreen(tui, scanner, controller));
+    public void onGameStarted() {
+        // nothing
     }
 
 

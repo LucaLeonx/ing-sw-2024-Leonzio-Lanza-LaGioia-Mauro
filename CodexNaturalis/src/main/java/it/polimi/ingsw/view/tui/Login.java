@@ -20,6 +20,7 @@ public class Login extends TUIState{
             code = scanner.nextInt();
         }
         catch(Exception e){
+            scanner.nextLine();
             System.out.println(e.getMessage());
             transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
         }
@@ -27,7 +28,7 @@ public class Login extends TUIState{
             controller.login(username, code);
         }
         catch (RemoteException RE) {
-            System.out.println("It seems that your username and or code are wrong, chose");
+            System.out.println("It seems that your username and or code are wrong, chose: ");
             while(true) {
                 System.out.println("1. Try again");
                 System.out.println("2. Go back");
@@ -37,7 +38,7 @@ public class Login extends TUIState{
                     scanner.nextLine(); // Consume newline
                 } catch (Exception e) {
                     scanner.nextLine(); // Consume newline
-                    System.out.println(e.getMessage());
+                    System.out.println("Chose 1 or 2\n");
                 }
 
                 switch (choice) {

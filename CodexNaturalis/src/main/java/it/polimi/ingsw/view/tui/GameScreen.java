@@ -18,9 +18,9 @@ public class GameScreen extends TUIState implements GameObserver{
     Object lockIsSetUpFinished;
     boolean hasGameStarted;
     boolean isSetUpFinished;
-    InfoTranslator infoTranslator;
     public GameScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
+        controller.subscribeToGameUpdates(this);
     }
 
     @Override
@@ -56,7 +56,6 @@ public class GameScreen extends TUIState implements GameObserver{
         }
 
         try {
-            InfoTranslator infoTraslator = null;
             TUIMethods.showCardsOnTable(null, null, controller.getDrawableCards());
         }
         catch(Exception e){
