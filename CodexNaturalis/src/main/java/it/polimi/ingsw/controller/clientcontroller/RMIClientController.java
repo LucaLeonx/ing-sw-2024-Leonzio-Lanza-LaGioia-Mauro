@@ -16,11 +16,12 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class RMIClientController implements ClientController, NotificationSubscriber {
+public class RMIClientController extends UnicastRemoteObject implements ClientController, NotificationSubscriber {
 
     private final AuthenticationManager authenticator;
     private ServerController session = null;

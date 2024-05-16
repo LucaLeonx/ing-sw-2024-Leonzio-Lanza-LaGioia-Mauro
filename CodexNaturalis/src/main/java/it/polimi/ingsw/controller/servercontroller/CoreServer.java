@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;
 
+import java.rmi.RemoteException;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -64,7 +65,7 @@ public class CoreServer {
         return lobbyList.getLobbyById(user.getJoinedLobbyId()).getLobbyInfo();
     }
 
-    public LobbyInfo createLobby(User creator, String lobbyName, int requiredPlayersNum){
+    public LobbyInfo createLobby(User creator, String lobbyName, int requiredPlayersNum) {
 
         if (requiredPlayersNum < 2 || requiredPlayersNum > 4){
             throw new InvalidCommandException("Invalid number of required players");
@@ -74,8 +75,6 @@ public class CoreServer {
 
         Lobby newLobby = lobbyList.createLobby(creator, lobbyName, requiredPlayersNum);
         creator.setStatus(WAITING_TO_START);
-
-        notifyToAllExcept(userList.getUsers(), creator, NotificationSubscriber::onLobbyListUpdate);
 
         return newLobby.getLobbyInfo();
     }
@@ -103,10 +102,28 @@ public class CoreServer {
 
         if(lobbyToJoin.readyToStart()){
             activeGames.addGameFromLobby(lobbyToJoin);
-            notifyToAll(lobbyToJoin.getConnectedUsers(), NotificationSubscriber::onGameStarted);
+            for(User other : lobbyToJoin.getConnectedUsers()){
+                if(!other.equals(user)){
+                    try {
+                        other.getNotificationSubscriber().onGameStarted();
+                    } catch (RemoteException e){
+                        continue;
+                    }
+                }
+            }
+
         } else {
             LobbyInfo lobbyInfo = lobbyToJoin.getLobbyInfo();
-            notifyToAllExcept(lobbyToJoin.getConnectedUsers(), user, (subscriber) -> subscriber.onJoinedLobbyUpdate(lobbyInfo));
+            // TODO: avoid the repetition of this loop for RemoteException handling
+            for(User other : lobbyToJoin.getConnectedUsers()){
+                if(!other.equals(user)){
+                    try {
+                        other.getNotificationSubscriber().onJoinedLobbyUpdate(lobbyToJoin.getLobbyInfo());
+                    } catch (RemoteException e){
+                        continue;
+                    }
+                }
+            }
         }
     }
 
@@ -125,11 +142,27 @@ public class CoreServer {
 
         exitedLobby.removeUser(user);
 
+
         if(exitedLobby.getNumOfWaitingPlayers() == 0) {
             lobbyList.removeLobby(exitedLobby.getId());
+            for(User other : userList.getUsers()){
+                if(!other.equals(user)){
+                    try {
+                        other.getNotificationSubscriber().onLobbyListUpdate();
+                    } catch (RemoteException e){
+                        continue;
+                    }
+                }
+            }
+        } else {
+            for(User other : exitedLobby.getConnectedUsers()){
+                try {
+                    other.getNotificationSubscriber().onJoinedLobbyUpdate(exitedLobby.getLobbyInfo());
+                } catch (RemoteException e){
+                    continue;
+                }
+            }
         }
-
-        notifyToAll(userList.getUsers(), NotificationSubscriber::onLobbyListUpdate);
     }
 
     public List<String> getPlayerNames(User user) {
@@ -204,7 +237,13 @@ public class CoreServer {
         joinedGame.registerPlayerSetup(user.getUsername(), objectiveCardId, initialCardSide);
 
         if(joinedGame.allPlayersHaveSetup()){
-            notifyToAll(connectedUsers, NotificationSubscriber::onSetupPhaseFinished);
+            for(User player : connectedUsers){
+                try {
+                    player.getNotificationSubscriber().onSetupPhaseFinished();
+                } catch (RemoteException e){
+                    continue;
+                }
+            }
         }
     }
 
@@ -222,22 +261,47 @@ public class CoreServer {
             joinedGame.changeCurrentPlayer();
 
             if(joinedGame.isEnded()){
-                notifyToAll(connectedUsers, NotificationSubscriber::onGameEnded);
+                for(User other : connectedUsers){
+                    try {
+                        other.getNotificationSubscriber().onGameEnded();
+                    } catch (RemoteException e){
+                        continue;
+                    }
+                }
             } else if(joinedGame.isLastTurn()){
-                notifyToAll(connectedUsers, NotificationSubscriber::onLastTurnReached);
+                for(User other : connectedUsers){
+                    try {
+                        other.getNotificationSubscriber().onLastTurnReached();
+                    } catch (RemoteException e){
+                        continue;
+                    }
+                }
             }
         } else {
 
             // Skip until you don't find a player who can play
            do {
-                String currentPlayer = joinedGame.getCurrentPlayerNickname();
-                joinedGame.skipTurn();
-                notifyToAll(connectedUsers, (subscriber) -> subscriber.onTurnSkipped(currentPlayer));
+               String currentPlayer = joinedGame.getCurrentPlayerNickname();
+               joinedGame.skipTurn();
+
+               for(User other : connectedUsers){
+                   try {
+                       other.getNotificationSubscriber().onTurnSkipped(currentPlayer);
+                   } catch (RemoteException e){
+                       continue;
+                   }
+               }
 
                 // All players tried, no one can play
                 if(currentPlayer.equals(user.getUsername())){
                     joinedGame.endGame();
-                    notifyToAll(connectedUsers, NotificationSubscriber::onGameEnded);
+                    for(User other : connectedUsers){
+                        try {
+                            other.getNotificationSubscriber().onGameEnded();
+                        } catch (RemoteException e){
+                            continue;
+                        }
+                    }
                 }
             } while((!joinedGame.canPlayerPlay(joinedGame.getCurrentPlayerNickname())));
         }
@@ -260,20 +324,6 @@ public class CoreServer {
         if(activeGames.areAllUsersDisconnected(gameId)){
             activeGames.removeGame(gameId);
         }
-    }
-
-    private void notifyToAllExcept(Collection<User> users, User excluded, Consumer<NotificationSubscriber> notificationToSend) {
-        users.stream()
-                .filter((other) -> !other.equals(excluded))
-                .map(User::getNotificationSubscriber)
-                .forEach(notificationToSend);
-    }
-
-    private void notifyToAll(Collection<User> users, Consumer<NotificationSubscriber> notificationToSend){
-        users.stream()
-                .map(User::getNotificationSubscriber)
-                .parallel()
-                .forEach(notificationToSend);
     }
 
     public String ping() {
