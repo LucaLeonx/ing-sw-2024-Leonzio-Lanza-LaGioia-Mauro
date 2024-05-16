@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 import static it.polimi.ingsw.dataobject.InfoTranslator.convertToLobbyInfo;

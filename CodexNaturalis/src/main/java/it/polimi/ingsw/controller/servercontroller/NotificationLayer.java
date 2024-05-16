@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.servercontroller;
 
+import it.polimi.ingsw.dataobject.InfoTranslator;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.PlayerSetup;
@@ -8,26 +9,46 @@ import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class NotificationLayer extends InternalServerLayer {
-    private final List<NotificationSubscriber> subscribers;
+    private final ConcurrentMap<User, NotificationSubscriber> userSubscriptions;
 
-    public NotificationLayer(InternalServerLayer... nextLayers) {
+    private final GameList gameList;
+    private final UserList userList;
+    private final LobbyList lobbyList;
+
+    public NotificationLayer(LobbyList lobbyList, GameList gameList, UserList userList, InternalServerLayer... nextLayers) {
         super(nextLayers);
-        this.subscribers = Collections.synchronizedList(new LinkedList<>());
+        this.gameList = gameList;
+        this.userList = userList;
+        this.lobbyList = lobbyList;
+        userSubscriptions = new ConcurrentHashMap<>();
     }
 
     @Override
     public Lobby createLobby(User creator, String lobbyName, int playersNumber) {
+        for(NotificationSubscriber subscriber : userSubscriptions.values()){
+            subscriber.onLobbyListUpdate(lobbyList.getLobbies().stream().map(InfoTranslator::convertToLobbyInfo).toList());
+        }
         return super.createLobby(creator, lobbyName, playersNumber);
     }
 
     @Override
     public Lobby addUserToLobby(User user, int lobbyId) {
+        if(user.getJoinedLobby() != null){
+            Lobby lobby = user.getJoinedLobby();
+            for(User inLobbyUser : user.getJoinedLobby().getConnectedUsers()){
+                   
+            }
+        } else {
+            for(User inGameUser : gameList.getConnectedUsers(user.getJoinedGame())){
+                userSubscriptions.get(inGameUser).onGameStarted();
+            }
+        }
         return super.addUserToLobby(user, lobbyId);
     }
 
@@ -105,5 +126,7 @@ public class NotificationLayer extends InternalServerLayer {
     public void exitGame(User user) {
         super.exitGame(user);
     }
+
+
 
 }

@@ -20,17 +20,23 @@ public class User {
     private final AtomicReference<UserStatus> status;
     private Optional<Lobby> joinedLobby;
     private Optional<Game> joinedGame;
+    private NotificationSubscriber notificationSubscriber;
 
     public User(String nickname){
         this.username = nickname;
         status = new AtomicReference<>(UserStatus.LOBBY_CHOICE);
         joinedLobby = Optional.empty();
         joinedGame = Optional.empty();
+        notificationSubscriber = null;
     }
 
     public int generateNewPass(){
         tempPassword = Optional.of(ThreadLocalRandom.current().nextInt(0, MAX_TEMPCODE_VAL));
         return tempPassword.get();
+    }
+
+    public synchronized void addNotificationSubscriber(NotificationSubscriber subscriber){
+        this.notificationSubscriber = notificationSubscriber;
     }
 
     public UserStatus getStatus(){
@@ -41,7 +47,7 @@ public class User {
         this.status.set(status);
     }
     public String getUsername(){ return this.username; }
-    public boolean checkPass(Integer pass){
+    public synchronized boolean checkPass(Integer pass){
         return tempPassword.orElse(-1).equals(pass);
     }
 

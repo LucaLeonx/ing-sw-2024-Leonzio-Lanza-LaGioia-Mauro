@@ -72,16 +72,14 @@ public abstract class FrontierServerLayer{
         return nextLayers[0].getWinnerName(user);
     }
 
+    public abstract List<String> getPlayersNames(User user);
+
     public void logout(User user){
         nextLayers[0].logout(user);
     }
 
     public List<String> getPlayerNames(User user) {
         return nextLayers[0].getPlayerNames(user);
-    }
-
-    public List<String> getPlayersNames(User user){
-        return nextLayers[0].getPlayersNames(user);
     }
 
     public List<ControlledPlayerInfo> getLeaderboard(User user) {

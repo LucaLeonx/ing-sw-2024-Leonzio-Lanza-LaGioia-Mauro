@@ -37,10 +37,13 @@ public class IntegrityLayer extends FrontierServerLayer {
     public void joinLobby(User user, int lobbyId) {
         if(user.getStatus() != LOBBY_CHOICE){
             throw new InvalidOperationException("Cannot join lobby when already in one");
-        } else if(lobbyList.getLobbyById(lobbyId) == null){
-            throw new InvalidOperationException("Lobby is non-existent");
-        } else if(lobbyList.getLobbyById(lobbyId).readyToStart()) {
-            throw new InvalidOperationException("Cannot join full lobby");
+        }
+        synchronized (lobbyList) {
+            if(lobbyList.getLobbyById(lobbyId) == null){
+                throw new InvalidOperationException("Lobby is non-existent");
+            } else if(lobbyList.getLobbyById(lobbyId).readyToStart()) {
+                throw new InvalidOperationException("Cannot join full lobby");
+            }
         }
 
         super.joinLobby(user, lobbyId);
@@ -51,13 +54,16 @@ public class IntegrityLayer extends FrontierServerLayer {
         if(user.getStatus() != WAITING_TO_START){
             throw new InvalidOperationException("Cannot exit a lobby if not in one");
         }
+        synchronized (lobbyList) {
+            if(user.getJoinedLobby().readyToStart()) {
 
+            }
+        }
         super.exitFromLobby(user);
     }
 
     @Override
     public List<LobbyInfo> getLobbies(User user) {
-
         return super.getLobbies(user);
     }
 
