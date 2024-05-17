@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class InsertNamePanel extends ButtonListPanel {
+public class InsertNamePanel extends StandardPanel {
     private JTextField registerName;
     private String generatedPassword= "**password**";
 

@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public class RegisterPanel extends ButtonListPanel implements LobbyObserver {
+public class RegisterPanel extends StandardPanel implements LobbyObserver {
     DefaultListModel<String> listModel= new DefaultListModel<>();
 
     public RegisterPanel(){
