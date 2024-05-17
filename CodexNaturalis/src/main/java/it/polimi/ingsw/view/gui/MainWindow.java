@@ -16,7 +16,7 @@ public class MainWindow extends JFrame {
     {
         setTitle("Codex Naturalis");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1400, 800);
+        setSize(1000, 600);
         setVisible(true);
 
         cardLayout = new CardLayout();
@@ -26,12 +26,17 @@ public class MainWindow extends JFrame {
         ChooseLoginPanel chooseLoginPanel= new ChooseLoginPanel();
         LoginPanel loginPanel = new LoginPanel();
         RegisterPanel registerPanel = new RegisterPanel();
+        InsertNamePanel insertNamePanel = new InsertNamePanel();
         CreateNewLobbyPanel createNewLobbyPanel = new CreateNewLobbyPanel();
+        GameFieldPanel gameFieldPanel = new GameFieldPanel();
+
         cardPanel.add("chooseConnectionPanel",chooseConnectionPanel);
         cardPanel.add("chooseLoginPanel",chooseLoginPanel);
         cardPanel.add("loginPanel",loginPanel);
         cardPanel.add("registerPanel",registerPanel);
+        cardPanel.add("insertNamePanel", insertNamePanel);
         cardPanel.add("createNewLobbyPanel", createNewLobbyPanel);
+        cardPanel.add("gameFieldPanel", gameFieldPanel);
         add(cardPanel);
 
     }

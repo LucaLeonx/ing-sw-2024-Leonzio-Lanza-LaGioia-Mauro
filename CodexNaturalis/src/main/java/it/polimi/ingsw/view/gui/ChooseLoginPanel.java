@@ -13,9 +13,15 @@ public class ChooseLoginPanel extends ButtonListPanel {
     private void buildPanel(){
         this.setLayout(new GridBagLayout());
         JLabel incipitTextArea = new JLabel("Choose your authentication:\n");
+        incipitTextArea.setBackground(Color.white);
+        incipitTextArea.setHorizontalAlignment(SwingConstants.CENTER);
+        incipitTextArea.setOpaque(true);
+        incipitTextArea.setFont(new Font("Arial", Font.BOLD, 20));  // Font ingrandito
 
         JButton login= new JButton("Login");
         JButton register= new JButton("Register");
+        ButtonStyle(login);
+        ButtonStyle(register);
 
         JTextArea connectionTextArea = new JTextArea();
 
@@ -32,7 +38,7 @@ public class ChooseLoginPanel extends ButtonListPanel {
             @Override
             public void actionPerformed(ActionEvent e) {//performed method after pushing a button
                 connectionTextArea.append("Register selected\n");
-                MainWindow.goToWindow("registerPanel");
+                MainWindow.goToWindow("insertNamePanel");
             }
         });
 
@@ -50,4 +56,17 @@ public class ChooseLoginPanel extends ButtonListPanel {
         add(register, gbc);
 
     }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Image image = null;
+        try {
+            image = new ImageIcon("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/images/codex_game.jpg").getImage();
+        }
+        catch (Exception e){
+            System.out.println("Path non rilevato");
+        }
+        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+    }
+
 }

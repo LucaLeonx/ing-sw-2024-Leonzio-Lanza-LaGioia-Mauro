@@ -22,11 +22,20 @@ public class ChooseConnectionPanel extends ButtonListPanel {
         JButton rmiButton= new JButton("RMI");
         socketButton.setAlignmentY(Component.CENTER_ALIGNMENT);
         rmiButton.setAlignmentY(Component.CENTER_ALIGNMENT);
+        ButtonStyle(socketButton);
+        ButtonStyle(rmiButton);
 
-        //JTextArea connectionTextArea = new JTextArea();
-        JLabel incipitTextArea = new JLabel("Choose your connection:");
-        incipitTextArea.setBackground(Color.white);
-        incipitTextArea.setHorizontalAlignment(SwingConstants.CENTER);
+        JLabel nameTextArea = new JLabel("Welcome to Codex Naturalis");
+        JLabel chooseTextArea = new JLabel("Choose your connection:");
+        nameTextArea.setBackground(Color.white);
+        nameTextArea.setHorizontalAlignment(SwingConstants.CENTER);
+        nameTextArea.setOpaque(true);
+        nameTextArea.setFont(new Font("Arial", Font.BOLD, 20));  // Font ingrandito
+
+        chooseTextArea.setBackground(Color.white);
+        chooseTextArea.setHorizontalAlignment(SwingConstants.CENTER);
+        chooseTextArea.setOpaque(true);
+        chooseTextArea.setFont(new Font("Arial", Font.BOLD, 20));  // Font ingrandito
 
         rmiButton.addActionListener(new ActionListener() {
             @Override
@@ -56,12 +65,15 @@ public class ChooseConnectionPanel extends ButtonListPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 5, 5, 5);
-        add(incipitTextArea, gbc);
+        add(nameTextArea, gbc);
 
-        gbc.gridy = 1;
-        add(socketButton, gbc);
+        gbc.gridy= 1;
+        add(chooseTextArea, gbc);
 
         gbc.gridy = 2;
+        add(socketButton, gbc);
+
+        gbc.gridy = 3;
         add(rmiButton, gbc);
 
     }
@@ -71,11 +83,12 @@ public class ChooseConnectionPanel extends ButtonListPanel {
         super.paintComponent(g);
         Image image = null;
         try {
-             image = new ImageIcon("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/codex-naturalis.png").getImage();
+             image = new ImageIcon("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/images/codex_game.jpg").getImage();
         }
         catch (Exception e){
             System.out.println("Path non rilevato");
         }
         g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
     }
+
 }
