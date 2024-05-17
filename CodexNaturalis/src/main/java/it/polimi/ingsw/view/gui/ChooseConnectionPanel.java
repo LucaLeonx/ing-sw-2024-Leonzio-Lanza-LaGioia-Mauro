@@ -4,12 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
-public class ChooseConnectionPanel extends ButtonListPanel {
+public class ChooseConnectionPanel extends StandardPanel {
 
     public ChooseConnectionPanel() {
         buildPanel();
@@ -83,7 +81,7 @@ public class ChooseConnectionPanel extends ButtonListPanel {
         super.paintComponent(g);
         Image image = null;
         try {
-             image = new ImageIcon("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/images/codex_game.jpg").getImage();
+             image = new ImageIcon("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/other_images/codex_game.jpg").getImage();
         }
         catch (Exception e){
             System.out.println("Path non rilevato");

@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class LoginPanel extends ButtonListPanel{
+public class LoginPanel extends StandardPanel {
     private JTextField user;
     private JPasswordField password;
     public LoginPanel(){

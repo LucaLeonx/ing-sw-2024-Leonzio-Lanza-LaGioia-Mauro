@@ -2,8 +2,10 @@ package it.polimi.ingsw.view.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class GameFieldPanel extends ButtonListPanel{
+public class GameFieldPanel extends StandardPanel {
     public GameFieldPanel() { buildPanel(); }
 
     private void buildPanel(){
@@ -26,6 +28,29 @@ public class GameFieldPanel extends ButtonListPanel{
     private JPanel newHostPanel(){
         JPanel host= new JPanel();
         host.setLayout(new GridBagLayout());
+
+        ImagePanel firstcard = new ImagePanel("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/front_images/img_21.jpeg",
+                "/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/back_images/img_21.jpeg");
+        ImagePanel secondcard = new ImagePanel("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/front_images/img_31.jpeg",
+                "/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/back_images/img_31.jpeg");
+        ImagePanel thirdcard = new ImagePanel("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/front_images/img_51.jpeg",
+                "/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/back_images/img_51.jpeg");
+        ImagePanel fourthcard = new ImagePanel("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/front_images/img_61.jpeg",
+                "/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/back_images/img_61.jpeg");
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx=0;
+        gbc.gridy=1;
+        host.add(firstcard, gbc);
+
+        gbc.gridx=1;
+        host.add(secondcard, gbc);
+
+        gbc.gridx=2;
+        host.add(thirdcard, gbc);
+
+        gbc.gridx=3;
+        host.add(fourthcard, gbc);
 
         return host;
     }
