@@ -54,8 +54,7 @@ public interface ClientController {
      */
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException;
     public void exitFromLobby() throws RemoteException;
-    public void subscribeToLobbyUpdates(LobbyObserver observer);
-    public void subscribeToGameUpdates(GameObserver observer);
+    public void subscribeToNotifications(ClientNotificationSubscription observer);
     public String getCurrentPlayerName() throws RemoteException;
     public List<String> getPlayerNames() throws RemoteException;
     public PlayerSetupInfo getPlayerSetup() throws RemoteException;

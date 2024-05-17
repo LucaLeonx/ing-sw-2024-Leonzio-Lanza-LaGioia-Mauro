@@ -1,12 +1,11 @@
 package it.polimi.ingsw.test.server.rmi;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
-import it.polimi.ingsw.controller.clientcontroller.LobbyObserver;
+import it.polimi.ingsw.controller.clientcontroller.ClientNotificationSubscription;
 import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.rmi.RemoteException;
-import java.sql.ClientInfoStatus;
 import java.util.List;
 
 public class TestLobbyEventsClient{
@@ -19,15 +18,15 @@ public class TestLobbyEventsClient{
             e.printStackTrace();
         }
 
-        LobbyUpdater updater = new LobbyUpdater();
-        controller.subscribeToLobbyUpdates(updater);
+        Updater updater = new Updater();
+        controller.subscribeToNotifications(updater);
         int tempCode = controller.register("LobbyObserver");
         controller.login("LobbyObserver", tempCode);
         System.out.println("Lobby updates");
     }
 }
 
-class LobbyUpdater implements LobbyObserver{
+class Updater implements ClientNotificationSubscription {
 
     private final int id = 10;
 

@@ -4,7 +4,7 @@ import it.polimi.ingsw.controller.clientcontroller.ClientController;
 
 import java.util.Scanner;
 
-public class CreateNewLobbyOrJoinLobby extends TUIState {
+public class CreateNewLobbyOrJoinLobby extends TUIScreen {
     public CreateNewLobbyOrJoinLobby(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
     }

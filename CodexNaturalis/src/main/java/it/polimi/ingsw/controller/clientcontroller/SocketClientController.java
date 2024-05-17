@@ -72,14 +72,10 @@ public class SocketClientController implements ClientController {
     }
 
     @Override
-    public void subscribeToLobbyUpdates(LobbyObserver observer) {
+    public void subscribeToNotifications(ClientNotificationSubscription observer) {
 
     }
 
-    @Override
-    public void subscribeToGameUpdates(GameObserver observer) {
-
-    }
 
     @Override
     public String getCurrentPlayerName() throws RemoteException {

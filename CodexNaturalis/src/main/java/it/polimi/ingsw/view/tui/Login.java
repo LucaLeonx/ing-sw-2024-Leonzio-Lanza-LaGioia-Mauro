@@ -5,7 +5,7 @@ import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
-public class Login extends TUIState{
+public class Login extends TUIScreen {
     public Login(TUI tui, Scanner scanner, ClientController controller){
         super(tui, scanner, controller);
     }

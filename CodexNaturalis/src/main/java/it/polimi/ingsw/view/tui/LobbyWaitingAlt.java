@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Scanner;
 
-public class LobbyWaiting extends TUIState implements LobbyObserver {
+public class LobbyWaiting extends TUIScreen implements LobbyObserver {
     Object lock=new Object();
     public LobbyWaiting(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);

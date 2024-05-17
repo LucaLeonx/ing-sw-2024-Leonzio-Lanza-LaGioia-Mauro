@@ -26,16 +26,14 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
 
     private final AuthenticationManager authenticator;
     private ServerController session = null;
-    private final List<GameObserver> gameObservers;
-    private final List<LobbyObserver> lobbyObservers;
+    private final List<ClientNotificationSubscription> clientNotifiers;
 
     private final ExecutorService notificationSender;
 
     public RMIClientController(String host, int port, String serverName) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(host, port);
         this.authenticator = (AuthenticationManager) registry.lookup(serverName);
-        this.gameObservers = new LinkedList<>();
-        this.lobbyObservers = new LinkedList<>();
+        this.clientNotifiers = new LinkedList<>();
         this.notificationSender = Executors.newSingleThreadExecutor();
     }
 
@@ -104,13 +102,8 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
     }
 
     @Override
-    public void subscribeToLobbyUpdates(LobbyObserver observer) {
-        lobbyObservers.add(observer);
-    }
-
-    @Override
-    public void subscribeToGameUpdates(GameObserver observer) {
-        gameObservers.add(observer);
+    public void subscribeToNotifications(ClientNotificationSubscription subscription) {
+        clientNotifiers.add(subscription);
     }
 
     @Override
@@ -210,54 +203,47 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
             throw new WrongPhaseException(e.getMessage());
         }
 
-        notifyToLobbyObservers((observer) -> observer.onLobbyListUpdate(updatedLobbyList));
+        notifyToSubscribers((observer) -> observer.onLobbyListUpdate(updatedLobbyList));
     }
 
     @Override
     public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
-        notifyToLobbyObservers((observer -> observer.onJoinedLobbyUpdate(joinedLobby)));
+        notifyToSubscribers((observer -> observer.onJoinedLobbyUpdate(joinedLobby)));
     }
 
     @Override
     public void onGameStarted() {
-       notifyToLobbyObservers(LobbyObserver::onGameStarted);
-       notifyToGameObservers(GameObserver::onGameStarted);
+       notifyToSubscribers(ClientNotificationSubscription::onGameStarted);
     }
 
     @Override
     public void onSetupPhaseFinished() {
-        notifyToGameObservers(GameObserver::onSetupPhaseFinished);
+        notifyToSubscribers(ClientNotificationSubscription::onSetupPhaseFinished);
     }
 
     @Override
     public void onCurrentPlayerChange(String newPlayerName) {
-        notifyToGameObservers(observer -> observer.onCurrentPlayerChange(newPlayerName));
+        notifyToSubscribers(observer -> observer.onCurrentPlayerChange(newPlayerName));
     }
 
     @Override
     public void onTurnSkipped(String skippedPlayerName) {
-        notifyToGameObservers(observer -> observer.onTurnSkipped(skippedPlayerName));
+        notifyToSubscribers(observer -> observer.onTurnSkipped(skippedPlayerName));
     }
 
     @Override
     public void onLastTurnReached() {
-       notifyToGameObservers(GameObserver::onLastTurnReached);
+       notifyToSubscribers(ClientNotificationSubscription::onLastTurnReached);
     }
 
     @Override
     public void onGameEnded() {
-        notifyToGameObservers(GameObserver::onGameEnded);
+        notifyToSubscribers(ClientNotificationSubscription::onGameEnded);
     }
 
-    private void notifyToGameObservers(Consumer<GameObserver> notificationToSend) {
+    private void notifyToSubscribers(Consumer<ClientNotificationSubscription> notificationToSend) {
         notificationSender.submit(() ->{
-            gameObservers.stream().parallel().forEach(notificationToSend);
-        });
-    }
-
-    private void notifyToLobbyObservers(Consumer<LobbyObserver> notificationToSend) {
-        notificationSender.submit(() ->{
-            lobbyObservers.stream().parallel().forEach(notificationToSend);
+            clientNotifiers.stream().parallel().forEach(notificationToSend);
         });
     }
 }

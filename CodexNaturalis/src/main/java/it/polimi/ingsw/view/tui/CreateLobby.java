@@ -1,14 +1,10 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
-import it.polimi.ingsw.controller.clientcontroller.LobbyObserver;
-import it.polimi.ingsw.dataobject.LobbyInfo;
 
-import java.rmi.RemoteException;
-import java.util.List;
 import java.util.Scanner;
 
-public class CreateLobby extends TUIState {
+public class CreateLobby extends TUIScreen {
     public CreateLobby(TUI tui, Scanner scanner, ClientController controller){
         super(tui, scanner, controller);
     }

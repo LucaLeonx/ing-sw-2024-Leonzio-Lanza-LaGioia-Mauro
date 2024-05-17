@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
-import it.polimi.ingsw.controller.clientcontroller.LobbyObserver;
+import it.polimi.ingsw.controller.clientcontroller.ClientNotificationSubscription;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import javax.swing.*;
@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public class RegisterPanel extends StandardPanel implements LobbyObserver {
+public class RegisterPanel extends StandardPanel implements ClientNotificationSubscription {
     DefaultListModel<String> listModel= new DefaultListModel<>();
 
     public RegisterPanel(){

@@ -4,7 +4,7 @@ import it.polimi.ingsw.controller.clientcontroller.ClientController;
 
 import java.util.Scanner;
 
-public class LoginOrRegister extends TUIState{
+public class LoginOrRegister extends TUIScreen {
     public LoginOrRegister(TUI tui, Scanner scanner, ClientController controller){
         super(tui, scanner, controller);
     }

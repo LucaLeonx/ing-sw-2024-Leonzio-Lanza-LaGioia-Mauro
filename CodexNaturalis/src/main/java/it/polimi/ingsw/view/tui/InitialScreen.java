@@ -7,7 +7,7 @@ import it.polimi.ingsw.controller.clientcontroller.SocketClientController;
 import java.util.Scanner;
 
 
-public class InitialScreen extends TUIState{
+public class InitialScreen extends TUIScreen {
     public InitialScreen(TUI tui, Scanner scanner, ClientController controller){
         super(tui, scanner, controller);
     }
@@ -41,9 +41,11 @@ public class InitialScreen extends TUIState{
                 case 1:
                     controller = new SocketClientController();
                     transitionState(new LoginOrRegister(tui, scanner, controller));
+                    controller.subscribeToNotifications(tui);
                     break;
                 case 2:
                     controller = new RMIClientController();
+                    controller.subscribeToNotifications(tui);
                     transitionState(new LoginOrRegister(tui, scanner, controller));
                     break;
                 case 3:

@@ -1,8 +1,6 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
-import it.polimi.ingsw.controller.clientcontroller.GameObserver;
-import it.polimi.ingsw.dataobject.InfoTranslator;
 import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
@@ -12,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class GameScreen extends TUIState implements GameObserver{
+public class GameScreen extends TUIScreen{
 
     Object lockHasGameStarted;
     Object lockIsSetUpFinished;
@@ -20,7 +18,6 @@ public class GameScreen extends TUIState implements GameObserver{
     boolean isSetUpFinished;
     public GameScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
-        controller.subscribeToGameUpdates(this);
     }
 
     @Override

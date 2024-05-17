@@ -1,18 +1,16 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
-import it.polimi.ingsw.controller.clientcontroller.LobbyObserver;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Scanner;
 
-public class LobbyWaiting extends TUIState implements LobbyObserver {
+public class LobbyWaiting extends TUIScreen {
     Object lock=new Object();
     public LobbyWaiting(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
-        controller.subscribeToLobbyUpdates(this);
     }
     @Override
     public void display() {
