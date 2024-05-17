@@ -1,11 +1,10 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.ElementNotFoundException;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCommandException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.GameField;
 import it.polimi.ingsw.model.map.Point;
-import it.polimi.ingsw.model.player.InvalidCardException;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 
@@ -184,7 +183,7 @@ public class Game {
         ObjectiveCard chosenObjective;
 
         if(player.hasSecretObjective()){
-            throw new InvalidCommandException("Setup already chosen");
+            throw new InvalidParameterException("Setup already chosen");
         }
 
         if(objectiveCardId == setup.objective1().getId()){

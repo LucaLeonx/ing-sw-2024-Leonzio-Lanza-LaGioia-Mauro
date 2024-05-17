@@ -1,15 +1,13 @@
 package it.polimi.ingsw.controller.servercontroller;
 
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.ElementNotFoundException;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCommandException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static it.polimi.ingsw.controller.servercontroller.UserStatus.LOBBY_CHOICE;
@@ -49,7 +47,7 @@ public class LobbyList {
 
     public synchronized Lobby createLobby(User creator, String lobbyName, int requiredPlayersNum){
         if (requiredPlayersNum < 2 || requiredPlayersNum > 4){
-            throw new InvalidCommandException("Invalid number of required players");
+            throw new InvalidParameterException("Invalid number of required players");
         } else if(creator.getStatus() != LOBBY_CHOICE){
             throw new WrongPhaseException("Cannot create Lobby when not choosing one");
         }

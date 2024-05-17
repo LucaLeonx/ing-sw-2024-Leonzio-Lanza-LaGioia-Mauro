@@ -2,13 +2,12 @@ package it.polimi.ingsw.controller.clientcontroller;
 
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
-import it.polimi.ingsw.model.InvalidOperationException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 
 import java.rmi.RemoteException;
 import java.util.List;
-import java.util.Map;
 
 public interface ClientController {
     // WARNING: The methods may throw unchecked exceptions, if called in the wrong place

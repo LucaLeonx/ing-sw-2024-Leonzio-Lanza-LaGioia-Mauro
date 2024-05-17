@@ -24,6 +24,14 @@ public class DraftObserverClient extends UnicastRemoteObject implements Observer
     public void onEvent(Payload payload) throws RemoteException {
         System.out.println(payload.information());
         System.out.println(getValue());
+
+        System.out.println("Starting some hefty operation...");
+        try {
+            Thread.sleep(5000); // 5 seconds
+        } catch (InterruptedException e){
+            System.out.println("Couldn't finish the job");
+        }
+        System.out.println("Finished");
     }
 
     public int getValue() throws RemoteException {

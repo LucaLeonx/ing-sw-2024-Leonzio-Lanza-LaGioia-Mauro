@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.controller.servercontroller.operationexceptions;
 
 public class InvalidOperationException extends RuntimeException{
     public InvalidOperationException(String message){

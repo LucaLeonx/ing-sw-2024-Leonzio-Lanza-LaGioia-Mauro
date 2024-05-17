@@ -5,7 +5,7 @@ import it.polimi.ingsw.controller.servercontroller.AuthenticationManager;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.dataobject.Message;
 import it.polimi.ingsw.dataobject.MessageType;
-import it.polimi.ingsw.model.InvalidOperationException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
 
 import java.rmi.RemoteException;
 

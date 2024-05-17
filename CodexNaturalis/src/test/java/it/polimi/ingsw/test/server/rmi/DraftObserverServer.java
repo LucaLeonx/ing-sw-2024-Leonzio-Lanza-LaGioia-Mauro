@@ -22,7 +22,12 @@ public class DraftObserverServer extends UnicastRemoteObject implements Observab
     public void changeValue(int newValue) throws RemoteException {
         value.set(newValue);
         for(Observer observer : observerList){
-            observer.onEvent(new Payload("Value updated"));
+            try {
+                observer.onEvent(new Payload("Value updated"));
+            } catch (InterruptedException e){
+                System.out.println("Could not finish operation");
+            }
+            System.out.println("Notification sent");
         }
     }
 

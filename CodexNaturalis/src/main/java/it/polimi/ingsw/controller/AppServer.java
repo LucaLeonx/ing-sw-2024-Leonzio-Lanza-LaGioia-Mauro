@@ -22,14 +22,13 @@ public class AppServer {
         GameList gameList = new GameList();
 
         CoreServer server = new CoreServer(userList, lobbyList, gameList);
-        AuthenticationManager authenticator = new AuthenticationManagerImpl(server, userList);
 
         LocateRegistry.createRegistry(ConnectionDefaultSettings.RMIRegistryPort);
         Registry reg = LocateRegistry.getRegistry();
-        reg.rebind(ConnectionDefaultSettings.RMIServerName, authenticator);
+        reg.rebind(ConnectionDefaultSettings.RMIServerName, (AuthenticationManager) server);
         System.out.println("Registry bound, ready to listen for clients from RMI");
 
-        SocketServer socketServer = new SocketServer(ConnectionDefaultSettings.SocketServerPort,authenticator);
+        SocketServer socketServer = new SocketServer(ConnectionDefaultSettings.SocketServerPort, (AuthenticationManager) server);
         socketServer.startServer();
         System.out.println("Game server ready");
     }

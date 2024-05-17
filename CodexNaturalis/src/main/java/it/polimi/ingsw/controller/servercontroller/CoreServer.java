@@ -1,35 +1,71 @@
 package it.polimi.ingsw.controller.servercontroller;
 
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.ElementNotFoundException;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCommandException;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.*;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.InvalidOperationException;
 import it.polimi.ingsw.model.card.Card;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.Player;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
-import java.util.function.Consumer;
 
 import static it.polimi.ingsw.controller.servercontroller.UserStatus.*;
 import static it.polimi.ingsw.model.DrawChoice.DECK_GOLD;
 import static it.polimi.ingsw.model.DrawChoice.DECK_RESOURCE;
 
-public class CoreServer {
+public class CoreServer extends UnicastRemoteObject implements AuthenticationManager {
 
     private final UserList userList;
     private final LobbyList lobbyList;
     private final GameList activeGames;
 
-    public CoreServer(UserList userList, LobbyList lobbyList, GameList activeGames) {
+    public CoreServer(UserList userList, LobbyList lobbyList, GameList activeGames) throws RemoteException {
+        super();
         this.userList = userList;
         this.lobbyList = lobbyList;
         this.activeGames = activeGames;
+    }
+
+    @Override
+    public int register(String username) throws RemoteException {
+        synchronized (userList){
+            if(userList.isUserRegistered(username)){
+                throw new InvalidOperationException("Username " + username + " is already in use");
+            }
+        }
+
+        User newUser = new User(username);
+        int tempCode = newUser.generateNewPass();
+        userList.addUser(newUser);
+        return tempCode;
+    }
+
+    @Override
+    public ServerController login(String username, int tempCode, NotificationSubscriber subscriber) throws RemoteException {
+        User loginUser;
+
+        if(subscriber == null){
+            throw new InvalidParameterException("Cannot provide null notification subscriber");
+        }
+
+        synchronized (userList) {
+            if (!userList.isUserRegistered(username)) {
+                throw new InvalidCredentialsException();
+            }
+
+            loginUser = userList.getUserByUsername(username);
+        }
+
+        if(loginUser.checkPass(tempCode)){
+            loginUser.setNotificationSubscriber(subscriber);
+            return new AuthenticatedSession(loginUser, this);
+        } else {
+            throw new InvalidCredentialsException();
+        }
     }
 
     public void logout(User user){
@@ -46,10 +82,6 @@ public class CoreServer {
 
             userList.removeUser(user);
         }
-    }
-
-    public void addNotificationSubscriber(User user, NotificationSubscriber subscriber){
-        user.setNotificationSubscriber(subscriber);
     }
 
     public List<LobbyInfo> getLobbies(User user){

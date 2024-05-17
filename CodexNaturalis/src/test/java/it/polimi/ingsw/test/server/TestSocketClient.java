@@ -1,17 +1,10 @@
 package it.polimi.ingsw.test.server;
 
-import it.polimi.ingsw.controller.clientcontroller.ConnectionDefaultSettings;
 import it.polimi.ingsw.controller.clientcontroller.SocketClientController;
-import it.polimi.ingsw.controller.socket.SocketClient;
-import it.polimi.ingsw.dataobject.LobbyInfo;
-import it.polimi.ingsw.dataobject.Message;
-import it.polimi.ingsw.dataobject.MessageType;
-import it.polimi.ingsw.model.InvalidOperationException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TestSocketClient {

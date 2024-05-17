@@ -4,7 +4,7 @@ import it.polimi.ingsw.controller.servercontroller.ServerController;
 import it.polimi.ingsw.controller.socket.SocketClient;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
-import it.polimi.ingsw.model.InvalidOperationException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 

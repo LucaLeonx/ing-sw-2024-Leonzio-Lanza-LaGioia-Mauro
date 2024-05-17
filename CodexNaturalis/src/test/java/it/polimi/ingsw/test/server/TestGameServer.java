@@ -19,7 +19,7 @@ public class TestGameServer {
         GameList gameList = new GameList();
 
         CoreServer server = new CoreServer(userList, lobbyList, gameList);
-        AuthenticationManager authenticator = new AuthenticationManagerImpl(server, userList);
+        AuthenticationManager authenticator = server;
 
         LocateRegistry.createRegistry(1099);
         Registry reg = LocateRegistry.getRegistry();

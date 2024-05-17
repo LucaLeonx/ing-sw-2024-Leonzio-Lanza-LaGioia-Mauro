@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller.servercontroller;
 
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCommandException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
@@ -30,7 +30,7 @@ public class Lobby implements Serializable {
             user.setJoinedLobbyId(id);
             user.setStatus(UserStatus.WAITING_TO_START);
         } else {
-            throw new InvalidCommandException("The lobby is already full");
+            throw new InvalidParameterException("The lobby is already full");
         }
     }
 

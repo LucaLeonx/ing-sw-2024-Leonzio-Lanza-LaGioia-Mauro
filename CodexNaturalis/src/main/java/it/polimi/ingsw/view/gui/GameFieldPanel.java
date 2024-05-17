@@ -27,8 +27,6 @@ public class GameFieldPanel extends ButtonListPanel{
         JPanel host= new JPanel();
         host.setLayout(new GridBagLayout());
 
-
-
         return host;
     }
 
