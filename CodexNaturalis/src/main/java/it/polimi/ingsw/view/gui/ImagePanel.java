@@ -47,7 +47,6 @@ public class ImagePanel extends JPanel {
         }
         @Override
         protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
             g.drawImage(frontPanelImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
@@ -60,7 +59,6 @@ public class ImagePanel extends JPanel {
         }
         @Override
         protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
             g.drawImage(backPanelImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
