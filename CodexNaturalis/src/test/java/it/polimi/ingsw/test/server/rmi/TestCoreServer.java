@@ -1,14 +1,18 @@
 package it.polimi.ingsw.test.server.rmi;
 
 import it.polimi.ingsw.controller.servercontroller.*;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.*;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 import junit.framework.TestCase;
 
+import java.lang.invoke.WrongMethodTypeException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static java.util.Map.entry;
 import static org.junit.Assert.assertThrows;
 
 public class TestCoreServer extends TestCase {
@@ -49,7 +53,7 @@ public class TestCoreServer extends TestCase {
         String username = "Steve";
         try {
             int tempCode = server.register(username);
-            ServerController session = server.login(username, tempCode, new DummyNotifiable());
+            ServerController session = server.login(username, tempCode, new NotificationRegistrator());
         } catch (Exception e){
             fail(e.getMessage());
         }
@@ -70,7 +74,7 @@ public class TestCoreServer extends TestCase {
         final int finalTempCode = tempCode + 1; // This is required by the assertThrows
 
         Exception exception = assertThrows(InvalidCredentialsException.class, () -> {
-            ServerController session = server.login(username, finalTempCode, new DummyNotifiable());
+            ServerController session = server.login(username, finalTempCode, new NotificationRegistrator());
         });
 
         String errorMessage = exception.getMessage();
@@ -89,7 +93,7 @@ public class TestCoreServer extends TestCase {
 
         final int finalTempCode = tempCode + 1;
         Exception exception = assertThrows(InvalidCredentialsException.class, () -> {
-            ServerController session = server.login(username, finalTempCode, new DummyNotifiable());
+            ServerController session = server.login(username, finalTempCode, new NotificationRegistrator());
         });
 
         String errorMessage = exception.getMessage();
@@ -98,7 +102,7 @@ public class TestCoreServer extends TestCase {
 
     public void test_login_UserNotRegistered_RejectLogin(){
         Exception exception = assertThrows(InvalidCredentialsException.class, () -> {
-            ServerController session = server.login("Tizio", 123456, new DummyNotifiable());
+            ServerController session = server.login("Tizio", 123456, new NotificationRegistrator());
         });
 
         String errorMessage = exception.getMessage();
@@ -106,7 +110,6 @@ public class TestCoreServer extends TestCase {
     }
 
     public void test_login_UserRegisteredNullNotificationSubscriber_RejectLogin(){
-
         String username = "Steve";
         int tempCode = -2;
 
@@ -125,10 +128,90 @@ public class TestCoreServer extends TestCase {
         assertTrue(errorMessage.contains("Cannot provide null notification subscriber"));
     }
 
+    public void test_createAndJoinLobby_SuccessfulOperationsAndNotificationSending(){
+        Thread creator= new Thread(() ->{
+            NotificationRegistrator registrar = new NotificationRegistrator();
+            ServerController controller = registerAndLogin("Steve", registrar);
+            try {
+                controller.addLobby("Example lobby", 3);
+            } catch (RemoteException e) {
+                fail(e.getMessage());
+            }
+
+            Exception creationException = assertThrows(WrongPhaseException.class, () -> {
+                controller.addLobby("Another lobby", 2);
+            });
+
+            assertTrue(creationException.getMessage().contains("Cannot create Lobby when not choosing one"));
+            registrar.waitForUpdate();
+
+            Map<String, Integer> notificationCount = registrar.getNotificationsCount();
+
+            assertEquals(Integer.valueOf(1), notificationCount.get("LobbyList"));
+            assertEquals(Integer.valueOf(1), notificationCount.get("JoinedLobby"));
+            System.out.println("Creator finished");
+        });
+
+        Thread joiner = new Thread(() ->{
+            NotificationRegistrator registrar = new NotificationRegistrator();
+            ServerController controller = registerAndLogin("Simone", registrar);
+
+            while(true){
+                try {
+                    controller.joinLobby(1);
+                    break;
+                } catch (ElementNotFoundException e){
+                    continue;
+                } catch (RemoteException e) {
+                    fail(e.getMessage());
+                }
+            }
+
+            registrar.waitForUpdate();
+
+            Map<String, Integer> notificationCount = registrar.getNotificationsCount();
+
+            assertEquals(Integer.valueOf(2), notificationCount.get("LobbyList"));
+            assertEquals(Integer.valueOf(1), notificationCount.get("JoinedLobby"));
+
+            LobbyInfo joinedLobby = null;
+
+            try {
+                joinedLobby = controller.getJoinedLobbyInfo();
+            } catch (RemoteException e) {
+                fail(e.getMessage());
+            }
+
+            assertEquals(joinedLobby.creator(), "Steve");
+            assertEquals(joinedLobby.name(), "Example lobby");
+            assertEquals(joinedLobby.id(), 1);
+            assertEquals(joinedLobby.reqPlayers(), 3);
+            assertEquals(joinedLobby.currNumPlayers(), 2);
+            assertEquals(joinedLobby.players(), List.of("Steve", "Simone"));
+            System.out.println("Joiner finished");
+        });
+
+        creator.start();
+        joiner.start();
+
+        try{
+            creator.join(10000);
+            joiner.join(10000);
+        } catch (InterruptedException e){
+            fail(e.getMessage());
+        }
+
+        System.out.println("Test finished");
+    }
+
+    public void test_joinLobby_LobbyAlmostFull_SuccessGetGameStartedNotification(){
+
+    }
+
     private ServerController registerAndLogin(String username){
         try {
             int tempCode = server.register(username);
-            return server.login(username, tempCode, new DummyNotifiable());
+            return server.login(username, tempCode, new NotificationRegistrator());
         } catch (Exception e){
             fail(e.getMessage());
         }
@@ -149,47 +232,90 @@ public class TestCoreServer extends TestCase {
         return null;
     }
 
-    // Just to avoid passing null references to the server as subscribers
-    private class DummyNotifiable implements NotificationSubscriber{
 
+
+    private class NotificationRegistrator implements NotificationSubscriber{
+
+        private final Map<String, Integer> notificationsReceived;
+
+        NotificationRegistrator(){
+            notificationsReceived = new HashMap<>(Map.ofEntries(
+                    entry("LobbyList", 0),
+                    entry("JoinedLobby", 0),
+                    entry("GameStarted", 0),
+                    entry("SetupFinished", 0),
+                    entry("CurrentPlayerChange", 0),
+                    entry("TurnSkipped", 0),
+                    entry("LastTurn", 0),
+                    entry("GameEnded", 0)
+            ));
+        }
         @Override
-        public void onLobbyListUpdate() throws RemoteException {
-
+        public synchronized void onLobbyListUpdate() throws RemoteException {
+            incrementNotificationCount("LobbyList");
         }
 
         @Override
-        public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) throws RemoteException {
-
+        public synchronized void onJoinedLobbyUpdate(LobbyInfo joinedLobby) throws RemoteException {
+            incrementNotificationCount("JoinedLobby");
         }
 
         @Override
-        public void onSetupPhaseFinished() throws RemoteException {
-
+        public synchronized void onGameStarted() throws RemoteException {
+            incrementNotificationCount("GameStarted");
         }
 
         @Override
-        public void onGameStarted() throws RemoteException {
-
+        public synchronized void onSetupPhaseFinished() throws RemoteException {
+            incrementNotificationCount("SetupFinished");
         }
 
         @Override
-        public void onCurrentPlayerChange(String newPlayerName) throws RemoteException {
-
+        public synchronized void onCurrentPlayerChange(String newPlayerName) throws RemoteException {
+            incrementNotificationCount("CurrentPlayerChange");
         }
 
         @Override
-        public void onTurnSkipped(String skippedPlayerName) throws RemoteException {
-
+        public synchronized void onTurnSkipped(String skippedPlayerName) throws RemoteException {
+            incrementNotificationCount("TurnSkipped");
         }
 
         @Override
-        public void onLastTurnReached() throws RemoteException {
-
+        public synchronized void onLastTurnReached() throws RemoteException {
+            incrementNotificationCount("LastTurn");
         }
 
         @Override
-        public void onGameEnded() throws RemoteException {
+        public synchronized void onGameEnded() throws RemoteException {
+            incrementNotificationCount("GameEnded");
+        }
 
+        private synchronized void incrementNotificationCount(String notificationType){
+            notificationsReceived.compute(notificationType, (key, value) -> (value == null) ? 0 : value + 1);
+        }
+
+        public synchronized void resetNotificationCount(String notificationType){
+            notificationsReceived.compute(notificationType, (key, value) -> 0);
+            notifyAll();
+        }
+
+        public synchronized void resetAll(){
+            for(String notificationType : notificationsReceived.keySet()){
+                resetNotificationCount(notificationType);
+            }
+            notifyAll();
+        }
+
+        public synchronized Map<String, Integer> getNotificationsCount(){
+            return new HashMap<>(notificationsReceived);
+        }
+
+        public synchronized void waitForUpdate() {
+            try {
+                wait(1000); // Should be enough time to get an update
+            } catch (InterruptedException e) {
+                return;
+            }
         }
     }
 

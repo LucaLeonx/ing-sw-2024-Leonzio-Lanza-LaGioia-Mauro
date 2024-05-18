@@ -40,14 +40,4 @@ class Updater implements ClientNotificationSubscription {
         lobbies.stream().forEach(System.out::println);
         System.out.println();
     }
-
-    @Override
-    public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
-        return;
-    }
-
-    @Override
-    public void onGameStarted() {
-
-    }
 }
