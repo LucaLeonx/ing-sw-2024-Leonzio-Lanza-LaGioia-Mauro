@@ -1,6 +1,7 @@
-/* package it.polimi.ingsw.view.tui;
+package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.controller.clientcontroller.ClientNotificationSubscription;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
@@ -8,7 +9,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Scanner;
 
-class LobbyWaiting extends TUIScreen {
+class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
 
     public LobbyWaiting(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
@@ -30,7 +31,7 @@ class LobbyWaiting extends TUIScreen {
             } catch (WrongPhaseException e){
                 System.out.println("Unable to exit - game already started");
             } catch (RemoteException re){
-                System.out.println(e.getMessage());
+                System.out.println(re.getMessage());
             }
         } else {
             transitionState(this);
@@ -48,4 +49,4 @@ class LobbyWaiting extends TUIScreen {
         transitionState(new GameScreen(tui, scanner, controller));
     }
 
-}*/
+}
