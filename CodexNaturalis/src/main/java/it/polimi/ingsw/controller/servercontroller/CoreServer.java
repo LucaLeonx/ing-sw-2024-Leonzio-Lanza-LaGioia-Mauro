@@ -126,7 +126,6 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
         synchronized (lobbyList){
             lobbyToJoin = lobbyList.getLobbyById(lobbyId);
             lobbyToJoin.addUser(user);
-            System.out.println(lobbyToJoin.getLobbyInfo());
 
             if(lobbyToJoin.readyToStart()) {
                 lobbyToJoin = lobbyList.removeLobby(lobbyId);
@@ -136,14 +135,11 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
         if(lobbyToJoin.readyToStart()){
             activeGames.addGameFromLobby(lobbyToJoin);
             List<User> connectedUsers = lobbyToJoin.getConnectedUsers();
-            connectedUsers.forEach((u) -> System.out.println(u.getUsername()));
 
             for(User other : connectedUsers){
                 try {
                     other.getNotificationSubscriber().onGameStarted();
-                    System.out.println("Notification sent to " + other.getUsername());
                 } catch (RemoteException e){
-                    System.out.println("Notification not sent to " + other.getUsername());
                     continue;
                 }
             }
