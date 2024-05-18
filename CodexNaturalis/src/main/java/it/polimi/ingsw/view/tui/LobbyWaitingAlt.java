@@ -20,7 +20,6 @@ class LobbyWaiting extends TUIScreen {
 
         // Asking for input from scanner is already a blocking call
         // No need to create an additional thread
-        // https://stackoverflow.com/questions/30249324/how-to-get-java-to-wait-for-user-input
 
         String input = scanner.nextLine().trim();
         if(input.equals("q")){

@@ -3,6 +3,8 @@ package it.polimi.ingsw.test.server.rmi;
 import it.polimi.ingsw.controller.servercontroller.*;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.*;
 import it.polimi.ingsw.dataobject.LobbyInfo;
+import it.polimi.ingsw.dataobject.PlayerSetupInfo;
+import it.polimi.ingsw.model.card.CardOrientation;
 import junit.framework.TestCase;
 
 import java.lang.invoke.WrongMethodTypeException;
@@ -149,7 +151,6 @@ public class TestCoreServer extends TestCase {
 
             assertEquals(Integer.valueOf(1), notificationCount.get("LobbyList"));
             assertEquals(Integer.valueOf(1), notificationCount.get("JoinedLobby"));
-            System.out.println("Creator finished");
         });
 
         Thread joiner = new Thread(() ->{
@@ -205,21 +206,203 @@ public class TestCoreServer extends TestCase {
     }
 
     public void test_joinLobby_LobbyAlmostFull_SuccessGetGameStartedNotification(){
+        Thread creator= new Thread(() -> {
+            NotificationRegistrator registrar = new NotificationRegistrator();
+            ServerController controller = registerAndLogin("Luca", registrar);
+            try {
+                controller.addLobby("Gaming lobby", 3);
+            } catch (RemoteException e) {
+                fail(e.getMessage());
+            }
 
+            registrar.waitForUpdate();
+
+            Map<String, Integer> notificationCount = registrar.getNotificationsCount();
+
+            assertEquals(Integer.valueOf(2), notificationCount.get("LobbyList"));
+            assertEquals(Integer.valueOf(1), notificationCount.get("JoinedLobby"));
+
+            registrar.waitForUpdate();
+
+            notificationCount = registrar.getNotificationsCount();
+
+            assertEquals(Integer.valueOf(1), notificationCount.get("JoinedLobby"));
+            assertEquals(Integer.valueOf(1), notificationCount.get("GameStarted"));
+        });
+
+        Thread joiner1 = new Thread(() ->{
+            NotificationRegistrator registrar = new NotificationRegistrator();
+            ServerController controller = registerAndLogin("Simone", registrar);
+
+            while(true){
+                try {
+                    controller.joinLobby(1);
+                    break;
+                } catch (ElementNotFoundException e){
+                    continue;
+                } catch (RemoteException e) {
+                    fail(e.getMessage());
+                }
+            }
+
+            registrar.waitForUpdate();
+            registrar.waitForUpdate();
+
+            Map<String, Integer> notificationCount = registrar.getNotificationsCount();
+
+            assertEquals(Integer.valueOf(1), notificationCount.get("GameStarted"));
+        });
+
+        Thread joiner2 = new Thread(() ->{
+            NotificationRegistrator registrar = new NotificationRegistrator();
+            ServerController controller = registerAndLogin("Giovanni", registrar);
+
+            while(true){
+                try {
+                    controller.joinLobby(1);
+                    break;
+                } catch (ElementNotFoundException e){
+                    continue;
+                } catch (RemoteException e) {
+                    fail(e.getMessage());
+                }
+            }
+
+            registrar.waitForUpdate();
+
+            Map<String, Integer> notificationCount = registrar.getNotificationsCount();
+
+            assertEquals(Integer.valueOf(1), notificationCount.get("GameStarted"));
+
+        });
+
+        creator.start();
+        joiner1.start();
+        joiner2.start();
+
+        try{
+            creator.join(10000);
+            joiner1.join(10000);
+            joiner2.join(10000);
+        } catch (InterruptedException e) {
+            fail(e.getMessage());
+        }
     }
 
-    private ServerController registerAndLogin(String username){
+    public void test_gameSetupPhase(){
+        Thread player1 = new Thread(() ->{
+            NotificationRegistrator registrar = new NotificationRegistrator();
+            ServerController controller = registerAndLogin("Simone", registrar);
+
+            try {
+                controller.addLobby("Example lobby", 3);
+            } catch (RemoteException e) {
+                fail(e.getMessage());
+            }
+
+            while(registrar.getNotificationsCount().get("GameStarted") == 0){
+                registrar.waitForUpdate();
+            }
+
+            try {
+                PlayerSetupInfo setup = controller.getPlayerSetup();
+                controller.registerPlayerSetupChoice(setup.objective1().id(), CardOrientation.FRONT);
+            } catch (RemoteException e) {
+                fail(e.getMessage());
+            }
+
+            while(registrar.getNotificationsCount().get("SetupFinished") == 0){
+                registrar.waitForUpdate();
+            }
+
+            Map<String, Integer> notificationCount = registrar.getNotificationsCount();
+
+            assertEquals(Integer.valueOf(1), notificationCount.get("SetupFinished"));
+        });
+
+        Thread player2 = new Thread(() ->{
+            NotificationRegistrator registrar = new NotificationRegistrator();
+            ServerController controller = registerAndLogin("Giovanni", registrar);
+
+            while(true){
+                try {
+                    controller.joinLobby(1);
+                    break;
+                } catch (ElementNotFoundException e){
+                    continue;
+                } catch (RemoteException e) {
+                    fail(e.getMessage());
+                }
+            }
+
+            while(registrar.getNotificationsCount().get("GameStarted") == 0){
+                registrar.waitForUpdate();
+            }
+
+            try {
+                PlayerSetupInfo setup = controller.getPlayerSetup();
+                controller.registerPlayerSetupChoice(setup.objective1().id(), CardOrientation.BACK);
+            } catch (RemoteException e) {
+                fail(e.getMessage());
+            }
+
+            while(registrar.getNotificationsCount().get("SetupFinished") == 0){
+                registrar.waitForUpdate();
+            }
+
+            Map<String, Integer> notificationCount = registrar.getNotificationsCount();
+
+            assertEquals(Integer.valueOf(1), notificationCount.get("SetupFinished"));
+        });
+
+        Thread player3 = new Thread(() ->{
+            NotificationRegistrator registrar = new NotificationRegistrator();
+            ServerController controller = registerAndLogin("Luca", registrar);
+
+            while(true){
+                try {
+                    controller.joinLobby(1);
+                    break;
+                } catch (ElementNotFoundException e){
+                    continue;
+                } catch (RemoteException e) {
+                    fail(e.getMessage());
+                }
+            }
+
+            while(registrar.getNotificationsCount().get("GameStarted") == 0){
+                registrar.waitForUpdate();
+            }
+
+            try {
+                PlayerSetupInfo setup = controller.getPlayerSetup();
+                controller.registerPlayerSetupChoice(setup.objective2().id(), CardOrientation.FRONT);
+            } catch (RemoteException e) {
+                fail(e.getMessage());
+            }
+
+            while(registrar.getNotificationsCount().get("SetupFinished") == 0){
+                registrar.waitForUpdate();
+            }
+
+            Map<String, Integer> notificationCount = registrar.getNotificationsCount();
+
+            assertEquals(Integer.valueOf(1), notificationCount.get("SetupFinished"));
+        });
+
+        player1.start();
+        player2.start();
+        player3.start();
+
         try {
-            int tempCode = server.register(username);
-            return server.login(username, tempCode, new NotificationRegistrator());
-        } catch (Exception e){
+            player1.join(10000);
+            player2.join(10000);
+            player3.join(10000);
+        } catch (InterruptedException e) {
             fail(e.getMessage());
         }
 
-        return null;
     }
-
-
 
     private ServerController registerAndLogin(String username, NotificationSubscriber subscriber){
         try {
@@ -231,8 +414,6 @@ public class TestCoreServer extends TestCase {
 
         return null;
     }
-
-
 
     private class NotificationRegistrator implements NotificationSubscriber{
 
@@ -247,9 +428,16 @@ public class TestCoreServer extends TestCase {
                     entry("CurrentPlayerChange", 0),
                     entry("TurnSkipped", 0),
                     entry("LastTurn", 0),
-                    entry("GameEnded", 0)
+                    entry("GameEnded", 0),
+                    entry("GameAvailable", 0)
             ));
         }
+
+        @Override
+        public void onStartedGameAvailable(GamePhase phase) {
+            incrementNotificationCount("GameAvailable");
+        }
+
         @Override
         public synchronized void onLobbyListUpdate() throws RemoteException {
             incrementNotificationCount("LobbyList");

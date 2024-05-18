@@ -1,10 +1,15 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
+import it.polimi.ingsw.controller.servercontroller.GamePhase;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.util.List;
 
 public interface ClientNotificationSubscription {
+
+    default public void onStartedGameAvailable(GamePhase phase){
+        return;
+    }
     default public void onLobbyListUpdate(List<LobbyInfo> lobbies) {
         return;
     }

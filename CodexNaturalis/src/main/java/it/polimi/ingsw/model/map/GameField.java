@@ -99,8 +99,8 @@ public class GameField{
     {
         if(!availableCells.contains(position)) {
             throw new InvalidParameterException("Position " + position + "not among available ones");
-        } else if(card.getSide(cardOrientation).isPlayable(this)){
-            throw new InvalidParameterException("Cannot play card " + card.getId() + "on " + cardOrientation + " side");
+        } else if(!card.getSide(cardOrientation).isPlayable(this)){
+            throw new InvalidParameterException("Cannot play card " + card.getId() + " on " + cardOrientation + " side");
         }
 
         registerCard(card, cardOrientation, position);
