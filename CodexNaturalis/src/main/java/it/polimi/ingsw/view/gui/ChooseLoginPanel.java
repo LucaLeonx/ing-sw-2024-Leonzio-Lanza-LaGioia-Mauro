@@ -57,7 +57,7 @@ public class ChooseLoginPanel extends StandardPanel {
 
     }
 
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Image image = null;
         try {

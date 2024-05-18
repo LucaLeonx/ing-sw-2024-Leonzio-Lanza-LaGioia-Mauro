@@ -27,7 +27,7 @@ public class InsertNamePanel extends StandardPanel {
         passwordValue.setVisible(false);
 
         JButton readyButton = new JButton(("Ready to play"));
-        JLabel warningMessage = new JLabel ("WARNING! Remember your password before Playing!");
+        JLabel warningMessage = new JLabel ("Be Careful! Remember your password before Playing!");
         warningMessage.setForeground(Color.RED);
         warningMessage.setVisible(false);
         readyButton.setVisible(false);
@@ -62,7 +62,7 @@ public class InsertNamePanel extends StandardPanel {
         readyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainWindow.goToWindow("gameFieldPanel");
+                MainWindow.goToWindow("registerPanel");
             }
         });
 

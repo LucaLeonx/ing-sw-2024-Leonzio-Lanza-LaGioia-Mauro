@@ -29,16 +29,47 @@ public class GameFieldPanel extends StandardPanel {
         JPanel host= new JPanel();
         host.setLayout(new GridBagLayout());
 
-        ImagePanel firstcard = new ImagePanel("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/front_images/img_21.jpeg",
-                "/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/back_images/img_21.jpeg");
-        ImagePanel secondcard = new ImagePanel("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/front_images/img_31.jpeg",
-                "/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/back_images/img_31.jpeg");
-        ImagePanel thirdcard = new ImagePanel("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/front_images/img_51.jpeg",
-                "/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/back_images/img_51.jpeg");
-        ImagePanel fourthcard = new ImagePanel("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/front_images/img_61.jpeg",
-                "/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/back_images/img_61.jpeg");
+        ImagePanel firstcard = new ImagePanel("img_21");
+        ImagePanel secondcard = new ImagePanel("img_31");
+        ImagePanel thirdcard = new ImagePanel("img_51");
+        ImagePanel fourthcard = new ImagePanel("img_61");
+
+        firstcard.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                firstcard.changeSide();
+            }
+        });
+
+        secondcard.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                secondcard.changeSide();
+            }
+        });
+
+        thirdcard.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                thirdcard.changeSide();
+            }
+        });
+
+        fourthcard.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                fourthcard.changeSide();
+            }
+        });
+
+
 
         GridBagConstraints gbc = new GridBagConstraints();
+
         gbc.gridx=0;
         gbc.gridy=1;
         host.add(firstcard, gbc);
@@ -55,7 +86,7 @@ public class GameFieldPanel extends StandardPanel {
         return host;
     }
 
-    private  JPanel newPlayer2(){
+    private JPanel newPlayer2(){
         JPanel player2 = new JPanel();
 
         return player2;

@@ -45,12 +45,12 @@ public class RegisterPanel extends StandardPanel implements ClientNotificationSu
         createLobby.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    onLobbyListUpdate(MainWindow.getClientController().getLobbyList());
+               /* try {
+                   onLobbyListUpdate(MainWindow.getClientController().getLobbyList());
                 }
                 catch (RemoteException exp){
                     System.out.println("Exception list");
-                }
+                }*/
                 MainWindow.goToWindow("createNewLobbyPanel");
             }
         });
