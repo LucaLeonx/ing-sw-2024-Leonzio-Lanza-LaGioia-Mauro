@@ -194,6 +194,7 @@ public class Game {
             throw new ElementNotFoundException("Cannot choose objective card with ID " + objectiveCardId);
         }
 
+        player.setSecretObjective(chosenObjective);
         player.getField().placeCard(setup.initialCard(), initialCardSide, new Point(0,0));
     }
 
