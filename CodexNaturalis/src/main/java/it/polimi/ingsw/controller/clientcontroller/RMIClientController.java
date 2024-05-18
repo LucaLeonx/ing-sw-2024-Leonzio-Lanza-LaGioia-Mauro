@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller.clientcontroller;
 
 
 import it.polimi.ingsw.controller.servercontroller.AuthenticationManager;
+import it.polimi.ingsw.controller.servercontroller.GamePhase;
 import it.polimi.ingsw.controller.servercontroller.NotificationSubscriber;
 import it.polimi.ingsw.controller.servercontroller.ServerController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
@@ -27,7 +28,6 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
     private final AuthenticationManager authenticator;
     private ServerController session = null;
     private final List<ClientNotificationSubscription> clientNotifiers;
-
     private final ExecutorService notificationSender;
 
     public RMIClientController(String host, int port, String serverName) throws RemoteException, NotBoundException {
@@ -193,6 +193,8 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
         session.exitFromGame();
     }
 
+
+
     @Override
     public void onLobbyListUpdate(){
         List<LobbyInfo> updatedLobbyList;
@@ -239,6 +241,11 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
     @Override
     public void onGameEnded() {
         notifyToSubscribers(ClientNotificationSubscription::onGameEnded);
+    }
+
+    @Override
+    public void onStartedGameAvailable(GamePhase phase) {
+        notifyToSubscribers((subscriber) -> subscriber.onStartedGameAvailable(phase));
     }
 
     private void notifyToSubscribers(Consumer<ClientNotificationSubscription> notificationToSend) {

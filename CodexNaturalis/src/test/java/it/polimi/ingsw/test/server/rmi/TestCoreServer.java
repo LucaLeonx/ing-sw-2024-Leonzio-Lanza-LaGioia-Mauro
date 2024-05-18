@@ -247,9 +247,16 @@ public class TestCoreServer extends TestCase {
                     entry("CurrentPlayerChange", 0),
                     entry("TurnSkipped", 0),
                     entry("LastTurn", 0),
-                    entry("GameEnded", 0)
+                    entry("GameEnded", 0),
+                    entry("GameAvailable", 0)
             ));
         }
+
+        @Override
+        public void onStartedGameAvailable(GamePhase phase) {
+            incrementNotificationCount("GameAvailable");
+        }
+
         @Override
         public synchronized void onLobbyListUpdate() throws RemoteException {
             incrementNotificationCount("LobbyList");

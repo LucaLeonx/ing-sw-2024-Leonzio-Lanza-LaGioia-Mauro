@@ -62,6 +62,21 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
 
         if(loginUser.checkPass(tempCode)){
             loginUser.setNotificationSubscriber(subscriber);
+
+            if(loginUser.hasJoinedGameId()){
+
+                Game game = activeGames.getJoinedGame(loginUser);
+                GamePhase phase = GamePhase.PLAY_PHASE;
+
+                if(game.allPlayersHaveSetup()){
+                    phase = GamePhase.SETUP_PHASE;
+                } else if(game.isEnded()){
+                    phase = GamePhase.END_PHASE;
+                }
+
+                loginUser.getNotificationSubscriber().onStartedGameAvailable(phase);
+            }
+
             return new AuthenticatedSession(loginUser, this);
         } else {
             throw new InvalidCredentialsException();
