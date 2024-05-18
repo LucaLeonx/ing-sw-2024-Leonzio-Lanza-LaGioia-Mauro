@@ -5,34 +5,63 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class ImagePanel extends JPanel {
-    private Image imageFront;
-    private Image imageBack;
-    private boolean isMouseOver;
+    private final FrontPanel frontPanel;
+    private final BackPanel backPanel;
+    private boolean side= true; //true is front side set by default
 
-    public ImagePanel(String imagePathFront, String imagePathBack) {
-        imageFront = Toolkit.getDefaultToolkit().getImage(imagePathFront);
-        imageBack = Toolkit.getDefaultToolkit().getImage(imagePathBack);
+    public ImagePanel(String imageNumber) {
+        this.frontPanel = new FrontPanel(Toolkit.getDefaultToolkit().getImage("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/front_images/" + imageNumber + ".jpeg"));
+        this.backPanel = new BackPanel(Toolkit.getDefaultToolkit().getImage("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/back_images/" + imageNumber + ".jpeg"));
 
-        addMouseMotionListener(new MouseMotionAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                // Verifica se il mouse è sopra l'area dell'immagine
-                isMouseOver = e.getX() >= 0 && e.getY() >= 0 && e.getX() < getWidth() && e.getY() < getHeight();
-                // Ridisegna il pannello per aggiornare l'immagine visualizzata
-                repaint();
-            }
-        });
+        this.add(frontPanel);
+        this.add(backPanel);
 
+        this.setPreferredSize(new Dimension(500, 500));
+
+        if(side) {
+            frontPanel.setVisible(side); //by default when we create the ImagePanel with both Images one visibilty is set true the other false
+            backPanel.setVisible(!side);
+        }
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if (imageFront != null && isMouseOver) {
-            g.drawImage(imageFront, 0, 0, getWidth(), getHeight(), this);
+    public ImagePanel changeSide()
+    {
+        this.side = !(this.side);
+
+        if(side) {
+            frontPanel.setVisible(true); //by default when we create the ImagePanel with both Images one visibilty is set true the other false
+            backPanel.setVisible(false);
         }
         else{
-            g.drawImage(imageBack, 0, 0, getWidth(), getHeight(), this);
+            frontPanel.setVisible(false);
+            backPanel.setVisible(true);
+        }
+        return this;
+    }
+
+    private class FrontPanel extends JPanel{
+        private final Image frontPanelImage;
+
+        private FrontPanel(Image frontPanelNumber){
+            this.frontPanelImage= frontPanelNumber;
+        }
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(frontPanelImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+
+    private class BackPanel extends JPanel{
+        private final Image backPanelImage;
+
+        private BackPanel(Image frontPanelNumber){
+            this.backPanelImage= frontPanelNumber;
+        }
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backPanelImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
 

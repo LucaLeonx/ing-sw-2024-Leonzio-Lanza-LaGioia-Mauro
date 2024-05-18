@@ -26,7 +26,7 @@ public class CreateNewLobbyPanel extends JPanel  {
         createLobby.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                MainWindow.goToWindow("gameFieldPanel");
             }
         });
         goBack.addActionListener(new ActionListener() {
