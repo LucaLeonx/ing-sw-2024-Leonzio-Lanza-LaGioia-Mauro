@@ -52,12 +52,9 @@ public class LobbyList {
             throw new WrongPhaseException("Cannot create Lobby when not choosing one");
         }
 
-        System.out.println("Status before creation: " + creator.getStatus());
-
         int newId = idGenerator.updateAndGet((value) -> (value + 1) % MAX_AVAILABLE_ID_NUM);
         Lobby createdLobby = new Lobby(newId, creator, requiredPlayersNum, lobbyName);
         createdLobby.addUser(creator);
-        System.out.println("Status after creation: " + creator.getStatus());
 
         lobbies.put(newId, createdLobby);
         return createdLobby;

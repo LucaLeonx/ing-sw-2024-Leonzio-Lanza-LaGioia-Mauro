@@ -124,29 +124,22 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
         // If the lobby isn't available, an exception is thrown
 
         synchronized (lobbyList){
-            if(lobbyList.containsLobby(lobbyId)){
-                lobbyToJoin = lobbyList.getLobbyById(lobbyId);
-                lobbyToJoin.addUser(user);
+            lobbyToJoin = lobbyList.getLobbyById(lobbyId);
+            lobbyToJoin.addUser(user);
 
-                if(lobbyToJoin.readyToStart()) {
-                    lobbyToJoin = lobbyList.removeLobby(lobbyId);
-                }
+            if(lobbyToJoin.readyToStart()) {
+                lobbyToJoin = lobbyList.removeLobby(lobbyId);
             }
         }
-
-        System.out.println("Are yo ready? " + lobbyToJoin.readyToStart());
 
         if(lobbyToJoin.readyToStart()){
             activeGames.addGameFromLobby(lobbyToJoin);
             List<User> connectedUsers = lobbyToJoin.getConnectedUsers();
-            connectedUsers.forEach((u) -> System.out.println(u.getUsername()));
 
             for(User other : connectedUsers){
                 try {
                     other.getNotificationSubscriber().onGameStarted();
-                    System.out.println("Notification sent to " + other.getUsername());
                 } catch (RemoteException e){
-                    System.out.println("Notification not sent to " + other.getUsername());
                     continue;
                 }
             }
