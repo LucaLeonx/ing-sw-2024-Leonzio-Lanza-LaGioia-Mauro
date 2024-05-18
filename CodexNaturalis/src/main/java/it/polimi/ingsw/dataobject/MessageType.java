@@ -7,5 +7,8 @@ public enum MessageType implements Serializable {
     CREATE_LOBBY,
     JOIN_LOBBY,
     TEMP_CODE,
-
+    LOGIN,
+    LOBBY_LIST,
+    JOINED_LOBBY_INFO,
+    EXIT_FROM_LOBBY,
 }

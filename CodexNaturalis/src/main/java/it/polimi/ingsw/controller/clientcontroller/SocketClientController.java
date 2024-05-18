@@ -10,11 +10,13 @@ import it.polimi.ingsw.model.map.Point;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SocketClientController implements ClientController {
 
-    private ServerController session = null;
+    //private ServerController session = null;
     private SocketClient client ;
 
     public SocketClientController() throws IOException {
@@ -38,7 +40,10 @@ public class SocketClientController implements ClientController {
 
     @Override
     public void login(String username, int tempCode) throws RemoteException {
-
+        List<Object> tuple = new ArrayList<>();
+        tuple.add(username);
+        tuple.add(tempCode);
+        client.sendMessage( new Message(MessageType.LOGIN,tuple));
     }
 
     @Override
@@ -48,27 +53,32 @@ public class SocketClientController implements ClientController {
 
     @Override
     public List<LobbyInfo> getLobbyList() throws RemoteException {
-        return List.of();
+        client.sendMessage(new Message(MessageType.LOBBY_LIST,new Object()));
+
+        return List.of((LobbyInfo) client.receiveMessage().getObj());
     }
 
     @Override
     public LobbyInfo createLobby(String lobbyName, int requiredPlayers) throws RemoteException {
-        return null;
+        client.sendMessage(new Message(MessageType.CREATE_LOBBY, new AbstractMap.SimpleEntry<>(lobbyName, requiredPlayers) ));
+
+        return (LobbyInfo) client.receiveMessage().getObj();
     }
 
     @Override
     public void joinLobby(int lobbyId) throws RemoteException {
-
+        client.sendMessage(new Message(MessageType.JOIN_LOBBY,lobbyId));
     }
 
     @Override
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
-        return null;
+        client.sendMessage(new Message(MessageType.JOINED_LOBBY_INFO,null));
+        return (LobbyInfo) client.receiveMessage().getObj();
     }
 
     @Override
     public void exitFromLobby() throws RemoteException {
-
+        client.sendMessage(new Message(MessageType.EXIT_FROM_LOBBY,null));
     }
 
     @Override

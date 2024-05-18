@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
-
 import it.polimi.ingsw.controller.servercontroller.AuthenticationManager;
 import it.polimi.ingsw.controller.servercontroller.NotificationSubscriber;
 import it.polimi.ingsw.controller.servercontroller.ServerController;
