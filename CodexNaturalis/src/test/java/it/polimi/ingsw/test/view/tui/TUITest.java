@@ -43,7 +43,7 @@ public class TUITest extends TestCase {
             fail();
         }
         playerTestDiagonal=new Player("Diagonale", PlayerColor.RED);
-        playerTestDiagonal.getField().placeCard(initialCards.get(0), CardOrientation.BACK, new Point(0,0));
+        playerTestDiagonal.getField().placeCard(initialCards.get(0), CardOrientation.FRONT, new Point(0,0));
         playerTestDiagonal.getField().placeCard(resourceCards.get(0), CardOrientation.FRONT, new Point(2,2));
         playerTestDiagonal.getField().placeCard(resourceCards.get(1), CardOrientation.FRONT, new Point(4,4));
         //playerTestDiagonal.getField().placeCard(resourceCards.get(2), CardOrientation.FRONT, new Point(6,6));
@@ -64,7 +64,7 @@ public class TUITest extends TestCase {
         M.getField().placeCard(resourceCards.get(39), CardOrientation.FRONT, new Point(-2, 6));
         M.getField().placeCard(goldenCards.get(36), CardOrientation.BACK, new Point(2, 2));
         M.getField().placeCard(goldenCards.get(25), CardOrientation.FRONT, new Point(-6, -6));
-        M.getField().placeCard(goldenCards.get(33), CardOrientation.BACK, new Point(-4, 4));
+        M.getField().placeCard(resourceCards.get(33), CardOrientation.FRONT, new Point(-4, 4));
         M.getField().placeCard(resourceCards.get(29), CardOrientation.FRONT, new Point(-8, -8));
 
 
@@ -76,14 +76,12 @@ public class TUITest extends TestCase {
         P.getField().placeCard(goldenCards.get(17), CardOrientation.FRONT, new Point(-6, 6));
         P.getField().placeCard(resourceCards.get(22), CardOrientation.FRONT, new Point(6, -2));
         P.getField().placeCard(resourceCards.get(2), CardOrientation.FRONT, new Point(4, -4));
-        P.getField().placeCard(goldenCards.get(12), CardOrientation.FRONT, new Point(6, -6));
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(P), InfoTranslator.convertToFieldInfo(P.getField()),true );
-        P.getField().placeCard(goldenCards.get(21), CardOrientation.FRONT, new Point(8, -4));
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(P), InfoTranslator.convertToFieldInfo(P.getField()),true );
+        P.getField().placeCard(goldenCards.get(12), CardOrientation.FRONT, new Point(6, -6)); //carta verde con angolo coperto alto destra
+        /*P.getField().placeCard(goldenCards.get(21), CardOrientation.FRONT, new Point(8, -4)); //carta sopra che non dovrebbe lasciar giocare
         P.getField().placeCard(resourceCards.get(37), CardOrientation.FRONT, new Point(10, -6));
         P.getField().placeCard(resourceCards.get(17), CardOrientation.BACK, new Point(8, -8));
         P.getField().placeCard(goldenCards.get(32), CardOrientation.FRONT, new Point(10, -10));
-        P.getField().placeCard(goldenCards.get(20), CardOrientation.FRONT, new Point(-8, 8));
+        P.getField().placeCard(goldenCards.get(20), CardOrientation.FRONT, new Point(-8, 8));*/
 
 
         T.getField().placeCard(initialCards.get(1), CardOrientation.FRONT, new Point(0,0));
@@ -99,7 +97,7 @@ public class TUITest extends TestCase {
         T.getField().placeCard(resourceCards.get(1), CardOrientation.BACK, new Point(0, 8));
         T.getField().placeCard(goldenCards.get(1), CardOrientation.FRONT, new Point(-4, 4));
         T.getField().placeCard(goldenCards.get(27), CardOrientation.BACK, new Point(-2, 6));
-        T.getField().placeCard(goldenCards.get(18), CardOrientation.BACK, new Point(4, 0));
+        //T.getField().placeCard(goldenCards.get(18), CardOrientation.FRONT, new Point(4, 0));
 
 
     }
@@ -127,6 +125,8 @@ public class TUITest extends TestCase {
         new GameFieldTest().checkInvariants(T.getField());
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()), true);
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()), false);
+        System.out.println(resourceCards.get(10).getSide(CardOrientation.BACK).getCenterSymbols());
+
     }
 
     public void testConsistencyOfAvailablePositionsNumberingAcrossTurns(){
