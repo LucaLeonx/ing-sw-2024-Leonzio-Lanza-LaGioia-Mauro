@@ -46,6 +46,6 @@ public class JoinLobby extends TUIScreen {
             System.out.println(e.getMessage());
             transitionState(new InitialScreen(tui, scanner, controller));
         }
-        transitionState(new LobbyWaiting(tui, scanner, controller));
+      //  transitionState(new LobbyWaiting(tui, scanner, controller));
     }
 }

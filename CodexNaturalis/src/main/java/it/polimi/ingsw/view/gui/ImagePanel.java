@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class ImagePanel extends JPanel {
     private final FrontPanel frontPanel;
@@ -16,15 +15,13 @@ public class ImagePanel extends JPanel {
         this.add(frontPanel);
         this.add(backPanel);
 
-        this.setPreferredSize(new Dimension(500, 500));
-
         if(side) {
             frontPanel.setVisible(side); //by default when we create the ImagePanel with both Images one visibilty is set true the other false
             backPanel.setVisible(!side);
         }
     }
 
-    public ImagePanel changeSide()
+    public void changeSide()
     {
         this.side = !(this.side);
 
@@ -36,7 +33,6 @@ public class ImagePanel extends JPanel {
             frontPanel.setVisible(false);
             backPanel.setVisible(true);
         }
-        return this;
     }
 
     private class FrontPanel extends JPanel{
@@ -44,6 +40,7 @@ public class ImagePanel extends JPanel {
 
         private FrontPanel(Image frontPanelNumber){
             this.frontPanelImage= frontPanelNumber;
+            this.setPreferredSize(new Dimension(100,80));
         }
         @Override
         protected void paintComponent(Graphics g) {
@@ -56,6 +53,7 @@ public class ImagePanel extends JPanel {
 
         private BackPanel(Image frontPanelNumber){
             this.backPanelImage= frontPanelNumber;
+            this.setPreferredSize(new Dimension(100,80));
         }
         @Override
         protected void paintComponent(Graphics g) {

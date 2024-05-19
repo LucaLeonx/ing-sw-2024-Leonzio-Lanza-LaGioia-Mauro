@@ -2,9 +2,11 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
+import it.polimi.ingsw.controller.clientcontroller.SocketClientController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
@@ -57,10 +59,9 @@ public class MainWindow extends JFrame {
         clientController = new RMIClientController();
     }
 
-    public static ClientController setSocketController(){
-      //  return clientController = new SocketClientController();
+    public static void setSocketController() throws IOException {
+        clientController = new SocketClientController();
         //waiting for socketcontroller implementation
-        return null;
     }
 
     public static void goToNextWindow(){
