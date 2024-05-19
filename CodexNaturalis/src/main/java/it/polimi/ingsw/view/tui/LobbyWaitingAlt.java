@@ -16,7 +16,7 @@ class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
 
     @Override
     public void display() {
-        System.out.println("Waiting for players to join... Press 'q' to stop waiting");
+        System.out.println("Waiting for players to join... Press 'q' to quit and go back to the menu");
 
         // Asking for input from scanner is already a blocking call
         // No need to create an additional thread

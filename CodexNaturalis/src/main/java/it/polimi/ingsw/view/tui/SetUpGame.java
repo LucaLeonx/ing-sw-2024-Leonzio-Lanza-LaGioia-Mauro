@@ -52,7 +52,7 @@ public class SetUpGame extends TUIScreen implements ClientNotificationSubscripti
         }
 
         try {
-            TUIMethods.showCardsOnTable(null, null, controller.getDrawableCards());
+            TUIMethods.showCardsOnTable(controller.getCommonObjectives().get(0), controller.getCommonObjectives().get(1), controller.getDrawableCards());
         }
         catch(Exception e){
             System.out.println(e.getMessage());
@@ -79,7 +79,7 @@ public class SetUpGame extends TUIScreen implements ClientNotificationSubscripti
                         break;
                     }
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    System.out.println(e.getMessage() + " the game ended"); // si blocca qui
                 }
             }
 
