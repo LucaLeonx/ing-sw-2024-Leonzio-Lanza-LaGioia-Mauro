@@ -34,14 +34,13 @@ public class CreateLobby extends TUIScreen {
 
         try {
             controller.createLobby(lobbyName, numberOfPartecipants);
+            transitionState(new LobbyWaiting(tui, scanner, controller));
         }
          catch (Exception e) {
             System.out.println("The name you entered is already in use, please select another one");
             System.out.println(e.getMessage());
             transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
         }
-        // if I was able to come here the command create lobby was successful.
-     //   transitionState(new LobbyWaiting(tui, scanner, controller));
 
     }
 

@@ -23,28 +23,26 @@ public class SetUpGame extends TUIScreen implements ClientNotificationSubscripti
 
     @Override
     public void display() {
-        synchronized (lockHasGameStarted) {
-            InitialScreen.printStylishMessage("THE GAME IS STARTING...                                                            ","\u001B[32m", "\u001B[34m");
-            printWolf();
+        InitialScreen.printStylishMessage("THE GAME IS STARTING...                                                            ","\u001B[32m", "\u001B[34m");
+        printWolf();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        /*while(!hasGameStarted) {
             try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            while(!hasGameStarted) {
-                try {
-                    lockHasGameStarted.wait();
-                } catch (InterruptedException IE) {
-                    try{
-                        controller.exitGame();
-                        System.out.println("You exited from the game ");
-                    }
-                    catch(Exception e){
-                        System.out.println(IE.getMessage());
-                    }
+                lockHasGameStarted.wait();
+            } catch (InterruptedException IE) {
+                try{
+                    controller.exitGame();
+                    System.out.println("You exited from the game ");
+                }
+                catch(Exception e){
+                    System.out.println(IE.getMessage());
                 }
             }
-        }
+        }*/
         // setup part:
         try {
             TUIMethods.showHand(controller.getControlledPlayerInformation());

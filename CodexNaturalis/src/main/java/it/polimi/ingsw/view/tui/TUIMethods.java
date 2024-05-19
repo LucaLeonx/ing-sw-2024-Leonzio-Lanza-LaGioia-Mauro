@@ -221,7 +221,6 @@ public class TUIMethods {
         for (int i = 0; i < 3; i++) {
             String[][] currentCard = new String[3][5];
             try {
-
                 currentCard = UtilityClassCardSketcher.sketchCard(player.cardsInHand().get(i).front());
             } catch (IndexOutOfBoundsException e) {
                 currentCard = UtilityClassCardSketcher.sketchEmptyCard();
@@ -234,7 +233,13 @@ public class TUIMethods {
         }
 
         String[][] currentCard = new String[3][5];
-        currentCard = UtilityClassCardSketcher.sketchObjectiveCard(player.secretObjective());
+        if(player.secretObjective() != null) {
+            System.out.println("banana");
+            currentCard = UtilityClassCardSketcher.sketchObjectiveCard(player.secretObjective());
+        }
+        else{
+            currentCard = UtilityClassCardSketcher.sketchEmptyCard();
+        }
         for (int j = 0; j < 3; j++) {
             for (int k = 0; k < 5; k++) {
                 matrixHand[j][k + 18] = currentCard[j][k];

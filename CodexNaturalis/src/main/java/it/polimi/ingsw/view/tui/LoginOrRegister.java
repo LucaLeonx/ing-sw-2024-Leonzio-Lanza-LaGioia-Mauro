@@ -18,8 +18,7 @@ public class LoginOrRegister extends TUIScreen {
         String choice;
 
         choice = scanner.nextLine().trim();
-        scanner.nextLine(); // Consume newline
-
+        
         switch(choice) {
             case "1":
                 transitionState(new Login(tui, scanner, controller));
