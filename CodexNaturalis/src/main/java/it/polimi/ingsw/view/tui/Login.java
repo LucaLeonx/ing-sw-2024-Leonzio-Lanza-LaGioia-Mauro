@@ -1,11 +1,12 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.controller.clientcontroller.ClientNotificationSubscription;
+import it.polimi.ingsw.controller.servercontroller.GamePhase;
 
-import java.rmi.RemoteException;
 import java.util.Scanner;
 
-public class Login extends TUIScreen {
+public class Login extends TUIScreen implements ClientNotificationSubscription {
     public Login(TUI tui, Scanner scanner, ClientController controller){
         super(tui, scanner, controller);
     }
@@ -16,45 +17,47 @@ public class Login extends TUIScreen {
         String username = scanner.nextLine();
         System.out.print("Enter the secret code: ");
         int code=0;
+        String stringCode;
+        stringCode=scanner.nextLine().trim();
         try {
-            code = scanner.nextInt();
-        }
-        catch(Exception e){
-            scanner.nextLine();
-            System.out.println(e.getMessage());
-            transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
-        }
-        try {
+            code=Integer.parseInt(stringCode);
             controller.login(username, code);
         }
-        catch (RemoteException RE) {
+        // I leave a general exception since in theory the code could crush for controller or if stringCode contains letters
+        catch (Exception e) {
             System.out.println("It seems that your username and or code are wrong, chose: ");
             while(true) {
                 System.out.println("1. Try again");
                 System.out.println("2. Go back");
-                int choice = 0;
-                try {
-                    choice = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
-                } catch (Exception e) {
-                    scanner.nextLine(); // Consume newline
-                    System.out.println("Chose 1 or 2\n");
-                }
+                String choice;
+                System.out.print("Please choose an option: ");
+                choice=scanner.nextLine().trim();
 
                 switch (choice) {
-                    case 1:
+                    case "1":
                         transitionState(new Login(tui, scanner, controller));
                         break;
-                    case 2:
+                    case "2":
                         transitionState(new LoginOrRegister(tui, scanner, controller));
                         break;
                     default:
                         System.out.println("Invalid choice. Please try again.");
-                        transitionState(new Login(tui, scanner, controller));
                 }
             }
         }
         System.out.println("Hello "+username +"\n\n");
         transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
+    }
+
+    public synchronized void onStartedGameAvailable(GamePhase phase){
+        if(phase == GamePhase.SETUP_PHASE) {
+            transitionState(new SetUpGame(tui, scanner, controller));
+        }
+        else if(phase == GamePhase.PLAY_PHASE) {
+            transitionState(new PlayingGameState(tui, scanner, controller));
+        }
+        else if(phase == GamePhase.END_PHASE) {
+            transitionState(new EndGameState(tui, scanner, controller));
+        }
     }
 }

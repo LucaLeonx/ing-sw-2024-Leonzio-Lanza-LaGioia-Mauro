@@ -26,21 +26,14 @@ public class Register extends TUIScreen {
             while (true) {
                 System.out.println("1. Chose another nickname");
                 System.out.println("2. Go back");
-                int choice = 0;
-                try {
-                    choice = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    scanner.nextLine(); // Consume newline
-                    transitionState(new Register(tui, scanner, controller));
-                }
+                String choice;
+                choice = scanner.nextLine().trim();
 
                 switch (choice) {
-                    case 1:
+                    case "1":
                         transitionState(new Register(tui, scanner, controller));
                         break;
-                    case 2:
+                    case "2":
                         transitionState(new LoginOrRegister(tui, scanner, controller));
                         break;
                     default:
