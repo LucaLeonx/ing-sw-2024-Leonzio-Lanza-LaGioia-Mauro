@@ -50,6 +50,14 @@ public class Login extends TUIScreen implements ClientNotificationSubscription {
     }
 
     public synchronized void onStartedGameAvailable(GamePhase phase){
-        transitionState(new SetUpGame(tui, scanner, controller));
+        if(phase == GamePhase.SETUP_PHASE) {
+            transitionState(new SetUpGame(tui, scanner, controller));
+        }
+        else if(phase == GamePhase.PLAY_PHASE) {
+            transitionState(new PlayingGameState(tui, scanner, controller));
+        }
+        else if(phase == GamePhase.END_PHASE) {
+            transitionState(new EndGameState(tui, scanner, controller));
+        }
     }
 }

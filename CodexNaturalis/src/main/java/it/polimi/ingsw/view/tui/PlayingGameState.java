@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class PlayingGameState extends TUIScreen implements ClientNotificationSubscription {
+    boolean isGameEnded=false;
     public PlayingGameState(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
     }
@@ -20,26 +21,14 @@ public class PlayingGameState extends TUIScreen implements ClientNotificationSub
     @Override
     public void display() {
         System.out.println("Setup finished, now to the actual game!");
-        while(true){
-            try {
-                if (!controller.hasGameEnded()) break;
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
+        while(!isGameEnded){
             try {
                 this.wait();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
-        try {
-            InitialScreen.printStylishMessage("Congratulation player " + controller.getWinner() + " has won", "\u001B[31m", "\u001B[33m");
-            for(ControlledPlayerInfo p: controller.getLeaderboard()){
-                System.out.println(p.nickname() + " had " +  p.score() + " points");
-            }
-        } catch (RemoteException e) {
-            System.out.println(e.getMessage());
-        }
+        transitionState(new EndGameState(tui, scanner, controller));
     }
 
     public synchronized void onCurrentPlayerChange(String newPlayer) {
@@ -171,6 +160,7 @@ public class PlayingGameState extends TUIScreen implements ClientNotificationSub
     @Override
     public synchronized void onGameEnded() {
         this.notifyAll();
+        isGameEnded=true;
     }
 
 }
