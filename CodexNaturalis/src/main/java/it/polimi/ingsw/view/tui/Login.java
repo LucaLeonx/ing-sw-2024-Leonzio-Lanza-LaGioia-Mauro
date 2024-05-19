@@ -1,11 +1,12 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.controller.clientcontroller.ClientNotificationSubscription;
+import it.polimi.ingsw.controller.servercontroller.GamePhase;
 
-import java.rmi.RemoteException;
 import java.util.Scanner;
 
-public class Login extends TUIScreen {
+public class Login extends TUIScreen implements ClientNotificationSubscription {
     public Login(TUI tui, Scanner scanner, ClientController controller){
         super(tui, scanner, controller);
     }
@@ -46,5 +47,9 @@ public class Login extends TUIScreen {
         }
         System.out.println("Hello "+username +"\n\n");
         transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
+    }
+
+    public synchronized void onStartedGameAvailable(GamePhase phase){
+        transitionState(new SetUpGame(tui, scanner, controller));
     }
 }

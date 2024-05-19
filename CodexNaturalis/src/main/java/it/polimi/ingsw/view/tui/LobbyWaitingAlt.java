@@ -6,7 +6,6 @@ import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhas
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.Scanner;
 
 class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
@@ -46,7 +45,7 @@ class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
     @Override
     public synchronized void onGameStarted() {
         System.out.println("Number of players reached - Game starting...");
-        transitionState(new GameScreen(tui, scanner, controller));
+        transitionState(new SetUpGame(tui, scanner, controller));
     }
 
 }
