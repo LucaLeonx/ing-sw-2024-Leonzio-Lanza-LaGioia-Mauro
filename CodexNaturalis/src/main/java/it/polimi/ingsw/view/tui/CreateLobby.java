@@ -39,7 +39,7 @@ public class CreateLobby extends TUIScreen {
             transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
         }
         // if I was able to come here the command create lobby was successful.
-        transitionState(new LobbyWaiting(tui, scanner, controller));
+     //   transitionState(new LobbyWaiting(tui, scanner, controller));
 
     }
 

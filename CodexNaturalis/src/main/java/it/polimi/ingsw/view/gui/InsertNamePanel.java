@@ -4,10 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class InsertNamePanel extends StandardPanel {
     private JTextField registerName;
-    private String generatedPassword= "**password**";
+    private int generatedPassword= 0;
 
     public InsertNamePanel(){
         buildPanel();
@@ -38,11 +39,19 @@ public class InsertNamePanel extends StandardPanel {
                 registerName.setEditable(false);
                 registerButton.setVisible(false);
                 password.setText("Password given: ");
-                passwordValue.setText(generatedPassword);
-                passwordValue.setVisible(true);
+
                 password.setVisible(true);
                 warningMessage.setVisible(true);
                 readyButton.setVisible(true);
+
+           /*     try {
+                    generatedPassword=MainWindow.getClientController().register(registerName.getName());
+                } catch (RemoteException ex) {
+                    System.out.println("Nome già in uso");
+                } */
+
+                passwordValue.setText(String.valueOf(generatedPassword));
+                passwordValue.setVisible(true);
             }
         });
 
