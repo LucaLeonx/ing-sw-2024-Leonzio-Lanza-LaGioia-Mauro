@@ -1,19 +1,23 @@
 package it.polimi.ingsw.test.server.rmi;
 
+import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.servercontroller.*;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.*;
-import it.polimi.ingsw.dataobject.LobbyInfo;
-import it.polimi.ingsw.dataobject.PlayerSetupInfo;
+import it.polimi.ingsw.dataobject.*;
+import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
+import it.polimi.ingsw.model.map.Point;
+import it.polimi.ingsw.view.tui.TUIMethods;
 import junit.framework.TestCase;
 
-import java.lang.invoke.WrongMethodTypeException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import static it.polimi.ingsw.model.card.CardOrientation.BACK;
+import static it.polimi.ingsw.model.card.CardOrientation.FRONT;
 import static java.util.Map.entry;
 import static org.junit.Assert.assertThrows;
 
@@ -301,12 +305,13 @@ public class TestCoreServer extends TestCase {
             }
 
             while(registrar.getNotificationsCount().get("GameStarted") == 0){
+                System.out.println("Player 1 - Waiting for game to start");
                 registrar.waitForUpdate();
             }
 
             try {
                 PlayerSetupInfo setup = controller.getPlayerSetup();
-                controller.registerPlayerSetupChoice(setup.objective1().id(), CardOrientation.FRONT);
+                controller.registerPlayerSetupChoice(setup.objective1().id(), FRONT);
             } catch (RemoteException e) {
                 fail(e.getMessage());
             }
@@ -336,12 +341,13 @@ public class TestCoreServer extends TestCase {
             }
 
             while(registrar.getNotificationsCount().get("GameStarted") == 0){
+                System.out.println("Player 1 - Waiting for game to start");
                 registrar.waitForUpdate();
             }
 
             try {
                 PlayerSetupInfo setup = controller.getPlayerSetup();
-                controller.registerPlayerSetupChoice(setup.objective1().id(), CardOrientation.BACK);
+                controller.registerPlayerSetupChoice(setup.objective1().id(), BACK);
             } catch (RemoteException e) {
                 fail(e.getMessage());
             }
@@ -376,7 +382,7 @@ public class TestCoreServer extends TestCase {
 
             try {
                 PlayerSetupInfo setup = controller.getPlayerSetup();
-                controller.registerPlayerSetupChoice(setup.objective2().id(), CardOrientation.FRONT);
+                controller.registerPlayerSetupChoice(setup.objective2().id(), FRONT);
             } catch (RemoteException e) {
                 fail(e.getMessage());
             }
@@ -388,6 +394,7 @@ public class TestCoreServer extends TestCase {
             Map<String, Integer> notificationCount = registrar.getNotificationsCount();
 
             assertEquals(Integer.valueOf(1), notificationCount.get("SetupFinished"));
+            System.out.println("Player3 finished");
         });
 
         player1.start();
@@ -404,6 +411,64 @@ public class TestCoreServer extends TestCase {
 
     }
 
+    public void test_fullGame(){
+        Thread player1 = createPlayingThread("Player 1", true, 3, 1);
+        Thread player2 = createPlayingThread("Player 2", false, 3, 1);
+        Thread player3 = createPlayingThread("Player 3", false, 3, 1);
+
+        player1.start();
+        player2.start();
+        player3.start();
+
+        try{
+            player1.join(60000);
+            player2.join(60000);
+            player3.join(60000);
+            server.getLeaderboard(userList.getUserByUsername("Player 1")).forEach((player) -> System.out.println(player.nickname() + ": " + player.score()));
+        } catch (InterruptedException e){
+            fail(e.getMessage());
+        }
+    }
+
+    private Thread createPlayingThread(String username, boolean isCreator, int requiredPlayersNum, int lobbyId){
+        return new Thread(() -> {
+
+            NotificationRegistrator registrar = new NotificationRegistrator();
+            ServerController controller = registerAndLogin(username, registrar);
+
+            if(isCreator){
+                createLobby(controller, "Lobby", requiredPlayersNum);
+            } else {
+                joinLobbyWhenAvailable(controller, registrar, lobbyId);
+            }
+            registrar.waitForMinimumNotificationNumber("GameStarted", 1);
+
+            Random rand = new Random();
+            int objectiveNum = rand.nextInt(1) + 1;
+            CardOrientation initialCardOrientation = (rand.nextInt() == 0) ? FRONT : BACK;
+
+            chooseSetup(controller, objectiveNum, initialCardOrientation);
+            registrar.waitForMinimumNotificationNumber("SetupFinished", 1);
+
+            while(true){
+                try{
+                    if(controller.hasGameEnded()){
+                        System.out.println(username + " finished");
+                        break;
+                    } else if(controller.getCurrentPlayer().equals(username)){
+                        playRandomCard(controller);
+                        System.out.println("LastTurn: " + controller.isLastTurn());
+                        System.out.println("GameEnded: " + controller.hasGameEnded());
+                    } else {
+                        registrar.waitForUpdate();
+                    }
+                } catch (RemoteException e){
+                    fail(e.getMessage());
+                }
+            }
+        }, username);
+    }
+
     private ServerController registerAndLogin(String username, NotificationSubscriber subscriber){
         try {
             int tempCode = server.register(username);
@@ -414,6 +479,104 @@ public class TestCoreServer extends TestCase {
 
         return null;
     }
+
+    private int createLobby(ServerController controller, String lobbyName, int requiredPlayersNum){
+
+        try {
+            controller.addLobby(lobbyName, requiredPlayersNum);
+        } catch (RemoteException e) {
+            fail(e.getMessage());
+        }
+
+        try {
+            return controller.getJoinedLobbyInfo().id();
+        } catch (RemoteException e) {
+            fail(e.getMessage());
+        }
+
+        return 0;
+    }
+
+    private void joinLobbyWhenAvailable(ServerController controller, NotificationRegistrator registrar, int lobbyId){
+
+        List<LobbyInfo> lobbies = null;
+
+        while(true){
+            try {
+                lobbies = controller.getLobbies();
+            } catch (InvalidOperationException | RemoteException e){
+                fail(e.getMessage());
+            }
+
+            if(lobbies.stream().anyMatch((lobby) -> lobby.id() == lobbyId)) {
+                try {
+                    controller.joinLobby(1);
+                    break;
+                } catch (ElementNotFoundException ignored) {
+                } catch (RemoteException ex) {
+                    fail(ex.getMessage());
+                }
+            } else {
+                registrar.waitForUpdate();
+            }
+        }
+    }
+
+    private void chooseSetup(ServerController controller, int objectiveNumber, CardOrientation initialCardSide){
+        try {
+            PlayerSetupInfo setup = controller.getPlayerSetup();
+            ObjectiveInfo chosenObjective = (objectiveNumber == 1) ? setup.objective1() : setup.objective2();
+            controller.registerPlayerSetupChoice(chosenObjective.id(), initialCardSide);
+        } catch (RemoteException e) {
+            fail(e.getMessage());
+        }
+    }
+
+    private void playRandomCard(ServerController controller){
+
+        Random rand = new Random();
+        ControlledPlayerInfo playerInfo = null;
+        DrawableCardsInfo drawableCards = null;
+
+        try {
+            playerInfo = controller.getControlledPlayerInfo();
+            drawableCards = controller.getDrawableCardsInfo();
+        } catch (RemoteException e){
+            fail(e.getMessage());
+        }
+        CardInfo cardToPlay = playerInfo.cardsInHand().get(rand.nextInt(playerInfo.cardsInHand().size()));
+
+        CardOrientation orientation = BACK;
+
+        // An higher probability of playing cards on the front
+        // Increases the odds of gaining points when making a move and ending
+        // a game faster
+        if(rand.nextFloat() < 0.8 && cardToPlay.getSide(FRONT).isPlayable()) {
+            orientation = FRONT;
+        }
+
+        GameFieldInfo field = playerInfo.field();
+        Point positionToPlay = field.availablePositions().get(rand.nextInt(field.availablePositions().size()));
+        DrawChoice drawChoice = drawableCards.drawableCards().keySet().stream().findAny().orElse(DrawChoice.RESOURCE_CARD_1);
+        // System.out.println(drawChoice);
+        // drawableCards.drawableCards().forEach((key, value) -> System.out.println(key + " " + value));
+        try {
+
+            controller.registerPlayerMove(cardToPlay.id(), positionToPlay, orientation, drawChoice);
+            playerInfo = controller.getControlledPlayerInfo();
+            List<ObjectiveInfo> commonObjectives = controller.getCommonObjectives();
+
+            System.out.println("Move of " + playerInfo.nickname() + " Score: + " + playerInfo.score() + "\n");
+            TUIMethods.drawMap(playerInfo, playerInfo.field(), true);
+            TUIMethods.showHand(playerInfo);
+            TUIMethods.showCardsOnTable(commonObjectives.getFirst(), commonObjectives.getLast(), drawableCards);
+        } catch (RemoteException e){
+            fail(e.getMessage());
+        }
+
+    }
+
+
 
     private class NotificationRegistrator implements NotificationSubscriber{
 
@@ -503,6 +666,12 @@ public class TestCoreServer extends TestCase {
                 wait(1000); // Should be enough time to get an update
             } catch (InterruptedException e) {
                 return;
+            }
+        }
+
+        public void waitForMinimumNotificationNumber(String notificationType, int minNotificationNum){
+            while(getNotificationsCount().get(notificationType) < minNotificationNum){
+                waitForUpdate();
             }
         }
     }
