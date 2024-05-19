@@ -106,22 +106,13 @@ class ResourceCardAdapter extends TypeAdapter<Card[]>{
         Card[] resourcesCard = new Card[40];
         int i = 0;
         String typeName = null;
-
         reader.beginArray();
 
         while (reader.hasNext()) {
             int id = 0,reward = 0;
             CardColor col = null;
             CardSide front = null;
-            CardSide back = new CardSide(
-                    new HashSet<Symbol>(),
-                    Map.of(AnglePosition.UP_LEFT, Symbol.BLANK,
-                            AnglePosition.UP_RIGHT, Symbol.BLANK,
-                            AnglePosition.DOWN_LEFT, Symbol.BLANK,
-                            AnglePosition.DOWN_RIGHT, Symbol.BLANK),
-                    new Requirement(new HashMap<Symbol,Integer>()),
-                    new Reward(NONE, createPointsRewardFunction(0))
-            );
+            Set<Symbol> backCenterSymbol  = new HashSet<>();
 
             reader.beginObject();
             JsonToken token = reader.peek();
@@ -134,6 +125,12 @@ class ResourceCardAdapter extends TypeAdapter<Card[]>{
             }
             if(typeName.equals("color")){
                 col = CardColor.valueOf(reader.nextString());
+                switch(col){
+                    case CardColor.GREEN -> backCenterSymbol.add(Symbol.PLANT);
+                    case CardColor.RED -> backCenterSymbol.add(Symbol.FUNGI);
+                    case CardColor.SKYBLUE -> backCenterSymbol.add(Symbol.ANIMAL);
+                    case CardColor.PURPLE -> backCenterSymbol.add(Symbol.INSECT);
+                }
                 typeName = reader.nextName();
             }
             if(typeName.equals("front")){
@@ -162,6 +159,16 @@ class ResourceCardAdapter extends TypeAdapter<Card[]>{
                 reader.endObject();
                 //typeName = reader.nextName();
             }
+
+            CardSide back = new CardSide(
+                    backCenterSymbol,
+                    Map.of(AnglePosition.UP_LEFT, Symbol.BLANK,
+                            AnglePosition.UP_RIGHT, Symbol.BLANK,
+                            AnglePosition.DOWN_LEFT, Symbol.BLANK,
+                            AnglePosition.DOWN_RIGHT, Symbol.BLANK),
+                    new Requirement(new HashMap<Symbol,Integer>()),
+                    new Reward(NONE, createPointsRewardFunction(0))
+            );
 
             resourcesCard[i] = new Card(id,col,front,back);
             i++;
@@ -290,15 +297,7 @@ class GoldCardAdapter extends TypeAdapter<Card[]>{
             Map<Symbol,Integer> requiredSymbols = new HashMap<Symbol,Integer>();
             CardColor col = null;
             CardSide front = null;
-            CardSide back = new CardSide(
-                    new HashSet<Symbol>(),
-                    Map.of(AnglePosition.UP_LEFT, Symbol.BLANK,
-                            AnglePosition.UP_RIGHT, Symbol.BLANK,
-                            AnglePosition.DOWN_LEFT, Symbol.BLANK,
-                            AnglePosition.DOWN_RIGHT, Symbol.BLANK),
-                    new Requirement(new HashMap<>()),
-                    new Reward(NONE, createPointsRewardFunction(0))
-            );
+            Set<Symbol> backCenterSymbol = new HashSet<>();
 
             reader.beginObject();
             JsonToken token = reader.peek();
@@ -311,6 +310,12 @@ class GoldCardAdapter extends TypeAdapter<Card[]>{
             }
             if(typeName.equals("color")){
                 col = CardColor.valueOf(reader.nextString());
+                switch(col){
+                    case CardColor.GREEN -> backCenterSymbol.add(Symbol.PLANT);
+                    case CardColor.RED -> backCenterSymbol.add(Symbol.FUNGI);
+                    case CardColor.SKYBLUE -> backCenterSymbol.add(Symbol.ANIMAL);
+                    case CardColor.PURPLE -> backCenterSymbol.add(Symbol.INSECT);
+                }
                 typeName = reader.nextName();
             }
             if(typeName.equals("front")){
@@ -372,6 +377,17 @@ class GoldCardAdapter extends TypeAdapter<Card[]>{
                 reader.endObject();
                 //typeName = reader.nextName();
             }
+
+            CardSide back = new CardSide(
+                    backCenterSymbol,
+                    Map.of(AnglePosition.UP_LEFT, Symbol.BLANK,
+                            AnglePosition.UP_RIGHT, Symbol.BLANK,
+                            AnglePosition.DOWN_LEFT, Symbol.BLANK,
+                            AnglePosition.DOWN_RIGHT, Symbol.BLANK),
+                    new Requirement(new HashMap<>()),
+                    new Reward(NONE, createPointsRewardFunction(0))
+            );
+
             array[i] = new Card(id,col,front,back);
             i++;
             if(token.equals(JsonToken.END_OBJECT)){
