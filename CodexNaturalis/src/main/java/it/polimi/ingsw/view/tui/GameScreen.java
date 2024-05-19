@@ -22,7 +22,6 @@ public class GameScreen extends TUIScreen{
 
     @Override
     public void display() {
-        System.out.println("I am in the starting state, but probably it is broken");
         synchronized (lockHasGameStarted) {
             InitialScreen.printStylishMessage("THE GAME IS STARTING...                                                            ","\u001B[32m", "\u001B[34m");
             printWolf();
@@ -45,6 +44,7 @@ public class GameScreen extends TUIScreen{
                 }
             }
         }
+        // setup part:
         try {
             TUIMethods.showHand(controller.getControlledPlayerInformation());
         }
@@ -60,28 +60,26 @@ public class GameScreen extends TUIScreen{
         }
 
         try {
-            int choiceObjective;
-            int choiceFrontOrBack;
+            String choiceObjective;
+            String choiceFrontOrBack;
             ObjectiveInfo chosenCard=controller.getPlayerSetup().objective1(); // initialization to a random one because if not compiler complains.
             CardOrientation chosenOrientation=CardOrientation.FRONT;
 
             while(true) {
                 System.out.println("Chose your secret objective card: ");
                 TUIMethods.show2Objectives(controller.getPlayerSetup().objective1(), controller.getPlayerSetup().objective2());
-                System.out.println("press 1 or 2: ");
+                System.out.print("select 1st or 2nd objective: ");
                 try {
-                    choiceObjective = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
-                    if(choiceObjective==1) {
+                    choiceObjective=scanner.nextLine().trim();
+                    if(choiceObjective.equals("1")) {
                         chosenCard=controller.getPlayerSetup().objective1();
                         break;
                     }
-                    else if(choiceObjective==2){
+                    else if(choiceObjective.equals("2")){
                         chosenCard=controller.getPlayerSetup().objective2();
                         break;
                     }
                 } catch (Exception e) {
-                    scanner.nextLine(); // Consume newline
                     System.out.println(e.getMessage());
                 }
             }
@@ -89,15 +87,14 @@ public class GameScreen extends TUIScreen{
             while(true) {
                 System.out.println("Chose the orientation of your initial card:  ");
                 TUIMethods.showInitialCard(controller.getPlayerSetup().initialCard());
-                System.out.println("press 1 for Front 2 for Back: ");
+                System.out.print("select 1 for Front 2 for Back: ");
                 try {
-                    choiceFrontOrBack = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
-                    if(choiceFrontOrBack==1) {
+                    choiceFrontOrBack = scanner.nextLine().trim();
+                    if(choiceFrontOrBack.equals("1")) {
                         chosenOrientation=CardOrientation.FRONT;
                         break;
                     }
-                    else if(choiceFrontOrBack==2){
+                    else if(choiceFrontOrBack.equals("2")){
                         chosenOrientation=CardOrientation.BACK;
                         break;
                     }
@@ -153,95 +150,83 @@ public class GameScreen extends TUIScreen{
     }
 
     @Override
-    public void onGameStarted() {
-        synchronized (lockHasGameStarted){
+    public synchronized void onGameStarted() {
             hasGameStarted=true;
             lockHasGameStarted.notifyAll();
-        }
     }
 
     @Override
-    public void onSetupPhaseFinished() {
-
+    public synchronized void onSetupPhaseFinished() {
+        hasGameStarted=true;
+        lockIsSetUpFinished.notifyAll();
     }
 
     @Override
     public void onCurrentPlayerChange(String newPlayer) {
         try {
-            TUIMethods.showCardsOnTable(controller.getCommonObjectives().get(0),controller.getCommonObjectives().get(1), controller.getDrawableCards());
-            if(controller.isLastTurn()){
+            TUIMethods.showCardsOnTable(controller.getCommonObjectives().get(0), controller.getCommonObjectives().get(1), controller.getDrawableCards());
+            if (controller.isLastTurn()) {
                 System.out.println("ATTENTION: this is going to be the last turn");
             }
-            if(newPlayer==controller.getControlledPlayerInformation().nickname()){
+            if (newPlayer == controller.getControlledPlayerInformation().nickname()) {
                 //It is the turn of me so I would need to make the choice
                 int cardChoice = -1;
-                int cardOrientation = 0;
-                int chosenPoint=-1;
+                String stringCardChoice;
+                int chosenPoint = -1;
+                String stringChosenPoint;
+                String cardOrientation;
                 String stringDrawChoice = "";
                 List<String> options = Arrays.asList("rd", "gd", "rc1", "rc2", "gc1", "gc2");
-                DrawChoice drawChoice=DrawChoice.DECK_GOLD;
-                CardOrientation orientationChosen=CardOrientation.FRONT;
+                DrawChoice drawChoice = DrawChoice.DECK_GOLD;
+                CardOrientation orientationChosen = CardOrientation.FRONT;
 
                 TUIMethods.drawMap(controller.getControlledPlayerInformation(), controller.getControlledPlayerInformation().field(), true);
                 TUIMethods.showHand(controller.getControlledPlayerInformation());
                 do {
                     System.out.println("Select the card you want to play (1 for first card etc...), 0 to exit game: ");
                     try {
-                        cardChoice = scanner.nextInt();
-                        scanner.nextLine(); // Consume newline
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        scanner.nextLine();
+                        stringCardChoice = scanner.nextLine().trim();
+                        cardChoice = Integer.parseInt(stringCardChoice);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number");
                     }
-                    if(controller.getControlledPlayerInformation().cardsInHand().get(cardChoice-1)!=null){
+                    if (controller.getControlledPlayerInformation().cardsInHand().get(cardChoice - 1) != null) {
                         break;
-                    }
-                    else if(cardChoice==0) {
+                    } else if (cardChoice == 0) {
                         controller.exitGame();
-                    }
-                    else{
+                    } else {
                         System.out.println("Invalid choice. Please try again.");
                     }
-                }while(true);
+                } while (true);
 
                 do {
-                    System.out.println("Select the orientation of the card to play (1 for front, 2 for back): ");
-                    try {
-                        cardOrientation = scanner.nextInt();
-                        scanner.nextLine(); // Consume newline
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        scanner.nextLine();
-                    }
-                    if(cardOrientation==1){
-                        orientationChosen=CardOrientation.FRONT;
+                    System.out.println("Select the orientation of the card to play (f for front, b for back): ");
+                    cardOrientation = scanner.nextLine().toLowerCase().trim();
+                    if (cardOrientation.equals("f")) {
+                        orientationChosen = CardOrientation.FRONT;
                         break;
-                    }
-                    else if(cardOrientation==2){
-                        orientationChosen=CardOrientation.BACK;
+                    } else if (cardOrientation.equals("b")) {
+                        orientationChosen = CardOrientation.BACK;
                         break;
-                    }
-                    else{
+                    } else {
                         System.out.println("Invalid choice. Please try again.");
                     }
-                }while(true);
+                } while (true);
 
                 do {
                     System.out.println("Select the position in the map where you want to place your card: ");
                     try {
-                        chosenPoint = scanner.nextInt();
-                        scanner.nextLine(); // Consume newline
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        scanner.nextLine();
+                        stringChosenPoint = scanner.nextLine().trim();
+                        chosenPoint = Integer.parseInt(stringChosenPoint);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number");
                     }
-                    if(controller.getControlledPlayerInformation().field().availablePositions().get(chosenPoint)!=null){
+                    if (controller.getControlledPlayerInformation().field().availablePositions().get(chosenPoint) != null) {
                         break;
-                    }
-                    else{
+                    } else {
                         System.out.println("Invalid choice. Please try again.");
                     }
-                }while(true);
+                } while (true);
 
 
                 do {
@@ -261,38 +246,38 @@ public class GameScreen extends TUIScreen{
                     } else {
                         System.out.println("Invalid choice. Please try again.");
                     }
-                }while(true);
-                switch(stringDrawChoice){
+                } while (true);
+                switch (stringDrawChoice) {
                     case "rd":
-                        drawChoice=DrawChoice.DECK_RESOURCE;
+                        drawChoice = DrawChoice.DECK_RESOURCE;
                         break;
                     case "gd":
-                        drawChoice=DrawChoice.DECK_GOLD;
+                        drawChoice = DrawChoice.DECK_GOLD;
                         break;
                     case "rc1":
-                        drawChoice=DrawChoice.RESOURCE_CARD_1;
+                        drawChoice = DrawChoice.RESOURCE_CARD_1;
                         break;
                     case "rc2":
-                        drawChoice=DrawChoice.RESOURCE_CARD_2;
+                        drawChoice = DrawChoice.RESOURCE_CARD_2;
                         break;
                     case "gc1":
-                        drawChoice=DrawChoice.GOLD_CARD_1;
+                        drawChoice = DrawChoice.GOLD_CARD_1;
                         break;
                     case "gc2":
-                        drawChoice=DrawChoice.GOLD_CARD_2;
+                        drawChoice = DrawChoice.GOLD_CARD_2;
                         break;
-
                 }
 
-                controller.makeMove(controller.getControlledPlayerInformation().cardsInHand().get(cardChoice-1), controller.getControlledPlayerInformation().field().availablePositions().get(chosenPoint) ,orientationChosen, drawChoice);
+                controller.makeMove(controller.getControlledPlayerInformation().cardsInHand().get(cardChoice - 1), controller.getControlledPlayerInformation().field().availablePositions().get(chosenPoint), orientationChosen, drawChoice);
             }
-            else{
+            else {
                 // when it is not my turn I still want to watch my map but without next position hint in order to (maybe) see it in a more clear way.
                 TUIMethods.drawMap(controller.getControlledPlayerInformation(), controller.getControlledPlayerInformation().field(), false);
                 TUIMethods.showHand(controller.getControlledPlayerInformation());
             }
-        } catch (RemoteException e) {
-            System.out.println(e.getMessage());
+        }
+        catch(RemoteException RE1){
+            System.out.println(RE1.getMessage());
         }
     }
 

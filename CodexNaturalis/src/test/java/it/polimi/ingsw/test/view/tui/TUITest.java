@@ -97,7 +97,7 @@ public class TUITest extends TestCase {
         T.getField().placeCard(resourceCards.get(1), CardOrientation.BACK, new Point(0, 8));
         T.getField().placeCard(goldenCards.get(1), CardOrientation.FRONT, new Point(-4, 4));
         T.getField().placeCard(goldenCards.get(27), CardOrientation.BACK, new Point(-2, 6));
-        //T.getField().placeCard(goldenCards.get(18), CardOrientation.FRONT, new Point(4, 0));
+        T.getField().placeCard(goldenCards.get(18), CardOrientation.FRONT, new Point(4, 0));
 
 
     }
@@ -125,7 +125,6 @@ public class TUITest extends TestCase {
         new GameFieldTest().checkInvariants(T.getField());
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()), true);
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()), false);
-        System.out.println(resourceCards.get(10).getSide(CardOrientation.BACK).getCenterSymbols());
 
     }
 

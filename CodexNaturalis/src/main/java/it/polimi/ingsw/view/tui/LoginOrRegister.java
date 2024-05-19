@@ -15,24 +15,19 @@ public class LoginOrRegister extends TUIScreen {
         System.out.println("2. Register");
         System.out.println("3. Go back");
         System.out.print("Please choose an option: ");
-        int choice = 0;
-        try {
-            choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            scanner.nextLine();
-            transitionState(new LoginOrRegister(tui, scanner, controller));
-        }
+        String choice;
+
+        choice = scanner.nextLine().trim();
+        scanner.nextLine(); // Consume newline
 
         switch(choice) {
-            case 1:
+            case "1":
                 transitionState(new Login(tui, scanner, controller));
                 break;
-            case 2:
+            case "2":
                 transitionState(new Register(tui, scanner, controller));
                 break;
-            case 3:
+            case "3":
                 transitionState(new InitialScreen(tui, scanner, null));
             default:
                 System.out.println("Invalid choice. Please try again.");

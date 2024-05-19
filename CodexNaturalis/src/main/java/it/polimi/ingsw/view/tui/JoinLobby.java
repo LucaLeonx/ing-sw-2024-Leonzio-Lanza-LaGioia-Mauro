@@ -12,20 +12,23 @@ public class JoinLobby extends TUIScreen {
 
     @Override
     public synchronized void display() {
+        int choice = 0;
+        String stringChoice;
         try {
             if (controller.getLobbyList().size() > 0) {
                 for (int i = 0; i < controller.getLobbyList().size(); i++) {
                     System.out.println(i + 1 + ". " + controller.getLobbyList().get(i));
                 }
-                System.out.println("Select the lobby you want to join or 0 to go back");
-                int choice = 0;
-                try {
-                    choice = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    scanner.nextLine(); // Consume newline
-                    transitionState(new JoinLobby(tui, scanner, controller));
+                while(true) {
+                    System.out.print("Select the lobby you want to join or 0 to go back: ");
+                    stringChoice = scanner.nextLine().trim();
+                    try{
+                        choice=Integer.parseInt(stringChoice);
+                        break;
+                    }
+                    catch(NumberFormatException e){
+                        System.out.println("please enter a number\n");
+                    }
                 }
                 if (choice == 0) {
                     transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
@@ -37,7 +40,7 @@ public class JoinLobby extends TUIScreen {
                     transitionState(new JoinLobby(tui, scanner, controller));
                 }
             } else {
-                System.out.println("No lobby present right now we are sorry, try creating one by yourself");
+                System.out.println("\n No lobby present right now we are sorry, try creating one by yourself");
                 transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
             }
         }

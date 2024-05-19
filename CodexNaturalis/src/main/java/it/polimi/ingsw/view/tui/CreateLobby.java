@@ -11,30 +11,32 @@ public class CreateLobby extends TUIScreen {
 
     @Override
     public void display() {
-        int numberOfPartecipants = 0;
+        int numberOfPartecipants;
         System.out.print("Choose name of the new lobby: ");
         String lobbyName = scanner.nextLine();
+        String stringNumberOfPartecipants;
         do {
-            System.out.print("Choose number of the participants (between 2 and 4): ");{
-            try {
-                numberOfPartecipants = scanner.nextInt();
-                scanner.nextLine(); // Consume newline
-            }
-            catch(Exception e) {
-                System.out.println(e.getMessage());
-                transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
-            }
-
+            while(true)
+            {
+                System.out.print("Choose number of the participants (between 2 and 4): ");
+                stringNumberOfPartecipants = scanner.nextLine().trim();
+                try {
+                    numberOfPartecipants = Integer.parseInt(stringNumberOfPartecipants);
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("please enter a number");
+                }
             }
             if(numberOfPartecipants < 2 || numberOfPartecipants > 4){
                 System.out.println("Please, select a number of participants between 2 and 4");
             }
         } while (numberOfPartecipants < 2 || numberOfPartecipants > 4);
+
         try {
             controller.createLobby(lobbyName, numberOfPartecipants);
         }
          catch (Exception e) {
-            System.out.println("The name you entered is already in use");
+            System.out.println("The name you entered is already in use, please select another one");
             System.out.println(e.getMessage());
             transitionState(new CreateNewLobbyOrJoinLobby(tui, scanner, controller));
         }
