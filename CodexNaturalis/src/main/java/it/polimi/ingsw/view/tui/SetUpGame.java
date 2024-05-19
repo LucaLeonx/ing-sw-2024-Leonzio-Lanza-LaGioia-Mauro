@@ -13,9 +13,7 @@ import java.util.Scanner;
 
 public class SetUpGame extends TUIScreen implements ClientNotificationSubscription {
 
-    Object lockHasGameStarted;
     Object lockIsSetUpFinished;
-    boolean hasGameStarted;
     boolean isSetUpFinished;
     public SetUpGame(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
@@ -30,19 +28,6 @@ public class SetUpGame extends TUIScreen implements ClientNotificationSubscripti
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        /*while(!hasGameStarted) {
-            try {
-                lockHasGameStarted.wait();
-            } catch (InterruptedException IE) {
-                try{
-                    controller.exitGame();
-                    System.out.println("You exited from the game ");
-                }
-                catch(Exception e){
-                    System.out.println(IE.getMessage());
-                }
-            }
-        }*/
         // setup part:
         try {
             TUIMethods.showHand(controller.getControlledPlayerInformation());
@@ -79,6 +64,7 @@ public class SetUpGame extends TUIScreen implements ClientNotificationSubscripti
                         break;
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     System.out.println(e.getMessage() + " the game ended"); // si blocca qui
                 }
             }
@@ -98,6 +84,7 @@ public class SetUpGame extends TUIScreen implements ClientNotificationSubscripti
                         break;
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     scanner.nextLine(); // Consume newline
                     System.out.println(e.getMessage());
                 }
@@ -149,14 +136,8 @@ public class SetUpGame extends TUIScreen implements ClientNotificationSubscripti
     }
 
     @Override
-    public synchronized void onGameStarted() {
-            hasGameStarted=true;
-            lockHasGameStarted.notifyAll();
-    }
-
-    @Override
     public synchronized void onSetupPhaseFinished() {
-        hasGameStarted=true;
+        isSetUpFinished=true;
         lockIsSetUpFinished.notifyAll();
     }
 
