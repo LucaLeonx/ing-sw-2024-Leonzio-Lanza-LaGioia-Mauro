@@ -9,18 +9,18 @@ import java.rmi.RemoteException;
 import java.util.Scanner;
 
 class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
-
+    boolean isGameStarted =false;
     public LobbyWaiting(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
     }
 
     @Override
     public void display() {
-        System.out.println("Waiting for players to join... Press 'q' to quit and go back to the menu");
 
+        System.out.println("Waiting for players to join...");
         // Asking for input from scanner is already a blocking call
         // No need to create an additional thread
-
+        // System.out.println("Waiting for players to join... Press 'q' to quit and go back to the menu");
         /*while(! controller.isGameStarted()) {
             String input = scanner.nextLine().trim();
             if (input.equals("q")) {
@@ -37,7 +37,7 @@ class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
                 transitionState(this);
             }
         }*/
-        try {
+        /*try {
             while (!controller.isGameStarted()) {
                 try {
                     wait(1000);
@@ -49,19 +49,40 @@ class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
         catch(Exception e){
             e.printStackTrace();
         }
-        transitionState(new SetUpGame(tui,scanner,controller));
+        transitionState(new SetUpGame(tui,scanner,controller));*/
+        /*try {
+            while (!controller.isGameStarted()) {
+                try {
+                    wait(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }*/
+
+        while(!isGameStarted){
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
-    /*@Override
+    @Override
     public synchronized void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
         System.out.println(joinedLobby);
-    }*/
+    }
 
-    /*@Override
+    @Override
     public synchronized void onGameStarted() {
         System.out.println("Number of players reached - Game starting...");
         transitionState(new SetUpGame(tui, scanner, controller));
+        isGameStarted=true;
         this.notifyAll();
-    }*/
+    }
 
 }
