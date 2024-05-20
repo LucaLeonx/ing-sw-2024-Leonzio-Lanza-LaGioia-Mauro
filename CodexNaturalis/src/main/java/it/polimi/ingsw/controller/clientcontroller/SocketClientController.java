@@ -86,6 +86,11 @@ public class SocketClientController implements ClientController {
 
     }
 
+    @Override
+    public boolean isGameStarted() throws RemoteException {
+        return false;
+    }
+
 
     @Override
     public String getCurrentPlayerName() throws RemoteException {

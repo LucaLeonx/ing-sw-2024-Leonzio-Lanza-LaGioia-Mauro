@@ -53,8 +53,10 @@ public interface ClientController {
      * @throws RemoteException If the user is not in a lobby
      */
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException;
+
     public void exitFromLobby() throws RemoteException;
     public void subscribeToNotifications(ClientNotificationSubscription observer);
+    public boolean isGameStarted() throws RemoteException;
     public String getCurrentPlayerName() throws RemoteException;
     public List<String> getPlayerNames() throws RemoteException;
     public PlayerSetupInfo getPlayerSetup() throws RemoteException;

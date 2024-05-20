@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.rmi.RemoteException;
 import java.util.Scanner;
@@ -51,5 +52,13 @@ public class JoinLobby extends TUIScreen {
             transitionState(new InitialScreen(tui, scanner, controller));
         }
 
+    }
+
+    public synchronized void onGameStarted(){
+        transitionState(new SetUpGame(tui, scanner, controller));
+    }
+
+    public synchronized void onJoinedLobbyUpdate(LobbyInfo joinedLobby){
+        transitionState(new LobbyWaiting(tui, scanner, controller));
     }
 }
