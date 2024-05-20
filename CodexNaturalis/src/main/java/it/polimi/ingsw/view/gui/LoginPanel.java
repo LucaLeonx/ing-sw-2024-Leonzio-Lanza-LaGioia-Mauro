@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class LoginPanel extends StandardPanel {
     private JTextField user;
@@ -24,7 +25,18 @@ public class LoginPanel extends StandardPanel {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int tempcode= Integer.parseInt(String.valueOf(password.getPassword()));
+                String name= user.getText();
+
+                try {
+                    MainWindow.getClientController().login(name, tempcode);
+                } catch (RemoteException ex) {
+                    System.out.println(ex.getMessage());
+                    return;
+                }
+
                 MainWindow.goToWindow("gameFieldPanel");
+
             }
         });
 
