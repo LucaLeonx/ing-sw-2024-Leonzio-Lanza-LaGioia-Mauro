@@ -210,7 +210,6 @@ public class TUITest extends TestCase {
     }
 
     public void testInitialCard(){
-        System.out.println(InfoTranslator.convertToCardInfo(initialCards.get(1), T.getField()));
         TUIMethods.showInitialCard( InfoTranslator.convertToCardInfo(initialCards.get(1), T.getField()));
     }
 

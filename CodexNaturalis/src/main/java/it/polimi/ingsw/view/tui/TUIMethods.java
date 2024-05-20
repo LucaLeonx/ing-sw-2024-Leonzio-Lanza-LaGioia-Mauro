@@ -428,7 +428,7 @@ public class TUIMethods {
         System.out.println("Front of the objective card: ");
         for (int k = 0; k < 3; k++) {
             for (int j = 0; j < 5; j++) {
-                System.out.print(Front[i][j]);
+                System.out.print(Front[k][j]);
             }
             System.out.println();
         }
@@ -438,7 +438,7 @@ public class TUIMethods {
         System.out.println("Back of the objective card: ");
         for (int k = 0; k < 3; k++) {
             for (int j = 0; j < 5; j++) {
-                System.out.print(Back[i][j]);
+                System.out.print(Back[k][j]);
             }
             System.out.println();
         }
