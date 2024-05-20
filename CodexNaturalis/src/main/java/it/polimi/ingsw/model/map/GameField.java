@@ -171,6 +171,15 @@ public class GameField{
 
         availableCells.remove(cardPosition);
 
+        for(AnglePosition angle : AnglePosition.values()){
+            Point updatedAnglePosition = cardPosition.sum(angle.getRelativePosition());
+            AngleCell updatedAngle = getAngleCells().get(updatedAnglePosition);
+
+            if(updatedAngle != null && updatedAngle.topSymbol() == Symbol.HIDDEN){
+                availableCells.remove(updatedAnglePosition.sum(angle.getRelativePosition()));
+            }
+        }
+
         for(Point adjacentCardPosition : Point.getAdjacentPositions(cardPosition, 2)){
             if(isPlaceable(adjacentCardPosition)) {
                 availableCells.add(adjacentCardPosition);

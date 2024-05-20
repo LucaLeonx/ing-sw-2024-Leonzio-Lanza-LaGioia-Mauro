@@ -309,7 +309,9 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
 
         if(joinedGame.canPlayerPlay(user.getUsername())){
             joinedGame.makePlayerPlaceCard(user.getUsername(), placedCardId, placementPoint, chosenSide);
-            joinedGame.makePlayerDraw(user.getUsername(), drawChoice);
+            if(!joinedGame.getVisibleCards().isEmpty()) {
+                joinedGame.makePlayerDraw(user.getUsername(), drawChoice);
+            }
             joinedGame.changeCurrentPlayer();
 
             if(joinedGame.isEnded()){

@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public interface NotificationSubscriber extends Remote {
-    public void onStartedGameAvailable(GamePhase phase);
+    public void onStartedGameAvailable(GamePhase phase) throws RemoteException;
     public void onLobbyListUpdate() throws RemoteException;
     public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) throws RemoteException;
     public void onSetupPhaseFinished() throws RemoteException;

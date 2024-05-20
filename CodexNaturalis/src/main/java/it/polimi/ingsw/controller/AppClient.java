@@ -19,12 +19,12 @@ import java.util.Scanner;
 
 public class AppClient {
 
-    public static void omain(String[] args){
+    public static void main(String[] args){
         TUI tui = new TUI();
         tui.display();
     }
 
-    public static void main(String[] args) throws NamingException, IOException, NotBoundException {
+    public static void omain(String[] args) throws NamingException, IOException, NotBoundException {
 
         System.out.println("Welcome to Codex Naturalis!!\n");
 

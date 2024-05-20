@@ -109,6 +109,8 @@ public class Symbol_String {
             case Symbol.BLANK:
                 CharSymbol=Symbol_String.WHITE_SQUARE_SYMBOL;
                 break;
+            default:
+                //probably there is a hidden symbol but in this situation I do nothing.
         }
         return CharSymbol;
     }

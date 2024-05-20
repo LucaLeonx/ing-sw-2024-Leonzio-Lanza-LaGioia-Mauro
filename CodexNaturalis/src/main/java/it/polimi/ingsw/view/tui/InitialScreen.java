@@ -27,28 +27,21 @@ public class InitialScreen extends TUIScreen {
             System.out.println("2. RMI");
             System.out.println("3. Exit");
             System.out.print("Please choose an option: ");
-            int choice = 0;
-            try {
-                choice = scanner.nextInt();
-                scanner.nextLine(); // Consume newline
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                scanner.nextLine();
-                transitionState(new InitialScreen(tui, scanner, controller));
-            }
+            String choice;
+            choice = scanner.nextLine().trim();
 
             switch(choice) {
-                case 1:
+                case "1":
                     controller = new SocketClientController();
                     transitionState(new LoginOrRegister(tui, scanner, controller));
                     controller.subscribeToNotifications(tui);
                     break;
-                case 2:
+                case "2":
                     controller = new RMIClientController();
                     controller.subscribeToNotifications(tui);
                     transitionState(new LoginOrRegister(tui, scanner, controller));
                     break;
-                case 3:
+                case "3":
                     System.out.println("Goodbye!");
                     scanner.close();
                     System.exit(0);
