@@ -234,7 +234,6 @@ public class TUIMethods {
 
         String[][] currentCard = new String[3][5];
         if(player.secretObjective() != null) {
-            System.out.println("banana");
             currentCard = UtilityClassCardSketcher.sketchObjectiveCard(player.secretObjective());
         }
         else{

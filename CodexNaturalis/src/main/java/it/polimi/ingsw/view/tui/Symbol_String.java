@@ -110,7 +110,7 @@ public class Symbol_String {
                 CharSymbol=Symbol_String.WHITE_SQUARE_SYMBOL;
                 break;
             default:
-                System.out.println("The program has gone to bananas");
+                //probably there is a hidden symbol but in this situation I do nothing.
         }
         return CharSymbol;
     }
