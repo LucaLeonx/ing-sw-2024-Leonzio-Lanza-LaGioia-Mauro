@@ -109,6 +109,8 @@ public class Symbol_String {
             case Symbol.BLANK:
                 CharSymbol=Symbol_String.WHITE_SQUARE_SYMBOL;
                 break;
+            default:
+                System.out.println("The program has gone to bananas");
         }
         return CharSymbol;
     }

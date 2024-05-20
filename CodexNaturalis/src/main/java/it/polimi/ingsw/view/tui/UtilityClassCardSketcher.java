@@ -52,8 +52,9 @@ public final class UtilityClassCardSketcher {
                 break;
             case CardColor.WHITE:
                 background = Symbol_String.BROWN_SQUARE_SYMBOL;
+                break;
             default:
-                System.out.println("Error");
+                System.out.println("Error on sketch background");
                 break;
         }
         for(int i=0; i<3; i++){
@@ -99,6 +100,7 @@ public final class UtilityClassCardSketcher {
             if(card.angleSymbols().get(angle) != Symbol.HIDDEN) {
                 cardSketched[y][x] = symbol;
             }
+            cardSketched[y][x] = symbol;
         }
         if(card.reward() != null && card.reward() == RewardType.ONE_POINT) {
             cardSketched[0][2]=Symbol_String.ONE_SYMBOL;

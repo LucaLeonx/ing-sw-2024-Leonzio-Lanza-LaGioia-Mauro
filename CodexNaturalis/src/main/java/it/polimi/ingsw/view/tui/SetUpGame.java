@@ -48,7 +48,7 @@ public class SetUpGame extends TUIScreen implements ClientNotificationSubscripti
             String choiceFrontOrBack;
             ObjectiveInfo chosenCard=controller.getPlayerSetup().objective1(); // initialization to a random one because if not compiler complains.
             CardOrientation chosenOrientation=CardOrientation.FRONT;
-
+            choiceObjective=scanner.nextLine().trim();
             while(true) {
                 System.out.println("Chose your secret objective card: ");
                 TUIMethods.show2Objectives(controller.getPlayerSetup().objective1(), controller.getPlayerSetup().objective2());
