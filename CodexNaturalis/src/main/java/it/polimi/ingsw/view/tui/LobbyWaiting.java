@@ -20,7 +20,8 @@ class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
 
         // Asking for input from scanner is already a blocking call
         // No need to create an additional thread
-        //while(controller.) {
+
+        /*while(! controller.isGameStarted()) {
             String input = scanner.nextLine().trim();
             if (input.equals("q")) {
                 try {
@@ -35,7 +36,20 @@ class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
             } else {
                 transitionState(this);
             }
+        }*/
+        try {
+            while (!controller.isGameStarted()) {
+                try {
+                    wait(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        transitionState(new SetUpGame(tui,scanner,controller));
     }
 
     /*@Override

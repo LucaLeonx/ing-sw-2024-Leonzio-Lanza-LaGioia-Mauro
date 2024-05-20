@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class SetUpGame extends TUIScreen implements ClientNotificationSubscription {
+public class SetUpGame extends TUIScreen{
 
     Object lockIsSetUpFinished;
     boolean isSetUpFinished;

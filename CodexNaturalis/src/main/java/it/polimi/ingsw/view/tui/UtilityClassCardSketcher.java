@@ -96,11 +96,11 @@ public final class UtilityClassCardSketcher {
                     break;
             }
             symbol=Symbol_String.FromSymbolToString(card.angleSymbols().get(angle));
+            //System.out.println(FromSy);
             // if it is hidden I don't want to change emoji from the background color.
             if(card.angleSymbols().get(angle) != Symbol.HIDDEN) {
                 cardSketched[y][x] = symbol;
             }
-            cardSketched[y][x] = symbol;
         }
         if(card.reward() != null && card.reward() == RewardType.ONE_POINT) {
             cardSketched[0][2]=Symbol_String.ONE_SYMBOL;

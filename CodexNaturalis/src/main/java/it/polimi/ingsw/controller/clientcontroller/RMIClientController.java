@@ -208,6 +208,17 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
     }
 
     @Override
+    public boolean isGameStarted(){
+        try {
+            session.getCurrentPlayer();
+            return true;
+        } catch (WrongPhaseException | RemoteException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
     public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
         notifyToSubscribers((observer -> observer.onJoinedLobbyUpdate(joinedLobby)));
     }
