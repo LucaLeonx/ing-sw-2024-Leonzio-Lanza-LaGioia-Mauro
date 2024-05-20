@@ -165,4 +165,9 @@ public class SocketClientController implements ClientController {
     public void closeSocket() throws IOException {
         client.closeConnection();
     }
+
+    @Override
+    public boolean isGameStarted() throws RemoteException{
+        return false;
+    }
 }

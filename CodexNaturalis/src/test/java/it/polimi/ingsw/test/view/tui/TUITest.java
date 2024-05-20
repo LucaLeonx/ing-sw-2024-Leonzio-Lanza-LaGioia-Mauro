@@ -128,6 +128,7 @@ public class TUITest extends TestCase {
         new GameFieldTest().checkInvariants(T.getField());
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()), true);
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()), false);
+        System.out.println(initialCards.get(1).getSide(CardOrientation.BACK));
 
     }
 
@@ -206,6 +207,11 @@ public class TUITest extends TestCase {
 
     public void testIntToEmoji(){
         System.out.println(Symbol_String.FromIntToEmoji(76));
+    }
+
+    public void testInitialCard(){
+        System.out.println(InfoTranslator.convertToCardInfo(initialCards.get(1), T.getField()));
+        TUIMethods.showInitialCard( InfoTranslator.convertToCardInfo(initialCards.get(1), T.getField()));
     }
 
 

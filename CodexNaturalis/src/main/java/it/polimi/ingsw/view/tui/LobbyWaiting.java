@@ -1,5 +1,5 @@
 package it.polimi.ingsw.view.tui;
-
+//TODO: try to make people exit from LobbyWaiting if needed.
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.clientcontroller.ClientNotificationSubscription;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
@@ -21,31 +21,47 @@ class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
         // Asking for input from scanner is already a blocking call
         // No need to create an additional thread
 
-        String input = scanner.nextLine().trim();
-        if(input.equals("q")){
-            try {
-                System.out.println("Exiting...");
-                controller.exitFromLobby();
-                transitionState(new JoinLobby(tui, scanner, controller));
-            } catch (WrongPhaseException e){
-                System.out.println("Unable to exit - game already started");
-            } catch (RemoteException re){
-                System.out.println(re.getMessage());
+        /*while(! controller.isGameStarted()) {
+            String input = scanner.nextLine().trim();
+            if (input.equals("q")) {
+                try {
+                    System.out.println("Exiting...");
+                    controller.exitFromLobby();
+                    transitionState(new JoinLobby(tui, scanner, controller));
+                } catch (WrongPhaseException e) {
+                    System.out.println("Unable to exit - game already started");
+                } catch (RemoteException re) {
+                    System.out.println(re.getMessage());
+                }
+            } else {
+                transitionState(this);
             }
-        } else {
-            transitionState(this);
+        }*/
+        try {
+            while (!controller.isGameStarted()) {
+                try {
+                    wait(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        transitionState(new SetUpGame(tui,scanner,controller));
     }
 
-    @Override
+    /*@Override
     public synchronized void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
         System.out.println(joinedLobby);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public synchronized void onGameStarted() {
         System.out.println("Number of players reached - Game starting...");
         transitionState(new SetUpGame(tui, scanner, controller));
-    }
+        this.notifyAll();
+    }*/
 
 }
