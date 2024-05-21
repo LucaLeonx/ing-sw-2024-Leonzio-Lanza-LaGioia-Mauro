@@ -5,6 +5,7 @@ import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
 import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.dataobject.PlayerSetupInfo;
 import it.polimi.ingsw.model.card.CardOrientation;
+import it.polimi.ingsw.view.tui.InitialScreen;
 import it.polimi.ingsw.view.tui.TUI;
 import it.polimi.ingsw.view.tui.TUIMethods;
 import it.polimi.ingsw.view.tui.TUIScreen;
@@ -19,14 +20,17 @@ public class NewGameSetupScreen extends TUIScreen {
 
     @Override
     public void display() {
-        System.out.println("Game started");
+
+        System.out.println("\n");
+        InitialScreen.printStylishMessage("THE GAME IS STARTED...                                                            ","\u001B[33m", "\u001B[31m");
 
         try {
             System.out.println("Players: " + controller.getPlayerNames());
             PlayerSetupInfo playerSetup = controller.getPlayerSetup();
             ControlledPlayerInfo controlledPlayer = controller.getControlledPlayerInformation();
-
+            TUIMethods.showCardsOnTable(controller.getCommonObjectives().get(0), controller.getCommonObjectives().get(1),controller.getDrawableCards());
             TUIMethods.showHand(controlledPlayer);
+            System.out.println("The secret objectives to chose from");
             TUIMethods.show2Objectives(playerSetup.objective1(), playerSetup.objective2());
 
             ObjectiveInfo chosenObjective = null;
