@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw;
 
 import it.polimi.ingsw.controller.clientcontroller.ConnectionDefaultSettings;
 import it.polimi.ingsw.controller.servercontroller.*;
