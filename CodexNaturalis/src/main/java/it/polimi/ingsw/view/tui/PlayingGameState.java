@@ -3,6 +3,8 @@ package it.polimi.ingsw.view.tui;
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.clientcontroller.ClientNotificationSubscription;
 import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
+import it.polimi.ingsw.dataobject.DrawableCardsInfo;
+import it.polimi.ingsw.dataobject.OpponentInfo;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.player.Player;
@@ -21,23 +23,24 @@ public class PlayingGameState extends TUIScreen implements ClientNotificationSub
     @Override
     public void display() {
         System.out.println("Setup finished, now to the actual game!");
-        while(!isGameEnded){
-            try {
-                this.wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        try {
+            while (!controller.hasGameEnded()){
+                showCurrentPlayer(controller.getCurrentPlayerName());
             }
+            transitionState(new EndGameState(tui, scanner, controller));
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        transitionState(new EndGameState(tui, scanner, controller));
+
     }
 
-    public synchronized void onCurrentPlayerChange(String newPlayer) {
+    public void showCurrentPlayer(String newPlayer) {
         try {
             TUIMethods.showCardsOnTable(controller.getCommonObjectives().get(0), controller.getCommonObjectives().get(1), controller.getDrawableCards());
             if (controller.isLastTurn()) {
                 System.out.println("ATTENTION: this is going to be the last turn");
             }
-            if (newPlayer == controller.getControlledPlayerInformation().nickname()) {
+            if (newPlayer.equals(controller.getControlledPlayerInformation().nickname())) {
                 //It is the turn of me so I would need to make the choice
                 int cardChoice = -1;
                 String stringCardChoice;
@@ -49,7 +52,7 @@ public class PlayingGameState extends TUIScreen implements ClientNotificationSub
                 DrawChoice drawChoice = DrawChoice.DECK_GOLD;
                 CardOrientation orientationChosen = CardOrientation.FRONT;
 
-                TUIMethods.drawMap(controller.getControlledPlayerInformation(), controller.getControlledPlayerInformation().field(), true);
+                TUIMethods.drawMap(controller.getControlledPlayerInformation().color(), controller.getControlledPlayerInformation().field(), true);
                 TUIMethods.showHand(controller.getControlledPlayerInformation());
                 do {
                     System.out.println("Select the card you want to play (1 for first card etc...), 0 to exit game: ");
@@ -140,9 +143,19 @@ public class PlayingGameState extends TUIScreen implements ClientNotificationSub
                 controller.makeMove(controller.getControlledPlayerInformation().cardsInHand().get(cardChoice - 1), controller.getControlledPlayerInformation().field().availablePositions().get(chosenPoint), orientationChosen, drawChoice);
             }
             else {
-                // when it is not my turn I still want to watch my map but without next position hint in order to (maybe) see it in a more clear way.
-                TUIMethods.drawMap(controller.getControlledPlayerInformation(), controller.getControlledPlayerInformation().field(), false);
-                TUIMethods.showHand(controller.getControlledPlayerInformation());
+
+                OpponentInfo opponent = controller.getOpponentInformation(newPlayer);
+                System.out.println(opponent.nickname() + "(Score: " + opponent.score() + ") is now playing");
+                TUIMethods.drawMap(opponent.color(), opponent.field(), false);
+                System.out.println("Waiting for her move...");
+                controller.waitForTurnChange();
+                System.out.println(newPlayer + " performed a move");
+                opponent = controller.getOpponentInformation(newPlayer);
+                DrawableCardsInfo drawableCardsInfo = controller.getDrawableCards();
+                System.out.println("New score: " + opponent.score());
+                System.out.println("Updated map:");
+                TUIMethods.drawMap(opponent.color(), opponent.field(), false);
+                TUIMethods.showCardsOnTable(controller.getCommonObjectives().getFirst(), controller.getCommonObjectives().getLast(), drawableCardsInfo);
             }
         }
         catch(RemoteException RE1){

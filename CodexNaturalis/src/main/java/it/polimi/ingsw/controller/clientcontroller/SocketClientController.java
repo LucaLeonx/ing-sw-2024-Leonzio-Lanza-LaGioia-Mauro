@@ -87,10 +87,34 @@ public class SocketClientController implements ClientController {
     }
 
     @Override
-    public boolean isGameStarted() throws RemoteException {
-        return false;
+    public void waitForLobbyListUpdate() {
+
     }
 
+    @Override
+    public void waitForGameToStart() {
+
+    }
+
+    @Override
+    public void waitForJoinedLobbyUpdate() {
+
+    }
+
+    @Override
+    public void waitForSetupFinished() {
+
+    }
+
+    @Override
+    public void waitForTurnChange() {
+
+    }
+
+    @Override
+    public void waitForGameEnded() {
+
+    }
 
     @Override
     public String getCurrentPlayerName() throws RemoteException {
