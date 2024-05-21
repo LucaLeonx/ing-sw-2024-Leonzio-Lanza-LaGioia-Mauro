@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.tuinew;
+package it.polimi.ingsw.view.tuiscreens;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.ElementNotFoundException;

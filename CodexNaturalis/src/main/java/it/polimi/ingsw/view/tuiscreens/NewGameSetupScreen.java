@@ -1,11 +1,10 @@
-package it.polimi.ingsw.view.tuinew;
+package it.polimi.ingsw.view.tuiscreens;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
 import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.dataobject.PlayerSetupInfo;
 import it.polimi.ingsw.model.card.CardOrientation;
-import it.polimi.ingsw.view.tui.InitialScreen;
 import it.polimi.ingsw.view.tui.TUI;
 import it.polimi.ingsw.view.tui.TUIMethods;
 import it.polimi.ingsw.view.tui.TUIScreen;
@@ -22,7 +21,7 @@ public class NewGameSetupScreen extends TUIScreen {
     public void display() {
 
         System.out.println("\n");
-        InitialScreen.printStylishMessage("THE GAME IS STARTED...                                                            ","\u001B[33m", "\u001B[31m");
+        TUIMethods.printStylishMessage("                              THE GAME IS STARTED                              ","\u001B[33m", "\u001B[31m");
 
         try {
             System.out.println("Players: " + controller.getPlayerNames());

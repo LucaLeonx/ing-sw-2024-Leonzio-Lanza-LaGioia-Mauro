@@ -4,7 +4,6 @@ import com.sun.tools.javac.Main;
 import it.polimi.ingsw.controller.clientcontroller.ClientNotificationSubscription;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
 import it.polimi.ingsw.dataobject.LobbyInfo;
-import it.polimi.ingsw.view.tui.JoinLobby;
 
 import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.tuinew;
+package it.polimi.ingsw.view.tuiscreens;
 
 public class InvalidInputException extends RuntimeException {
     public InvalidInputException(String message){
