@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,51 +9,58 @@ import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
 public class InsertNamePanel extends StandardPanel {
-    private JTextField registerName;
-    private int generatedPassword= 0;
+    private JTextArea registerName;
+    private int generatedPassword;
 
     public InsertNamePanel(){
         buildPanel();
     }
     private void buildPanel() {
         this.setLayout(new GridBagLayout());
+
         JButton goBack = new JButton("Go Back");
-
-        JLabel nameLabel = new JLabel("Register name: ");
-        registerName = new JTextField(15);
-
+        JLabel nameLabel = new JLabel("Register username: ");
+        registerName = new JTextArea(1,6);
         JButton registerButton = new JButton("Register NOW");
 
+        JLabel incorrectNameMessage= new JLabel();
+        incorrectNameMessage.setForeground(Color.RED);
+
         JLabel password = new JLabel();
-        password.setVisible(false);
-        JLabel passwordValue = new JLabel();
+        JTextArea passwordValue = new JTextArea();
         passwordValue.setVisible(false);
 
         JButton readyButton = new JButton(("Ready to play"));
-        JLabel warningMessage = new JLabel ("Be Careful! Remember your password before Playing!");
-        warningMessage.setForeground(Color.RED);
-        warningMessage.setVisible(false);
         readyButton.setVisible(false);
+
+        JLabel warningMessage = new JLabel ();
+        warningMessage.setForeground(Color.RED);
+
 
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(registerName.getText().isEmpty())
+                    return;
+
+                try {
+                    generatedPassword=MainWindow.getClientController().register(registerName.getText());
+                } catch (RemoteException | InvalidOperationException ex) {
+                    incorrectNameMessage.setText(ex.getMessage());
+                    return;
+                }
+
                 registerName.setEditable(false);
                 registerButton.setVisible(false);
+                incorrectNameMessage.setVisible(false);
+
                 password.setText("Password given: ");
-
-                password.setVisible(true);
-                warningMessage.setVisible(true);
+                warningMessage.setText("Be Careful! Remember your password before Playing!");
                 readyButton.setVisible(true);
-
-           /*     try {
-                    generatedPassword=MainWindow.getClientController().register(registerName.getName());
-                } catch (RemoteException ex) {
-                    System.out.println("Nome già in uso");
-                } */
 
                 passwordValue.setText(String.valueOf(generatedPassword));
                 passwordValue.setVisible(true);
+                passwordValue.setEditable(false);
             }
         });
 
@@ -88,7 +97,10 @@ public class InsertNamePanel extends StandardPanel {
         gbc.gridx=0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
-        add(registerButton, gbc);
+        add(incorrectNameMessage, gbc);
+
+        gbc.gridy=3;
+        add(registerButton,gbc);
 
         gbc.gridy= 4;
         gbc.gridwidth = 1;

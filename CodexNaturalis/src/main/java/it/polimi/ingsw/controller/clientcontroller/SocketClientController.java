@@ -86,6 +86,35 @@ public class SocketClientController implements ClientController {
 
     }
 
+    @Override
+    public void waitForLobbyListUpdate() {
+
+    }
+
+    @Override
+    public void waitForGameToStart() {
+
+    }
+
+    @Override
+    public void waitForJoinedLobbyUpdate() {
+
+    }
+
+    @Override
+    public void waitForSetupFinished() {
+
+    }
+
+    @Override
+    public void waitForTurnChange() {
+
+    }
+
+    @Override
+    public void waitForGameEnded() {
+
+    }
 
     @Override
     public String getCurrentPlayerName() throws RemoteException {
@@ -157,12 +186,17 @@ public class SocketClientController implements ClientController {
 
     }
 
+    @Override
+    public boolean isWaitingInLobby() {
+        return false;
+    }
+
     public void closeSocket() throws IOException {
         client.closeConnection();
     }
 
     @Override
-    public boolean isGameStarted() throws RemoteException{
+    public boolean isInGame() throws RemoteException{
         return false;
     }
 }

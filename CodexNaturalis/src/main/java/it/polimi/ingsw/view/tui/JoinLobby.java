@@ -36,12 +36,9 @@ public class JoinLobby extends TUIScreen {
                 }
                 try {
                     controller.joinLobby(controller.getLobbyList().get(choice - 1).id());
-                    try {
-                        this.wait();
-                    }
-                    catch(InterruptedException e){
-                        e.printStackTrace();
-                    }
+                    System.out.println("Waiting for game to start...");
+                    controller.waitForGameToStart();
+                    transitionState(new SetUpGame(tui, scanner, controller));
                 } catch (RemoteException RE) {
                     System.out.println("It seems like the lobby you are trying to enter doesn't exists, make another choice");
                     transitionState(new JoinLobby(tui, scanner, controller));

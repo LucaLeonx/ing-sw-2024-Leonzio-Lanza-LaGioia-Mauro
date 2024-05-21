@@ -22,6 +22,7 @@ public class Register extends TUIScreen {
             controller.login(username, code);
         }
         catch (RemoteException RE) {
+            RE.printStackTrace();
             System.out.println("It seems that your username is already in use, chose");
             while (true) {
                 System.out.println("1. Chose another nickname");

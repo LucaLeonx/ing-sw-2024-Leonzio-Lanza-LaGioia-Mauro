@@ -314,6 +314,9 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
             }
             joinedGame.changeCurrentPlayer();
 
+
+
+
             if(joinedGame.isEnded()){
                 for(User other : connectedUsers){
                     try {
@@ -356,8 +359,17 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
                             continue;
                         }
                     }
+                    break;
                 }
             } while((!joinedGame.canPlayerPlay(joinedGame.getCurrentPlayerNickname())));
+
+            for(User other : connectedUsers){
+                try {
+                    other.getNotificationSubscriber().onCurrentPlayerChange(joinedGame.getCurrentPlayerNickname());
+                } catch (RemoteException e){
+                    continue;
+                }
+            }
         }
     }
 

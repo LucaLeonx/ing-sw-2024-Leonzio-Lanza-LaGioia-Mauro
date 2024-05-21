@@ -53,10 +53,26 @@ public interface ClientController {
      * @throws RemoteException If the user is not in a lobby
      */
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException;
+
     public void exitFromLobby() throws RemoteException;
 
-    public  boolean isGameStarted() throws RemoteException;
     public void subscribeToNotifications(ClientNotificationSubscription observer);
+
+    public void waitForLobbyListUpdate();
+
+    public void waitForGameToStart();
+
+    public void waitForJoinedLobbyUpdate();
+
+    public void waitForSetupFinished();
+
+    public void waitForTurnChange();
+
+    public void waitForGameEnded();
+
+
+
+    public boolean isInGame() throws RemoteException;
     public String getCurrentPlayerName() throws RemoteException;
     public List<String> getPlayerNames() throws RemoteException;
     public PlayerSetupInfo getPlayerSetup() throws RemoteException;
@@ -76,5 +92,7 @@ public interface ClientController {
     public void setPlayerSetup(ObjectiveInfo chosenObjective, CardOrientation initialCardSide) throws RemoteException;
     public void makeMove(CardInfo card, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException;
     public void exitGame() throws InvalidOperationException, RemoteException;
+
+    boolean isWaitingInLobby();
 }
 

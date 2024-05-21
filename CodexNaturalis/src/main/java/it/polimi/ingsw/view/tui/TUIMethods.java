@@ -12,7 +12,7 @@ import static java.lang.Math.abs;
 
 
 public class TUIMethods {
-    public static void drawMap(ControlledPlayerInfo player, GameFieldInfo gameField, boolean isWithAvailablePosition) {
+    public static void drawMap(PlayerColor playerColor, GameFieldInfo gameField, boolean isWithAvailablePosition) {
 
         // 1 find the max and min row and column in order to create a matrix of the right dimension
         int minX = 0; // x of the leftmost cell
@@ -179,13 +179,13 @@ public class TUIMethods {
 
         //5 we add the player token in the middle of the map
         String playerSymbol = Symbol_String.BLUE_CIRCLE_SYMBOL; //we need to initialize it to not get strange error.
-        if (player.color() == PlayerColor.BLUE) {
+        if (playerColor == PlayerColor.BLUE) {
             playerSymbol = Symbol_String.BLUE_CIRCLE_SYMBOL;
-        } else if (player.color() == PlayerColor.RED) {
+        } else if (playerColor == PlayerColor.RED) {
             playerSymbol = Symbol_String.RED_CIRCLE_SYMBOL;
-        } else if (player.color() == PlayerColor.GREEN) {
+        } else if (playerColor == PlayerColor.GREEN) {
             playerSymbol = Symbol_String.GREEN_CIRCLE_SYMBOL;
-        } else if (player.color() == PlayerColor.YELLOW) {
+        } else if (playerColor == PlayerColor.YELLOW) {
             playerSymbol = Symbol_String.YELLOW_CIRCLE_SYMBOL;
         }
         matrixMap[abs(minY)][abs(minX)] = playerSymbol;

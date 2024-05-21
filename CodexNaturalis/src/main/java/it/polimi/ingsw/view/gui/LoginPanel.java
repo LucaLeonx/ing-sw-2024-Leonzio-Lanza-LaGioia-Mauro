@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class LoginPanel extends StandardPanel {
     private JTextField user;
@@ -20,11 +21,27 @@ public class LoginPanel extends StandardPanel {
         user = new JTextField(15);
         password = new JPasswordField(15);
 
+        JLabel wrongPasswordWarning= new JLabel("Incorrect name or password!");
+        wrongPasswordWarning.setVisible(false);
+        wrongPasswordWarning.setForeground(Color.RED);
+
         JButton loginButton= new JButton("Login NOW");
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int tempcode= Integer.parseInt(String.valueOf(password.getPassword()));
+                String name= user.getText();
+
+                try {
+                    MainWindow.getClientController().login(name, tempcode);
+                    wrongPasswordWarning.setVisible(false);
+                } catch (RemoteException | NumberFormatException ex) {
+                    wrongPasswordWarning.setText("Incorrect name or password!");
+                    return;
+                }
+
                 MainWindow.goToWindow("gameFieldPanel");
+
             }
         });
 
@@ -56,11 +73,12 @@ public class LoginPanel extends StandardPanel {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
+        add(wrongPasswordWarning, gbc);
+
+        gbc.gridy = 3;
         add(loginButton, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 2;
+        gbc.gridy = 4;
         add(goBack, gbc);
 
     }

@@ -9,8 +9,8 @@ import it.polimi.ingsw.model.card.CardColor;
 import it.polimi.ingsw.model.card.Symbol;
 
 public final class UtilityClassCardSketcher {
-    
-    private UtilityClassCardSketcher (){}; 
+
+    private UtilityClassCardSketcher (){};
     public static String[][] sketchCard(CardSideInfo card){
         if(card.Type()== CardType.RESOURCE) {
             return sketchResourceCard(card);
@@ -167,7 +167,7 @@ public final class UtilityClassCardSketcher {
         return cardSketched;
     }
 
-   
+
 
 
 
