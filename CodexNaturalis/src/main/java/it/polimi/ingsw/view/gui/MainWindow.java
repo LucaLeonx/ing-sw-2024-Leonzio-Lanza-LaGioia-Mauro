@@ -78,6 +78,10 @@ public class MainWindow extends JFrame {
         cardLayout.show(cardPanel, name);
     }
 
+  /*  public static void resetWindow(String name){
+        MainWindow.get
+    }*/
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MainWindow::new);
     }
