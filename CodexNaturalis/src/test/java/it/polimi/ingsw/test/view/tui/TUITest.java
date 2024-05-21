@@ -108,37 +108,37 @@ public class TUITest extends TestCase {
     // To see the real image of the maps go to Notes-->ExampleMaps
     public void testTUIWithDiagonalMap(){
         new GameFieldTest().checkInvariants(playerTestDiagonal.getField());
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(playerTestDiagonal), InfoTranslator.convertToFieldInfo(playerTestDiagonal.getField()),false );
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(playerTestDiagonal), InfoTranslator.convertToFieldInfo(playerTestDiagonal.getField()),true );
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(playerTestDiagonal).color(), InfoTranslator.convertToFieldInfo(playerTestDiagonal.getField()),false );
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(playerTestDiagonal).color(), InfoTranslator.convertToFieldInfo(playerTestDiagonal.getField()),true );
         System.out.println(playerTestDiagonal.getField().getAvailablePositions());
     }
 
     public void testTUIWithMinnieMap(){
         new GameFieldTest().checkInvariants(M.getField());
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(M), InfoTranslator.convertToFieldInfo(M.getField()), false  );
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(M), InfoTranslator.convertToFieldInfo(M.getField()), true   );
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(M).color(), InfoTranslator.convertToFieldInfo(M.getField()), false  );
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(M).color(), InfoTranslator.convertToFieldInfo(M.getField()), true   );
     }
 
     public void testTUIWithPaperinaMap(){
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(P), InfoTranslator.convertToFieldInfo(P.getField()), true  );
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(P).color(), InfoTranslator.convertToFieldInfo(P.getField()), true  );
     }
 
 
     public void testTUIWithTopolinoMap(){
         new GameFieldTest().checkInvariants(T.getField());
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()), true);
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T), InfoTranslator.convertToFieldInfo(T.getField()), false);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T).color(), InfoTranslator.convertToFieldInfo(T.getField()), true);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T).color(), InfoTranslator.convertToFieldInfo(T.getField()), false);
         System.out.println(initialCards.get(1).getSide(CardOrientation.BACK));
 
     }
 
     public void testConsistencyOfAvailablePositionsNumberingAcrossTurns(){
         GameField field = T.getField();
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T),InfoTranslator.convertToFieldInfo(field), true);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T).color(),InfoTranslator.convertToFieldInfo(field), true);
         field.placeCard(resourceCards.get(2), CardOrientation.BACK, new Point(6,6));
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T),InfoTranslator.convertToFieldInfo(field), true);
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T),InfoTranslator.convertToFieldInfo(field), true);
-        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T),InfoTranslator.convertToFieldInfo(field), true);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T).color(),InfoTranslator.convertToFieldInfo(field), true);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T).color(),InfoTranslator.convertToFieldInfo(field), true);
+        tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T).color(),InfoTranslator.convertToFieldInfo(field), true);
     }
 
 
