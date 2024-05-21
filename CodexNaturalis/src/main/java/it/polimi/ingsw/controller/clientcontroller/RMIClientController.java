@@ -252,7 +252,7 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
     }
 
     @Override
-    public boolean isGameStarted(){
+    public boolean isInGame(){
         try {
             session.getCurrentPlayer();
             return true;
@@ -260,6 +260,16 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
             return false;
         }
     }
+
+     @Override
+     public boolean isWaitingInLobby(){
+        try {
+            session.getJoinedLobbyInfo();
+            return true;
+        } catch (WrongPhaseException | RemoteException e){
+            return false;
+        }
+     }
 
     @Override
     public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {

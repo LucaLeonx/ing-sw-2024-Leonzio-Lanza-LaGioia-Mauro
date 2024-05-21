@@ -21,7 +21,7 @@ class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
         // Asking for input from scanner is already a blocking call
         // No need to create an additional thread
         // System.out.println("Waiting for players to join... Press 'q' to quit and go back to the menu");
-        /*while(! controller.isGameStarted()) {
+        /*while(! controller.isInGame()) {
             String input = scanner.nextLine().trim();
             if (input.equals("q")) {
                 try {
@@ -38,7 +38,7 @@ class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
             }
         }*/
         /*try {
-            while (!controller.isGameStarted()) {
+            while (!controller.isInGame()) {
                 try {
                     wait(1000);
                 } catch (InterruptedException e) {
@@ -51,7 +51,7 @@ class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
         }
         transitionState(new SetUpGame(tui,scanner,controller));*/
         /*try {
-            while (!controller.isGameStarted()) {
+            while (!controller.isInGame()) {
                 try {
                     wait(1000);
                 } catch (InterruptedException e) {

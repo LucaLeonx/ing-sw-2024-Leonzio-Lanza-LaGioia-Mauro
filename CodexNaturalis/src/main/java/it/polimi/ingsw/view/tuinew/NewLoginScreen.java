@@ -3,16 +3,21 @@ package it.polimi.ingsw.view.tuinew;
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.view.tui.TUI;
 import it.polimi.ingsw.view.tui.TUIScreen;
 
 import java.rmi.RemoteException;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class NewLoginScreen extends TUIScreen {
 
+    private final AtomicReference<TUIScreen> nextState = new AtomicReference<>();
+
     public NewLoginScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
+        this.nextState.set(new NewLobbyScreen(tui,scanner,controller));
     }
 
     private final Runnable registrationExecution = () -> {
@@ -26,7 +31,6 @@ public class NewLoginScreen extends TUIScreen {
                 String username = scanner.nextLine().trim();
 
                 int tempCode = controller.register(username);
-                controller.login(username, tempCode);
 
                 System.out.println("Registration successful. Temporary code: " + tempCode);
 
@@ -42,6 +46,8 @@ public class NewLoginScreen extends TUIScreen {
                 break;
             }
         }
+
+        nextState.set(new NewLobbyScreen(tui, scanner, controller));
     };
 
     private final Runnable loginExecution = () -> {
@@ -67,6 +73,28 @@ public class NewLoginScreen extends TUIScreen {
                 break;
             }
         }
+
+        try {
+            if(controller.isWaitingInLobby()){
+                System.out.println("Getting into joined lobby");
+                nextState.set(new NewLobbyWaitScreen(tui, scanner, controller));
+            }
+        } catch (InvalidOperationException e){
+            // Just skip
+        }
+
+        try {
+            if(controller.isInGame()){
+                System.out.println("A previous game is available. Coming back...");
+                if(controller.getControlledPlayerInformation().secretObjective() == null){
+                        nextState.set(new NewGameSetupScreen(tui, scanner, controller));
+                } else {
+                        nextState.set(new NewGamePlayScreen(tui, scanner, controller));
+                }
+            }
+        } catch (InvalidOperationException | RemoteException e){
+            System.out.println("Unable to retrieve previous player state: " + e.getMessage());
+        }
     };
 
     private final ExecutionDialog loginOptionChoice = new ExecutionDialog(
@@ -79,7 +107,7 @@ public class NewLoginScreen extends TUIScreen {
     public void display() {
         try {
             loginOptionChoice.askAndExecuteChoice(scanner);
-            transitionState(new NewLobbyScreen(tui, scanner, controller));
+            transitionState(nextState.get());
         } catch (CancelChoiceException e) {
             transitionState(new NewConnectionChoiceScreen(tui, scanner, controller));
         }

@@ -70,7 +70,9 @@ public interface ClientController {
 
     public void waitForGameEnded();
 
-    public boolean isGameStarted() throws RemoteException;
+
+
+    public boolean isInGame() throws RemoteException;
     public String getCurrentPlayerName() throws RemoteException;
     public List<String> getPlayerNames() throws RemoteException;
     public PlayerSetupInfo getPlayerSetup() throws RemoteException;
@@ -90,5 +92,7 @@ public interface ClientController {
     public void setPlayerSetup(ObjectiveInfo chosenObjective, CardOrientation initialCardSide) throws RemoteException;
     public void makeMove(CardInfo card, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException;
     public void exitGame() throws InvalidOperationException, RemoteException;
+
+    boolean isWaitingInLobby();
 }
 

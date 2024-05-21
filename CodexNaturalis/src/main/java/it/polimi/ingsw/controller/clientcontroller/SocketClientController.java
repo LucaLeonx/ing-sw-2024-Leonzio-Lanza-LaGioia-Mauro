@@ -186,12 +186,17 @@ public class SocketClientController implements ClientController {
 
     }
 
+    @Override
+    public boolean isWaitingInLobby() {
+        return false;
+    }
+
     public void closeSocket() throws IOException {
         client.closeConnection();
     }
 
     @Override
-    public boolean isGameStarted() throws RemoteException{
+    public boolean isInGame() throws RemoteException{
         return false;
     }
 }
