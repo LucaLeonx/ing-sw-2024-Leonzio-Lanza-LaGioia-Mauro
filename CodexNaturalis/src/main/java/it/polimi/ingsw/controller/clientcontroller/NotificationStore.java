@@ -111,9 +111,7 @@ public class NotificationStore extends UnicastRemoteObject implements Notificati
 
     public void waitForNotificationArrival(String notificationType){
         int oldNotificationType = getNotificationsCount().get(notificationType);
-        System.out.println("OldNotificationType: " + oldNotificationType);
         while(getNotificationsCount().get(notificationType) <= oldNotificationType){
-            System.out.println("Notification type: " + getNotificationsCount().get(notificationType));
             waitForUpdate();
         }
     }

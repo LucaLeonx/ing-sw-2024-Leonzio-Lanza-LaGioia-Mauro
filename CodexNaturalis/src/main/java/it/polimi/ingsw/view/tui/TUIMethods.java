@@ -14,7 +14,6 @@ import static java.lang.Math.abs;
 public class TUIMethods {
     public static void drawMap(PlayerColor playerColor, GameFieldInfo gameField, boolean isWithAvailablePosition) {
 
-
         // 1 find the max and min row and column in order to create a matrix of the right dimension
         int minX = 0; // x of the leftmost cell
         int maxX = 0; // x of the rightmost cell
@@ -235,7 +234,6 @@ public class TUIMethods {
 
         String[][] currentCard = new String[3][5];
         if(player.secretObjective() != null) {
-            System.out.println("banana");
             currentCard = UtilityClassCardSketcher.sketchObjectiveCard(player.secretObjective());
         }
         else{
@@ -429,7 +427,7 @@ public class TUIMethods {
         System.out.println("Front of the objective card: ");
         for (int k = 0; k < 3; k++) {
             for (int j = 0; j < 5; j++) {
-                System.out.print(Front[i][j]);
+                System.out.print(Front[k][j]);
             }
             System.out.println();
         }
@@ -439,7 +437,7 @@ public class TUIMethods {
         System.out.println("Back of the objective card: ");
         for (int k = 0; k < 3; k++) {
             for (int j = 0; j < 5; j++) {
-                System.out.print(Back[i][j]);
+                System.out.print(Back[k][j]);
             }
             System.out.println();
         }

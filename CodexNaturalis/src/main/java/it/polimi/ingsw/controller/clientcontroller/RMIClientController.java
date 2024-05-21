@@ -58,7 +58,9 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
             session.logout();
         }
 
-        return authenticator.register(username);
+        int tempCode = authenticator.register(username);
+        login(username, tempCode);
+        return tempCode;
     }
 
     @Override
@@ -197,6 +199,7 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
     public void exitGame() throws RemoteException {
         checkLogin();
         session.exitFromGame();
+        notificationStore.resetAll();
     }
 
     @Override
@@ -216,7 +219,17 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
 
     @Override
     public void waitForTurnChange(){
-        notificationStore.waitForNotificationArrival("CurrentPlayerChange");
+        String oldCurrentPlayer = null;
+        try {
+            oldCurrentPlayer = session.getCurrentPlayer();
+            while(oldCurrentPlayer.equals(session.getCurrentPlayer())){
+                Thread.sleep(1000);
+            }
+        } catch (RemoteException e) {
+            return;
+        } catch (InterruptedException e) {
+            return;
+        }
     }
 
     @Override
