@@ -124,7 +124,7 @@ public class Game {
         return isLastTurn;
     }
 
-    public boolean isEnded() {
+    public synchronized boolean isEnded() {
         return isGameEnded;
     }
 
@@ -211,10 +211,6 @@ public class Game {
 
         Player player = getPlayer(playerName);
 
-        if(!visibleCards.containsKey(drawChoice)){
-            throw new ElementNotFoundException("Cannot draw non-existent card from " + drawChoice + " position");
-        }
-
         Deck selectedDeck = switch(drawChoice){
             case DECK_RESOURCE, RESOURCE_CARD_1, RESOURCE_CARD_2 -> getResourceCardDeck();
             case DECK_GOLD, GOLD_CARD_1, GOLD_CARD_2 -> getGoldenCardDeck();
@@ -222,17 +218,23 @@ public class Game {
 
         switch(drawChoice){
             case DECK_RESOURCE, DECK_GOLD: {
-                try {
-                    player.addCard(selectedDeck.draw());
-                } catch (EmptyDeckException e){
-                     throw new ElementNotFoundException("Cannot draw non-existent card from " + drawChoice);
+                if(selectedDeck.isEmpty()){
+                    throw new ElementNotFoundException("Cannot draw from empty " + drawChoice );
                 }
+                player.addCard(selectedDeck.draw());
                 break;
             }
             case RESOURCE_CARD_1, RESOURCE_CARD_2, GOLD_CARD_1, GOLD_CARD_2:
+
+                if(!visibleCards.containsKey(drawChoice)){
+                    throw new ElementNotFoundException("Cannot draw non-existent card from " + drawChoice + " position");
+                }
+
                 player.addCard(visibleCards.get(drawChoice));
                 visibleCards.remove(drawChoice);
-                visibleCards.put(drawChoice, selectedDeck.draw());
+                if(!selectedDeck.isEmpty()){
+                    visibleCards.put(drawChoice, selectedDeck.draw());
+                }
                 break;
         }
     }
@@ -243,7 +245,7 @@ public class Game {
 
     public synchronized List<Player> getLeaderBoard(){
             List<Player> leaderboard = getPlayers();
-            leaderboard.sort((p1, p2) -> (p1.getScore() > p2.getScore()) ? 1 : -1);
+            leaderboard.sort((p1, p2) -> (p1.getScore() > p2.getScore()) ? -1 : 1);
             return leaderboard;
     }
 

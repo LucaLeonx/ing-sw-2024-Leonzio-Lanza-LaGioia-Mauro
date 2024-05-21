@@ -309,8 +309,13 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
 
         if(joinedGame.canPlayerPlay(user.getUsername())){
             joinedGame.makePlayerPlaceCard(user.getUsername(), placedCardId, placementPoint, chosenSide);
-            joinedGame.makePlayerDraw(user.getUsername(), drawChoice);
+            if(!joinedGame.getVisibleCards().isEmpty()) {
+                joinedGame.makePlayerDraw(user.getUsername(), drawChoice);
+            }
             joinedGame.changeCurrentPlayer();
+
+
+
 
             if(joinedGame.isEnded()){
                 for(User other : connectedUsers){
@@ -354,8 +359,17 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
                             continue;
                         }
                     }
+                    break;
                 }
             } while((!joinedGame.canPlayerPlay(joinedGame.getCurrentPlayerNickname())));
+
+            for(User other : connectedUsers){
+                try {
+                    other.getNotificationSubscriber().onCurrentPlayerChange(joinedGame.getCurrentPlayerNickname());
+                } catch (RemoteException e){
+                    continue;
+                }
+            }
         }
     }
 

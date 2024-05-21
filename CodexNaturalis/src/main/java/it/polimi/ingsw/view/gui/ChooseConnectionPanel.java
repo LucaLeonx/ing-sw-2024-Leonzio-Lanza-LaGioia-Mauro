@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
@@ -40,10 +41,10 @@ public class ChooseConnectionPanel extends StandardPanel {
             public void actionPerformed(ActionEvent e) {//performed method after pushing a button
                 try {
                     MainWindow.setRMIController();
-                } catch (NotBoundException | RemoteException ex) {
+                } catch (IOException | NotBoundException io) {
+                    System.out.println(io.getMessage());
                     return;
                 }
-
                 MainWindow.goToWindow("chooseLoginPanel");
             }
 
@@ -53,7 +54,11 @@ public class ChooseConnectionPanel extends StandardPanel {
         socketButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {//performed method after pushing a button
-               // connectionTextArea.append("RMI connection selected\n");
+                try {
+                    MainWindow.setSocketController();
+                } catch (IOException ex) {
+                    return;
+                }
                 MainWindow.goToWindow("chooseLoginPanel");
             }
         });

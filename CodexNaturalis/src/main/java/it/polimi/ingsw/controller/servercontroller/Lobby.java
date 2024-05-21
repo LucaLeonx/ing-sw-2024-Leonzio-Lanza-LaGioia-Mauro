@@ -6,6 +6,7 @@ import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Lobby implements Serializable {
@@ -20,7 +21,7 @@ public class Lobby implements Serializable {
         this.id = id;
         this.name = lobbyName;
         this.creatorUsername = creatorUser.getUsername();
-        this.waitingPlayers = new ArrayList<>();
+        this.waitingPlayers = Collections.synchronizedList(new ArrayList<>());
         this.requiredNumOfPlayers = numOfPlayers;
     }
 
@@ -48,7 +49,7 @@ public class Lobby implements Serializable {
     }
 
     public synchronized List<User> getConnectedUsers(){
-        return waitingPlayers;
+        return new ArrayList<>(waitingPlayers);
     }
 
     public synchronized List<String> getConnectedUserNames(){

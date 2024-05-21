@@ -13,11 +13,9 @@ public interface ClientNotificationSubscription {
     default public void onLobbyListUpdate(List<LobbyInfo> lobbies) {
         return;
     }
-
     default public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
         return;
     }
-
     default public void onGameStarted() {
         return;
     }

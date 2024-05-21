@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.tui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientNotificationSubscription;
 import it.polimi.ingsw.dataobject.LobbyInfo;
+import it.polimi.ingsw.view.tuinew.NewInitialScreen;
 
 import java.util.List;
 import java.util.Scanner;
@@ -10,7 +11,7 @@ public class TUI implements ClientNotificationSubscription {
     private TUIScreen screen;
     public TUI(){
         Scanner scanner = new Scanner(System.in);
-        setScreen(new InitialScreen(this, scanner, null));
+        setScreen(new NewInitialScreen(this, scanner, null));
     }
 
     public void display() {

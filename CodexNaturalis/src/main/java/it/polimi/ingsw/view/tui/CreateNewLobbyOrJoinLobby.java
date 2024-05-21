@@ -15,24 +15,16 @@ public class CreateNewLobbyOrJoinLobby extends TUIScreen {
         System.out.println("2. Show existing lobby: ");
         System.out.println("3. Logout ");
         System.out.print("Please choose an option: ");
-        int choice =0;
-        try {
-            choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
-        }
-        catch(Exception e)
-        {
-            scanner.nextLine();
-            System.out.println(e.getMessage());
-        }
+        String choice;
+        choice= scanner.nextLine().trim();
         switch (choice) {
-            case 1:
+            case "1":
                 transitionState(new CreateLobby(tui, scanner, controller));
                 break;
-            case 2:
+            case "2":
                 transitionState(new JoinLobby(tui, scanner, controller));
                 break;
-            case 3:
+            case "3":
                 transitionState(new LoginOrRegister(tui, scanner, controller));
                 break;
             default:

@@ -12,7 +12,7 @@ import static java.lang.Math.abs;
 
 
 public class TUIMethods {
-    public static void drawMap(ControlledPlayerInfo player, GameFieldInfo gameField, boolean isWithAvailablePosition) {
+    public static void drawMap(PlayerColor playerColor, GameFieldInfo gameField, boolean isWithAvailablePosition) {
 
         // 1 find the max and min row and column in order to create a matrix of the right dimension
         int minX = 0; // x of the leftmost cell
@@ -179,13 +179,13 @@ public class TUIMethods {
 
         //5 we add the player token in the middle of the map
         String playerSymbol = Symbol_String.BLUE_CIRCLE_SYMBOL; //we need to initialize it to not get strange error.
-        if (player.color() == PlayerColor.BLUE) {
+        if (playerColor == PlayerColor.BLUE) {
             playerSymbol = Symbol_String.BLUE_CIRCLE_SYMBOL;
-        } else if (player.color() == PlayerColor.RED) {
+        } else if (playerColor == PlayerColor.RED) {
             playerSymbol = Symbol_String.RED_CIRCLE_SYMBOL;
-        } else if (player.color() == PlayerColor.GREEN) {
+        } else if (playerColor == PlayerColor.GREEN) {
             playerSymbol = Symbol_String.GREEN_CIRCLE_SYMBOL;
-        } else if (player.color() == PlayerColor.YELLOW) {
+        } else if (playerColor == PlayerColor.YELLOW) {
             playerSymbol = Symbol_String.YELLOW_CIRCLE_SYMBOL;
         }
         matrixMap[abs(minY)][abs(minX)] = playerSymbol;
@@ -221,7 +221,6 @@ public class TUIMethods {
         for (int i = 0; i < 3; i++) {
             String[][] currentCard = new String[3][5];
             try {
-
                 currentCard = UtilityClassCardSketcher.sketchCard(player.cardsInHand().get(i).front());
             } catch (IndexOutOfBoundsException e) {
                 currentCard = UtilityClassCardSketcher.sketchEmptyCard();
@@ -234,7 +233,12 @@ public class TUIMethods {
         }
 
         String[][] currentCard = new String[3][5];
-        currentCard = UtilityClassCardSketcher.sketchObjectiveCard(player.secretObjective());
+        if(player.secretObjective() != null) {
+            currentCard = UtilityClassCardSketcher.sketchObjectiveCard(player.secretObjective());
+        }
+        else{
+            currentCard = UtilityClassCardSketcher.sketchEmptyCard();
+        }
         for (int j = 0; j < 3; j++) {
             for (int k = 0; k < 5; k++) {
                 matrixHand[j][k + 18] = currentCard[j][k];
@@ -423,7 +427,7 @@ public class TUIMethods {
         System.out.println("Front of the objective card: ");
         for (int k = 0; k < 3; k++) {
             for (int j = 0; j < 5; j++) {
-                System.out.print(Front[i][j]);
+                System.out.print(Front[k][j]);
             }
             System.out.println();
         }
@@ -433,7 +437,7 @@ public class TUIMethods {
         System.out.println("Back of the objective card: ");
         for (int k = 0; k < 3; k++) {
             for (int j = 0; j < 5; j++) {
-                System.out.print(Back[i][j]);
+                System.out.print(Back[k][j]);
             }
             System.out.println();
         }

@@ -44,7 +44,7 @@ public abstract class InfoTranslator {
         try{
             secretObjective = convertToObjectiveInfo(player.getSecretObjective());
         } catch (NullPointerException e){
-            secretObjective = new ObjectiveInfo(-1);
+            secretObjective = null;
         }
 
         return new ControlledPlayerInfo(player.getNickname(), player.getColor(),
