@@ -11,9 +11,10 @@
 CodexNaturalis/assets/*
 
 # User-specific stuff
+.DS_Store
 */.DS_Store
 .idea
-CodexNaturalis/.idea
+*/.idea
 CodexNaturalis/.gitignore
 CodexNaturalis/CodexNaturalis/.idea/**/workspace.xml
 CodexNaturalis/CodexNaturalis/.idea/**/tasks.xml
