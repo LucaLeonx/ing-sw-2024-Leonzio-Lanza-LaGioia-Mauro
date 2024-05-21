@@ -55,8 +55,21 @@ public interface ClientController {
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException;
 
     public void exitFromLobby() throws RemoteException;
-    
+
     public void subscribeToNotifications(ClientNotificationSubscription observer);
+
+    public void waitForLobbyListUpdate();
+
+    public void waitForGameToStart();
+
+    public void waitForJoinedLobbyUpdate();
+
+    public void waitForSetupFinished();
+
+    public void waitForTurnChange();
+
+    public void waitForGameEnded();
+
     public boolean isGameStarted() throws RemoteException;
     public String getCurrentPlayerName() throws RemoteException;
     public List<String> getPlayerNames() throws RemoteException;

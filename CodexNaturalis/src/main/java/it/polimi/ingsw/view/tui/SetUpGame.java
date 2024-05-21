@@ -24,7 +24,7 @@ public class SetUpGame extends TUIScreen{
         InitialScreen.printStylishMessage("THE GAME IS STARTING...                                                            ","\u001B[32m", "\u001B[34m");
         printWolf();
         try {
-            Thread.sleep(100);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -33,34 +33,29 @@ public class SetUpGame extends TUIScreen{
             TUIMethods.showHand(controller.getControlledPlayerInformation());
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-
-        try {
-            TUIMethods.showCardsOnTable(controller.getCommonObjectives().get(0), controller.getCommonObjectives().get(1), controller.getDrawableCards());
-        }
-        catch(Exception e){
+            e.printStackTrace();
             System.out.println(e.getMessage());
         }
 
         try {
             String choiceObjective;
             String choiceFrontOrBack;
-            ObjectiveInfo chosenCard=controller.getPlayerSetup().objective1(); // initialization to a random one because if not compiler complains.
+            ObjectiveInfo chosenCard = controller.getPlayerSetup().objective1(); // initialization to a random one because if not compiler complains.
             CardOrientation chosenOrientation=CardOrientation.FRONT;
-            choiceObjective=scanner.nextLine().trim();
+
+
             while(true) {
                 System.out.println("Chose your secret objective card: ");
                 TUIMethods.show2Objectives(controller.getPlayerSetup().objective1(), controller.getPlayerSetup().objective2());
                 System.out.print("select 1st or 2nd objective: ");
                 try {
-                    choiceObjective=scanner.nextLine().trim();
+                    choiceObjective = scanner.nextLine().trim();
                     if(choiceObjective.equals("1")) {
-                        chosenCard=controller.getPlayerSetup().objective1();
+                        chosenCard = controller.getPlayerSetup().objective1();
                         break;
                     }
                     else if(choiceObjective.equals("2")){
-                        chosenCard=controller.getPlayerSetup().objective2();
+                        chosenCard = controller.getPlayerSetup().objective2();
                         break;
                     }
                 } catch (Exception e) {
@@ -76,7 +71,7 @@ public class SetUpGame extends TUIScreen{
                 try {
                     choiceFrontOrBack = scanner.nextLine().trim();
                     if(choiceFrontOrBack.equals("1")) {
-                        chosenOrientation=CardOrientation.FRONT;
+                        chosenOrientation = CardOrientation.FRONT;
                         break;
                     }
                     else if(choiceFrontOrBack.equals("2")){
@@ -85,33 +80,18 @@ public class SetUpGame extends TUIScreen{
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    scanner.nextLine(); // Consume newline
                     System.out.println(e.getMessage());
                 }
             }
-            controller.setPlayerSetup(chosenCard,chosenOrientation);
-
+            controller.setPlayerSetup(chosenCard, chosenOrientation);
+            System.out.println("Waiting for other players to choose their setup...");
+            controller.waitForSetupFinished();
+            transitionState(new PlayingGameState(tui, scanner, controller));
         }
-        catch(Exception e){
+        catch(Exception e) {
             System.out.println(e.getMessage());
         }
 
-        synchronized (lockIsSetUpFinished){
-            while(!isSetUpFinished) {
-                try {
-                    lockIsSetUpFinished.wait();
-                } catch (InterruptedException IE) {
-                    try{
-                        controller.exitGame();
-                        System.out.println("You exited from the game ");
-                    }
-                    catch(Exception e){
-                        System.out.println(IE.getMessage());
-                    }
-                }
-            }
-        }
-        transitionState(new PlayingGameState(tui, scanner, controller));
     }
 
     public static void printWolf(){

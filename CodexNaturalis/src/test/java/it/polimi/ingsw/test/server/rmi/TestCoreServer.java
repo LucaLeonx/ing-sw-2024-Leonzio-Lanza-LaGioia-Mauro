@@ -567,7 +567,7 @@ public class TestCoreServer extends TestCase {
             List<ObjectiveInfo> commonObjectives = controller.getCommonObjectives();
 
             System.out.println("Move of " + playerInfo.nickname() + " Score: + " + playerInfo.score() + "\n");
-            TUIMethods.drawMap(playerInfo, playerInfo.field(), true);
+            TUIMethods.drawMap(playerInfo.color(), playerInfo.field(), true);
             TUIMethods.showHand(playerInfo);
             TUIMethods.showCardsOnTable(commonObjectives.getFirst(), commonObjectives.getLast(), drawableCards);
         } catch (RemoteException e){

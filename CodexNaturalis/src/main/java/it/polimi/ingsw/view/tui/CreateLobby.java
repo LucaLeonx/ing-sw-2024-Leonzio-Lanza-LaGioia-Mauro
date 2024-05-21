@@ -34,6 +34,8 @@ public class CreateLobby extends TUIScreen {
 
         try {
             controller.createLobby(lobbyName, numberOfPartecipants);
+            System.out.println("Waiting for game to start");
+            controller.waitForGameToStart();
             transitionState(new LobbyWaiting(tui, scanner, controller));
         }
          catch (Exception e) {
