@@ -22,7 +22,7 @@ public class NewConnectionChoiceScreen extends TUIScreen {
 
         try {
             connectionChoiceDialog = new AssignmentDialog<>("Choose your connection option:",
-                            new DialogOption<>("Socket", new SocketClientController()),
+                            //new DialogOption<>("Socket", new SocketClientController()),
                             new DialogOption<>("RMI", new RMIClientController()));
         } catch (ConnectException connectException){
             System.out.println("Unable to connect to server");

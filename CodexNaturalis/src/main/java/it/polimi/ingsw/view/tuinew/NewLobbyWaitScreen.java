@@ -2,7 +2,9 @@ package it.polimi.ingsw.view.tuinew;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
+import it.polimi.ingsw.view.tui.InitialScreen;
 import it.polimi.ingsw.view.tui.TUI;
+import it.polimi.ingsw.view.tui.TUIMethods;
 import it.polimi.ingsw.view.tui.TUIScreen;
 
 import java.rmi.RemoteException;
@@ -44,7 +46,8 @@ public class NewLobbyWaitScreen extends TUIScreen {
 
     @Override
     public void display() {
-        System.out.println("Waiting to start... ");
+        TUIMethods.printStylishMessage("WAITING FOR OTHER PLAYER TO JOIN...                                                ","\u001B[32m", "\u001B[34m");
+        TUIMethods.printWolf();
         controller.waitForGameToStart();
         transitionState(new NewGameSetupScreen(tui, scanner, controller));
         /*updateThread.start();

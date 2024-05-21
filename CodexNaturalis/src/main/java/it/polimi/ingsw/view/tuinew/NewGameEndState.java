@@ -2,7 +2,9 @@ package it.polimi.ingsw.view.tuinew;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
+import it.polimi.ingsw.view.tui.InitialScreen;
 import it.polimi.ingsw.view.tui.TUI;
+import it.polimi.ingsw.view.tui.TUIMethods;
 import it.polimi.ingsw.view.tui.TUIScreen;
 
 import java.rmi.RemoteException;
@@ -18,6 +20,7 @@ public class NewGameEndState extends TUIScreen {
     public void display() {
         try {
             List<ControlledPlayerInfo> leaderboard = controller.getLeaderboard();
+            TUIMethods.printStylishMessage("Congratulation player " + controller.getWinner() + " has won", "\u001B[31m", "\u001B[33m");
             System.out.println("The game is ended - This is the leaderboard");
             leaderboard.forEach((player) -> System.out.println(player.nickname() + " " + player.score()));
             System.out.println("Press any key to go back to lobby choice");
@@ -28,4 +31,6 @@ public class NewGameEndState extends TUIScreen {
             throw new RuntimeException(e);
         }
     }
+
+
 }

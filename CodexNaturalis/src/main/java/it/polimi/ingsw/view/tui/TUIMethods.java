@@ -13,7 +13,7 @@ import static java.lang.Math.abs;
 
 public class TUIMethods {
     public static void drawMap(PlayerColor playerColor, GameFieldInfo gameField, boolean isWithAvailablePosition) {
-
+        System.out.println("map: ");
         // 1 find the max and min row and column in order to create a matrix of the right dimension
         int minX = 0; // x of the leftmost cell
         int maxX = 0; // x of the rightmost cell
@@ -202,6 +202,7 @@ public class TUIMethods {
         Point origin = new Point(0, 0);
         CardOrientation initialCardOrientation = gameField.placedCards().get(origin).orientation();
         System.out.println("list of the symbol in the middle of the starting card: " + gameField.placedCards().get(origin).card().getSide(initialCardOrientation).centerSymbols());
+        System.out.println("\n"); // just some spacing.
     }
 
     public static void showPoints(OpponentInfo player) {
@@ -252,6 +253,8 @@ public class TUIMethods {
             System.out.println();
         }
 
+        System.out.println("\n"); // just some spacing.
+
     }
     public  static void show2Objectives(ObjectiveInfo objectiveCard1, ObjectiveInfo objectiveCard2){
         String[][] objectives = new String[3][11];
@@ -281,7 +284,7 @@ public class TUIMethods {
             }
             System.out.println();
         }
-        System.out.print("\n\n");
+        System.out.println("\n"); // just some spacing.
 
     }
 
@@ -441,8 +444,86 @@ public class TUIMethods {
             }
             System.out.println();
         }
-        System.out.print("\n");
+        System.out.println("\n"); // just some spacing.
     }
 
 
+    public static void printStylishMessage(String message, String borderColor, String textColor) {
+        // Define ASCII art characters for styling
+        final String TOP_LEFT = borderColor + "╔";
+        final String TOP_RIGHT = borderColor + "╗";
+        final String BOTTOM_LEFT = borderColor +"╚";
+        final String BOTTOM_RIGHT =borderColor + "╝";
+        final String HORIZONTAL_LINE =borderColor + "═";
+        final String VERTICAL_LINE = borderColor + "║";
+
+        String ANSI_BOLD = "\u001B[1m";
+        // ANSI escape code to reset text formatting
+        String ANSI_RESET = "\u001B[0m";
+
+        // Determine message width based on length
+        int messageLength = message.length();
+        int boxWidth = messageLength + 4; // Additional padding for borders
+
+        // Print top border with specified border color
+        System.out.print(TOP_LEFT);
+        for (int i = 0; i < boxWidth - 2; i++) {
+            System.out.print(HORIZONTAL_LINE);
+        }
+        System.out.println(TOP_RIGHT);
+
+        // Print message with specified text color
+        System.out.println(VERTICAL_LINE + textColor + " " + ANSI_BOLD + message + ANSI_RESET + " " + VERTICAL_LINE);
+
+        // Print bottom border with specified border color
+        System.out.print(BOTTOM_LEFT);
+        for (int i = 0; i < boxWidth - 2; i++) {
+            System.out.print(HORIZONTAL_LINE);
+        }
+        System.out.println(BOTTOM_RIGHT);
+
+        // Reset colors after printing
+        System.out.print("\u001B[0m");
+    }
+
+    public static void printMushroom(){
+        System.out.println("\u001B[31m"+ "\t\t\t\t\t\t        __.....__ ");
+        System.out.println("\u001B[31m"+"\t\t\t\t\t\t     .'\"         \"`." );
+        System.out.println("\u001B[31m"+"\t\t\t\t\t\t   .'               `.\t\t\t\t"+ "\u001B[35m" + "(_\\|/_)");
+        System.out.println("\u001B[31m"+"\t\t\t\t\t\t  .                   . \t\t\t "+ "\u001B[35m" + "(/|\\) ");
+        System.out.println("\u001B[31m"+"\t\t\t\t\t\t .       __...__       .");
+        System.out.println("\u001B[31m"+"\t\t\t\t\t\t. _.--\"\"\"       \"\"\"--._ .");
+        System.out.println("\u001B[31m"+"\t\t\t\t\t\t:\"                     \";");
+        System.out.println("\u001B[31m"+"\t\t\t\t\t\t `-.__    :   :    __.-'");
+        System.out.println("\u001B[31m"+"\t\t\t\t\t\t     \"\"\"-:   :-\"\"\"   ");
+        System.out.println("\u001B[31m"+"\t\t\t\t\t\t        J     L");
+        System.out.println("\u001B[31m"+"\t\t\t\t\t\t        :     :  ");
+        System.out.println("\u001B[31m"+"\t\t\t\t\t\t        J       L");
+        System.out.println("\u001B[31m"+"\t\t\t\t\t\t        :       :");
+        System.out.println("\u001B[31m"+"\t\t\t\t\t\t       `._____.'");
+        System.out.println("\u001B[32m"+"_______\\|/_____________\\|/_________________________\\|/_________________\\|/__________");
+        // Reset colors after printing
+        System.out.print("\u001B[0m");
+    }
+
+    public static void printWolf(){
+        System.out.println("\u001B[34m"+ "                                           ,     ,");
+        System.out.println("\u001B[34m"+"                                           |\\---/|" );
+        System.out.println("\u001B[34m"+"                                          /  , , |\t\t\t"+ "\u001B[35m" + "(_\\|/_)");
+        System.out.println("\u001B[34m"+"                                     __.-'|  / \\ /\t\t\t "+ "\u001B[35m" + "(/|\\) ");
+        System.out.println("\u001B[34m"+"                            __ ___.-'        ._O|");
+        System.out.println("\u001B[34m"+"                         .-'  '        :      _/");
+        System.out.println("\u001B[34m"+"                        / ,    .        .     |");
+        System.out.println("\u001B[34m"+"                       :  ;    :        :   _/");
+        System.out.println("\u001B[34m"+"                       |  |   .'     __:   /");
+        System.out.println("\u001B[34m"+"                       |  :   /'----'| \\  |");
+        System.out.println("\u001B[34m"+"                       \\  |\\  |      | /| |");
+        System.out.println("\u001B[34m"+"                        '.'| /       || \\ |");
+        System.out.println("\u001B[32m"+"_____________\\|/________"+"\u001B[34m"+"| /|.'"+"\u001B[32m"+"_______"+ "\u001B[34m"+ "'.l \\\\_" + "\u001B[32m"+"_______\\|/______________________\\|/____");
+        System.out.println("\u001B[32m"+"__\\|/___________________"+ "\u001B[34m"+"|| ||" +"\u001B[32m"+"_____________"+"\u001B[34m"+ "'-'" + "\u001B[32m"+"_______\\|/______________________\\|/____");
+        System.out.println("\u001B[32m"+"________________\\|/_____"+ "\u001B[34m" +"'-''-'" + "\u001B[32m"+"_______\\|/_____________\\|/_________________________\\|/");
+        //System.out.println("\u001B[32m"+"_______\\|/_____________\\|/_________________________\\|/_________________\\|/__________");
+        // Reset colors after printing
+        System.out.print("\u001B[0m");
+    }
 }

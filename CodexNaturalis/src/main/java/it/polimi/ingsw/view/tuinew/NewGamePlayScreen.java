@@ -29,9 +29,6 @@ public class NewGamePlayScreen extends TUIScreen {
             ObjectiveInfo objective1 = objectives.getFirst();
             ObjectiveInfo objective2 = objectives.getLast();
 
-            TUIMethods.showHand(controlledPlayer);
-            TUIMethods.drawMap(controlledPlayer.color(), controlledPlayer.field(), true);
-            TUIMethods.showCardsOnTable(objective1, objective2, controller.getDrawableCards());
 
             while(!controller.hasGameEnded()){
                 String currentPlayerName = controller.getCurrentPlayerName();
@@ -43,19 +40,19 @@ public class NewGamePlayScreen extends TUIScreen {
                     System.out.println("Your score: " + controlledPlayer.score());
 
                     if(controller.isLastTurn()){
-                        System.out.println("It's last turn");
+                        TUIMethods.printStylishMessage("ATTENTION: IT IS YOUR LAST TURN!!", "\u001B[31m", "\u001B[33m");
                     }
 
-                    TUIMethods.showHand(controlledPlayer);
+                    System.out.println();
                     TUIMethods.drawMap(controlledPlayer.color(), controlledPlayer.field(), true);
                     TUIMethods.showCardsOnTable(objective1, objective2, drawableCards);
+                    TUIMethods.showHand(controlledPlayer);
 
                     boolean confirmed = true;
 
                     do {
                         confirmed = true;
                         try {
-                            TUIMethods.showHand(controlledPlayer);
                             CardInfo chosenCard = new AssignmentDialog<>(
                                     "Choose card to play: ",
                                     generateCardOptions(controlledPlayer.cardsInHand()))
@@ -67,13 +64,12 @@ public class NewGamePlayScreen extends TUIScreen {
                                     generateOrientationOption(chosenCard))
                                     .askForChoice(scanner);
 
-                            TUIMethods.drawMap(controlledPlayer.color(), controlledPlayer.field(), true);
+
                             Point position = new AssignmentDialog<>(
                                     "Choose position to play card:",
                                     generatePositionOptions(controlledPlayer.field().availablePositions()))
                                     .askForChoice(scanner);
 
-                            TUIMethods.showCardsOnTable(objective1, objective2, drawableCards);
 
                             DrawChoice cardToDraw = null;
                             if(!drawableCards.drawableCards().isEmpty()){
@@ -94,14 +90,13 @@ public class NewGamePlayScreen extends TUIScreen {
 
                 } else {
                     OpponentInfo currentPlayingOpponent = controller.getOpponentInformation(currentPlayerName);
-                    System.out.println("Now it is playing " + currentPlayerName + " Score: " + currentPlayingOpponent.score());
-                    TUIMethods.showCardsOnTable(objective1, objective2, drawableCards);
-                    TUIMethods.drawMap(currentPlayingOpponent.color(), currentPlayingOpponent.field(), false);
+                    System.out.println("Waiting for " + currentPlayerName + " Score: " + currentPlayingOpponent.score() + " to make his move");
                     controller.waitForTurnChange();
-                    System.out.println("After move");
-                    System.out.println("Now it is playing " + currentPlayerName + " Score: " + currentPlayingOpponent.score());
-                    TUIMethods.showCardsOnTable(objective1, objective2, controller.getDrawableCards());
+                    System.out.println(currentPlayingOpponent.nickname() + " has done its move, this is his final field: ");
                     TUIMethods.drawMap(currentPlayingOpponent.color(), controller.getOpponentInformation(currentPlayerName).field(), false);
+                    System.out.println("And these the remaining cards on table: ");
+                    TUIMethods.showCardsOnTable(objective1, objective2, controller.getDrawableCards());
+
                 }
             }
 
