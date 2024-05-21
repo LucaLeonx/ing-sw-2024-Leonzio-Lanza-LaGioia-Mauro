@@ -1,8 +1,7 @@
-package it.polimi.ingsw.view.tuinew;
+package it.polimi.ingsw.view.tuiscreens;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
-import it.polimi.ingsw.controller.clientcontroller.SocketClientController;
 import it.polimi.ingsw.view.tui.TUI;
 import it.polimi.ingsw.view.tui.TUIScreen;
 

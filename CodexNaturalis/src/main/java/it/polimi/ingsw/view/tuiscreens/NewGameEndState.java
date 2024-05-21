@@ -1,8 +1,7 @@
-package it.polimi.ingsw.view.tuinew;
+package it.polimi.ingsw.view.tuiscreens;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
-import it.polimi.ingsw.view.tui.InitialScreen;
 import it.polimi.ingsw.view.tui.TUI;
 import it.polimi.ingsw.view.tui.TUIMethods;
 import it.polimi.ingsw.view.tui.TUIScreen;

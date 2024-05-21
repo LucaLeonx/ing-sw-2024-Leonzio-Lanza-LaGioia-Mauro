@@ -1,9 +1,8 @@
-package it.polimi.ingsw.view.tuinew;
+package it.polimi.ingsw.view.tuiscreens;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.view.tui.TUI;
 import it.polimi.ingsw.view.tui.TUIScreen;
 
