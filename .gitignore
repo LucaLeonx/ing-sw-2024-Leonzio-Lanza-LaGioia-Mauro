@@ -11,6 +11,9 @@
 CodexNaturalis/assets/*
 
 # User-specific stuff
+.idea
+CodexNaturalis/.idea
+CodexNaturalis/.gitignore
 CodexNaturalis/CodexNaturalis/.idea/**/workspace.xml
 CodexNaturalis/CodexNaturalis/.idea/**/tasks.xml
 CodexNaturalis/CodexNaturalis/.idea/**/usage.statistics.xml
