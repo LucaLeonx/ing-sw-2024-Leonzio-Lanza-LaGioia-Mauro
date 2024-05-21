@@ -81,7 +81,7 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
         checkLogin();
         return session.addLobby(lobbyName, requiredPlayers);
     }
-
+    
     @Override
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
         checkLogin();

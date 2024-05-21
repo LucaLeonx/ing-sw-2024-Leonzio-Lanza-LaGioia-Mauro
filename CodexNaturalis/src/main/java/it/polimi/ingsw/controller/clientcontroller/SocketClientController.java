@@ -60,6 +60,7 @@ public class SocketClientController implements ClientController {
 
     @Override
     public LobbyInfo createLobby(String lobbyName, int requiredPlayers) throws RemoteException {
+
         client.sendMessage(new Message(MessageType.CREATE_LOBBY, new AbstractMap.SimpleEntry<>(lobbyName, requiredPlayers) ));
 
         return (LobbyInfo) client.receiveMessage().getObj();
@@ -94,6 +95,8 @@ public class SocketClientController implements ClientController {
 
     @Override
     public List<String> getPlayerNames() throws RemoteException {
+
+
         return List.of();
     }
 
