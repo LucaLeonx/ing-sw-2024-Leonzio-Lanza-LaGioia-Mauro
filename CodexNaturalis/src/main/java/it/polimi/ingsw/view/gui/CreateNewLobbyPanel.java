@@ -1,6 +1,9 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.ElementNotFoundException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,13 +32,8 @@ public class CreateNewLobbyPanel extends JPanel  {
                     return;
 
                 try {
-                    MainWindow.getClientController().createLobby(lobbyName.getText(),4);
-                } catch (RemoteException ex) {
-                    return;
-                    //invalid number of players
-                    //name already used
-                }
-                catch (RuntimeException ex){
+                    MainWindow.getClientController().createLobby(lobbyName.getText(),2);
+                } catch (ElementNotFoundException | WrongPhaseException | RemoteException ex) {
                     System.out.println(ex.getMessage());
                 }
 
