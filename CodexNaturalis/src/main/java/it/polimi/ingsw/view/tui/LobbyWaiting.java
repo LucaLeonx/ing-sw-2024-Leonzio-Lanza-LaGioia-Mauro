@@ -8,7 +8,7 @@ import it.polimi.ingsw.dataobject.LobbyInfo;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
-class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
+class LobbyWaiting extends TUIScreen{
     boolean isGameStarted =false;
     public LobbyWaiting(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
@@ -71,18 +71,4 @@ class LobbyWaiting extends TUIScreen implements ClientNotificationSubscription {
             }
         }
     }
-
-    @Override
-    public synchronized void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
-        System.out.println(joinedLobby);
-    }
-
-    @Override
-    public synchronized void onGameStarted() {
-        System.out.println("Number of players reached - Game starting...");
-        transitionState(new SetUpGame(tui, scanner, controller));
-        isGameStarted=true;
-        this.notifyAll();
-    }
-
 }
