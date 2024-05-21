@@ -96,14 +96,14 @@ public class SetUpGame extends TUIScreen{
             System.out.println(e.getMessage());
         }
 
+        System.out.println("Please wait for other player to make their move");
         synchronized (lockIsSetUpFinished){
             while(!isSetUpFinished) {
                 try {
                     lockIsSetUpFinished.wait();
                 } catch (InterruptedException IE) {
                     try{
-                        controller.exitGame();
-                        System.out.println("You exited from the game ");
+                        System.out.println("there was a problem in the SetUpGame ");
                     }
                     catch(Exception e){
                         System.out.println(IE.getMessage());
