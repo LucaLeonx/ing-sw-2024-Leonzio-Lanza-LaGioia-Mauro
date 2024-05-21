@@ -107,10 +107,14 @@ public class NewGamePlayScreen extends TUIScreen {
     }
 
     private List<DialogOption<DrawChoice>> generateDrawChoiceOptions(DrawableCardsInfo drawableCards) {
-        return drawableCards.drawableCards()
-                .keySet().stream()
-                .map((drawChoice) -> new DialogOption<>(drawChoice.toString(), drawChoice))
-                .toList();
+       List<DialogOption<DrawChoice>> result = new ArrayList<>();
+        result.add(new DialogOption<>("Deck Resource",DrawChoice.DECK_RESOURCE));
+        result.add(new DialogOption<>("Resource Card 1",DrawChoice.RESOURCE_CARD_1));
+        result.add(new DialogOption<>("Resource Card 2",DrawChoice.RESOURCE_CARD_2));
+        result.add(new DialogOption<>("Deck Gold",DrawChoice.DECK_GOLD));
+        result.add(new DialogOption<>("Gold Card 1",DrawChoice.GOLD_CARD_1));
+        result.add(new DialogOption<>("Gold Card 2",DrawChoice.GOLD_CARD_2));
+        return result;
     }
 
     private List<DialogOption<Point>> generatePositionOptions(ArrayList<Point> points) {
