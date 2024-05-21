@@ -4,7 +4,6 @@ import com.sun.tools.javac.Main;
 import it.polimi.ingsw.controller.clientcontroller.ClientNotificationSubscription;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
 import it.polimi.ingsw.dataobject.LobbyInfo;
-import it.polimi.ingsw.view.tui.JoinLobby;
 
 import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.*;
@@ -75,6 +74,7 @@ public class RegisterPanel extends StandardPanel implements ClientNotificationSu
                 String lobbyrow= jList.getSelectedValue();
                 try {
                     MainWindow.getClientController().joinLobby(lobbyById.get(lobbyrow));
+                    MainWindow.goToWindow("gameFieldPanel");
                 } catch (RemoteException | InvalidOperationException ex) {
                     System.out.println(ex.getMessage());
                     return;
