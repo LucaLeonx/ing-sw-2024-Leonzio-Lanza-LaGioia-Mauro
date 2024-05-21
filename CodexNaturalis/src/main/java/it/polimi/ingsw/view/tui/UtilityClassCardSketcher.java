@@ -105,7 +105,6 @@ public final class UtilityClassCardSketcher {
         if(card.reward() != null && card.reward() == RewardType.ONE_POINT) {
             cardSketched[0][2]=Symbol_String.ONE_SYMBOL;
         }
-
         return cardSketched;
     }
 

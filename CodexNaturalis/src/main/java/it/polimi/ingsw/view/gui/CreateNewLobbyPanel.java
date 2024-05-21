@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 public class CreateNewLobbyPanel extends JPanel  {
     public CreateNewLobbyPanel() {
@@ -20,12 +21,31 @@ public class CreateNewLobbyPanel extends JPanel  {
         JButton goBack = new JButton("Go Back");
         Dimension buttonSize = new Dimension(300, 25); // Imposta le dimensioni desiderate (larghezza x altezza)
         goBack.setPreferredSize(buttonSize);
-     //   goBack.setSize(1000,50);
-
 
         createLobby.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(lobbyName.getText().isEmpty())
+                    return;
+
+                try {
+                    MainWindow.getClientController().createLobby(lobbyName.getText(),4);
+                } catch (RemoteException ex) {
+                    return;
+                    //invalid number of players
+                    //name already used
+                }
+                catch (RuntimeException ex){
+                    System.out.println(ex.getMessage());
+                }
+
+                try {
+                    MainWindow.getClientController().getLobbyList();
+                } catch (RemoteException ex) {
+                    return;
+                }
+                //implement number of players
+
                 MainWindow.goToWindow("gameFieldPanel");
             }
         });

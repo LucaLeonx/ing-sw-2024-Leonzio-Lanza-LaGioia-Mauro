@@ -42,7 +42,8 @@ public class ChooseConnectionPanel extends StandardPanel {
                 try {
                     MainWindow.setRMIController();
                 } catch (IOException | NotBoundException io) {
-                 //   return;
+                    System.out.println(io.getMessage());
+                    return;
                 }
                 MainWindow.goToWindow("chooseLoginPanel");
             }
