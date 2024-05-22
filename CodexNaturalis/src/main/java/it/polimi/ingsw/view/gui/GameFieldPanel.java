@@ -74,6 +74,8 @@ public class GameFieldPanel extends StandardPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainWindow.goToWindow("chooseLoginPanel");
+                resetPanel();
+                buildPanel();
             }
         });
 
