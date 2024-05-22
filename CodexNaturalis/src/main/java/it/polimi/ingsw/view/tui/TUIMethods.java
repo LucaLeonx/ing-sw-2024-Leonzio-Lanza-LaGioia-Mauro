@@ -256,6 +256,7 @@ public class TUIMethods {
         System.out.println("\n"); // just some spacing.
 
     }
+
     public  static void show2Objectives(ObjectiveInfo objectiveCard1, ObjectiveInfo objectiveCard2){
         String[][] objectives = new String[3][11];
         //I add the space between the card.
@@ -287,7 +288,6 @@ public class TUIMethods {
         System.out.println("\n"); // just some spacing.
 
     }
-
 
     public static void showCardsOnTable(ObjectiveInfo objectiveCard1, ObjectiveInfo objectiveCard2, DrawableCardsInfo drawable) {
         System.out.println("Cards on the table: ");
@@ -404,7 +404,6 @@ public class TUIMethods {
         show2Objectives(objectiveCard1, objectiveCard2);
     }
 
-
     public static void showInitialCard(CardInfo card){
         String[][] Front = new String[5][3];
         String[][] Back = new String[5][3];
@@ -446,7 +445,6 @@ public class TUIMethods {
         }
         System.out.println("\n"); // just some spacing.
     }
-
 
     public static void printStylishMessage(String message, String borderColor, String textColor) {
         // Define ASCII art characters for styling

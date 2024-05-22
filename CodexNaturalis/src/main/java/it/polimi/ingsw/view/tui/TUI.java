@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class TUI {
     private TUIScreen screen;
+
     public TUI() {
         Scanner scanner = new Scanner(System.in);
         setScreen(new NewInitialScreen(this, scanner, null));

@@ -29,8 +29,10 @@ public class SocketMultiHandler implements Runnable {
                 System.out.println("Object received:\t"+ InMsg.getObj());
 
                 Message OutMsg =  MessageTranslator.processMessage(InMsg);
-                oos.writeObject(OutMsg);
-                oos.flush();
+                if(OutMsg != null) {
+                    oos.writeObject(OutMsg);
+                    oos.flush();
+                }
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
