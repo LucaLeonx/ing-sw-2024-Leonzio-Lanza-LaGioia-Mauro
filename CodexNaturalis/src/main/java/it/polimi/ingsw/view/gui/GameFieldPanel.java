@@ -38,7 +38,7 @@ public class GameFieldPanel extends StandardPanel {
 
         JButton goBacK= new JButton("Go Back");
 
-        firstcard.addMouseListener(new MouseAdapter() {
+        firstcard.addMouseListener( new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);

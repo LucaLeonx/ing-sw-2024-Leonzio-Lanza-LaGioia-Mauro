@@ -9,8 +9,8 @@ public class ImagePanel extends JPanel {
     private boolean side= true; //true is front side set by default
 
     public ImagePanel(String imageNumber) {
-        this.frontPanel = new FrontPanel(Toolkit.getDefaultToolkit().getImage("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/front_images/" + imageNumber + ".jpeg"));
-        this.backPanel = new BackPanel(Toolkit.getDefaultToolkit().getImage("/Users/giovanni/IdeaProjects/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/back_images/" + imageNumber + ".jpeg"));
+        this.frontPanel = new FrontPanel(Toolkit.getDefaultToolkit().getImage("CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/front_images/" + imageNumber + ".jpeg"));
+        this.backPanel = new BackPanel(Toolkit.getDefaultToolkit().getImage("CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/back_images/" + imageNumber + ".jpeg"));
 
         this.add(frontPanel);
         this.add(backPanel);

@@ -3,12 +3,14 @@ package it.polimi.ingsw.view.gui;
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
 import it.polimi.ingsw.controller.clientcontroller.SocketClientController;
+import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.List;
 
 public class MainWindow extends JFrame {
     private static CardLayout cardLayout;
@@ -75,6 +77,10 @@ public class MainWindow extends JFrame {
     public static void goToWindow(String name) {
         cardLayout.show(cardPanel, name);
     }
+
+  /*  public static void resetWindow(String name){
+        MainWindow.get
+    }*/
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MainWindow::new);

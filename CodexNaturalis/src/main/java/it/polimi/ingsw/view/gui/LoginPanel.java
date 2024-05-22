@@ -1,5 +1,8 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,8 +24,7 @@ public class LoginPanel extends StandardPanel {
         user = new JTextField(15);
         password = new JPasswordField(15);
 
-        JLabel wrongPasswordWarning= new JLabel("Incorrect name or password!");
-        wrongPasswordWarning.setVisible(false);
+        JLabel wrongPasswordWarning= new JLabel();
         wrongPasswordWarning.setForeground(Color.RED);
 
         JButton loginButton= new JButton("Login NOW");
@@ -35,12 +37,12 @@ public class LoginPanel extends StandardPanel {
                 try {
                     MainWindow.getClientController().login(name, tempcode);
                     wrongPasswordWarning.setVisible(false);
-                } catch (RemoteException | NumberFormatException ex) {
+                } catch (RemoteException | NumberFormatException | InvalidCredentialsException ex) {
                     wrongPasswordWarning.setText("Incorrect name or password!");
                     return;
                 }
 
-                MainWindow.goToWindow("gameFieldPanel");
+                MainWindow.goToWindow("registerPanel");
 
             }
         });

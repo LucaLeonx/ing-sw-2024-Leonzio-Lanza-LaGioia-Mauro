@@ -106,7 +106,7 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
 
     @Override
     public void subscribeToNotifications(ClientNotificationSubscription subscription) {
-        clientNotifiers.add(subscription);
+
     }
 
     @Override
