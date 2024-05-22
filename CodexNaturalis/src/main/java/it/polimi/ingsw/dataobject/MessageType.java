@@ -11,4 +11,5 @@ public enum MessageType implements Serializable {
     LOBBY_LIST,
     JOINED_LOBBY_INFO,
     EXIT_FROM_LOBBY,
+    LOGOUT,
 }

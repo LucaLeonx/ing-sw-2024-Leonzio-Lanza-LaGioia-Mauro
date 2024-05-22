@@ -142,7 +142,7 @@ public class AppClient {
         SocketClient client = new SocketClient(ConnectionDefaultSettings.SocketServerPort);
 
         try{
-            Message msg = new Message(MessageType.CREATE_LOBBY,
+            Message msg = new Message(MessageType.CREATE_LOBBY,null,
                     new LobbyInfo(1,"Seconda Lobby di Prova","Luca",new ArrayList<>(),4,0));
             client.startClientConnection();
 

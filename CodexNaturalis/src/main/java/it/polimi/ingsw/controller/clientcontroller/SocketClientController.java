@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
-import it.polimi.ingsw.controller.servercontroller.ServerController;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
 import it.polimi.ingsw.controller.socket.SocketClient;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
@@ -17,6 +17,8 @@ import java.util.List;
 public class SocketClientController implements ClientController {
 
     //private ServerController session = null;
+    private String username = null;
+    private int tempCode = 0;
     private SocketClient client ;
 
     public SocketClientController() throws IOException {
@@ -24,62 +26,88 @@ public class SocketClientController implements ClientController {
         this.client.startClientConnection();
     }
 
+    private boolean isRegistered(){
+        return (username != null && tempCode != 0);
+    }
+
+    private void checkLogin(){
+        if(!isRegistered()){
+            throw new InvalidOperationException("Cannot perform this operation when not logged in");
+        }
+    }
+
+    private void checkExceptionOnMessage(Message message){
+        if(message.getObj() instanceof InvalidCredentialsException){
+            throw (InvalidCredentialsException) message.getObj();
+        }
+        if(message.getObj() instanceof InvalidOperationException){
+            throw (InvalidOperationException) message.getObj();
+        }
+    }
+
+    private AbstractMap.SimpleEntry<String,Integer> getCredentials(){
+        return new AbstractMap.SimpleEntry<String,Integer>(username, tempCode);
+    }
+
     @Override
-    public int register(String username) throws RemoteException {
-        Message msg = new Message(MessageType.REGISTER_USER,username);
+    public int register(String user) throws RemoteException {
+        if(!isRegistered()){ this.logout();}
+        Message msg = new Message(MessageType.REGISTER_USER,null,user);
         client.sendMessage(msg);
 
         Message receivedMsg = client.receiveMessage();
-        if(receivedMsg.getObj() instanceof Integer){
-            return (Integer) receivedMsg.getObj();
-        }
-        else{
-            throw new InvalidOperationException("Username " + username + " is already in use");
-        }
+        checkExceptionOnMessage(receivedMsg);
+        this.username = user;
+        this.tempCode = (Integer) receivedMsg.getObj();
+        return tempCode;
     }
 
     @Override
     public void login(String username, int tempCode) throws RemoteException {
-        List<Object> tuple = new ArrayList<>();
-        tuple.add(username);
-        tuple.add(tempCode);
-        client.sendMessage( new Message(MessageType.LOGIN,tuple));
+        AbstractMap.SimpleEntry<String,Integer> tuple = new AbstractMap.SimpleEntry<>(username,tempCode);
+        client.sendMessage( new Message(MessageType.LOGIN,tuple,null));
+
+        Message receivedMsg = client.receiveMessage();
+        checkExceptionOnMessage(receivedMsg);//throw exception if wrong data
+        this.username = username;
+        this.tempCode = tempCode;
     }
 
     @Override
     public void logout() throws RemoteException {
-
+        checkLogin();
+        client.sendMessage(new Message(MessageType.LOGOUT,getCredentials(),null));
     }
 
     @Override
     public List<LobbyInfo> getLobbyList() throws RemoteException {
-        client.sendMessage(new Message(MessageType.LOBBY_LIST,new Object()));
+        client.sendMessage(new Message(MessageType.LOBBY_LIST, getCredentials(),null));
 
         return List.of((LobbyInfo) client.receiveMessage().getObj());
     }
 
     @Override
     public LobbyInfo createLobby(String lobbyName, int requiredPlayers) throws RemoteException {
-
-        client.sendMessage(new Message(MessageType.CREATE_LOBBY, new AbstractMap.SimpleEntry<>(lobbyName, requiredPlayers) ));
+        LobbyInfo tuple = new LobbyInfo(-1,lobbyName,null,null,requiredPlayers,0);
+        client.sendMessage(new Message(MessageType.CREATE_LOBBY, getCredentials(),tuple));
 
         return (LobbyInfo) client.receiveMessage().getObj();
     }
 
     @Override
     public void joinLobby(int lobbyId) throws RemoteException {
-        client.sendMessage(new Message(MessageType.JOIN_LOBBY,lobbyId));
+        client.sendMessage(new Message(MessageType.JOIN_LOBBY, getCredentials(),lobbyId));
     }
 
     @Override
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
-        client.sendMessage(new Message(MessageType.JOINED_LOBBY_INFO,null));
+        client.sendMessage(new Message(MessageType.JOINED_LOBBY_INFO, getCredentials(),null));
         return (LobbyInfo) client.receiveMessage().getObj();
     }
 
     @Override
     public void exitFromLobby() throws RemoteException {
-        client.sendMessage(new Message(MessageType.EXIT_FROM_LOBBY,null));
+        client.sendMessage(new Message(MessageType.EXIT_FROM_LOBBY, getCredentials(),null));
     }
 
     @Override
