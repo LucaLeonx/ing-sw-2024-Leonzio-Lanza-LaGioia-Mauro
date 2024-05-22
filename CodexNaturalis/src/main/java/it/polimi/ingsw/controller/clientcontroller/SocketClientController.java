@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SocketClientController implements ClientController {
@@ -95,14 +96,14 @@ public class SocketClientController implements ClientController {
     }
 
     @Override
-    public void joinLobby(int lobbyId) throws RemoteException {
-        client.sendMessage(new Message(MessageType.JOIN_LOBBY, getCredentials(),lobbyId));
+    public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
+        client.sendMessage(new Message(MessageType.GET_JOINED_LOBBY_INFO, getCredentials(),null));
+        return (LobbyInfo) client.receiveMessage().getObj();
     }
 
     @Override
-    public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
-        client.sendMessage(new Message(MessageType.JOINED_LOBBY_INFO, getCredentials(),null));
-        return (LobbyInfo) client.receiveMessage().getObj();
+    public void joinLobby(int lobbyId) throws RemoteException {
+        client.sendMessage(new Message(MessageType.JOIN_LOBBY, getCredentials(),lobbyId));
     }
 
     @Override
@@ -147,74 +148,87 @@ public class SocketClientController implements ClientController {
 
     @Override
     public String getCurrentPlayerName() throws RemoteException {
-        return "";
+        client.sendMessage(new Message(MessageType.GET_CURRENT_PLAYER_NAME, getCredentials(),null));
+        return client.receiveMessage().getObj().toString();
     }
 
     @Override
     public List<String> getPlayerNames() throws RemoteException {
-
-
-        return List.of();
+        client.sendMessage(new Message(MessageType.GET_PLAYER_NAMES,getCredentials(),null));
+        return List.of(client.receiveMessage().getObj().toString());
     }
 
     @Override
     public PlayerSetupInfo getPlayerSetup() throws RemoteException {
-        return null;
+        client.sendMessage(new Message(MessageType.GET_PLAYER_SETUP,getCredentials(),null));
+        return (PlayerSetupInfo) client.receiveMessage().getObj();
     }
 
     @Override
     public List<ObjectiveInfo> getCommonObjectives() throws RemoteException {
-        return List.of();
+        client.sendMessage(new Message(MessageType.GET_COMMON_OBJECTIVES,getCredentials(),null));
+        return List.of((ObjectiveInfo) client.receiveMessage().getObj());
     }
 
     @Override
     public ControlledPlayerInfo getControlledPlayerInformation() throws RemoteException {
-        return null;
+        client.sendMessage(new Message(MessageType.GET_CONTROLLED_PLAYER_INFO,null,null));
+        return (ControlledPlayerInfo) client.receiveMessage().getObj();
     }
 
     @Override
     public OpponentInfo getOpponentInformation(String opponentName) throws RemoteException {
-        return null;
+        client.sendMessage(new Message(MessageType.GET_OPPONENT_INFORMATION,getCredentials(),opponentName));
+        return (OpponentInfo) client.receiveMessage().getObj();
     }
 
     @Override
     public DrawableCardsInfo getDrawableCards() throws RemoteException {
-        return null;
+        client.sendMessage(new Message(MessageType.GET_DRAWABLE_CARDS,getCredentials(),null));
+        return (DrawableCardsInfo) client.receiveMessage().getObj();
     }
 
     @Override
     public boolean isLastTurn() throws RemoteException {
-        return false;
+        client.sendMessage(new Message(MessageType.IS_LAST_TURN,getCredentials(),null));
+        return (boolean) client.receiveMessage().getObj();
     }
 
     @Override
     public boolean hasGameEnded() throws RemoteException {
-        return false;
+        client.sendMessage(new Message(MessageType.HAS_GAME_ENDED,getCredentials(),null));
+        return (boolean) client.receiveMessage().getObj();
     }
 
     @Override
     public String getWinner() throws RemoteException {
-        return "";
+        try {
+            return getLeaderboard().getFirst().nickname();
+        } catch (InvalidOperationException | RemoteException e){
+            throw new InvalidOperationException("The game has not ended yet. Cannot find a winner");
+        }
     }
 
     @Override
     public List<ControlledPlayerInfo> getLeaderboard() throws RemoteException {
-        return List.of();
+        client.sendMessage(new Message(MessageType.HAS_GAME_ENDED,getCredentials(),null));
+        return List.of((ControlledPlayerInfo) client.receiveMessage().getObj());
     }
 
     @Override
     public void setPlayerSetup(ObjectiveInfo chosenObjective, CardOrientation initialCardSide) throws RemoteException {
-
+        Tuple data = new Tuple(chosenObjective, initialCardSide);
+        client.sendMessage(new Message(MessageType.SET_PLAYER_SETUP,getCredentials(),data));
     }
 
     @Override
     public void makeMove(CardInfo card, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException {
-
+        client.sendMessage(new Message(MessageType.MAKE_MOVE,getCredentials(),new MoveInfo(card,placementPoint,chosenSide,drawChoice)));
     }
 
     @Override
     public void exitGame() throws InvalidOperationException {
-
+        client.sendMessage(new Message(MessageType.EXIT_GAME,getCredentials(),null));
     }
 
     @Override

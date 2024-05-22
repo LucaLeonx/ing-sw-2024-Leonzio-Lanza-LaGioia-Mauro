@@ -4,17 +4,13 @@ import com.sun.security.auth.LdapPrincipal;
 import it.polimi.ingsw.controller.clientcontroller.NotificationStore;
 import it.polimi.ingsw.controller.servercontroller.*;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
-import it.polimi.ingsw.dataobject.LobbyInfo;
-import it.polimi.ingsw.dataobject.Message;
-import it.polimi.ingsw.dataobject.MessageType;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
+import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
-import it.polimi.ingsw.dataobject.ObjectiveInfo;
+import it.polimi.ingsw.model.card.CardOrientation;
 
 import java.rmi.RemoteException;
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Server-side class.
@@ -51,7 +47,6 @@ public class MessageTranslator {
         return user;
     }
 
-//change message type, it must have always the username and password
     public static Message processMessage(Message message) throws RemoteException {
 
         switch (message.getMessageType()){
@@ -98,9 +93,179 @@ public class MessageTranslator {
                 }
                 return  new Message(null,null,server.createLobby(user,tuple.name(), tuple.reqPlayers()));
             }
-            case JOIN_LOBBY -> {
 
+            case GET_JOINED_LOBBY_INFO -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                return new Message(null,null,server.getJoinedLobbyInfo(user));
             }
+
+            case JOIN_LOBBY -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                server.joinLobby(user,(Integer) message.getObj());
+            }
+
+            case EXIT_FROM_LOBBY -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                server.exitFromLobby(user);
+            }
+
+            case GET_CURRENT_PLAYER_NAME -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                return new Message(null,null,server.getCurrentPlayer(user));
+            }
+
+            case GET_PLAYER_NAMES -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                return new Message(null,null,server.getPlayerNames(user));
+            }
+
+            case GET_PLAYER_SETUP -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                return new Message(null,null,server.getPlayerSetupInfo(user));
+            }
+
+            case GET_COMMON_OBJECTIVES -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                return new Message(null,null,server.getCommonObjectives(user));
+            }
+
+            case GET_CONTROLLED_PLAYER_INFO -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                return new Message(null,null,server.getControlledPlayerInfo(user));
+            }
+
+            case GET_OPPONENT_INFORMATION -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                return new Message(null,null,server.getOpponentInfo(user,message.getObj().toString()));
+            }
+
+            case GET_DRAWABLE_CARDS -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                return new Message(null,null,server.getDrawableCardsInfo(user));
+            }
+
+            case IS_LAST_TURN -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                return new Message(null,null,server.isLastTurn(user));
+            }
+
+            case HAS_GAME_ENDED -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                return new Message(null,null,server.hasGameEnded(user));
+            }
+
+            case GET_LEADERBOARD -> {
+                User user;
+                List<ControlledPlayerInfo> lead = null;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                try {
+                    lead = server.getLeaderboard(user);
+                }catch(WrongPhaseException e){
+                    return new Message(null,null,e);
+                }
+                return new Message(null,null,lead);
+            }
+
+            case MAKE_MOVE -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                MoveInfo mInfo = (MoveInfo) message.getObj();
+                try{
+                    server.registerPlayerMove(user,mInfo.card().id(), mInfo.placementPoint(),mInfo.chosenSide(),mInfo.drawChoice());
+                }catch(WrongPhaseException e){
+                    return new Message(null,null,e);
+                }
+            }
+
+            case EXIT_GAME -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                server.exitFromGame(user);
+            }
+
+            case SET_PLAYER_SETUP -> {
+                User user;
+                Tuple data = (Tuple) message.getObj();
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                server.registerPlayerSetup(user,((ObjectiveInfo) data.first()).id(),(CardOrientation) data.second() );
+            }
+
 
 
         }
