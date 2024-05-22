@@ -28,7 +28,7 @@ public class AppServer {
         reg.rebind(ConnectionDefaultSettings.RMIServerName, (AuthenticationManager) server);
         System.out.println("Registry bound, ready to listen for clients from RMI");
 
-        SocketServer socketServer = new SocketServer(ConnectionDefaultSettings.SocketServerPort, (AuthenticationManager) server);
+        SocketServer socketServer = new SocketServer(ConnectionDefaultSettings.SocketServerPort, server);
         socketServer.startServer();
         System.out.println("Game server ready");
     }

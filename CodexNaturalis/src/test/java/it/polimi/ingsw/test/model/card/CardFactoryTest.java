@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class CardFactoryTest extends TestCase {
+public class    CardFactoryTest extends TestCase {
     private Set<Integer> Ids;
     private Set<CardColor> colors;
 
