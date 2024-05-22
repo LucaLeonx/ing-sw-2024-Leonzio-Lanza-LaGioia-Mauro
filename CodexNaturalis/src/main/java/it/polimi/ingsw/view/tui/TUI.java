@@ -9,7 +9,8 @@ import java.util.Scanner;
 
 public class TUI {
     private TUIScreen screen;
-    public TUI(){
+
+    public TUI() {
         Scanner scanner = new Scanner(System.in);
         setScreen(new NewInitialScreen(this, scanner, null));
     }
@@ -18,8 +19,9 @@ public class TUI {
         screen.display();
     }
 
-    public void setScreen(TUIScreen state){
+    public void setScreen(TUIScreen state) {
         this.screen = state;
         display();
 
+    }
 }

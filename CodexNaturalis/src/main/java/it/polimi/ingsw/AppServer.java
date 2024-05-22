@@ -1,17 +1,13 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw;
 
 import it.polimi.ingsw.controller.clientcontroller.ConnectionDefaultSettings;
 import it.polimi.ingsw.controller.servercontroller.*;
-import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.controller.socket.SocketServer;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 public class AppServer {
     public static void main(String[] args) throws RemoteException, AlreadyBoundException {
