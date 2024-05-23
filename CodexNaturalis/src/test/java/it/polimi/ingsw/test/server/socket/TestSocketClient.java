@@ -11,10 +11,10 @@ import java.util.Scanner;
 public class TestSocketClient {
     public static void main(String[] args) {
         SocketClient client = new SocketClient(6660);
-
+        /*
         try{
             Message msg = new Message(MessageType.CREATE_LOBBY,
-                    new LobbyInfo(1,"Seconda Lobby di Prova","Luca",new ArrayList<>(),4,0));
+                    new LobbyInfo(1,"Seconda Lobby di Prova",null,"Luca",new ArrayList<>(),4,0));
             client.startClientConnection();
 
             System.out.println("Type 'send' for send an info, Type 'quit' for close the client ");
@@ -29,6 +29,6 @@ public class TestSocketClient {
         }
         catch(Exception e){
             System.err.println(e.getMessage());
-        }
+        }*/
     }
 }

@@ -85,7 +85,7 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
         checkLogin();
         return session.addLobby(lobbyName, requiredPlayers);
     }
-
+    
     @Override
     public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
         checkLogin();
@@ -106,7 +106,7 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
 
     @Override
     public void subscribeToNotifications(ClientNotificationSubscription subscription) {
-        clientNotifiers.add(subscription);
+
     }
 
     @Override

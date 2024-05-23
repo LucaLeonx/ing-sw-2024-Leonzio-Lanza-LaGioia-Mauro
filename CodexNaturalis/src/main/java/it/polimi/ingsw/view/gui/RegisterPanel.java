@@ -1,33 +1,28 @@
 package it.polimi.ingsw.view.gui;
 
-import com.sun.tools.javac.Main;
-import it.polimi.ingsw.controller.clientcontroller.ClientNotificationSubscription;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
-import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.awt.GridBagConstraints.CENTER;
 import static java.awt.GridBagConstraints.LINE_END;
 
-public class RegisterPanel extends StandardPanel implements ClientNotificationSubscription {
-    private final DefaultListModel<String> listModel= new DefaultListModel<>();
+public class RegisterPanel extends StandardPanel {
+    private final DefaultListModel<String> listModel = new DefaultListModel<>();
     private final Map<String, Integer> lobbyById = new HashMap<String, Integer>();
 
-    public RegisterPanel(){
+    public RegisterPanel() {
         buildPanel();
     }
+
     private void buildPanel() {
         this.setLayout(new GridBagLayout());
         JButton goBack = new JButton("Go Back");
@@ -43,7 +38,7 @@ public class RegisterPanel extends StandardPanel implements ClientNotificationSu
         JTextField lobbyName = new JTextField(15);
         JButton createLobby = new JButton("Create a new Lobby");
 
-        JButton joinLobby= new JButton("Join Lobby");
+        JButton joinLobby = new JButton("Join Lobby");
 
 
         createLobby.addActionListener(new ActionListener() {
@@ -71,9 +66,10 @@ public class RegisterPanel extends StandardPanel implements ClientNotificationSu
         joinLobby.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String lobbyrow= jList.getSelectedValue();
+                String lobbyrow = jList.getSelectedValue();
                 try {
                     MainWindow.getClientController().joinLobby(lobbyById.get(lobbyrow));
+                    MainWindow.goToWindow("gameFieldPanel");
                 } catch (RemoteException | InvalidOperationException ex) {
                     System.out.println(ex.getMessage());
                     return;
@@ -83,33 +79,32 @@ public class RegisterPanel extends StandardPanel implements ClientNotificationSu
 
         GridBagConstraints gbc = new GridBagConstraints();
 
-        gbc.gridy=0;
-        gbc.gridx=1;
+        gbc.gridy = 0;
+        gbc.gridx = 1;
         add(listOfLobbies, gbc);
 
-        gbc.gridx=2;
-        gbc.anchor= LINE_END;
+        gbc.gridx = 2;
+        gbc.anchor = LINE_END;
         add(updateLobbylist, gbc);
 
-        gbc.gridx=1;
-        gbc.gridy=1;
+        gbc.gridx = 1;
+        gbc.gridy = 1;
         gbc.gridwidth = 2;
-        gbc.anchor= CENTER;
+        gbc.anchor = CENTER;
         add(scrollPane, gbc);
 
-        gbc.gridy=2;
+        gbc.gridy = 2;
         add(createLobby, gbc);
 
-        gbc.gridy=3;
+        gbc.gridy = 3;
         add(goBack, gbc);
 
-        gbc.gridy=4;
+        gbc.gridy = 4;
         add(joinLobby, gbc);
 
     }
 
-    public void showLobbies(){
-        if(this.isShowing()) {
+    public void showLobbies() {
             try {
                 List<LobbyInfo> lobbyList = MainWindow.getClientController().getLobbyList();
                 listModel.clear();
@@ -122,25 +117,5 @@ public class RegisterPanel extends StandardPanel implements ClientNotificationSu
             } catch (RemoteException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
-    }
-
-
-    @Override
-    public void onLobbyListUpdate(List<LobbyInfo> lobbies) {
-        for (LobbyInfo L: lobbies) {
-            listModel.addElement(L.toString());
-        }
-        listModel.addElement("Prova");
-    }
-
-    @Override
-    public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
-        // nothing
-    }
-
-    @Override
-    public void onGameStarted() {
-        // nothing
     }
 }

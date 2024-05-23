@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.socket;
 
 import it.polimi.ingsw.controller.servercontroller.AuthenticationManager;
+import it.polimi.ingsw.controller.servercontroller.CoreServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,9 +11,9 @@ import java.util.concurrent.Executors;
 
 public class SocketServer {
     public int port;
-    private AuthenticationManager authenticator;
+    private final CoreServer authenticator;
 
-    public SocketServer(int port, AuthenticationManager authenticator) {
+    public SocketServer(int port, CoreServer authenticator) {
         this.authenticator = authenticator;
         this.port = port;
     }

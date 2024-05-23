@@ -20,7 +20,7 @@ public class MainWindow extends JFrame {
     {
         setTitle("Codex Naturalis");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 600);
+        setSize(1200, 700);
         setVisible(true);
 
         cardLayout = new CardLayout();
@@ -43,6 +43,8 @@ public class MainWindow extends JFrame {
         cardPanel.add("gameFieldPanel", gameFieldPanel);
         add(cardPanel);
 
+        if(registerPanel.isShowing())
+            registerPanel.showLobbies();
     }
 
     public static CardLayout getCardLayout(){
@@ -66,17 +68,13 @@ public class MainWindow extends JFrame {
         //waiting for socketcontroller implementation
     }
 
-    public static void goToNextWindow(){
-        cardLayout.next(cardPanel);
-    }
-
-    public static void goToPreviousWindow(){
-        cardLayout.previous(cardPanel);
-    }
-
     public static void goToWindow(String name) {
         cardLayout.show(cardPanel, name);
     }
+
+  /*  public static void resetWindow(String name){
+        MainWindow.get
+    }*/
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MainWindow::new);

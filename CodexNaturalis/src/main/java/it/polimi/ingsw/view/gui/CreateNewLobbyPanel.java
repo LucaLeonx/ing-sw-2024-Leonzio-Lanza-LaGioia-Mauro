@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
-public class CreateNewLobbyPanel extends JPanel  {
+public class CreateNewLobbyPanel extends StandardPanel  {
     public CreateNewLobbyPanel() {
         buildPanel();
     }
@@ -45,6 +45,8 @@ public class CreateNewLobbyPanel extends JPanel  {
                 //implement number of players
 
                 MainWindow.goToWindow("gameFieldPanel");
+                resetPanel();
+                buildPanel();
             }
         });
         goBack.addActionListener(new ActionListener() {
