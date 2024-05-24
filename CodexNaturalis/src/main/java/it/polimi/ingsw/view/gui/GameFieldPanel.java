@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.rmi.RemoteException;
 
 public class GameFieldPanel extends StandardPanel {
     public GameFieldPanel() { buildPanel(); }
@@ -36,7 +37,7 @@ public class GameFieldPanel extends StandardPanel {
         ImagePanel thirdcard = new ImagePanel("img_51");
         ImagePanel fourthcard = new ImagePanel("img_61");
 
-        JButton goBacK= new JButton("Go Back");
+        JButton logOut= new JButton("Log Out");
 
         firstcard.addMouseListener( new MouseAdapter() {
             @Override
@@ -70,11 +71,16 @@ public class GameFieldPanel extends StandardPanel {
             }
         });
 
-        goBacK.addActionListener(new ActionListener() {
+        logOut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainWindow.goToWindow("chooseLoginPanel");
                 resetPanel();
+                try {
+                    MainWindow.getClientController().logout();
+                } catch (RemoteException ex) {
+                    System.out.println(ex.getMessage());
+                }
                 buildPanel();
             }
         });
@@ -99,7 +105,7 @@ public class GameFieldPanel extends StandardPanel {
         host.add(fourthcard, gbc);
 
         gbc.gridx=4;
-        host.add(goBacK, gbc);
+        host.add(logOut, gbc);
 
         return host;
     }
