@@ -22,6 +22,11 @@ public class NewGameEndState extends TUIScreen {
             TUIMethods.printStylishMessage("Congratulation player " + controller.getWinner() + " has won", "\u001B[31m", "\u001B[33m");
             System.out.println("The game is ended - This is the leaderboard");
             leaderboard.forEach((player) -> System.out.println(player.nickname() + " " + player.score()));
+            System.out.println("\n FINAL MAPS: \n");
+            for(ControlledPlayerInfo p: leaderboard) {
+                System.out.println("The final map of player" + p.nickname());
+                TUIMethods.drawMap(p.color(), p.field(), false);
+            }
             System.out.println("Press any key to go back to lobby choice");
             String command = scanner.nextLine().trim();
             controller.exitGame();

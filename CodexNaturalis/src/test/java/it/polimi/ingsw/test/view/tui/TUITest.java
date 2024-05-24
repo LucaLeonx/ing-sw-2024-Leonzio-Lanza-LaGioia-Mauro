@@ -128,7 +128,7 @@ public class TUITest extends TestCase {
         new GameFieldTest().checkInvariants(T.getField());
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T).color(), InfoTranslator.convertToFieldInfo(T.getField()), true);
         tui.drawMap(InfoTranslator.convertToControlledPlayerInfo(T).color(), InfoTranslator.convertToFieldInfo(T.getField()), false);
-        System.out.println(initialCards.get(1).getSide(CardOrientation.BACK));
+
 
     }
 

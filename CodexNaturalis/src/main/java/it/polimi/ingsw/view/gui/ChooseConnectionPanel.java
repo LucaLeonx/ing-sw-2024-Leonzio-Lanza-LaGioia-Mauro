@@ -29,12 +29,12 @@ public class ChooseConnectionPanel extends StandardPanel {
         nameTextArea.setBackground(Color.white);
         nameTextArea.setHorizontalAlignment(SwingConstants.CENTER);
         nameTextArea.setOpaque(true);
-        nameTextArea.setFont(new Font("Arial", Font.BOLD, 20));  // Font ingrandito
+        nameTextArea.setFont(new Font("Arial", Font.BOLD, 20));  // Font enlarged
 
         chooseTextArea.setBackground(Color.white);
         chooseTextArea.setHorizontalAlignment(SwingConstants.CENTER);
         chooseTextArea.setOpaque(true);
-        chooseTextArea.setFont(new Font("Arial", Font.BOLD, 20));  // Font ingrandito
+        chooseTextArea.setFont(new Font("Arial", Font.BOLD, 20));  // Font enlarged
 
         rmiButton.addActionListener(new ActionListener() {
             @Override

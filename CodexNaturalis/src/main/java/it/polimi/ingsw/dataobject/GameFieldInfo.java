@@ -1,5 +1,6 @@
 package it.polimi.ingsw.dataobject;
 
+import it.polimi.ingsw.model.card.Symbol;
 import it.polimi.ingsw.model.map.Point;
 
 import java.io.Serializable;
@@ -13,4 +14,7 @@ import java.util.*;
  */
 public record GameFieldInfo(HashMap<Point, CardCellInfo> placedCards,
                             HashMap<Point, AngleCellInfo> placedAngles,
-                            ArrayList<Point> availablePositions) implements Serializable {}
+
+                            ArrayList<Point> availablePositions,
+                            HashMap<Symbol, Integer> symbolCounterMap
+) implements Serializable {}
