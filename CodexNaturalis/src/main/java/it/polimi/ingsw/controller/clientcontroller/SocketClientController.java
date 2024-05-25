@@ -242,6 +242,8 @@ public class SocketClientController implements ClientController {
 
     @Override
     public boolean isInGame() throws RemoteException{
-        return false;
+        client.sendMessage(new Message(MessageType.GET_JOINED_LOBBY_INFO,getCredentials(),null));
+        checkExceptionOnMessage(client.receiveMessage());
+        return true;
     }
 }
