@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,16 +18,18 @@ public class GameFieldPanel extends StandardPanel {
         //startGame.setAlignmentY(CENTER_ALIGNMENT);
         this.setLayout(new BorderLayout());
         this.add(startGame, BorderLayout.CENTER);
+
         startGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                buildPanel();
+                buildPanel();;
             }
         });
     }
 
     private void buildPanel(){
         startGame.setVisible(false);
+        this.setLayout(new BorderLayout());
 
         JPanel hostPlayer = newHostPanel();
         JPanel otherPlayers = newOtherPlayers();
@@ -34,8 +38,8 @@ public class GameFieldPanel extends StandardPanel {
         JPanel game = newGame();
 
         this.add(hostPlayer, BorderLayout.PAGE_END);
-        this.add(otherPlayers, BorderLayout.LINE_END);
-        this.add(rightInfo, BorderLayout.PAGE_START);
+        this.add(otherPlayers, BorderLayout.PAGE_START);
+        this.add(rightInfo, BorderLayout.LINE_END);
         this.add(chat, BorderLayout.LINE_START);
         this.add(game, BorderLayout.CENTER);
 
@@ -150,11 +154,39 @@ public class GameFieldPanel extends StandardPanel {
         JPanel otherPlayes = new JPanel();
         otherPlayes.setLayout(new GridBagLayout());
 
-        JRadioButton player2 = new JRadioButton("Player 2");
-        JRadioButton player3 = new JRadioButton("Player 3");
-        JRadioButton player4 = new JRadioButton("Player 4");
+        JButton player2 = new JButton("Player 2");
+        JButton player3 = new JButton("Player 3");
+        JButton player4 = new JButton("Player 4");
 
-        GridBagConstraints gbc = new GridBagConstraints();
+        GridBagConstraints gbc= new GridBagConstraints();
+
+      /*  try {
+            List<String> names= MainWindow.getClientController().getPlayerNames();
+            for (int i = 0; i<3; names.size())
+            {
+                if (i==0)
+                {
+                   player2.setText(names.get(1));
+                   gbc.gridx=0;
+                   otherPlayes.add(player2, gbc);
+                }
+                if (i==1)
+                {
+                    player3.setText(names.get(2));
+                    gbc.gridx=1;
+                    otherPlayes.add(player3, gbc);
+                }
+                if (i==2)
+                {
+                    player4.setText(names.get(3));
+                    gbc.gridx=2;
+                    otherPlayes.add(player4, gbc);
+                }
+                i++;
+            }
+        } catch (RemoteException | WrongPhaseException e) {
+            System.out.println(e.getMessage());
+        }*/
 
         gbc.gridx=0;
         otherPlayes.add(player2, gbc);
@@ -181,7 +213,6 @@ public class GameFieldPanel extends StandardPanel {
 
     private JPanel newGame(){
         JPanel game = new JPanel();
-        this.setLayout(new GridBagLayout());
 
         return game;
     }

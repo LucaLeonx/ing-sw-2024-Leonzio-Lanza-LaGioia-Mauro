@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
+import javax.imageio.stream.ImageInputStream;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -98,7 +99,8 @@ public class ChooseConnectionPanel extends StandardPanel {
         super.paintComponent(g);
         Image image = null;
         try {
-             image = new ImageIcon("CodexNaturalis/src/main/resources/other_images/codex_game.jpg").getImage();
+
+            image = new ImageIcon("CodexNaturalis/src/main/resources/other_images/codex_game.jpg").getImage();
         }
         catch (Exception e){
             System.out.println("Path non rilevato");
