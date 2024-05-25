@@ -31,18 +31,26 @@ public class LoginPanel extends StandardPanel {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int tempcode= Integer.parseInt(String.valueOf(password.getPassword()));
-                String name= user.getText();
-
                 try {
+                    int tempcode= Integer.parseInt(String.valueOf(password.getPassword()));
+                    String name= user.getText();
                     MainWindow.getClientController().login(name, tempcode);
                     wrongPasswordWarning.setVisible(false);
-                } catch (RemoteException | NumberFormatException | InvalidCredentialsException ex) {
+                } catch (RemoteException | InvalidCredentialsException | NumberFormatException ex) {
                     wrongPasswordWarning.setText("Incorrect name or password!");
                     return;
                 }
 
-                MainWindow.goToWindow("registerPanel");
+                try {
+                    if(MainWindow.getClientController().isInGame()){
+                        MainWindow.goToWindow("gameFieldPanel");
+                    }
+                    else {
+                        MainWindow.goToWindow("registerPanel");
+                    }
+                } catch (RemoteException ex) {
+                    ex.getMessage();
+                }
 
             }
         });

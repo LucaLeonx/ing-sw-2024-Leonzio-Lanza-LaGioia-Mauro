@@ -43,8 +43,6 @@ public class MainWindow extends JFrame {
         cardPanel.add("gameFieldPanel", gameFieldPanel);
         add(cardPanel);
 
-        if(registerPanel.isShowing())
-            registerPanel.showLobbies();
     }
 
     public static CardLayout getCardLayout(){
