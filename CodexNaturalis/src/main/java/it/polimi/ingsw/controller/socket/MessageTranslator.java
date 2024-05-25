@@ -97,12 +97,14 @@ public class MessageTranslator {
 
             case GET_JOINED_LOBBY_INFO -> {
                 User user;
+                LobbyInfo info ;
                 try {
                     user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                    info = server.getJoinedLobbyInfo(user);
                 }catch(InvalidOperationException e){
                     return new Message(null,null,e);
                 }
-                return new Message(null,null,server.getJoinedLobbyInfo(user));
+                return new Message(null,null,info);
             }
 
             case JOIN_LOBBY -> {
