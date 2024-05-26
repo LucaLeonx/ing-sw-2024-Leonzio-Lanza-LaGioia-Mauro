@@ -30,6 +30,15 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
         this.activeGames = activeGames;
     }
 
+    public User checkLoggedIn(String username, int password) throws RemoteException {
+        for (User user : userList.getUsers()) {
+            if (user.getUsername().equals(username)) {
+                if(user.checkPass(password)){return user;}
+            }
+        }
+        return null;
+    }
+
     @Override
     public int register(String username) throws RemoteException {
         synchronized (userList){

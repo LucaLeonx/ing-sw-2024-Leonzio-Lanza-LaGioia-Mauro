@@ -35,6 +35,7 @@ public class GameFieldTest extends TestCase {
 
         emptyField = new GameField();
         diagonalField = new GameField();
+        diagonalField.placeCard(initialCards.get(0), CardOrientation.FRONT, new Point(0,0));
         diagonalField.placeCard(resourceCards.get(0), CardOrientation.BACK, new Point(2,2));
         diagonalField.placeCard(resourceCards.get(1), CardOrientation.BACK, new Point(4,4));
         diagonalField.placeCard(resourceCards.get(2), CardOrientation.BACK, new Point(6,6));
@@ -163,7 +164,8 @@ public class GameFieldTest extends TestCase {
         assertEquals(2, SecretObjective.getPoints(field));
     }
 
-    public void testPattenPaperina(){
+    //Order of placing is a little bit different from the one in the photo to test covered angle function.
+    public void testPattenPaperinaAndCoveredAngles(){
 
         GameField field = new GameField();
 
@@ -175,28 +177,32 @@ public class GameFieldTest extends TestCase {
         field.placeCard(goldenCards.get(17), CardOrientation.FRONT, new Point(-6, 6));
         field.placeCard(resourceCards.get(22), CardOrientation.BACK, new Point(6, -2));
         field.placeCard(resourceCards.get(2), CardOrientation.FRONT, new Point(4, -4));
-        field.placeCard(goldenCards.get(21), CardOrientation.FRONT, new Point(8, -4));
-        field.placeCard(goldenCards.get(12), CardOrientation.FRONT, new Point(6, -6));
-        field.placeCard(resourceCards.get(37), CardOrientation.FRONT, new Point(10, -6));
+        field.placeCard(goldenCards.get(12), CardOrientation.BACK, new Point(6, -6));
         field.placeCard(resourceCards.get(17), CardOrientation.BACK, new Point(8, -8));
-        field.placeCard(goldenCards.get(32), CardOrientation.FRONT, new Point(10, -10));
+        field.placeCard(goldenCards.get(32), CardOrientation.BACK, new Point(10, -10));
         field.placeCard(goldenCards.get(20), CardOrientation.FRONT, new Point(-8, 8));
+        field.placeCard(resourceCards.get(37), CardOrientation.FRONT, new Point(10, -6));
+        field.placeCard(goldenCards.get(25), CardOrientation.FRONT, new Point(8, -4)); // CARD DIFFERENT TO TEST COVERED ANGLES FUNCTION
+
 
         checkInvariants(field);
         RewardFunction CommonObjective1 = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.DOWN_RIGHT, CardColor.RED, CardColor.GREEN);
         RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
         RewardFunction SecretObjective = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.UP_LEFT, CardColor.PURPLE, CardColor.SKYBLUE);
+        RewardFunction CoveredAnglesTest1 = GameFunctionFactory.createCoveredAnglesFunction(66);
+
 
         assertEquals(3,CommonObjective1.getPoints(field));
         assertEquals(2,CommonObjective2.getPoints(field));
         assertEquals(3, SecretObjective.getPoints(field));
+        assertEquals(6, CoveredAnglesTest1.getPoints(field) );
 
 
     }
 
 
 
-    public void testPatternTopolino(){
+    public void testPatternTopolinoAndCoveredAngles(){
 
         GameField field = new GameField();
 
@@ -214,16 +220,24 @@ public class GameFieldTest extends TestCase {
         field.placeCard(goldenCards.get(1), CardOrientation.FRONT, new Point(-4, 4));
         field.placeCard(goldenCards.get(27), CardOrientation.BACK, new Point(-2, 6));
         field.placeCard(goldenCards.get(18), CardOrientation.FRONT, new Point(4, 0));
+        field.placeCard(goldenCards.get(5), CardOrientation.FRONT, new Point(6,2)); // CARD DIFFERENT FROM PHOTO TO TEST COVERED ANGLES FUNCTION.
+        field.placeCard(goldenCards.get(4), CardOrientation.FRONT, new Point(2, 10)); // CARD DIFFERENT TO TEST COVERED ANGLES FUNCTION
+
 
         checkInvariants(field);
 
         RewardFunction CommonObjective1 = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.DOWN_RIGHT, CardColor.RED, CardColor.GREEN);
         RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
         RewardFunction SecretObjective = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.UP_RIGHT, CardColor.SKYBLUE, CardColor.RED);
+        RewardFunction CoveredAnglesTest1 = GameFunctionFactory.createCoveredAnglesFunction(46);
+        RewardFunction CoveredAnglesTest2 = GameFunctionFactory.createCoveredAnglesFunction(45);
 
         assertEquals(3,CommonObjective1.getPoints(field));
         assertEquals(2,CommonObjective2.getPoints(field));
         assertEquals(3, SecretObjective.getPoints(field));
+        assertEquals(4, CoveredAnglesTest1.getPoints(field) );
+        assertEquals(2, CoveredAnglesTest2.getPoints(field) );
+
 
 
 

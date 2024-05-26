@@ -90,7 +90,8 @@ public abstract class GameFunctionFactory {
                 }
 
                 for(Point anglePoint : Point.getAdjacentPositions(cardPosition)){
-                    if(field.getAngleCells().get(anglePoint).topCardPosition() == cardPosition){
+                    //if bottom position of the angle card == to the same card means that it is the only card for that angle -->
+                    if(!field.getAngleCells().get(anglePoint).bottomCardPosition().equals(cardPosition) ){
                         coveredAngles++;
                     }
                 }

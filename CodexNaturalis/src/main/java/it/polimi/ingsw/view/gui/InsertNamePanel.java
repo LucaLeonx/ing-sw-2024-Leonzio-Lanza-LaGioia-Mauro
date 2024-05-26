@@ -81,6 +81,8 @@ public class InsertNamePanel extends StandardPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainWindow.goToWindow("registerPanel");
+                resetPanel();
+                buildPanel();
             }
         });
 

@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
-public class CreateNewLobbyPanel extends JPanel  {
+public class CreateNewLobbyPanel extends StandardPanel  {
     public CreateNewLobbyPanel() {
         buildPanel();
     }
@@ -20,6 +20,9 @@ public class CreateNewLobbyPanel extends JPanel  {
         this.setLayout(new GridBagLayout());
         JButton createLobby = new JButton("Create Lobby");
         JTextField lobbyName = new JTextField(15);
+
+        Integer[] players = {2, 3, 4};
+        JComboBox<Integer> numberOption = new JComboBox<>(players);
 
         JButton goBack = new JButton("Go Back");
         Dimension buttonSize = new Dimension(300, 25); // Imposta le dimensioni desiderate (larghezza x altezza)
@@ -32,8 +35,9 @@ public class CreateNewLobbyPanel extends JPanel  {
                     return;
 
                 try {
-                    MainWindow.getClientController().createLobby(lobbyName.getText(),2);
-                } catch (ElementNotFoundException | WrongPhaseException | RemoteException ex) {
+                    Integer selected= (Integer) numberOption.getSelectedItem();
+                    MainWindow.getClientController().createLobby(lobbyName.getText(),selected);
+                } catch (ElementNotFoundException | WrongPhaseException | RemoteException | NullPointerException ex) {
                     System.out.println(ex.getMessage());
                 }
 
@@ -45,6 +49,8 @@ public class CreateNewLobbyPanel extends JPanel  {
                 //implement number of players
 
                 MainWindow.goToWindow("gameFieldPanel");
+                resetPanel();
+                buildPanel();
             }
         });
         goBack.addActionListener(new ActionListener() {
@@ -61,12 +67,17 @@ public class CreateNewLobbyPanel extends JPanel  {
         add(lobbyName, gbc);
 
         gbc.gridx=1;
+        add(numberOption, gbc);
+
+        gbc.gridx=2;
         add(createLobby, gbc);
 
         gbc.gridx=0;
         gbc.gridy=1;
-        gbc.gridwidth=2;
+        gbc.gridwidth=3;
         add(goBack, gbc);
+
+
 
     }
 }

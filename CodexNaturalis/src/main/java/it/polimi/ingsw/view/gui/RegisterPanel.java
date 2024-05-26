@@ -1,21 +1,16 @@
 package it.polimi.ingsw.view.gui;
 
-import com.sun.tools.javac.Main;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 
-import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.awt.GridBagConstraints.CENTER;
 import static java.awt.GridBagConstraints.LINE_END;
@@ -110,7 +105,6 @@ public class RegisterPanel extends StandardPanel {
     }
 
     public void showLobbies() {
-        if (this.isShowing()) {
             try {
                 List<LobbyInfo> lobbyList = MainWindow.getClientController().getLobbyList();
                 listModel.clear();
@@ -123,6 +117,5 @@ public class RegisterPanel extends StandardPanel {
             } catch (RemoteException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
     }
 }

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
-import it.polimi.ingsw.controller.servercontroller.ServerController;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
 import it.polimi.ingsw.controller.socket.SocketClient;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
@@ -12,11 +12,14 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SocketClientController implements ClientController {
 
     //private ServerController session = null;
+    private String username = null;
+    private int tempCode = 0;
     private SocketClient client ;
 
     public SocketClientController() throws IOException {
@@ -24,61 +27,88 @@ public class SocketClientController implements ClientController {
         this.client.startClientConnection();
     }
 
+    private boolean isRegistered(){
+        return (username != null && tempCode != 0);
+    }
+
+    private void checkLogin(){
+        if(!isRegistered()){
+            throw new InvalidOperationException("Cannot perform this operation when not logged in");
+        }
+    }
+
+    private void checkExceptionOnMessage(Message message){
+        if(message.getObj() instanceof InvalidCredentialsException){
+            throw (InvalidCredentialsException) message.getObj();
+        }
+        if(message.getObj() instanceof InvalidOperationException){
+            throw (InvalidOperationException) message.getObj();
+        }
+    }
+
+    private AbstractMap.SimpleEntry<String,Integer> getCredentials(){
+        return new AbstractMap.SimpleEntry<String,Integer>(username, tempCode);
+    }
+
     @Override
-    public int register(String username) throws RemoteException {
-        Message msg = new Message(MessageType.REGISTER_USER,username);
+    public int register(String user) throws RemoteException {
+        if(isRegistered()){ this.logout();}
+        Message msg = new Message(MessageType.REGISTER_USER,null,user);
         client.sendMessage(msg);
 
         Message receivedMsg = client.receiveMessage();
-        if(receivedMsg.getObj() instanceof Integer){
-            return (Integer) receivedMsg.getObj();
-        }
-        else{
-            throw new InvalidOperationException("Username " + username + " is already in use");
-        }
+        checkExceptionOnMessage(receivedMsg);
+        this.username = user;
+        this.tempCode = (Integer) receivedMsg.getObj();
+        return tempCode;
     }
 
     @Override
     public void login(String username, int tempCode) throws RemoteException {
-        List<Object> tuple = new ArrayList<>();
-        tuple.add(username);
-        tuple.add(tempCode);
-        client.sendMessage( new Message(MessageType.LOGIN,tuple));
+        AbstractMap.SimpleEntry<String,Integer> tuple = new AbstractMap.SimpleEntry<>(username,tempCode);
+        client.sendMessage( new Message(MessageType.LOGIN,tuple,null));
+
+        Message receivedMsg = client.receiveMessage();
+        checkExceptionOnMessage(receivedMsg);//throw exception if wrong data
+        this.username = username;
+        this.tempCode = tempCode;
     }
 
     @Override
     public void logout() throws RemoteException {
-
+        checkLogin();
+        client.sendMessage(new Message(MessageType.LOGOUT,getCredentials(),null));
     }
 
     @Override
     public List<LobbyInfo> getLobbyList() throws RemoteException {
-        client.sendMessage(new Message(MessageType.LOBBY_LIST,new Object()));
+        client.sendMessage(new Message(MessageType.LOBBY_LIST, getCredentials(),null));
 
-        return List.of((LobbyInfo) client.receiveMessage().getObj());
+        return (List<LobbyInfo>) client.receiveMessage().getObj();
     }
 
     @Override
     public LobbyInfo createLobby(String lobbyName, int requiredPlayers) throws RemoteException {
-        client.sendMessage(new Message(MessageType.CREATE_LOBBY, new AbstractMap.SimpleEntry<>(lobbyName, requiredPlayers) ));
+        LobbyInfo tuple = new LobbyInfo(-1,lobbyName,null,null,requiredPlayers,0);
+        client.sendMessage(new Message(MessageType.CREATE_LOBBY, getCredentials(),tuple));
 
+        return (LobbyInfo) client.receiveMessage().getObj();
+    }
+
+    @Override
+    public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
+        client.sendMessage(new Message(MessageType.GET_JOINED_LOBBY_INFO, getCredentials(),null));
         return (LobbyInfo) client.receiveMessage().getObj();
     }
 
     @Override
     public void joinLobby(int lobbyId) throws RemoteException {
-        client.sendMessage(new Message(MessageType.JOIN_LOBBY,lobbyId));
-    }
-
-    @Override
-    public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
-        client.sendMessage(new Message(MessageType.JOINED_LOBBY_INFO,null));
-        return (LobbyInfo) client.receiveMessage().getObj();
+        client.sendMessage(new Message(MessageType.JOIN_LOBBY, getCredentials(),lobbyId));
     }
 
     @Override
     public void exitFromLobby() throws RemoteException {
-        client.sendMessage(new Message(MessageType.EXIT_FROM_LOBBY,null));
+        client.sendMessage(new Message(MessageType.EXIT_FROM_LOBBY, getCredentials(),null));
     }
 
     @Override
@@ -118,72 +148,87 @@ public class SocketClientController implements ClientController {
 
     @Override
     public String getCurrentPlayerName() throws RemoteException {
-        return "";
+        client.sendMessage(new Message(MessageType.GET_CURRENT_PLAYER_NAME, getCredentials(),null));
+        return client.receiveMessage().getObj().toString();
     }
 
     @Override
     public List<String> getPlayerNames() throws RemoteException {
-        return List.of();
+        client.sendMessage(new Message(MessageType.GET_PLAYER_NAMES,getCredentials(),null));
+        return (List<String>) client.receiveMessage().getObj();
     }
 
     @Override
     public PlayerSetupInfo getPlayerSetup() throws RemoteException {
-        return null;
+        client.sendMessage(new Message(MessageType.GET_PLAYER_SETUP,getCredentials(),null));
+        return (PlayerSetupInfo) client.receiveMessage().getObj();
     }
 
     @Override
     public List<ObjectiveInfo> getCommonObjectives() throws RemoteException {
-        return List.of();
+        client.sendMessage(new Message(MessageType.GET_COMMON_OBJECTIVES,getCredentials(),null));
+        return (List<ObjectiveInfo>) client.receiveMessage().getObj();
     }
 
     @Override
     public ControlledPlayerInfo getControlledPlayerInformation() throws RemoteException {
-        return null;
+        client.sendMessage(new Message(MessageType.GET_CONTROLLED_PLAYER_INFO,null,null));
+        return (ControlledPlayerInfo) client.receiveMessage().getObj();
     }
 
     @Override
     public OpponentInfo getOpponentInformation(String opponentName) throws RemoteException {
-        return null;
+        client.sendMessage(new Message(MessageType.GET_OPPONENT_INFORMATION,getCredentials(),opponentName));
+        return (OpponentInfo) client.receiveMessage().getObj();
     }
 
     @Override
     public DrawableCardsInfo getDrawableCards() throws RemoteException {
-        return null;
+        client.sendMessage(new Message(MessageType.GET_DRAWABLE_CARDS,getCredentials(),null));
+        return (DrawableCardsInfo) client.receiveMessage().getObj();
     }
 
     @Override
     public boolean isLastTurn() throws RemoteException {
-        return false;
+        client.sendMessage(new Message(MessageType.IS_LAST_TURN,getCredentials(),null));
+        return (boolean) client.receiveMessage().getObj();
     }
 
     @Override
     public boolean hasGameEnded() throws RemoteException {
-        return false;
+        client.sendMessage(new Message(MessageType.HAS_GAME_ENDED,getCredentials(),null));
+        return (boolean) client.receiveMessage().getObj();
     }
 
     @Override
     public String getWinner() throws RemoteException {
-        return "";
+        try {
+            return getLeaderboard().getFirst().nickname();
+        } catch (InvalidOperationException | RemoteException e){
+            throw new InvalidOperationException("The game has not ended yet. Cannot find a winner");
+        }
     }
 
     @Override
     public List<ControlledPlayerInfo> getLeaderboard() throws RemoteException {
-        return List.of();
+        client.sendMessage(new Message(MessageType.HAS_GAME_ENDED,getCredentials(),null));
+        return (List<ControlledPlayerInfo>) client.receiveMessage().getObj();
     }
 
     @Override
     public void setPlayerSetup(ObjectiveInfo chosenObjective, CardOrientation initialCardSide) throws RemoteException {
-
+        Tuple data = new Tuple(chosenObjective, initialCardSide);
+        client.sendMessage(new Message(MessageType.SET_PLAYER_SETUP,getCredentials(),data));
     }
 
     @Override
     public void makeMove(CardInfo card, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException {
-
+        client.sendMessage(new Message(MessageType.MAKE_MOVE,getCredentials(),new MoveInfo(card,placementPoint,chosenSide,drawChoice)));
     }
 
     @Override
     public void exitGame() throws InvalidOperationException {
-
+        client.sendMessage(new Message(MessageType.EXIT_GAME,getCredentials(),null));
     }
 
     @Override
@@ -197,6 +242,8 @@ public class SocketClientController implements ClientController {
 
     @Override
     public boolean isInGame() throws RemoteException{
-        return false;
+        client.sendMessage(new Message(MessageType.GET_JOINED_LOBBY_INFO,getCredentials(),null));
+        checkExceptionOnMessage(client.receiveMessage());
+        return true;
     }
 }

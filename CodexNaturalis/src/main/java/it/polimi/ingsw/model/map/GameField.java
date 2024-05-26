@@ -34,6 +34,9 @@ public class GameField{
         this.symbolCounters = new HashMap<>(other.symbolCounters);
     }
 
+    public synchronized Map<Symbol, Integer> getSymbolCounters(){
+        return Map.copyOf(symbolCounters);
+    }
     /**
      *
      *
@@ -212,6 +215,7 @@ public class GameField{
     private void decrementCounter(Symbol symbol){
         symbolCounters.put(symbol, symbolCounters.get(symbol) - 1);
     }
+
 }
 
 

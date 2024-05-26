@@ -98,7 +98,6 @@ public class NewGamePlayScreen extends TUIScreen {
 
                 }
             }
-
             transitionState(new NewGameEndState(tui, scanner, controller));
         } catch (RemoteException e) {
             throw new RuntimeException(e);

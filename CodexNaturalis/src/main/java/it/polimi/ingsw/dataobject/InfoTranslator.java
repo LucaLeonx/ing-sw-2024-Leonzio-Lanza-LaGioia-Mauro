@@ -60,6 +60,7 @@ public abstract class InfoTranslator {
     public static GameFieldInfo convertToFieldInfo(GameField field) {
         HashMap<Point, CardCellInfo> cardCellInfoMap = new HashMap<>();
         HashMap<Point, AngleCellInfo> angleCellInfoMap = new HashMap<>();
+        HashMap<Symbol, Integer> symbolCountersInfoMap = new HashMap<>();
 
         for(Map.Entry<Point, CardCell> cardCell : field.getCardCells().entrySet()){
             cardCellInfoMap.put(cardCell.getKey(), convertToCardCellInfo(cardCell.getValue()));
@@ -69,7 +70,11 @@ public abstract class InfoTranslator {
             angleCellInfoMap.put(angleCell.getKey(), convertToAngleCellInfo(angleCell.getValue()));
         }
 
-        return new GameFieldInfo(cardCellInfoMap, angleCellInfoMap, new ArrayList<>(field.getAvailablePositions()));
+        for(Map.Entry<Symbol, Integer> symbolCounter  : field.getSymbolCounters().entrySet()){
+            symbolCountersInfoMap.put(symbolCounter.getKey() , symbolCounter.getValue());
+        }
+
+        return new GameFieldInfo(cardCellInfoMap, angleCellInfoMap, new ArrayList<>(field.getAvailablePositions()), symbolCountersInfoMap);
 
     }
 

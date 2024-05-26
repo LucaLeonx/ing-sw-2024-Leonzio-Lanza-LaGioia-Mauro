@@ -202,6 +202,19 @@ public class TUIMethods {
         Point origin = new Point(0, 0);
         CardOrientation initialCardOrientation = gameField.placedCards().get(origin).orientation();
         System.out.println("list of the symbol in the middle of the starting card: " + gameField.placedCards().get(origin).card().getSide(initialCardOrientation).centerSymbols());
+
+        // if is withAvaiablePosition=TRUE it might also be useful for playing player to have the list of all the symbol he has on the map
+        if(isWithAvailablePosition) {
+            System.out.println("");
+            System.out.println("Your count of visible symbols on the map: ");
+            System.out.println(Symbol_String.FromSymbolToString(Symbol.FUNGI) + ":" + gameField.symbolCounterMap().get(Symbol.FUNGI));
+            System.out.println(Symbol_String.FromSymbolToString(Symbol.ANIMAL) + ":" + gameField.symbolCounterMap().get(Symbol.ANIMAL));
+            System.out.println(Symbol_String.FromSymbolToString(Symbol.PLANT) + ":" + gameField.symbolCounterMap().get(Symbol.PLANT));
+            System.out.println(Symbol_String.FromSymbolToString(Symbol.INSECT) + ":" + gameField.symbolCounterMap().get(Symbol.INSECT));
+            System.out.println(Symbol_String.FromSymbolToString(Symbol.INKWELL) + ":" + gameField.symbolCounterMap().get(Symbol.INKWELL));
+            System.out.println(Symbol_String.FromSymbolToString(Symbol.QUILL) + ":" + gameField.symbolCounterMap().get(Symbol.QUILL));
+            System.out.println(Symbol_String.FromSymbolToString(Symbol.MANUSCRIPT) + ":" + gameField.symbolCounterMap().get(Symbol.MANUSCRIPT));
+        }
         System.out.println("\n"); // just some spacing.
     }
 
@@ -256,6 +269,7 @@ public class TUIMethods {
         System.out.println("\n"); // just some spacing.
 
     }
+
     public  static void show2Objectives(ObjectiveInfo objectiveCard1, ObjectiveInfo objectiveCard2){
         String[][] objectives = new String[3][11];
         //I add the space between the card.
@@ -287,7 +301,6 @@ public class TUIMethods {
         System.out.println("\n"); // just some spacing.
 
     }
-
 
     public static void showCardsOnTable(ObjectiveInfo objectiveCard1, ObjectiveInfo objectiveCard2, DrawableCardsInfo drawable) {
         System.out.println("Cards on the table: ");
@@ -404,7 +417,6 @@ public class TUIMethods {
         show2Objectives(objectiveCard1, objectiveCard2);
     }
 
-
     public static void showInitialCard(CardInfo card){
         String[][] Front = new String[5][3];
         String[][] Back = new String[5][3];
@@ -427,7 +439,7 @@ public class TUIMethods {
             }
             i++;
         }
-        System.out.println("Front of the objective card: ");
+        System.out.println("Front of the initial card: ");
         for (int k = 0; k < 3; k++) {
             for (int j = 0; j < 5; j++) {
                 System.out.print(Front[k][j]);
@@ -446,7 +458,6 @@ public class TUIMethods {
         }
         System.out.println("\n"); // just some spacing.
     }
-
 
     public static void printStylishMessage(String message, String borderColor, String textColor) {
         // Define ASCII art characters for styling
