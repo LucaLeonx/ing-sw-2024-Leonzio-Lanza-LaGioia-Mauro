@@ -51,9 +51,10 @@ public class MessageTranslator {
 
         switch (message.getMessageType()){
             case REGISTER_USER -> {
-                int tempCode;
+                int tempCode = 0;
                 try{
                     tempCode = server.register((String) message.getObj());
+                    server.login((String) message.getObj(),tempCode,dummySubs);
                 }catch (InvalidOperationException e){
                     return new Message(null,null,e);
                 }
@@ -96,12 +97,14 @@ public class MessageTranslator {
 
             case GET_JOINED_LOBBY_INFO -> {
                 User user;
+                LobbyInfo info ;
                 try {
                     user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                    info = server.getJoinedLobbyInfo(user);
                 }catch(InvalidOperationException e){
                     return new Message(null,null,e);
                 }
-                return new Message(null,null,server.getJoinedLobbyInfo(user));
+                return new Message(null,null,info);
             }
 
             case JOIN_LOBBY -> {
@@ -265,12 +268,12 @@ public class MessageTranslator {
                 }
                 server.registerPlayerSetup(user,((ObjectiveInfo) data.first()).id(),(CardOrientation) data.second() );
             }
-
+            default -> { return new Message(MessageType.OK,null,null); }
 
 
         }
 
-        return null;
+        return new Message(MessageType.OK,null,null);
     }
 
 

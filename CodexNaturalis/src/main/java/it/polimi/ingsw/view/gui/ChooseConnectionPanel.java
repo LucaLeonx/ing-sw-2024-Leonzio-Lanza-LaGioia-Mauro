@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
+import javax.imageio.stream.ImageInputStream;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -36,6 +37,13 @@ public class ChooseConnectionPanel extends StandardPanel {
         chooseTextArea.setOpaque(true);
         chooseTextArea.setFont(new Font("Arial", Font.BOLD, 20));  // Font enlarged
 
+        JLabel wrongConnection = new JLabel();
+        wrongConnection.setBackground(Color.white);
+        wrongConnection.setHorizontalAlignment(SwingConstants.CENTER);
+        wrongConnection.setOpaque(true);
+        wrongConnection.setForeground(Color.RED);
+
+
         rmiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {//performed method after pushing a button
@@ -43,6 +51,7 @@ public class ChooseConnectionPanel extends StandardPanel {
                     MainWindow.setRMIController();
                 } catch (IOException | NotBoundException io) {
                     System.out.println(io.getMessage());
+                    wrongConnection.setText("Connection is not working properly");
                     return;
                 }
                 MainWindow.goToWindow("chooseLoginPanel");
@@ -57,6 +66,7 @@ public class ChooseConnectionPanel extends StandardPanel {
                 try {
                     MainWindow.setSocketController();
                 } catch (IOException ex) {
+                    wrongConnection.setText("Connection is not working properly");
                     return;
                 }
                 MainWindow.goToWindow("chooseLoginPanel");
@@ -79,6 +89,9 @@ public class ChooseConnectionPanel extends StandardPanel {
         gbc.gridy = 3;
         add(rmiButton, gbc);
 
+        gbc.gridy = 4;
+        add(wrongConnection, gbc);
+
     }
 
 
@@ -86,7 +99,8 @@ public class ChooseConnectionPanel extends StandardPanel {
         super.paintComponent(g);
         Image image = null;
         try {
-             image = new ImageIcon("src/main/java/it/polimi/ingsw/view/gui/other_images/codex_game.jpg").getImage();
+
+            image = new ImageIcon("CodexNaturalis/src/main/resources/other_images/codex_game.jpg").getImage();
         }
         catch (Exception e){
             System.out.println("Path non rilevato");

@@ -52,7 +52,7 @@ public class SocketClientController implements ClientController {
 
     @Override
     public int register(String user) throws RemoteException {
-        if(!isRegistered()){ this.logout();}
+        if(isRegistered()){ this.logout();}
         Message msg = new Message(MessageType.REGISTER_USER,null,user);
         client.sendMessage(msg);
 
@@ -84,7 +84,7 @@ public class SocketClientController implements ClientController {
     public List<LobbyInfo> getLobbyList() throws RemoteException {
         client.sendMessage(new Message(MessageType.LOBBY_LIST, getCredentials(),null));
 
-        return List.of((LobbyInfo) client.receiveMessage().getObj());
+        return (List<LobbyInfo>) client.receiveMessage().getObj();
     }
 
     @Override
@@ -155,7 +155,7 @@ public class SocketClientController implements ClientController {
     @Override
     public List<String> getPlayerNames() throws RemoteException {
         client.sendMessage(new Message(MessageType.GET_PLAYER_NAMES,getCredentials(),null));
-        return List.of(client.receiveMessage().getObj().toString());
+        return (List<String>) client.receiveMessage().getObj();
     }
 
     @Override
@@ -167,7 +167,7 @@ public class SocketClientController implements ClientController {
     @Override
     public List<ObjectiveInfo> getCommonObjectives() throws RemoteException {
         client.sendMessage(new Message(MessageType.GET_COMMON_OBJECTIVES,getCredentials(),null));
-        return List.of((ObjectiveInfo) client.receiveMessage().getObj());
+        return (List<ObjectiveInfo>) client.receiveMessage().getObj();
     }
 
     @Override
@@ -212,7 +212,7 @@ public class SocketClientController implements ClientController {
     @Override
     public List<ControlledPlayerInfo> getLeaderboard() throws RemoteException {
         client.sendMessage(new Message(MessageType.HAS_GAME_ENDED,getCredentials(),null));
-        return List.of((ControlledPlayerInfo) client.receiveMessage().getObj());
+        return (List<ControlledPlayerInfo>) client.receiveMessage().getObj();
     }
 
     @Override
@@ -242,6 +242,8 @@ public class SocketClientController implements ClientController {
 
     @Override
     public boolean isInGame() throws RemoteException{
-        return false;
+        client.sendMessage(new Message(MessageType.GET_JOINED_LOBBY_INFO,getCredentials(),null));
+        checkExceptionOnMessage(client.receiveMessage());
+        return true;
     }
 }

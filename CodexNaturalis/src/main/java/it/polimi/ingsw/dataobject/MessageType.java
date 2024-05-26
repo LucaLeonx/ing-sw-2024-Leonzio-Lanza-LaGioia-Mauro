@@ -25,4 +25,5 @@ public enum MessageType implements Serializable {
     MAKE_MOVE,
     EXIT_GAME,
     SET_PLAYER_SETUP,
+    OK,
 }
