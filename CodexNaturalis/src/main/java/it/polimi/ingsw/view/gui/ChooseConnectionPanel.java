@@ -86,7 +86,7 @@ public class ChooseConnectionPanel extends StandardPanel {
         super.paintComponent(g);
         Image image = null;
         try {
-             image = new ImageIcon("CodexNaturalis/src/main/java/it/polimi/ingsw/view/gui/other_images/codex_game.jpg").getImage();
+             image = new ImageIcon("src/main/java/it/polimi/ingsw/view/gui/other_images/codex_game.jpg").getImage();
         }
         catch (Exception e){
             System.out.println("Path non rilevato");
