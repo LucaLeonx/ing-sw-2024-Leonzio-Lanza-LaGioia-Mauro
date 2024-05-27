@@ -64,7 +64,7 @@ public interface ClientController {
 
     public void waitForJoinedLobbyUpdate();
 
-    public void waitForSetupFinished();
+    public void waitForSetupFinished() throws RemoteException;
 
     public void waitForTurnChange();
 

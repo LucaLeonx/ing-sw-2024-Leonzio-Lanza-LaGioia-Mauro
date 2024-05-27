@@ -401,6 +401,11 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
         }
     }
 
+    public boolean setupDone(User user){
+        Game joinedGame = activeGames.getJoinedGame(user);
+        return joinedGame.allPlayersHaveSetup();
+    }
+
     public String ping() {
         return "Server ready";
     }
