@@ -99,8 +99,7 @@ public class ChooseConnectionPanel extends StandardPanel {
         super.paintComponent(g);
         Image image = null;
         try {
-
-            image = new ImageIcon("CodexNaturalis/src/main/resources/other_images/codex_game.jpg").getImage();
+            image = new ImageIcon("src/main/resources/other_images/codex_game.jpg").getImage();
         }
         catch (Exception e){
             System.out.println("Path non rilevato");
