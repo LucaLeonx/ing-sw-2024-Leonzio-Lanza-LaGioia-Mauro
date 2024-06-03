@@ -120,22 +120,7 @@ public class TUIMethods {
                 matrixMap[p.y() + abs(minY) - 1][p.x() + abs(minX)] = Symbol_String.YELLOW_SQUARE_SYMBOL;
                 matrixMap[p.y() + abs(minY) - 1][p.x() + abs(minX) -1] = Symbol_String.YELLOW_SQUARE_SYMBOL;
 
-                List<String> numberAsEmojis = Symbol_String.FromIntToEmoji(availablePositionCount);
-
-                if(availablePositionCount < 10){
-                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX)] = numberAsEmojis.getFirst() ;
-                }
-                else if(availablePositionCount < 100){
-                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) -1] = numberAsEmojis.getFirst();
-                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) ] = numberAsEmojis.get(1);
-                }
-                else if(availablePositionCount < 1000){
-                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) -1] = numberAsEmojis.getFirst();
-                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) ] = numberAsEmojis.get(1);
-                    matrixMap[p.y() + abs(minY)][p.x() + abs(minX) +1] = numberAsEmojis.get(2);
-                }
-                // we assumed it is impossible to have more than 1000 choice to position a card in a game.
-
+                matrixMap[p.y() + abs(minY)][p.x() + abs(minX)] = Symbol_String.FromIntToString(availablePositionCount);
                 availablePositionCount++;
             }
         }

@@ -3,7 +3,6 @@ package it.polimi.ingsw.test.view.tui;
 import it.polimi.ingsw.dataobject.DrawableCardsInfo;
 import it.polimi.ingsw.dataobject.InfoTranslator;
 import it.polimi.ingsw.model.DrawChoice;
-import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.*;
 import it.polimi.ingsw.model.map.GameField;
 import it.polimi.ingsw.model.map.Point;
@@ -206,7 +205,7 @@ public class TUITest extends TestCase {
 
 
     public void testIntToEmoji(){
-        System.out.println(Symbol_String.FromIntToEmoji(76));
+        System.out.println(Symbol_String.FromIntToString(76));
     }
 
     public void testInitialCard(){
