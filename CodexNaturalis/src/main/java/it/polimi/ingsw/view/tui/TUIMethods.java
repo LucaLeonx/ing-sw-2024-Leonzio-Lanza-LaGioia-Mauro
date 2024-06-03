@@ -218,9 +218,6 @@ public class TUIMethods {
         System.out.println("\n"); // just some spacing.
     }
 
-    public static void showPoints(OpponentInfo player) {
-        System.out.println("Player " + player.nickname() + " has " + player.score() + " points");
-    }
 
     public static void showHand(ControlledPlayerInfo player) {
         System.out.println("Your hand: ");
@@ -228,7 +225,7 @@ public class TUIMethods {
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 23; j++) {
-                matrixHand[i][j] = "\t\t"; //I add the space between the card.
+                matrixHand[i][j] = "      "; //I add the space between the card.
             }
         }
 
@@ -275,7 +272,7 @@ public class TUIMethods {
         //I add the space between the card.
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 11; j++) {
-                objectives[i][j] = "\t\t";
+                objectives[i][j] = "      ";
             }
         }
 
@@ -320,9 +317,9 @@ public class TUIMethods {
         //I add the space between the card.
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 11; j++) {
-                decks[i][j] = "\t\t";
-                drawableCards1[i][j] = "\t\t";
-                drawableCards2[i][j] = "\t\t";
+                decks[i][j] = "      ";
+                drawableCards1[i][j] = "      ";
+                drawableCards2[i][j] = "      ";
             }
         }
 
@@ -386,7 +383,7 @@ public class TUIMethods {
             }
         }
 
-        System.out.println("ResourceDeck \tGoldDeck");
+        System.out.println("ResourceDeck    GoldDeck");
         for(int i = 0; i < 3; i++) {
             for (int j = 0; j < 11; j++) {
                 System.out.print(decks[i][j]);
@@ -498,20 +495,20 @@ public class TUIMethods {
     }
 
     public static void printMushroom(){
-        System.out.println("\u001B[31m"+ "\t\t\t\t\t\t        __.....__ ");
-        System.out.println("\u001B[31m"+"\t\t\t\t\t\t     .'\"         \"`." );
-        System.out.println("\u001B[31m"+"\t\t\t\t\t\t   .'               `.\t\t\t\t"+ "\u001B[35m" + "(_\\|/_)");
-        System.out.println("\u001B[31m"+"\t\t\t\t\t\t  .                   . \t\t\t "+ "\u001B[35m" + "(/|\\) ");
-        System.out.println("\u001B[31m"+"\t\t\t\t\t\t .       __...__       .");
-        System.out.println("\u001B[31m"+"\t\t\t\t\t\t. _.--\"\"\"       \"\"\"--._ .");
-        System.out.println("\u001B[31m"+"\t\t\t\t\t\t:\"                     \";");
-        System.out.println("\u001B[31m"+"\t\t\t\t\t\t `-.__    :   :    __.-'");
-        System.out.println("\u001B[31m"+"\t\t\t\t\t\t     \"\"\"-:   :-\"\"\"   ");
-        System.out.println("\u001B[31m"+"\t\t\t\t\t\t        J     L");
-        System.out.println("\u001B[31m"+"\t\t\t\t\t\t        :     :  ");
-        System.out.println("\u001B[31m"+"\t\t\t\t\t\t        J       L");
-        System.out.println("\u001B[31m"+"\t\t\t\t\t\t        :       :");
-        System.out.println("\u001B[31m"+"\t\t\t\t\t\t       `._____.'");
+        System.out.println("\u001B[31m"+ "                                __.....__ ");
+        System.out.println("\u001B[31m"+"                             .'\"         \"`." );
+        System.out.println("\u001B[31m"+"                           .'               `.\t\t\t\t"+ "\u001B[35m" + "(_\\|/_)");
+        System.out.println("\u001B[31m"+"                          .                   . \t\t\t "+ "\u001B[35m" + "(/|\\) ");
+        System.out.println("\u001B[31m"+"                         .       __...__       .");
+        System.out.println("\u001B[31m"+"                        . _.--\"\"\"       \"\"\"--._ .");
+        System.out.println("\u001B[31m"+"                        :\"                     \";");
+        System.out.println("\u001B[31m"+"                         `-.__    :   :    __.-'");
+        System.out.println("\u001B[31m"+"                             \"\"\"-:   :-\"\"\"   ");
+        System.out.println("\u001B[31m"+"                                J     L");
+        System.out.println("\u001B[31m"+"                                :     :  ");
+        System.out.println("\u001B[31m"+"                                J       L");
+        System.out.println("\u001B[31m"+"                                :       :");
+        System.out.println("\u001B[31m"+"                               `._____.'");
         System.out.println("\u001B[32m"+"_______\\|/_____________\\|/_________________________\\|/_________________\\|/__________");
         // Reset colors after printing
         System.out.print("\u001B[0m");
