@@ -25,16 +25,18 @@ public class Symbol_String {
     public static final String GREEN_CIRCLE_SYMBOL= "\uD83D\uDFE2";
     public static final String YELLOW_CIRCLE_SYMBOL= "\uD83D\uDFE1";
     public static final String RED_CIRCLE_SYMBOL= "\uD83D\uDD34";
-    public static final String ZERO_SYMBOL = "0️⃣";
-    public static final String ONE_SYMBOL = "1️⃣";
-    public static final String TWO_SYMBOL = "2️⃣";
-    public static final String THREE_SYMBOL = "3️⃣";
-    public static final String FOUR_SYMBOL = "4️⃣";
-    public static final String FIVE_SYMBOL = "5️⃣";
-    public static final String SIX_SYMBOL = "6️⃣";
-    public static final String SEVEN_SYMBOL = "7️⃣";
-    public static final String EIGHT_SYMBOL = "8️⃣";
-    public static final String NINE_SYMBOL = "9️⃣";
+
+    public static final String ZERO_SYMBOL = "\u0030\uFE0F\u20E3";
+    public static final String ONE_SYMBOL = "\u0031\uFE0F\u20E3";
+    public static final String TWO_SYMBOL = "\u0032\uFE0F\u20E3";
+    public static final String THREE_SYMBOL = "\u0033\uFE0F\u20E3";
+    public static final String FOUR_SYMBOL = "\u0034\uFE0F\u20E3";
+    public static final String FIVE_SYMBOL = "\u0035\uFE0F\u20E3";
+    public static final String SIX_SYMBOL = "\u0036\uFE0F\u20E3";
+    public static final String SEVEN_SYMBOL = "\u0037\uFE0F\u20E3";
+    public static final String EIGHT_SYMBOL = "\u0038\uFE0F\u20E3";
+    public static final String NINE_SYMBOL = "\u0039\uFE0F\u20E3";
+
 
     public static final String COVERED_ANGLES_SYMBOL = "\u25F0 ";
     public static final String FOR_EACH_SYMBOL ="\u2755";
