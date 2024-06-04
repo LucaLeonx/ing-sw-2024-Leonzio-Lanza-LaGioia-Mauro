@@ -66,44 +66,6 @@ public class Symbol_String {
         else {
             result=temp;
         }
-        /*
-        for(int i=0; i<temp.length(); i++){
-            switch (temp.charAt(i)){
-                case '0':
-                    result.add(ZERO_SYMBOL);
-                    break;
-                case '1':
-                    result.add(ONE_SYMBOL);
-                    break;
-                case '2':
-                    result.add(TWO_SYMBOL);
-                    break;
-                case '3':
-                    result.add(THREE_SYMBOL);
-                    break;
-                case '4':
-                    result.add(FOUR_SYMBOL);
-                    break;
-                case '5':
-                    result.add(FIVE_SYMBOL);
-                    break;
-                case '6':
-                    result.add(SIX_SYMBOL);
-                    break;
-                case '7':
-                    result.add(SEVEN_SYMBOL);
-                    break;
-                case '8':
-                    result.add(EIGHT_SYMBOL);
-                    break;
-                case '9':
-                    result.add(NINE_SYMBOL);
-                    break;
-                default:
-                    System.out.println("Error in FromIntToString. We are sorry");
-            }
-        }
-       */
         return result;
     }
 
