@@ -263,6 +263,7 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
 
      @Override
      public boolean isWaitingInLobby(){
+
         try {
             session.getJoinedLobbyInfo();
             return true;

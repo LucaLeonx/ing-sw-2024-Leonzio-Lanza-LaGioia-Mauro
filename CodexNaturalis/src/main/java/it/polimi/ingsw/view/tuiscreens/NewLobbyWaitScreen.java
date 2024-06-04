@@ -79,7 +79,7 @@ public class NewLobbyWaitScreen extends TUIScreen {
         try {
             boolean gameStarted = waitForGameStarting.get();
             if (gameStarted) {
-                transitionState(new NewGameSetupScreen(tui, new Scanner(System.in) , controller));
+                transitionState(new NewGameSetupScreen(tui, scanner , controller));
             } else {
                 transitionState(new NewLobbyScreen(tui, scanner, controller));
             }

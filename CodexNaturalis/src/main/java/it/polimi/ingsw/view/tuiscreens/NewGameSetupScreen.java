@@ -19,7 +19,6 @@ public class NewGameSetupScreen extends TUIScreen {
 
     @Override
     public void display() {
-
         System.out.println("\n");
         TUIMethods.printStylishMessage("                              THE GAME IS STARTED                              ","\u001B[33m", "\u001B[31m");
 
