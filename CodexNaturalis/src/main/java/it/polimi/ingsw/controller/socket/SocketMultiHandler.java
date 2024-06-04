@@ -32,6 +32,7 @@ public class SocketMultiHandler implements Runnable {
                 if(OutMsg != null) {
                     oos.writeObject(OutMsg);
                     oos.flush();
+                    oos.reset();
                 }
             }
         } catch (IOException e) {
