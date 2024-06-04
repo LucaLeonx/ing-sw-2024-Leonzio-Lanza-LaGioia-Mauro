@@ -45,7 +45,7 @@ public class NewLobbyScreen extends TUIScreen {
         } catch (CancelChoiceException e) {
             throw new CancelChoiceException();
         } catch (ElementNotFoundException | InvalidParameterException e){
-            System.out.println("Unable to join lobby - May be already full");
+            System.out.println("Unable to join lobby - It might be already full");
             throw new CancelChoiceException();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
@@ -93,7 +93,6 @@ public class NewLobbyScreen extends TUIScreen {
 
             while(true){
                 try {
-                    controller.getLobbyList().forEach(System.out::println);
                     lobbyOperationChoice.askAndExecuteChoice(scanner);
                     break;
                 } catch (CancelChoiceException cancel) {
@@ -101,8 +100,6 @@ public class NewLobbyScreen extends TUIScreen {
                     break;
                 } catch (InvalidInputException e){
                     continue;
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
                 }
             }
 

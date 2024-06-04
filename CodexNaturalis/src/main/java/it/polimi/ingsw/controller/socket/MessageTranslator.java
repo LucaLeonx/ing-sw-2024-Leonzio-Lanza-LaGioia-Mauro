@@ -217,6 +217,16 @@ public class MessageTranslator {
                 return new Message(null,null,server.hasGameEnded(user));
             }
 
+            case ALL_PLAYERS_HAVE_SETUP -> {
+                User user;
+                try {
+                    user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                }catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
+                return new Message(null,null,server.setupDone(user));
+            }
+
             case GET_LEADERBOARD -> {
                 User user;
                 List<ControlledPlayerInfo> lead = null;

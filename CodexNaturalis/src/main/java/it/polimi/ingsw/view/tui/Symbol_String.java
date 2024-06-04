@@ -13,70 +13,58 @@ public class Symbol_String {
     public static final String MANUSCRIPT_SYMBOL= "\uD83D\uDCDD";
     public static final String QUILL_SYMBOL= "\uD83E\uDEB6";
     public static final String INKWELL_SYMBOL= "\uD83E\uDED9";
-    public static final String WHITE_SQUARE_SYMBOL= "\u2B1C";
+    //public static final String WHITE_SQUARE_SYMBOL= "\u2B1C";
+    //public static final String WHITE_SQUARE_SYMBOL= "\u2B1C\uFE0F";
+    public static final String WHITE_SQUARE_SYMBOL= "\u26AA";
     public static final String RED_SQUARE_SYMBOL= "\uD83D\uDFE5";
     public static final String GREEN_SQUARE_SYMBOL= "\uD83D\uDFE9";
     public static final String BLUE_SQUARE_SYMBOL= "\uD83D\uDFE6";
     public static final String PURPLE_SQUARE_SYMBOL= "\uD83D\uDFEA";
     public static final String BROWN_SQUARE_SYMBOL= "\uD83D\uDFEB";
-    public static final String BLACK_SQUARE_SYMBOL= "\u2B1B";
+    //public static final String BLACK_SQUARE_SYMBOL= "\u2B1B\uFE0F";
+    public static final String BLACK_SQUARE_SYMBOL= "\u26AB";
     public static final String YELLOW_SQUARE_SYMBOL = "\uD83D\uDFE8";
     public static final String BLUE_CIRCLE_SYMBOL= "\uD83D\uDD35";
     public static final String GREEN_CIRCLE_SYMBOL= "\uD83D\uDFE2";
     public static final String YELLOW_CIRCLE_SYMBOL= "\uD83D\uDFE1";
     public static final String RED_CIRCLE_SYMBOL= "\uD83D\uDD34";
-    public static final String ZERO_SYMBOL = "0️⃣";
-    public static final String ONE_SYMBOL = "1️⃣";
-    public static final String TWO_SYMBOL = "2️⃣";
-    public static final String THREE_SYMBOL = "3️⃣";
-    public static final String FOUR_SYMBOL = "4️⃣";
-    public static final String FIVE_SYMBOL = "5️⃣";
-    public static final String SIX_SYMBOL = "6️⃣";
-    public static final String SEVEN_SYMBOL = "7️⃣";
-    public static final String EIGHT_SYMBOL = "8️⃣";
-    public static final String NINE_SYMBOL = "9️⃣";
+
+    //deprecated. old symbol for Intellij output but doesn't work on universal terminal.
+    /*
+    public static final String ZERO_SYMBOL = "\u0030\uFE0F\u20E3";
+    public static final String ONE_SYMBOL = "\u0031\uFE0F\u20E3";
+    public static final String TWO_SYMBOL = "\u0032\uFE0F\u20E3";
+    public static final String THREE_SYMBOL = "\u0033\uFE0F\u20E3";
+    public static final String FOUR_SYMBOL = "\u0034\uFE0F\u20E3";
+    public static final String FIVE_SYMBOL = "\u0035\uFE0F\u20E3";
+    public static final String SIX_SYMBOL = "\u0036\uFE0F\u20E3";
+    public static final String SEVEN_SYMBOL = "\u0037\uFE0F\u20E3";
+    public static final String EIGHT_SYMBOL = "\u0038\uFE0F\u20E3";
+    public static final String NINE_SYMBOL = "\u0039\uFE0F\u20E3";
+     */
+
+    public static final String ZERO_SYMBOL = "0";
+    public static final String ONE_SYMBOL = "1";
+    public static final String TWO_SYMBOL = "2";
+    public static final String THREE_SYMBOL = "3";
+    public static final String FOUR_SYMBOL = "4";
+    public static final String FIVE_SYMBOL = "5";
+    public static final String SIX_SYMBOL = "6";
+    public static final String SEVEN_SYMBOL = "7";
+    public static final String EIGHT_SYMBOL = "8";
+    public static final String NINE_SYMBOL = "9";
 
     public static final String COVERED_ANGLES_SYMBOL = "\u25F0 ";
     public static final String FOR_EACH_SYMBOL ="\u2755";
 
-    public static List<String> FromIntToEmoji(int n){
+    public static String FromIntToString(int n){
         String temp = String.valueOf(n);
-        List<String> result= new ArrayList<>();
-        for(int i=0; i<temp.length(); i++){
-            switch (temp.charAt(i)){
-                case '0':
-                    result.add(ZERO_SYMBOL);
-                    break;
-                case '1':
-                    result.add(ONE_SYMBOL);
-                    break;
-                case '2':
-                    result.add(TWO_SYMBOL);
-                    break;
-                case '3':
-                    result.add(THREE_SYMBOL);
-                    break;
-                case '4':
-                    result.add(FOUR_SYMBOL);
-                    break;
-                case '5':
-                    result.add(FIVE_SYMBOL);
-                    break;
-                case '6':
-                    result.add(SIX_SYMBOL);
-                    break;
-                case '7':
-                    result.add(SEVEN_SYMBOL);
-                    break;
-                case '8':
-                    result.add(EIGHT_SYMBOL);
-                    break;
-                case '9':
-                    result.add(NINE_SYMBOL);
-                    break;
-                default:
-                    System.out.println("Error in FromIntToEmoji. We are sorry");
-            }
+        String result;
+        if(n<10){
+            result=" " + temp;
+        }
+        else {
+            result=temp;
         }
         return result;
     }

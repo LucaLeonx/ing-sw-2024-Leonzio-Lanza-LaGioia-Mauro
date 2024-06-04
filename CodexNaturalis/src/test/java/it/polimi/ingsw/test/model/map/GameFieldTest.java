@@ -19,15 +19,19 @@ public class GameFieldTest extends TestCase {
     private List<Card> goldenCards;
     private List<Card> initialCards;
 
+    private List<ObjectiveCard> objectiveCards;
+
+
     private GameField emptyField;
     private GameField diagonalField;
-    private GameField negativeDiagonalField;
+
 
     public void setUp(){
         try {
             resourceCards = CardFactory.getResourceCards();
             goldenCards = CardFactory.getGoldCards();
             initialCards = CardFactory.getInitialCards();
+            objectiveCards = CardFactory.getObjectiveCards();
         } catch (Exception e){
             e.printStackTrace();
             fail();
@@ -156,8 +160,8 @@ public class GameFieldTest extends TestCase {
         field.placeCard(resourceCards.get(29), CardOrientation.FRONT, new Point(-8, -8));
 
         checkInvariants(field);
-        RewardFunction CommonObjective1 = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.DOWN_RIGHT, CardColor.RED, CardColor.GREEN);
-        RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
+        RewardFunction CommonObjective1 = objectiveCards.get(4).getRewardFunction();
+        RewardFunction CommonObjective2 = objectiveCards.get(1).getRewardFunction();
         RewardFunction SecretObjective = GameFunctionFactory.createDiagonalPatternMatchFunction(true, CardColor.SKYBLUE);
         assertEquals(0,CommonObjective1.getPoints(field));
         assertEquals(2,CommonObjective2.getPoints(field));
@@ -186,9 +190,9 @@ public class GameFieldTest extends TestCase {
 
 
         checkInvariants(field);
-        RewardFunction CommonObjective1 = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.DOWN_RIGHT, CardColor.RED, CardColor.GREEN);
-        RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
-        RewardFunction SecretObjective = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.UP_LEFT, CardColor.PURPLE, CardColor.SKYBLUE);
+        RewardFunction CommonObjective1 = objectiveCards.get(4).getRewardFunction();
+        RewardFunction CommonObjective2 = objectiveCards.get(1).getRewardFunction();
+        RewardFunction SecretObjective = objectiveCards.get(7).getRewardFunction();
         RewardFunction CoveredAnglesTest1 = GameFunctionFactory.createCoveredAnglesFunction(66);
 
 
@@ -226,9 +230,9 @@ public class GameFieldTest extends TestCase {
 
         checkInvariants(field);
 
-        RewardFunction CommonObjective1 = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.DOWN_RIGHT, CardColor.RED, CardColor.GREEN);
-        RewardFunction CommonObjective2 = GameFunctionFactory.createDiagonalPatternMatchFunction(false, CardColor.GREEN);
-        RewardFunction SecretObjective = GameFunctionFactory.createBlockPatternMatchFunction(AnglePosition.UP_RIGHT, CardColor.SKYBLUE, CardColor.RED);
+        RewardFunction CommonObjective1 = objectiveCards.get(4).getRewardFunction();
+        RewardFunction CommonObjective2 = objectiveCards.get(1).getRewardFunction();
+        RewardFunction SecretObjective = objectiveCards.get(6).getRewardFunction();
         RewardFunction CoveredAnglesTest1 = GameFunctionFactory.createCoveredAnglesFunction(46);
         RewardFunction CoveredAnglesTest2 = GameFunctionFactory.createCoveredAnglesFunction(45);
 
@@ -239,11 +243,32 @@ public class GameFieldTest extends TestCase {
         assertEquals(2, CoveredAnglesTest2.getPoints(field) );
 
 
+    }
 
+
+    public void testBlockPatternMultipleTime(){
+
+        GameField field = new GameField();
+
+        field.placeCard(initialCards.get(1), CardOrientation.FRONT, new Point(0,0));
+
+        field.placeCard(resourceCards.get(11), CardOrientation.BACK, new Point( 2, 2));
+        field.placeCard(resourceCards.get(12), CardOrientation.BACK, new Point(2, -2));
+        field.placeCard(goldenCards.get(13), CardOrientation.BACK, new Point(-2, 2));
+        field.placeCard(resourceCards.get(14), CardOrientation.BACK, new Point(-2, -2));
+
+        field.placeCard(resourceCards.get(31), CardOrientation.BACK, new Point(0, -4));
+        field.placeCard(goldenCards.get(32), CardOrientation.BACK, new Point(-4, -4));
+
+
+
+        checkInvariants(field);
+        RewardFunction CommonObjective1 = objectiveCards.get(5).getRewardFunction();
+
+        assertEquals(6,CommonObjective1.getPoints(field));
 
 
     }
-
 
 
 

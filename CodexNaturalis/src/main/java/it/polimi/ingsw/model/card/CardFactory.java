@@ -441,20 +441,20 @@ class ObjectiveCardAdapter extends TypeAdapter<ObjectiveCard[]>{
                     String angle = reader.nextString();
                     switch (angle){
                         case "UP_LEFT":
-                            colorblock = CardColor.valueOf("RED");
-                            colorangle = CardColor.valueOf("GREEN");
+                            colorblock = CardColor.valueOf("PURPLE");
+                            colorangle = CardColor.valueOf("SKYBLUE");
                             break;
                         case "UP_RIGHT":
-                            colorblock = CardColor.valueOf("GREEN");
-                            colorangle = CardColor.valueOf("PURPLE");
-                            break;
-                        case "DOWN_LEFT":
                             colorblock = CardColor.valueOf("SKYBLUE");
                             colorangle = CardColor.valueOf("RED");
                             break;
+                        case "DOWN_LEFT":
+                            colorblock = CardColor.valueOf("GREEN");
+                            colorangle = CardColor.valueOf("PURPLE");
+                            break;
                         case "DOWN_RIGHT":
-                            colorblock = CardColor.valueOf("PURPLE");
-                            colorangle = CardColor.valueOf("SKYBLUE");
+                            colorblock = CardColor.valueOf("RED");
+                            colorangle = CardColor.valueOf("GREEN");
                             break;
                     }
                     reward = createBlockPatternMatchFunction(AnglePosition.valueOf(angle),colorblock,colorangle);

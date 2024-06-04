@@ -118,32 +118,91 @@ public class SocketClientController implements ClientController {
 
     @Override
     public void waitForLobbyListUpdate() {
-
+        List<LobbyInfo> oldLobbies;
+        try{
+            oldLobbies = getLobbyList();
+            int newSize,oldSize;
+            newSize = oldSize = oldLobbies.size();
+            while(newSize == oldSize){
+                Thread.sleep(1000);
+                newSize = getLobbyList().size();
+            }
+        }catch(RemoteException | InterruptedException e){
+            return;
+        }
     }
 
     @Override
     public void waitForGameToStart() {
-
+        int currPlayer,reqPlayer;
+        LobbyInfo currentLobby;
+        try{
+            currentLobby = getJoinedLobbyInfo();
+            currPlayer = currentLobby.currNumPlayers();
+            reqPlayer = currentLobby.reqPlayers();
+            while(currPlayer < reqPlayer){
+                Thread.sleep(1000);
+                currPlayer = getJoinedLobbyInfo().currNumPlayers();
+            }
+        }catch(InterruptedException | RemoteException e){
+            return;
+        }
     }
 
     @Override
     public void waitForJoinedLobbyUpdate() {
+        int currPlayers,oldPlayers;
+        LobbyInfo currentLobby;
+        try{
+            currentLobby = getJoinedLobbyInfo();
+            oldPlayers = currPlayers = currentLobby.currNumPlayers();
+            while(currPlayers == oldPlayers){
+                Thread.sleep(1000);
+                currPlayers = getJoinedLobbyInfo().currNumPlayers();
+            }
+        }catch(InterruptedException | RemoteException e){
+            return;
+        }
+    }
 
+    private boolean allPlayersHaveSetup(){
+        client.sendMessage(new Message(MessageType.ALL_PLAYERS_HAVE_SETUP,getCredentials(),null));
+        return (boolean) client.receiveMessage().getObj();
     }
 
     @Override
-    public void waitForSetupFinished() {
-
+    public void waitForSetupFinished(){
+        try{
+            while(!allPlayersHaveSetup()){
+                Thread.sleep(1000);
+            }
+        }catch(InterruptedException e){
+            return;
+        }
     }
 
     @Override
-    public void waitForTurnChange() {
-
+    public void waitForTurnChange() {//Continuous polling
+        String oldUser;
+        try{
+            oldUser = getCurrentPlayerName();
+            while(oldUser.equals(getCurrentPlayerName())){
+                Thread.sleep(1000);
+            }
+        }catch (InterruptedException | RemoteException e) {
+            return;
+        }
     }
 
     @Override
     public void waitForGameEnded() {
-
+        try{
+            while(!hasGameEnded()){
+                Thread.sleep(1000);
+            }
+        }catch(InterruptedException | RemoteException e){
+            return;
+        }
     }
 
     @Override
@@ -233,7 +292,8 @@ public class SocketClientController implements ClientController {
 
     @Override
     public boolean isWaitingInLobby() {
-        return false;
+        client.sendMessage(new Message(MessageType.GET_JOINED_LOBBY_INFO,getCredentials(),null));
+        return !(client.receiveMessage().getObj() instanceof Exception);
     }
 
     public void closeSocket() throws IOException {
@@ -243,7 +303,6 @@ public class SocketClientController implements ClientController {
     @Override
     public boolean isInGame() throws RemoteException{
         client.sendMessage(new Message(MessageType.GET_JOINED_LOBBY_INFO,getCredentials(),null));
-        checkExceptionOnMessage(client.receiveMessage());
-        return true;
+        return !(client.receiveMessage().getObj() instanceof Exception);
     }
 }

@@ -10,69 +10,89 @@ import java.rmi.RemoteException;
 import java.util.Scanner;
 import java.util.concurrent.*;
 
+import java.util.Scanner;
+import java.util.concurrent.*;
+
+import java.util.Scanner;
+import java.util.concurrent.*;
+
+import java.util.Scanner;
+import java.util.concurrent.*;
+
 public class NewLobbyWaitScreen extends TUIScreen {
+    private Thread updateThread;
+    private Thread checkForUserInput;
+    private Future<Boolean> waitForGameStarting;
+    private ExecutorService executor;
+    private volatile boolean isRunning;
+
     public NewLobbyWaitScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
+        this.executor = Executors.newSingleThreadExecutor();
+        this.isRunning = true;
     }
-
-    Thread updateThread = new Thread( () -> {
-        while(true){
-            controller.waitForJoinedLobbyUpdate();
-            try {
-                System.out.println(controller.getJoinedLobbyInfo());
-            } catch (RemoteException e) {
-                break;
-            }
-        }}
-    );
-
-    private Future<Boolean> waitForGameStarting;
-
-    Thread checkForUserInput = new Thread( () -> {
-        String input = scanner.nextLine().trim().toLowerCase();
-        if(input.equals("q")){
-            try{
-                controller.exitFromLobby();
-                waitForGameStarting.cancel(true);
-                updateThread.interrupt();
-            } catch (WrongPhaseException | RemoteException e){
-                System.out.println("Unable to quit from lobby - Game already started");
-            }
-        }
-    });
-
-
 
     @Override
     public void display() {
-        TUIMethods.printStylishMessage("WAITING FOR OTHER PLAYER TO JOIN...                                                ","\u001B[32m", "\u001B[34m");
+        TUIMethods.printStylishMessage("WAITING FOR OTHER PLAYER TO JOIN...                                                ", "\u001B[32m", "\u001B[34m");
         TUIMethods.printWolf();
-        controller.waitForGameToStart();
-        transitionState(new NewGameSetupScreen(tui, scanner, controller));
-        /*updateThread.start();
-        checkForUserInput.start();
+        System.out.println("press q to quit: ");
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        waitForGameStarting = executor.submit(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception {
-                controller.waitForGameToStart();
-                return true;
+        updateThread = new Thread(() -> {
+            while (isRunning && !Thread.currentThread().isInterrupted()) {
+                controller.waitForJoinedLobbyUpdate();
+                try {
+                    System.out.println("A new player joined the lobby or a player left your lobby, new lobby status: ");
+                    System.out.println(controller.getJoinedLobbyInfo());
+                } catch (RemoteException e) {
+                    break;
+                }
             }
         });
-        try {
-            checkForUserInput.join();
-            if(waitForGameStarting.isCancelled()){
-                transitionState(new NewLobbyScreen(tui, scanner, controller));
-            } else {
-                transitionState(new NewGameSetupScreen(tui, scanner, controller));
+
+        checkForUserInput = new Thread(() -> {
+            while (isRunning && !Thread.currentThread().isInterrupted()) {
+                if (scanner.hasNextLine()) {
+                    String input = scanner.nextLine().trim().toLowerCase();
+                    if (input.equals("q")) {
+                        try {
+                            controller.exitFromLobby();
+                            waitForGameStarting.cancel(true);
+                            isRunning = false;
+                            updateThread.interrupt();
+                        } catch (WrongPhaseException | RemoteException e) {
+                            System.out.println("Unable to quit from lobby - Game already started");
+                        }
+                    }
+                }
             }
-        } catch (InterruptedException e) {
+        });
+
+        updateThread.start();
+        checkForUserInput.start();
+
+        waitForGameStarting = executor.submit(() -> {
+            controller.waitForGameToStart();
+            return true;
+        });
+
+        try {
+            boolean gameStarted = waitForGameStarting.get();
+            if (gameStarted) {
+                transitionState(new NewGameSetupScreen(tui, new Scanner(System.in) , controller));
+            } else {
+                transitionState(new NewLobbyScreen(tui, scanner, controller));
+            }
+        } catch (CancellationException e) {
+            System.out.println("The game start waiting task was cancelled.");
             transitionState(new NewLobbyScreen(tui, scanner, controller));
-        }*/
-
-
-
-
+        } catch (InterruptedException | ExecutionException e) {
+            transitionState(new NewLobbyScreen(tui, scanner, controller));
+        } finally {
+            isRunning = false;
+            updateThread.interrupt();
+            checkForUserInput.interrupt();
+            executor.shutdownNow();
+        }
     }
 }

@@ -123,4 +123,17 @@ public class InsertNamePanel extends StandardPanel {
         add(goBack, gbc);
 
     }
+
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Image image = null;
+        try {
+            image = new ImageIcon("src/main/resources/other_images/codex_game.jpg").getImage();
+        }
+        catch (Exception e){
+            System.out.println("Path non rilevato");
+        }
+        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+    }
+
 }
