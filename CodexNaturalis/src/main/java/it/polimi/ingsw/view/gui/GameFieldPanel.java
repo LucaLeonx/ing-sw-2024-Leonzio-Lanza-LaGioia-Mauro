@@ -12,23 +12,34 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public class GameFieldPanel extends StandardPanel {
-    JButton startGame= new JButton("PRESS TO START GAME");
+    JLabel waitingForOthers= new JLabel("Waiting for other players to join...");
+    private final Timer timer;
 
     public GameFieldPanel() {
         //startGame.setAlignmentY(CENTER_ALIGNMENT);
         this.setLayout(new BorderLayout());
-        this.add(startGame, BorderLayout.CENTER);
+        this.add(waitingForOthers, BorderLayout.CENTER);
 
-        startGame.addActionListener(new ActionListener() {
+        timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                buildPanel();;
+                try {
+                    MainWindow.getClientController().waitForGameToStart();
+                    buildPanel();
+                    }
+                catch (Exception ex) {
+                    System.out.println(ex);
+                    timer.stop();
+                    timer.start();
+                }
             }
         });
+       // timer.start();
+
     }
 
     private void buildPanel(){
-        startGame.setVisible(false);
+        waitingForOthers.setVisible(false);
         this.setLayout(new BorderLayout());
 
         JPanel hostPlayer = newHostPanel();
@@ -48,11 +59,17 @@ public class GameFieldPanel extends StandardPanel {
     private JPanel newHostPanel(){
         JPanel host= new JPanel();
         host.setLayout(new GridBagLayout());
+        ArrayList<CardInfo> cardsInHands = new ArrayList<>();
 
-        ImagePanel firstcard = new ImagePanel("img_21");
-        ImagePanel secondcard = new ImagePanel("img_31");
-        ImagePanel thirdcard = new ImagePanel("img_51");
-        ImagePanel fourthcard = new ImagePanel("img_61");
+        try {
+            cardsInHands = MainWindow.getClientController().getControlledPlayerInformation().cardsInHand();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        ImagePanel firstcard = new ImagePanel(cardsInHands.get(0).id());
+        ImagePanel secondcard = new ImagePanel(cardsInHands.get(1).id());
+        ImagePanel thirdcard = new ImagePanel(cardsInHands.get(2).id());
+        ImagePanel fourthcard = new ImagePanel(cardsInHands.get(3).id());
 
         JButton logout= new JButton("Exit and logout");
         JButton goBack= new JButton("Go Back");
@@ -154,55 +171,95 @@ public class GameFieldPanel extends StandardPanel {
         JPanel otherPlayes = new JPanel();
         otherPlayes.setLayout(new GridBagLayout());
 
+        int numberOfPlyayers = 0;
+
+        JButton player2 = new JButton();
+        JButton player3 = new JButton();
+        JButton player4 = new JButton();
+
+        try {
+            numberOfPlyayers= MainWindow.getClientController().getLeaderboard().size();
+            for(int i=0; i<numberOfPlyayers; i++) {
+                if(i==0)
+                    player2.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
+                if(i==1)
+                    player3.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
+                if(i==2)
+                    player4.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
         JButton player2 = new JButton("Player 2");
         JButton player3 = new JButton("Player 3");
         JButton player4 = new JButton("Player 4");
 
         GridBagConstraints gbc= new GridBagConstraints();
 
-      /*  try {
-            List<String> names= MainWindow.getClientController().getPlayerNames();
-            for (int i = 0; i<3; names.size())
-            {
-                if (i==0)
-                {
-                   player2.setText(names.get(1));
-                   gbc.gridx=0;
-                   otherPlayes.add(player2, gbc);
-                }
-                if (i==1)
-                {
-                    player3.setText(names.get(2));
-                    gbc.gridx=1;
-                    otherPlayes.add(player3, gbc);
-                }
-                if (i==2)
-                {
-                    player4.setText(names.get(3));
-                    gbc.gridx=2;
-                    otherPlayes.add(player4, gbc);
-                }
-                i++;
+        player2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
             }
-        } catch (RemoteException | WrongPhaseException e) {
-            System.out.println(e.getMessage());
-        }*/
+        });
 
-        gbc.gridx=0;
-        otherPlayes.add(player2, gbc);
 
-        gbc.gridx=1;
-        otherPlayes.add(player3, gbc);
-
-        gbc.gridx=2;
-        otherPlayes.add(player4, gbc);
+        for(int i = 0; i<numberOfPlyayers-1; i++) {
+            gbc.gridx = i;
+            if(i==0)
+                otherPlayes.add(player2, gbc);
+            if(i==1)
+                otherPlayes.add(player3, gbc);
+            if(i==2)
+                otherPlayes.add(player4, gbc);
+        }
 
         return otherPlayes;
     }
 
     private JPanel newInfo(){
-        JPanel player3 = new JPanel();
-        return player3;
+        JPanel info = new JPanel();
+
+        HashMap<Symbol, Integer> symbolCounter= new HashMap<>();
+
+        JLabel insectPoints= new JLabel();
+        JLabel animalPoints= new JLabel();
+        JLabel fungiPoints= new JLabel();
+        JLabel plantPoints= new JLabel();
+
+        try {
+            symbolCounter= MainWindow.getClientController().getControlledPlayerInformation().field().symbolCounterMap();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        insectPoints.setText(Symbol_String.INSECT_SYMBOL + symbolCounter.get(Symbol.INSECT).toString());
+        animalPoints.setText(Symbol_String.ANIMAL_SYMBOL +symbolCounter.get(Symbol.ANIMAL).toString());
+        fungiPoints.setText(Symbol_String.FUNGI_SYMBOL + symbolCounter.get(Symbol.FUNGI).toString());
+        plantPoints.setText(Symbol_String.PLANT_SYMBOL + symbolCounter.get(Symbol.PLANT).toString());
+
+
+
+
+        GridBagConstraints gbc= new GridBagConstraints();
+
+        gbc.gridx=0;
+        gbc.gridy=0;
+        info.add(insectPoints, gbc);
+
+        gbc.gridy=1;
+        info.add(animalPoints, gbc);
+
+        gbc.gridy=2;
+        info.add(fungiPoints, gbc);
+
+        gbc.gridy=3;
+        info.add(plantPoints, gbc);
+
+        return info;
     }
 
     private JPanel newChat(){
