@@ -1,6 +1,11 @@
 package it.polimi.ingsw.view.gui;
 
+import com.sun.tools.javac.Main;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
+import it.polimi.ingsw.dataobject.CardInfo;
+import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
+import it.polimi.ingsw.model.card.Symbol;
+import it.polimi.ingsw.view.tui.Symbol_String;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +14,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class GameFieldPanel extends StandardPanel {
@@ -193,9 +200,7 @@ public class GameFieldPanel extends StandardPanel {
             System.out.println(e);
         }
 
-        JButton player2 = new JButton("Player 2");
-        JButton player3 = new JButton("Player 3");
-        JButton player4 = new JButton("Player 4");
+
 
         GridBagConstraints gbc= new GridBagConstraints();
 
