@@ -107,13 +107,11 @@ public class Game {
         return players;
     }
 
-    public Player getPlayer(String nickname) throws NoSuchElementException {
-        Player playerInformation = players.stream()
+    public Player getPlayer(String nickname) throws ElementNotFoundException {
+        return players.stream()
                 .filter((player) -> player.getNickname().equals(nickname))
                 .findFirst()
                 .orElseThrow(() -> new ElementNotFoundException("Player " + nickname + " not found"));
-
-        return playerInformation;
     }
 
     public synchronized String getCurrentPlayerNickname() {

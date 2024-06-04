@@ -115,7 +115,7 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
 
     public LobbyInfo getJoinedLobbyInfo(User user){
         if(user.getStatus() != WAITING_TO_START) {
-            throw new InvalidOperationException("The user is not in any lobby");
+            throw new WrongPhaseException("The user is not in any lobby");
         }
 
         return lobbyList.getLobbyById(user.getJoinedLobbyId()).getLobbyInfo();
@@ -312,7 +312,7 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
         Game joinedGame = activeGames.getJoinedGame(user);
         Set<User> connectedUsers = activeGames.getConnectedUsers(user.getJoinedGameId());
 
-        if(joinedGame.getCurrentPlayerNickname() != user.getUsername()){
+        if(!Objects.equals(joinedGame.getCurrentPlayerNickname(), user.getUsername())){
             throw new WrongPhaseException("Cannot perform a move when it is not your turn");
         }
 
