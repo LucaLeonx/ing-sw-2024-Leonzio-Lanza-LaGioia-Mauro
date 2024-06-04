@@ -23,15 +23,17 @@ import java.util.concurrent.*;
 public class NewLobbyWaitScreen extends TUIScreen {
     private Thread updateThread;
     private Thread checkForUserInput;
+    private Thread checkForGameToStart;
     private Future<Boolean> waitForGameStarting;
     private ExecutorService executor;
     private LobbyInfo lobbyInfo;
     private LobbyInfo lobbyInfoUpdated;
     private volatile boolean isRunning;
+    private volatile boolean isExited;
 
     public NewLobbyWaitScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
-        this.executor = Executors.newSingleThreadExecutor();
+        //this.executor = Executors.newSingleThreadExecutor();
         this.isRunning = true;
         /*try{
             lobbyInfo=controller.getJoinedLobbyInfo();
@@ -45,16 +47,19 @@ public class NewLobbyWaitScreen extends TUIScreen {
     public void display() {
         TUIMethods.printStylishMessage("WAITING FOR OTHER PLAYER TO JOIN...                                                ", "\u001B[32m", "\u001B[34m");
         TUIMethods.printWolf();
+        controller.waitForGameToStart();
+        transitionState(new NewGameSetupScreen(tui, new Scanner(System.in) , controller));
+
         //System.out.print("Lobby current status: ");
         //System.out.println(lobbyInfo);
         //System.out.println("press q to quit lobby: ");
-
+        /*
 
         updateThread = new Thread(() -> {
             while (isRunning && !Thread.currentThread().isInterrupted()) {
                 controller.waitForJoinedLobbyUpdate();
                 try {
-                    /*lobbyInfoUpdated=controller.getJoinedLobbyInfo();
+                    lobbyInfoUpdated=controller.getJoinedLobbyInfo();
                     if(!lobbyInfo.equals(lobbyInfoUpdated)) {
                         if(lobbyInfo.currNumPlayers()<lobbyInfoUpdated.currNumPlayers()) {
                             for(String p: lobbyInfoUpdated.players()){
@@ -72,7 +77,7 @@ public class NewLobbyWaitScreen extends TUIScreen {
                                 }
                             }
                         }
-                        lobbyInfo=controller.getJoinedLobbyInfo();*/
+                        lobbyInfo=controller.getJoinedLobbyInfo();
                         System.out.print("Lobby current status: ");
                         System.out.println(controller.getJoinedLobbyInfo());
                         System.out.println("press q to quit lobby: ");
@@ -90,8 +95,11 @@ public class NewLobbyWaitScreen extends TUIScreen {
                     if (input.equals("q")) {
                         try {
                             controller.exitFromLobby();
-                            waitForGameStarting.cancel(true);
+                            //waitForGameStarting.cancel(true);
                             isRunning = false;
+                            updateThread.interrupt();
+                            checkForGameToStart.interrupt();
+                            transitionState(new NewGameSetupScreen(tui, new Scanner(System.in) , controller));
                         } catch (WrongPhaseException | RemoteException e) {
                             System.out.println("Unable to quit the lobby - Game already started");
                         }
@@ -100,40 +108,22 @@ public class NewLobbyWaitScreen extends TUIScreen {
             }
         });
 
-        updateThread.start();
-        checkForUserInput.start();
-
-        waitForGameStarting = executor.submit(() -> {
+        checkForGameToStart = new Thread(() -> {
             controller.waitForGameToStart();
-            return true;
-        });
-
-        try {
-            boolean gameStarted = waitForGameStarting.get();
-            if (gameStarted) {
-                isRunning = false;
-                updateThread.interrupt();
-                checkForUserInput.interrupt();
-                scanner.close();
-                executor.shutdownNow();
-                transitionState(new NewGameSetupScreen(tui, new Scanner(System.in) , controller));
-            } else {
-                isRunning = false;
-                updateThread.interrupt();
-                checkForUserInput.interrupt();
-                executor.shutdownNow();
-                transitionState(new NewLobbyScreen(tui, scanner, controller));
-            }
-        } catch (CancellationException | ExecutionException e) {
             isRunning = false;
             updateThread.interrupt();
             checkForUserInput.interrupt();
+            scanner.close();
             executor.shutdownNow();
-            System.out.println("You quit the lobby");
-            transitionState(new NewLobbyScreen(tui, scanner, controller));
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+            transitionState(new NewGameSetupScreen(tui, new Scanner(System.in) , controller));
+        });
+
+
+        updateThread.start();
+        checkForUserInput.start(); /*
+
+         */
 
     }
+
 }
