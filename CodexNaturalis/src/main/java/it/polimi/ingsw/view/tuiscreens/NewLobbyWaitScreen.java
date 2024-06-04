@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.tuiscreens;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
+import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.view.tui.TUI;
 import it.polimi.ingsw.view.tui.TUIMethods;
 import it.polimi.ingsw.view.tui.TUIScreen;
@@ -24,27 +25,59 @@ public class NewLobbyWaitScreen extends TUIScreen {
     private Thread checkForUserInput;
     private Future<Boolean> waitForGameStarting;
     private ExecutorService executor;
+    private LobbyInfo lobbyInfo;
+    private LobbyInfo lobbyInfoUpdated;
     private volatile boolean isRunning;
 
     public NewLobbyWaitScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
         this.executor = Executors.newSingleThreadExecutor();
         this.isRunning = true;
+        /*try{
+            lobbyInfo=controller.getJoinedLobbyInfo();
+        }
+        catch(RemoteException re){
+            re.printStackTrace();
+        }*/
     }
 
     @Override
     public void display() {
         TUIMethods.printStylishMessage("WAITING FOR OTHER PLAYER TO JOIN...                                                ", "\u001B[32m", "\u001B[34m");
         TUIMethods.printWolf();
-        System.out.println("press q to quit: ");
+        System.out.print("Lobby current status: ");
+        //System.out.println(lobbyInfo);
+        //System.out.println("press q to quit lobby: ");
+
 
         updateThread = new Thread(() -> {
             while (isRunning && !Thread.currentThread().isInterrupted()) {
                 controller.waitForJoinedLobbyUpdate();
                 try {
-                    System.out.println("A new player joined the lobby or a player left your lobby, new lobby status: ");
-                    System.out.println(controller.getJoinedLobbyInfo());
-                } catch (RemoteException e) {
+                    /*lobbyInfoUpdated=controller.getJoinedLobbyInfo();
+                    if(!lobbyInfo.equals(lobbyInfoUpdated)) {
+                        if(lobbyInfo.currNumPlayers()<lobbyInfoUpdated.currNumPlayers()) {
+                            for(String p: lobbyInfoUpdated.players()){
+                                if(!lobbyInfo.players().contains(p))
+                                {
+                                    System.out.println(p +" joined the lobby");
+                                }
+                            }
+                        }
+                        else{
+                            for(String p: lobbyInfo.players()){
+                                if(!lobbyInfoUpdated.players().contains(p))
+                                {
+                                    System.out.println(p +" quit the lobby");
+                                }
+                            }
+                        }
+                        lobbyInfo=controller.getJoinedLobbyInfo();*/
+                        System.out.print("Lobby current status: ");
+                        System.out.println(controller.getJoinedLobbyInfo());
+                        System.out.println("press q to quit lobby: ");
+                    }
+                catch (RemoteException e) {
                     break;
                 }
             }
@@ -61,7 +94,7 @@ public class NewLobbyWaitScreen extends TUIScreen {
                             isRunning = false;
                             updateThread.interrupt();
                         } catch (WrongPhaseException | RemoteException e) {
-                            System.out.println("Unable to quit from lobby - Game already started");
+                            System.out.println("Unable to quit the lobby - Game already started");
                         }
                     }
                 }
@@ -79,12 +112,13 @@ public class NewLobbyWaitScreen extends TUIScreen {
         try {
             boolean gameStarted = waitForGameStarting.get();
             if (gameStarted) {
+                //scanner.close();
                 transitionState(new NewGameSetupScreen(tui, new Scanner(System.in) , controller));
             } else {
                 transitionState(new NewLobbyScreen(tui, scanner, controller));
             }
         } catch (CancellationException e) {
-            System.out.println("The game start waiting task was cancelled.");
+            System.out.println("You quit the lobby");
             transitionState(new NewLobbyScreen(tui, scanner, controller));
         } catch (InterruptedException | ExecutionException e) {
             transitionState(new NewLobbyScreen(tui, scanner, controller));

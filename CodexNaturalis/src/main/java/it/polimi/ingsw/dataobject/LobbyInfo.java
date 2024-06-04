@@ -11,7 +11,7 @@ public record LobbyInfo (int id,
                         int currNumPlayers) implements Serializable {
     @Override
     public String toString() {
-        return id + " | " + name + " | Creator: " + creator + " | Players: " + currNumPlayers + "/" + reqPlayers + " "+ players;
+        return "LobbyName: " + name + " | Creator: " + creator + " | Players: " + currNumPlayers + "/" + reqPlayers + " "+ players;
     }
 }
 
