@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 
 import java.io.IOException;
+import java.io.StreamCorruptedException;
 import java.rmi.RemoteException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import java.util.List;
 public class SocketClientController implements ClientController {
 
     //private ServerController session = null;
-    private String username = null;
+    private  String username = null;
     private int tempCode = 0;
     private SocketClient client ;
 
@@ -96,9 +97,11 @@ public class SocketClientController implements ClientController {
     }
 
     @Override
-    public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
+        public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
         client.sendMessage(new Message(MessageType.GET_JOINED_LOBBY_INFO, getCredentials(),null));
-        return (LobbyInfo) client.receiveMessage().getObj();
+        Message response = client.receiveMessage();
+        checkExceptionOnMessage(response);
+        return (LobbyInfo) response.getObj();
     }
 
     @Override
@@ -138,13 +141,11 @@ public class SocketClientController implements ClientController {
         LobbyInfo currentLobby;
         try{
             currentLobby = getJoinedLobbyInfo();
-            currPlayer = currentLobby.currNumPlayers();
-            reqPlayer = currentLobby.reqPlayers();
-            while(currPlayer < reqPlayer){
+            while(currentLobby != null){
                 Thread.sleep(1000);
-                currPlayer = getJoinedLobbyInfo().currNumPlayers();
+                currentLobby = getJoinedLobbyInfo();
             }
-        }catch(InterruptedException | RemoteException e){
+        }catch(InterruptedException | RemoteException | InvalidOperationException e){
             return;
         }
     }
@@ -158,9 +159,10 @@ public class SocketClientController implements ClientController {
             oldPlayers = currPlayers = currentLobby.currNumPlayers();
             while(currPlayers == oldPlayers){
                 Thread.sleep(1000);
+                currentLobby = getJoinedLobbyInfo();
                 currPlayers = getJoinedLobbyInfo().currNumPlayers();
             }
-        }catch(InterruptedException | RemoteException e){
+        }catch(InterruptedException | RemoteException | InvalidOperationException e){
             return;
         }
     }
@@ -214,7 +216,9 @@ public class SocketClientController implements ClientController {
     @Override
     public List<String> getPlayerNames() throws RemoteException {
         client.sendMessage(new Message(MessageType.GET_PLAYER_NAMES,getCredentials(),null));
-        return (List<String>) client.receiveMessage().getObj();
+        Message response = client.receiveMessage();
+        checkExceptionOnMessage(response);
+        return (List<String>) response.getObj();
     }
 
     @Override

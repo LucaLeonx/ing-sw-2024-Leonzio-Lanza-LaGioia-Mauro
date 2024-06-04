@@ -278,7 +278,7 @@ public class MessageTranslator {
                 }
                 server.registerPlayerSetup(user,((ObjectiveInfo) data.first()).id(),(CardOrientation) data.second() );
             }
-            default -> { return new Message(MessageType.OK,null,null); }
+            default -> { return new Message(MessageType.OK,null,new Exception("MessageTranslator didn't catch anything")); }
 
 
         }
