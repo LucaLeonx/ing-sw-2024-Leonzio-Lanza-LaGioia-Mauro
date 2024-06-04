@@ -47,16 +47,17 @@ public class NewLobbyWaitScreen extends TUIScreen {
     public void display() {
         TUIMethods.printStylishMessage("WAITING FOR OTHER PLAYER TO JOIN...                                                ", "\u001B[32m", "\u001B[34m");
         TUIMethods.printWolf();
-        controller.waitForGameToStart();
-        transitionState(new NewGameSetupScreen(tui, new Scanner(System.in) , controller));
+        //controller.waitForGameToStart();
+        //transitionState(new NewGameSetupScreen(tui, new Scanner(System.in) , controller));
 
         //System.out.print("Lobby current status: ");
         //System.out.println(lobbyInfo);
         //System.out.println("press q to quit lobby: ");
-        /*
+
 
         updateThread = new Thread(() -> {
             while (isRunning && !Thread.currentThread().isInterrupted()) {
+                /*
                 controller.waitForJoinedLobbyUpdate();
                 try {
                     lobbyInfoUpdated=controller.getJoinedLobbyInfo();
@@ -77,12 +78,15 @@ public class NewLobbyWaitScreen extends TUIScreen {
                                 }
                             }
                         }
-                        lobbyInfo=controller.getJoinedLobbyInfo();
-                        System.out.print("Lobby current status: ");
-                        System.out.println(controller.getJoinedLobbyInfo());
-                        System.out.println("press q to quit lobby: ");
-                    }
-                catch (RemoteException e) {
+
+                 */
+                try {
+                    lobbyInfo = controller.getJoinedLobbyInfo();
+                    System.out.print("Lobby current status: ");
+                    System.out.println(controller.getJoinedLobbyInfo());
+                    System.out.println("press q to quit lobby: ");
+                }
+                catch(RemoteException RE){
                     break;
                 }
             }
@@ -120,9 +124,8 @@ public class NewLobbyWaitScreen extends TUIScreen {
 
 
         updateThread.start();
-        checkForUserInput.start(); /*
-
-         */
+        checkForUserInput.start();
+        checkForGameToStart.start();
 
     }
 
