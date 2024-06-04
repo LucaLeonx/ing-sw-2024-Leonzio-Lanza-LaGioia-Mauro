@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.tuiscreens;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.ElementNotFoundException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.dataobject.LobbyInfo;
@@ -12,6 +13,8 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static java.lang.Thread.sleep;
 
 public class NewLobbyScreen extends TUIScreen {
 
@@ -31,7 +34,6 @@ public class NewLobbyScreen extends TUIScreen {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-
         System.out.println("Lobby created successfully");
     };
 
@@ -40,8 +42,8 @@ public class NewLobbyScreen extends TUIScreen {
             List<LobbyInfo> lobbyInfos = controller.getLobbyList();
             LobbyInfo chosenLobby = new AssignmentDialog<LobbyInfo>("Choose lobby to join:",
                     generateLobbyDialogChoice(lobbyInfos)).askForChoice(scanner);
-
             controller.joinLobby(chosenLobby.id());
+
         } catch (CancelChoiceException e) {
             throw new CancelChoiceException();
         } catch (ElementNotFoundException | InvalidParameterException e){
@@ -87,28 +89,44 @@ public class NewLobbyScreen extends TUIScreen {
 
     @Override
     public void display() {
-
         AtomicBoolean goBackToScreen = new AtomicBoolean(false);
 
 
-            while(true){
-                try {
-                    lobbyOperationChoice.askAndExecuteChoice(scanner);
-                    break;
-                } catch (CancelChoiceException cancel) {
-                    goBackToScreen.set(true);
-                    break;
-                } catch (InvalidInputException e){
-                    continue;
-                }
-            }
-
-            if(goBackToScreen.get()){
-                transitionState(new NewLoginScreen(tui, scanner, controller));
-            } else {
-                transitionState(new NewLobbyWaitScreen(tui, scanner, controller));
+        while (true) {
+            try {
+                lobbyOperationChoice.askAndExecuteChoice(scanner);
+                break;
+            } catch (CancelChoiceException cancel) {
+                goBackToScreen.set(true);
+                break;
+            } catch (InvalidInputException e) {
+                continue;
             }
         }
+        if (goBackToScreen.get()) {
+            transitionState(new NewLoginScreen(tui, scanner, controller));
+        } else {
+
+           /* while (true) {
+                try {
+                    if (controller.isWaitingInLobby()) {
+                        break;
+                    } else if (controller.isInGame()) {
+                        break;
+                    }
+                    sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                catch(InvalidOperationException e){
+                    continue;
+                } catch (RemoteException e) {
+                    continue;
+                }
+            }*/
+            transitionState(new NewLobbyWaitScreen(tui, scanner, controller));
+        }
+    }
 
     private List<DialogOption<LobbyInfo>> generateLobbyDialogChoice(List<LobbyInfo> availableLobbies){
         return availableLobbies.stream()
