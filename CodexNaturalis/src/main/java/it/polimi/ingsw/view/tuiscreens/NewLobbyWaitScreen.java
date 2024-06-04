@@ -45,7 +45,7 @@ public class NewLobbyWaitScreen extends TUIScreen {
     public void display() {
         TUIMethods.printStylishMessage("WAITING FOR OTHER PLAYER TO JOIN...                                                ", "\u001B[32m", "\u001B[34m");
         TUIMethods.printWolf();
-        System.out.print("Lobby current status: ");
+        //System.out.print("Lobby current status: ");
         //System.out.println(lobbyInfo);
         //System.out.println("press q to quit lobby: ");
 
@@ -92,7 +92,6 @@ public class NewLobbyWaitScreen extends TUIScreen {
                             controller.exitFromLobby();
                             waitForGameStarting.cancel(true);
                             isRunning = false;
-                            updateThread.interrupt();
                         } catch (WrongPhaseException | RemoteException e) {
                             System.out.println("Unable to quit the lobby - Game already started");
                         }
@@ -112,21 +111,29 @@ public class NewLobbyWaitScreen extends TUIScreen {
         try {
             boolean gameStarted = waitForGameStarting.get();
             if (gameStarted) {
-                //scanner.close();
+                isRunning = false;
+                updateThread.interrupt();
+                checkForUserInput.interrupt();
+                scanner.close();
+                executor.shutdownNow();
                 transitionState(new NewGameSetupScreen(tui, new Scanner(System.in) , controller));
             } else {
+                isRunning = false;
+                updateThread.interrupt();
+                checkForUserInput.interrupt();
+                executor.shutdownNow();
                 transitionState(new NewLobbyScreen(tui, scanner, controller));
             }
-        } catch (CancellationException e) {
-            System.out.println("You quit the lobby");
-            transitionState(new NewLobbyScreen(tui, scanner, controller));
-        } catch (InterruptedException | ExecutionException e) {
-            transitionState(new NewLobbyScreen(tui, scanner, controller));
-        } finally {
+        } catch (CancellationException | ExecutionException e) {
             isRunning = false;
             updateThread.interrupt();
             checkForUserInput.interrupt();
             executor.shutdownNow();
+            System.out.println("You quit the lobby");
+            transitionState(new NewLobbyScreen(tui, scanner, controller));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+
     }
 }
