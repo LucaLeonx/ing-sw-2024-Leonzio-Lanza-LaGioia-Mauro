@@ -3,20 +3,25 @@ package it.polimi.ingsw.view.tuiscreens;
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
+import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.view.tui.TUI;
 import it.polimi.ingsw.view.tui.TUIScreen;
 
 import java.rmi.RemoteException;
 import java.util.Scanner;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class NewLoginScreen extends TUIScreen {
 
     private final AtomicReference<TUIScreen> nextState = new AtomicReference<>();
+    AtomicBoolean goBackToThisScreen = new AtomicBoolean(false);
 
     public NewLoginScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
         this.nextState.set(new NewLobbyScreen(tui,scanner,controller));
+        this.goBackToThisScreen.set(false); // at the beginning if CancelException arise I should go back to previous panel
     }
 
     private final Runnable registrationExecution = () -> {
@@ -46,7 +51,7 @@ public class NewLoginScreen extends TUIScreen {
             }
         }
 
-        nextState.set(new NewLobbyScreen(tui, scanner, controller));
+        //nextState.set(new NewLobbyScreen(tui, scanner, controller));
     };
 
     private final Runnable loginExecution = () -> {
@@ -63,10 +68,16 @@ public class NewLoginScreen extends TUIScreen {
                 System.out.println("Login successful");
                 validCredentials = true;
             } catch (NumberFormatException e){
-                System.out.println("Invalid input e");
+                System.out.println("Invalid input, you should enter a number");
             }
             catch (InvalidCredentialsException e) {
-                System.out.println("Invalid credentials supplied. Try again");
+                goBackToThisScreen.set(true); // If I come here I don't want to go back to chose connection, I want to go back to chose login strategy
+              System.out.println("Invalid credentials supplied");
+                int choice = new AssignmentDialog<Integer>(
+                        "Would you like to try again? ",
+                        new DialogOption<>("Try again", 1))
+                        .askForChoice(scanner);
+
             } catch (RemoteException e){
                 e.printStackTrace();
                 break;
@@ -108,7 +119,12 @@ public class NewLoginScreen extends TUIScreen {
             loginOptionChoice.askAndExecuteChoice(scanner);
             transitionState(nextState.get());
         } catch (CancelChoiceException e) {
-            transitionState(new NewConnectionChoiceScreen(tui, scanner, controller));
+            if(!goBackToThisScreen.get()) {
+                transitionState(new NewConnectionChoiceScreen(tui, scanner, controller));
+            }
+            else{
+                transitionState(new NewLoginScreen(tui, scanner, controller));
+            }
         }
     }
 }
