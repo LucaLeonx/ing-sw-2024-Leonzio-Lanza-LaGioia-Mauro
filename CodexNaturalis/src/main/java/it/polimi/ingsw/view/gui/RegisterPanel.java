@@ -18,6 +18,7 @@ import static java.awt.GridBagConstraints.LINE_END;
 public class RegisterPanel extends StandardPanel {
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
     private final Map<String, Integer> lobbyById = new HashMap<String, Integer>();
+    private Timer timer;
 
     public RegisterPanel() {
         buildPanel();
@@ -39,6 +40,20 @@ public class RegisterPanel extends StandardPanel {
         JButton createLobby = new JButton("Create a new Lobby");
 
         JButton joinLobby = new JButton("Join Lobby");
+
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    showLobbies();
+                }
+                catch (Exception ex) {
+                    System.out.println(ex);
+                    timer.stop();
+                }
+            }
+        });
+        timer.start();
 
 
         createLobby.addActionListener(new ActionListener() {
