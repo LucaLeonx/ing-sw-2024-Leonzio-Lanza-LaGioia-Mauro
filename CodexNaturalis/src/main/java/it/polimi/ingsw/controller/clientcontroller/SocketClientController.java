@@ -18,10 +18,11 @@ import java.util.List;
 
 public class SocketClientController implements ClientController {
 
-    //private ServerController session = null;
+    //Cyrrent bug: getPlayerName receive the message from joinedLobbyInfo after the game start, why? joinedLobbyInfo method didn't have time for execute the receiveMessage istruction?
     private  String username = null;
     private int tempCode = 0;
     private SocketClient client ;
+    private Object lock = new Object();
 
     public SocketClientController() throws IOException {
         this.client = new SocketClient(ConnectionDefaultSettings.SocketServerPort);
@@ -45,6 +46,7 @@ public class SocketClientController implements ClientController {
         if(message.getObj() instanceof InvalidOperationException){
             throw (InvalidOperationException) message.getObj();
         }
+
     }
 
     private AbstractMap.SimpleEntry<String,Integer> getCredentials(){
@@ -100,7 +102,11 @@ public class SocketClientController implements ClientController {
         public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
         client.sendMessage(new Message(MessageType.GET_JOINED_LOBBY_INFO, getCredentials(),null));
         Message response = client.receiveMessage();
-        checkExceptionOnMessage(response);
+        try {
+            checkExceptionOnMessage(response);
+        }catch(InvalidCredentialsException e){
+            return null;
+        }//I think is useless
         return (LobbyInfo) response.getObj();
     }
 
@@ -141,7 +147,7 @@ public class SocketClientController implements ClientController {
         LobbyInfo currentLobby;
         try{
             currentLobby = getJoinedLobbyInfo();
-            while(currentLobby != null){
+            while(currentLobby != null && currentLobby.currNumPlayers()< currentLobby.reqPlayers() ){
                 Thread.sleep(1000);
                 currentLobby = getJoinedLobbyInfo();
             }
@@ -235,7 +241,7 @@ public class SocketClientController implements ClientController {
 
     @Override
     public ControlledPlayerInfo getControlledPlayerInformation() throws RemoteException {
-        client.sendMessage(new Message(MessageType.GET_CONTROLLED_PLAYER_INFO,null,null));
+        client.sendMessage(new Message(MessageType.GET_CONTROLLED_PLAYER_INFO,getCredentials(),null));
         return (ControlledPlayerInfo) client.receiveMessage().getObj();
     }
 

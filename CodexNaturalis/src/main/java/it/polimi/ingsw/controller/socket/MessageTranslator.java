@@ -47,7 +47,7 @@ public class MessageTranslator {
         return user;
     }
 
-    public static Message processMessage(Message message) throws RemoteException {
+    public static synchronized Message processMessage(Message message) throws RemoteException {
 
         switch (message.getMessageType()){
             case REGISTER_USER -> {
