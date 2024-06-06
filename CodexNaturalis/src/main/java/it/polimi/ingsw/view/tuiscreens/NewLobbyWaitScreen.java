@@ -30,7 +30,7 @@ public class NewLobbyWaitScreen extends TUIScreen{
 
     @Override
             public void display(){
-        TUIMethods.printStylishMessage("WAITING FOR OTHER PLAYER TO JOIN...","\u001B[32m","\u001B[34m");
+        TUIMethods.printStylishMessage("WAITING FOR OTHER PLAYER TO JOIN...                                                ","\u001B[32m","\u001B[34m");
         TUIMethods.printWolf();
         System.out.println("press q to quit:");
 
