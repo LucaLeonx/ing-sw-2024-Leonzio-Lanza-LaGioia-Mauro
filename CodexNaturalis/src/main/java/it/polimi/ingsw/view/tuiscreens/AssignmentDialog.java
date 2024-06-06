@@ -39,8 +39,8 @@ public class AssignmentDialog<T> {
             System.out.println("0. Cancel");
 
             System.out.print(">> ");
-
-            String inputChoice = input.nextLine().trim();
+            String inputChoice = "0";
+            inputChoice = input.nextLine().trim();
             int chosenOption = 0;
 
             try {

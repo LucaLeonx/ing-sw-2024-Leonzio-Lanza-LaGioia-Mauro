@@ -47,6 +47,9 @@ public class NewLobbyScreen extends TUIScreen {
         goBackToThisScreen.set(true);// if CancelException arise this remains set to true and I will come back to choice of create lobby or join one.
         try {
             List<LobbyInfo> lobbyInfos = controller.getLobbyList();
+            if(lobbyInfos.isEmpty()){
+                System.out.println("No lobby is available. Create a new one");
+            }
             LobbyInfo chosenLobby = new AssignmentDialog<LobbyInfo>("Choose lobby to join:",
                     generateLobbyDialogChoice(lobbyInfos)).askForChoice(scanner);
             goBackToThisScreen.set(false); // if cancel exception does not arise instead I set this value to false
@@ -73,7 +76,7 @@ public class NewLobbyScreen extends TUIScreen {
                 System.out.println("Lobbies available");
                 List<LobbyInfo> lobbyInfos = controller.getLobbyList();
 
-                if(lobbyInfos==null | lobbyInfos.isEmpty()){
+                if(lobbyInfos.isEmpty()){
                     System.out.println("No lobby is available. Create a new one");
                 } else {
                     lobbyInfos.forEach(System.out::println);
@@ -99,8 +102,6 @@ public class NewLobbyScreen extends TUIScreen {
 
     @Override
     public void display() {
-
-
 
         while (true) {
             try {
