@@ -25,9 +25,9 @@ public class SocketMultiHandler implements Runnable {
 
             //Here we cloud start another thread (Server side) which his purpose is to send message to the client whenever you want
             while (true) {
-                System.out.println("\nReady to listen");
+                //System.out.println("\nReady to listen");
                 Message InMsg = (Message) ois.readObject();
-                System.out.println("Object received:\t"+ InMsg.getObj()  + " type: " + InMsg.getMessageType() + (InMsg.getCredentials() != null ? " by: " + InMsg.getCredentials().getKey() : ""));
+                //System.out.println("Object received:\t"+ InMsg.getObj()  + " type: " + InMsg.getMessageType() + (InMsg.getCredentials() != null ? " by: " + InMsg.getCredentials().getKey() : ""));
 
                 Message OutMsg =  MessageTranslator.processMessage(InMsg);
                 if(OutMsg != null) {

@@ -23,3 +23,5 @@ Useful functions to have:
 - ping()
 - login(LoginInfo)
 - ...
+
+For run the .jar file on Linux make sure to install fonts-noto package 
