@@ -18,7 +18,7 @@ import java.util.List;
 
 public class SocketClientController implements ClientController {
 
-    //Cyrrent bug: getPlayerName receive the message from joinedLobbyInfo after the game start, why? joinedLobbyInfo method didn't have time for execute the receiveMessage istruction?
+    //Current bug: getPlayerName receive the message from joinedLobbyInfo after the game start, why? joinedLobbyInfo method didn't have time for execute the receiveMessage instruction?
     private  String username = null;
     private int tempCode = 0;
     private SocketClient client ;
@@ -81,6 +81,7 @@ public class SocketClientController implements ClientController {
     public void logout() throws RemoteException {
         checkLogin();
         client.sendMessage(new Message(MessageType.LOGOUT,getCredentials(),null));
+        client.receiveMessage();
     }
 
     @Override
@@ -100,24 +101,32 @@ public class SocketClientController implements ClientController {
 
     @Override
         public LobbyInfo getJoinedLobbyInfo() throws RemoteException {
-        client.sendMessage(new Message(MessageType.GET_JOINED_LOBBY_INFO, getCredentials(),null));
-        Message response = client.receiveMessage();
-        try {
-            checkExceptionOnMessage(response);
-        }catch(InvalidCredentialsException e){
-            return null;
-        }//I think is useless
-        return (LobbyInfo) response.getObj();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.GET_JOINED_LOBBY_INFO, getCredentials(), null));
+            Message response = client.receiveMessage();
+            try {
+                checkExceptionOnMessage(response);
+            } catch (InvalidCredentialsException e) {
+                return null;
+            }//I think is useless
+
+            return (LobbyInfo) response.getObj();
+        }
     }
 
     @Override
     public void joinLobby(int lobbyId) throws RemoteException {
         client.sendMessage(new Message(MessageType.JOIN_LOBBY, getCredentials(),lobbyId));
+        Message received = client.receiveMessage();
+        if(received == null || !received.getObj().equals("Success")) {
+            throw new InvalidOperationException("Not joined the lobby");
+        }
     }
 
     @Override
     public void exitFromLobby() throws RemoteException {
         client.sendMessage(new Message(MessageType.EXIT_FROM_LOBBY, getCredentials(),null));
+        client.receiveMessage();
     }
 
     @Override
@@ -166,7 +175,7 @@ public class SocketClientController implements ClientController {
             while(currPlayers == oldPlayers){
                 Thread.sleep(1000);
                 currentLobby = getJoinedLobbyInfo();
-                currPlayers = getJoinedLobbyInfo().currNumPlayers();
+                currPlayers = currentLobby.currNumPlayers();
             }
         }catch(InterruptedException | RemoteException | InvalidOperationException e){
             return;
@@ -288,16 +297,19 @@ public class SocketClientController implements ClientController {
     public void setPlayerSetup(ObjectiveInfo chosenObjective, CardOrientation initialCardSide) throws RemoteException {
         Tuple data = new Tuple(chosenObjective, initialCardSide);
         client.sendMessage(new Message(MessageType.SET_PLAYER_SETUP,getCredentials(),data));
+        client.receiveMessage();
     }
 
     @Override
     public void makeMove(CardInfo card, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException {
         client.sendMessage(new Message(MessageType.MAKE_MOVE,getCredentials(),new MoveInfo(card,placementPoint,chosenSide,drawChoice)));
+        client.receiveMessage();
     }
 
     @Override
     public void exitGame() throws InvalidOperationException {
         client.sendMessage(new Message(MessageType.EXIT_GAME,getCredentials(),null));
+        client.receiveMessage();
     }
 
     @Override

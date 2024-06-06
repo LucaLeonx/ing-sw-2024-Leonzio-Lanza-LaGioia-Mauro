@@ -47,7 +47,7 @@ public class MessageTranslator {
         return user;
     }
 
-    public static synchronized Message processMessage(Message message) throws RemoteException {
+    public static Message processMessage(Message message) throws RemoteException {
 
         switch (message.getMessageType()){
             case REGISTER_USER -> {
@@ -115,6 +115,7 @@ public class MessageTranslator {
                     return new Message(null,null,e);
                 }
                 server.joinLobby(user,(Integer) message.getObj());
+                return new Message(null,null,"Success");
             }
 
             case EXIT_FROM_LOBBY -> {

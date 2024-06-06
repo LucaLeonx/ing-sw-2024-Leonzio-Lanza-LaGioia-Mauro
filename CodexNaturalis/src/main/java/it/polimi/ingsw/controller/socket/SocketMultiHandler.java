@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class SocketMultiHandler implements Runnable {
     private Socket socket;
-    private MessageTranslator translator;
+    private final MessageTranslator translator;
 
     public SocketMultiHandler(Socket socket,MessageTranslator translator) {
         this.socket = socket;
@@ -25,6 +25,7 @@ public class SocketMultiHandler implements Runnable {
 
             //Here we cloud start another thread (Server side) which his purpose is to send message to the client whenever you want
             while (true) {
+                System.out.println("\nReady to listen");
                 Message InMsg = (Message) ois.readObject();
                 System.out.println("Object received:\t"+ InMsg.getObj()  + " type: " + InMsg.getMessageType() + (InMsg.getCredentials() != null ? " by: " + InMsg.getCredentials().getKey() : ""));
 
