@@ -25,6 +25,7 @@ public interface ServerController extends Remote {
     public PlayerSetupInfo getPlayerSetup() throws RemoteException;
     public boolean isLastTurn() throws RemoteException;
     public boolean hasGameEnded() throws RemoteException;
+    public boolean setupDone() throws RemoteException;
     public List<ControlledPlayerInfo> getLeaderboard() throws RemoteException;
     public void registerPlayerSetupChoice(int chosenObjectiveId, CardOrientation initialCardOrientation) throws RemoteException;
     public void registerPlayerMove(int placedCardId, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException;

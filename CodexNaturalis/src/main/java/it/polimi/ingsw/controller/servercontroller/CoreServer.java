@@ -54,12 +54,8 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
     }
 
     @Override
-    public ServerController login(String username, int tempCode, NotificationSubscriber subscriber) throws RemoteException {
+    public ServerController login(String username, int tempCode) throws RemoteException {
         User loginUser;
-
-        if(subscriber == null){
-            throw new InvalidParameterException("Cannot provide null notification subscriber");
-        }
 
         synchronized (userList) {
             if (!userList.isUserRegistered(username)) {
@@ -70,22 +66,6 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
         }
 
         if(loginUser.checkPass(tempCode)){
-            loginUser.setNotificationSubscriber(subscriber);
-
-            if(loginUser.hasJoinedGameId()){
-
-                Game game = activeGames.getJoinedGame(loginUser);
-                GamePhase phase = GamePhase.PLAY_PHASE;
-
-                if(game.allPlayersHaveSetup()){
-                    phase = GamePhase.SETUP_PHASE;
-                } else if(game.isEnded()){
-                    phase = GamePhase.END_PHASE;
-                }
-
-                loginUser.getNotificationSubscriber().onStartedGameAvailable(phase);
-            }
-
             return new AuthenticatedSession(loginUser, this);
         } else {
             throw new InvalidCredentialsException();
@@ -123,17 +103,6 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
 
     public LobbyInfo createLobby(User creator, String lobbyName, int requiredPlayersNum) {
         Lobby newLobby = lobbyList.createLobby(creator, lobbyName, requiredPlayersNum);
-
-        for(User other : userList.getUsers()){
-            if(!other.equals(creator)){
-                try {
-                    other.getNotificationSubscriber().onLobbyListUpdate();
-                } catch (RemoteException e){
-                    continue;
-                }
-            }
-        }
-
         return newLobby.getLobbyInfo();
     }
 
@@ -158,33 +127,6 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
 
         if(lobbyToJoin.readyToStart()){
             activeGames.addGameFromLobby(lobbyToJoin);
-            List<User> connectedUsers = lobbyToJoin.getConnectedUsers();
-
-            for(User other : connectedUsers){
-                try {
-                    other.getNotificationSubscriber().onGameStarted();
-                } catch (RemoteException e){
-                    continue;
-                }
-            }
-        } else {
-            LobbyInfo lobbyInfo = lobbyToJoin.getLobbyInfo();
-            // TODO: avoid the repetition of this loop for RemoteException handling
-            for(User other : lobbyToJoin.getConnectedUsers()){
-                try {
-                    other.getNotificationSubscriber().onJoinedLobbyUpdate(lobbyInfo);
-                } catch (RemoteException e){
-                    continue;
-                }
-            }
-        }
-
-        for(User other : userList.getUsers()){
-            try {
-                other.getNotificationSubscriber().onLobbyListUpdate();
-            } catch (RemoteException e){
-                continue;
-            }
         }
     }
 
@@ -206,23 +148,6 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
 
         if(exitedLobby.getNumOfWaitingPlayers() == 0) {
             lobbyList.removeLobby(exitedLobby.getId());
-            for(User other : userList.getUsers()){
-                if(!other.equals(user)){
-                    try {
-                        other.getNotificationSubscriber().onLobbyListUpdate();
-                    } catch (RemoteException e){
-                        continue;
-                    }
-                }
-            }
-        } else {
-            for(User other : exitedLobby.getConnectedUsers()){
-                try {
-                    other.getNotificationSubscriber().onJoinedLobbyUpdate(exitedLobby.getLobbyInfo());
-                } catch (RemoteException e){
-                    continue;
-                }
-            }
         }
     }
 
@@ -293,24 +218,11 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
 
     public void registerPlayerSetup(User user, int objectiveCardId, CardOrientation initialCardSide){
         Game joinedGame = activeGames.getJoinedGame(user);
-        Set<User> connectedUsers = activeGames.getConnectedUsers(user.getJoinedGameId());
-
         joinedGame.registerPlayerSetup(user.getUsername(), objectiveCardId, initialCardSide);
-
-        if(joinedGame.allPlayersHaveSetup()){
-            for(User player : connectedUsers){
-                try {
-                    player.getNotificationSubscriber().onSetupPhaseFinished();
-                } catch (RemoteException e){
-                    continue;
-                }
-            }
-        }
     }
 
     public void registerPlayerMove(User user, int placedCardId, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice){
         Game joinedGame = activeGames.getJoinedGame(user);
-        Set<User> connectedUsers = activeGames.getConnectedUsers(user.getJoinedGameId());
 
         if(!Objects.equals(joinedGame.getCurrentPlayerNickname(), user.getUsername())){
             throw new WrongPhaseException("Cannot perform a move when it is not your turn");
@@ -322,27 +234,6 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
                 joinedGame.makePlayerDraw(user.getUsername(), drawChoice);
             }
             joinedGame.changeCurrentPlayer();
-
-
-
-
-            if(joinedGame.isEnded()){
-                for(User other : connectedUsers){
-                    try {
-                        other.getNotificationSubscriber().onGameEnded();
-                    } catch (RemoteException e){
-                        continue;
-                    }
-                }
-            } else if(joinedGame.isLastTurn()){
-                for(User other : connectedUsers){
-                    try {
-                        other.getNotificationSubscriber().onLastTurnReached();
-                    } catch (RemoteException e){
-                        continue;
-                    }
-                }
-            }
         } else {
 
             // Skip until you don't find a player who can play
@@ -350,35 +241,12 @@ public class CoreServer extends UnicastRemoteObject implements AuthenticationMan
                String currentPlayer = joinedGame.getCurrentPlayerNickname();
                joinedGame.skipTurn();
 
-               for(User other : connectedUsers){
-                   try {
-                       other.getNotificationSubscriber().onTurnSkipped(currentPlayer);
-                   } catch (RemoteException e){
-                       continue;
-                   }
-               }
-
                 // All players tried, no one can play
                 if(currentPlayer.equals(user.getUsername())){
                     joinedGame.endGame();
-                    for(User other : connectedUsers){
-                        try {
-                            other.getNotificationSubscriber().onGameEnded();
-                        } catch (RemoteException e){
-                            continue;
-                        }
-                    }
                     break;
                 }
             } while((!joinedGame.canPlayerPlay(joinedGame.getCurrentPlayerNickname())));
-
-            for(User other : connectedUsers){
-                try {
-                    other.getNotificationSubscriber().onCurrentPlayerChange(joinedGame.getCurrentPlayerNickname());
-                } catch (RemoteException e){
-                    continue;
-                }
-            }
         }
     }
 

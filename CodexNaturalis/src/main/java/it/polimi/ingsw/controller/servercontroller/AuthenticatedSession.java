@@ -87,6 +87,11 @@ public class AuthenticatedSession extends UnicastRemoteObject implements ServerC
     }
 
     @Override
+    public boolean setupDone() throws RemoteException {
+        return server.setupDone(user);
+    }
+
+    @Override
     public void registerPlayerSetupChoice(int chosenObjectiveId, CardOrientation initialCardOrientation) throws RemoteException {
         server.registerPlayerSetup(user, chosenObjectiveId, initialCardOrientation);
     }

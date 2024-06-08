@@ -1,8 +1,6 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
 import it.polimi.ingsw.controller.servercontroller.AuthenticationManager;
-import it.polimi.ingsw.controller.servercontroller.GamePhase;
-import it.polimi.ingsw.controller.servercontroller.NotificationSubscriber;
 import it.polimi.ingsw.controller.servercontroller.ServerController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.dataobject.*;
@@ -16,26 +14,16 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 
-public class RMIClientController extends UnicastRemoteObject implements ClientController, NotificationSubscriber {
+public class RMIClientController extends UnicastRemoteObject implements ClientController {
 
     private final AuthenticationManager authenticator;
     private ServerController session = null;
-    private final List<ClientNotificationSubscription> clientNotifiers;
-    private final ExecutorService notificationSender;
-    private final NotificationStore notificationStore;
 
     public RMIClientController(String host, int port, String serverName) throws RemoteException, NotBoundException {
         Registry registry = LocateRegistry.getRegistry(host, port);
         this.authenticator = (AuthenticationManager) registry.lookup(serverName);
-        this.clientNotifiers = new LinkedList<>();
-        this.notificationStore = new NotificationStore();
-        this.notificationSender = Executors.newSingleThreadExecutor();
     }
 
     public RMIClientController() throws RemoteException, NotBoundException {
@@ -65,7 +53,7 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
 
     @Override
     public void login(String username, int tempCode) throws RemoteException {
-        session = (ServerController) authenticator.login(username, tempCode, notificationStore);
+        session = authenticator.login(username, tempCode);
     }
 
     @Override
@@ -105,13 +93,15 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
     }
 
     @Override
-    public void subscribeToNotifications(ClientNotificationSubscription subscription) {
-
-    }
-
-    @Override
     public void waitForLobbyListUpdate() {
-        notificationStore.waitForNotificationArrival("LobbyList");
+
+        try {
+            while(!session.hasGameEnded()){
+                Thread.sleep(1000);
+            }
+        } catch (RemoteException | InterruptedException e) {
+            return;
+        }
     }
 
     @Override
@@ -199,56 +189,70 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
     public void exitGame() throws RemoteException {
         checkLogin();
         session.exitFromGame();
-        notificationStore.resetAll();
     }
 
     @Override
     public void waitForGameToStart(){
-        notificationStore.waitForMinimumNotificationNumber("GameStarted", 1);
-    }
-
-    @Override
-    public void waitForJoinedLobbyUpdate(){
-        notificationStore.waitForNotificationArrival("JoinedLobby");
-    }
-
-    @Override
-    public void waitForSetupFinished(){
-        notificationStore.waitForMinimumNotificationNumber("SetupFinished", 1);
-    }
-
-    @Override
-    public void waitForTurnChange(){
-        String oldCurrentPlayer = null;
+        checkLogin();
         try {
-            oldCurrentPlayer = session.getCurrentPlayer();
-            while(oldCurrentPlayer.equals(session.getCurrentPlayer())){
+            while(!isInGame()){
                 Thread.sleep(1000);
             }
-        } catch (RemoteException e) {
-            return;
         } catch (InterruptedException e) {
             return;
         }
     }
 
     @Override
-    public void waitForGameEnded(){
-        notificationStore.waitForMinimumNotificationNumber("GameEnded", 1);
+    public void waitForJoinedLobbyUpdate(){
+        checkLogin();
+        int oldNumPlayers = 0;
+        try {
+            oldNumPlayers = session.getJoinedLobbyInfo().currNumPlayers();
+            while(oldNumPlayers == session.getJoinedLobbyInfo().currNumPlayers()){
+                Thread.sleep(1000);
+            }
+        } catch (RemoteException | InterruptedException e) {
+            return;
+        }
     }
 
+    @Override
+    public void waitForSetupFinished(){
+        checkLogin();
+        try {
+            while(!session.setupDone()){
+                Thread.sleep(1000);
+            }
+        } catch (RemoteException | InterruptedException e) {
+            return;
+        }
+    }
 
     @Override
-    public void onLobbyListUpdate(){
-        List<LobbyInfo> updatedLobbyList;
-
+    public void waitForTurnChange(){
+        checkLogin();
+        String oldCurrentPlayer = null;
         try {
-            updatedLobbyList = getLobbyList();
-        } catch (RemoteException e) {
-            throw new WrongPhaseException(e.getMessage());
+            oldCurrentPlayer = session.getCurrentPlayer();
+            while(oldCurrentPlayer.equals(session.getCurrentPlayer())){
+                Thread.sleep(1000);
+            }
+        } catch (RemoteException | InterruptedException e) {
+            return;
         }
+    }
 
-        notifyToSubscribers((observer) -> observer.onLobbyListUpdate(updatedLobbyList));
+    @Override
+    public void waitForGameEnded(){
+        checkLogin();
+        try {
+            while(!session.hasGameEnded()){
+                Thread.sleep(1000);
+            }
+        } catch (RemoteException | InterruptedException e) {
+            return;
+        }
     }
 
     @Override
@@ -263,7 +267,6 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
 
      @Override
      public boolean isWaitingInLobby(){
-
         try {
             session.getJoinedLobbyInfo();
             return true;
@@ -271,50 +274,4 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
             return false;
         }
      }
-
-    @Override
-    public void onJoinedLobbyUpdate(LobbyInfo joinedLobby) {
-        notifyToSubscribers((observer -> observer.onJoinedLobbyUpdate(joinedLobby)));
-    }
-
-    @Override
-    public void onGameStarted() {
-       notifyToSubscribers(ClientNotificationSubscription::onGameStarted);
-    }
-
-    @Override
-    public void onSetupPhaseFinished() {
-        notifyToSubscribers(ClientNotificationSubscription::onSetupPhaseFinished);
-    }
-
-    @Override
-    public void onCurrentPlayerChange(String newPlayerName) {
-        notifyToSubscribers(observer -> observer.onCurrentPlayerChange(newPlayerName));
-    }
-
-    @Override
-    public void onTurnSkipped(String skippedPlayerName) {
-        notifyToSubscribers(observer -> observer.onTurnSkipped(skippedPlayerName));
-    }
-
-    @Override
-    public void onLastTurnReached() {
-       notifyToSubscribers(ClientNotificationSubscription::onLastTurnReached);
-    }
-
-    @Override
-    public void onGameEnded() {
-        notifyToSubscribers(ClientNotificationSubscription::onGameEnded);
-    }
-
-    @Override
-    public void onStartedGameAvailable(GamePhase phase) {
-        notifyToSubscribers((subscriber) -> subscriber.onStartedGameAvailable(phase));
-    }
-
-    private void notifyToSubscribers(Consumer<ClientNotificationSubscription> notificationToSend) {
-        notificationSender.submit(() ->{
-            clientNotifiers.stream().parallel().forEach(notificationToSend);
-        });
-    }
 }

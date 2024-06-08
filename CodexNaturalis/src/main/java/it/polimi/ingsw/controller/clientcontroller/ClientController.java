@@ -100,9 +100,6 @@ public interface ClientController {
      */
     public void exitFromLobby() throws RemoteException;
 
-    @Deprecated
-    public void subscribeToNotifications(ClientNotificationSubscription observer);
-
     /**
      * This method blocks the caller until there isn't an update to the lobby list or
      * there is an exception
@@ -224,7 +221,6 @@ public interface ClientController {
     public void setPlayerSetup(ObjectiveInfo chosenObjective, CardOrientation initialCardSide) throws RemoteException;
     public void makeMove(CardInfo card, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException;
     public void exitGame() throws InvalidOperationException, RemoteException;
-
     boolean isWaitingInLobby();
 }
 

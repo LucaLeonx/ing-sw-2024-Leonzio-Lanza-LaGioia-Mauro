@@ -141,11 +141,6 @@ public class SocketClientController implements ClientController {
     }
 
     @Override
-    public void subscribeToNotifications(ClientNotificationSubscription observer) {
-
-    }
-
-    @Override
     public void waitForLobbyListUpdate() {
         List<LobbyInfo> oldLobbies;
         try{

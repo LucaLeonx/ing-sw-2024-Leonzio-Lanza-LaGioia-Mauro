@@ -1,9 +1,6 @@
 package it.polimi.ingsw.controller.socket;
 
-import com.sun.security.auth.LdapPrincipal;
-import it.polimi.ingsw.controller.clientcontroller.NotificationStore;
 import it.polimi.ingsw.controller.servercontroller.*;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
@@ -21,16 +18,9 @@ import java.util.*;
 public class MessageTranslator {
 
     private static CoreServer server;
-    private static NotificationSubscriber dummySubs;
 
     public MessageTranslator(CoreServer manager) {
         this.server = manager;
-        try {
-            dummySubs = new NotificationStore();
-        }catch (RemoteException e){
-            e.printStackTrace();
-        }
-
     }
 
     private static User checkLogin(String username, int password){
@@ -54,7 +44,7 @@ public class MessageTranslator {
                 int tempCode = 0;
                 try{
                     tempCode = server.register((String) message.getObj());
-                    server.login((String) message.getObj(),tempCode,dummySubs);
+                    server.login((String) message.getObj(),tempCode);
                 }catch (InvalidOperationException e){
                     return new Message(null,null,e);
                 }
@@ -64,7 +54,7 @@ public class MessageTranslator {
             case LOGIN -> {
                 AbstractMap.SimpleEntry<String,Integer> tuple = message.getCredentials();
                 try {
-                    server.login(tuple.getKey(), tuple.getValue(), dummySubs);
+                    server.login(tuple.getKey(), tuple.getValue());
                 }catch(InvalidOperationException e){
                     return new Message(null,null,e);
                 }

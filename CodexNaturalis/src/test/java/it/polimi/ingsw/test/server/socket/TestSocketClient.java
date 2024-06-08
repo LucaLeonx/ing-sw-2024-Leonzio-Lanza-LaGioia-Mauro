@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class TestSocketClient {
     public static void main(String[] args) {
-        SocketClient client = new SocketClient(6660);
+        SocketClient client = new SocketClient(7000);
 
         try{
             Message msg = new Message(MessageType.LOGIN,null,"user");

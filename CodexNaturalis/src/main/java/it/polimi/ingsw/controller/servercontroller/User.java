@@ -21,27 +21,16 @@ public class User {
     private UserStatus status;
     private Optional<Integer> joinedLobbyId;
     private Optional<Integer> joinedGameId;
-    private NotificationSubscriber notificationSubscriber;
 
     public User(String nickname){
         this.username = nickname;
         status = UserStatus.LOBBY_CHOICE;
         joinedLobbyId = Optional.empty();
-        joinedGameId = Optional.empty();
-        notificationSubscriber = null;
     }
 
     public int generateNewPass(){
         tempPassword = Optional.of(ThreadLocalRandom.current().nextInt(0, MAX_TEMPCODE_VAL));
         return tempPassword.get();
-    }
-
-    public synchronized NotificationSubscriber getNotificationSubscriber(){
-        return this.notificationSubscriber;
-    }
-
-    public void setNotificationSubscriber(NotificationSubscriber subscriber) {
-        this.notificationSubscriber = subscriber;
     }
 
     public synchronized UserStatus getStatus(){

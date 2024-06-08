@@ -1,10 +1,7 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.controller.clientcontroller.ClientNotificationSubscription;
-import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.view.tuiscreens.NewInitialScreen;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class TUI {
