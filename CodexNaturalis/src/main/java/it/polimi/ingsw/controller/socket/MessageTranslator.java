@@ -115,6 +115,7 @@ public class MessageTranslator {
                     return new Message(null,null,e);
                 }
                 server.joinLobby(user,(Integer) message.getObj());
+                return new Message(null,null,"Success");
             }
 
             case EXIT_FROM_LOBBY -> {
@@ -278,7 +279,7 @@ public class MessageTranslator {
                 }
                 server.registerPlayerSetup(user,((ObjectiveInfo) data.first()).id(),(CardOrientation) data.second() );
             }
-            default -> { return new Message(MessageType.OK,null,null); }
+            default -> { return new Message(MessageType.OK,null,new Exception("MessageTranslator didn't catch anything")); }
 
 
         }

@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.card.*;
 import junit.framework.TestCase;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -96,5 +97,11 @@ public class CardFactoryTest extends TestCase {
         }
         assertEquals(Ids.size(), actualIds.size());
         assertTrue(Ids.containsAll(actualIds));
+    }
+
+    public void testFetchCardsFromResourceFolder() throws FileNotFoundException {
+        FileReader reader= new FileReader("src/main/java/it/polimi/ingsw/model/card/JsonFiles/Initial.json");
+
+
     }
 }

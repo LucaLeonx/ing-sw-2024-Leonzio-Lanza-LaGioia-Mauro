@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller.socket;
 
 import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.dataobject.Message;
+import it.polimi.ingsw.dataobject.MessageType;
 
 import java.io.*;
 import java.net.Socket;
@@ -39,8 +40,8 @@ public class SocketClient {
         try {
             return (Message) socketIn.readObject();
         }
-        catch(IOException |ClassNotFoundException e) {
-            return null;
+        catch(IOException | ClassNotFoundException e) {
+            return new Message(null,null,e);
         }
     }
 

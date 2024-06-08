@@ -8,9 +8,9 @@ public class ImagePanel extends JPanel {
     private final BackPanel backPanel;
     private boolean side= true; //true is front side set by default
 
-    public ImagePanel(String imageNumber) {
-        this.frontPanel = new FrontPanel(Toolkit.getDefaultToolkit().getImage("src/main/resources/front_images/" + imageNumber + ".jpeg"));
-        this.backPanel = new BackPanel(Toolkit.getDefaultToolkit().getImage("src/main/resources/back_images/" + imageNumber + ".jpeg"));
+    public ImagePanel(Integer imageNumber) {
+        this.frontPanel = new FrontPanel(Toolkit.getDefaultToolkit().getImage("src/main/resources/cropped_fronte/img_" + imageNumber + ".jpeg"));
+        this.backPanel = new BackPanel(Toolkit.getDefaultToolkit().getImage("src/main/resources/cropped_retro/img_" + imageNumber + ".jpeg"));
 
         this.add(frontPanel);
         this.add(backPanel);

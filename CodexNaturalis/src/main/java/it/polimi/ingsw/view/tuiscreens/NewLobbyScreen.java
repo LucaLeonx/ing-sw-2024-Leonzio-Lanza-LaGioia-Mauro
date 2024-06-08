@@ -17,14 +17,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static java.lang.Thread.sleep;
 
 public class NewLobbyScreen extends TUIScreen {
+    AtomicBoolean goBackToScreen = new AtomicBoolean(false);
+    AtomicBoolean goBackToThisScreen = new AtomicBoolean(false);
 
     private final Runnable createLobbyExecution = () -> {
         System.out.print("Insert name of the new lobby: ");
         String lobbyName = scanner.nextLine();
+        int requiredPlayersNum=0;
         System.out.print("Insert required number of players: ");
-
-        int requiredPlayersNum = Integer.parseInt(scanner.nextLine());
-
+        try {
+            requiredPlayersNum = Integer.parseInt(scanner.nextLine());
+        }
+        catch(NumberFormatException NFE) {
+            throw new InvalidInputException("Number of players must be between 2 and 4");
+        }
         if(requiredPlayersNum < 2 || requiredPlayersNum > 4){
             throw new InvalidInputException("Number of players must be between 2 and 4");
         }
@@ -38,10 +44,15 @@ public class NewLobbyScreen extends TUIScreen {
     };
 
     private final Runnable joinLobbyExecution = () -> {
+        goBackToThisScreen.set(true);// if CancelException arise this remains set to true and I will come back to choice of create lobby or join one.
         try {
             List<LobbyInfo> lobbyInfos = controller.getLobbyList();
+            if(lobbyInfos.isEmpty()){
+                System.out.println("No lobby is available. Create a new one");
+            }
             LobbyInfo chosenLobby = new AssignmentDialog<LobbyInfo>("Choose lobby to join:",
                     generateLobbyDialogChoice(lobbyInfos)).askForChoice(scanner);
+            goBackToThisScreen.set(false); // if cancel exception does not arise instead I set this value to false
             controller.joinLobby(chosenLobby.id());
 
         } catch (CancelChoiceException e) {
@@ -85,12 +96,12 @@ public class NewLobbyScreen extends TUIScreen {
 
     public NewLobbyScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
+        goBackToScreen = new AtomicBoolean(false);
+        goBackToThisScreen = new AtomicBoolean(false);
     }
 
     @Override
     public void display() {
-        AtomicBoolean goBackToScreen = new AtomicBoolean(false);
-
 
         while (true) {
             try {
@@ -100,12 +111,19 @@ public class NewLobbyScreen extends TUIScreen {
                 goBackToScreen.set(true);
                 break;
             } catch (InvalidInputException e) {
+                System.out.println("\n" + e.getMessage() + " try again\n");
                 continue;
             }
         }
-        if (goBackToScreen.get()) {
+        if(goBackToThisScreen.get()) // first I check this condition because in this case the other boolean will be true.
+        {
+            transitionState(new NewLobbyScreen(tui, scanner, controller));
+        }
+        else if (goBackToScreen.get()) {
             transitionState(new NewLoginScreen(tui, scanner, controller));
-        } else {
+        }
+
+        else {
 
            /* while (true) {
                 try {
