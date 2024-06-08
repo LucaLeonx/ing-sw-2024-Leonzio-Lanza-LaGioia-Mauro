@@ -9,7 +9,7 @@ Ogni carta viene rappresentata nella GUI come un'immagine:
 Dove a e b sono le dimensioni in pixel della carta, r ed s lo spazio tra gli angoli
 (considerati di dimensioni uguali). Ogni carta ha anche un centro, M.
 
-Nel nostro caso, i parametri sono:
+Nel nostro caso, i parametri sono (circa, con un errore di qualche pixel):
 - a = 556
 - b = 831
 - r = 106
@@ -64,6 +64,8 @@ che, sulla mappa, le carte si trovano tutte in posizioni pari.
 
 - Affinché le coordinate dei centri delle carte siano tutte intere,
   è necessario che a, b, r, ed s siano valori dispari di pixel
+- Forse ci sono dei +- 1 da aggiungere alle formule 
+  (però non dovrebbero essere visibili a occhio nudo)
 - Le formule di cui sopra valgono anche se, al posto delle coordinate
   dei centri delle carte, si vogliono utilizzare quelle dell'angolo in 
   alto a sinistra: infatti, tale punto si ottiene traslando il centro di
@@ -85,7 +87,7 @@ GameFieldInfo, si può utilizzare il seguente algoritmo.
 - Per ciascuno di essi, se troviamo che è coperto (ovvero la carta superiore è diversa
 dalla carta iniziale), recuperiamo la carta nella posizione corrispondente e 
 stampiamola a schermo.
-- Ripetiamo questo procedimento per tutte le carte appena aggiunte, fino ad esaurire
+- Ripetiamo questo procedimento per tutte le carte appena aggiunte, fino a esaurire
   tutte le carte presenti sulla mappa
 
 ### Pseudocodice
