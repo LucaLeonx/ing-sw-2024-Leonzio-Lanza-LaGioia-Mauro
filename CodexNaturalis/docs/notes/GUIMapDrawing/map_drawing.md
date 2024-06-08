@@ -9,7 +9,7 @@ Ogni carta viene rappresentata nella GUI come un'immagine:
 Dove a e b sono le dimensioni in pixel della carta, r ed s lo spazio tra gli angoli
 (considerati di dimensioni uguali). Ogni carta ha anche un centro, M.
 
-Nel nostro caso, i parametri sono (circa, con un errore di qualche pixel):
+Nel nostro caso, i parametri sono (circa, con un errore di 1-2 pixel):
 - a = 556
 - b = 831
 - r = 106
