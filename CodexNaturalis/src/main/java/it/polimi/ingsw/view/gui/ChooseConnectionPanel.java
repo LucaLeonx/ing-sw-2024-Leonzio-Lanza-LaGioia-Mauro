@@ -1,13 +1,12 @@
 package it.polimi.ingsw.view.gui;
 
-import javax.imageio.stream.ImageInputStream;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
+import java.util.Objects;
 
 public class ChooseConnectionPanel extends StandardPanel {
 
@@ -99,7 +98,8 @@ public class ChooseConnectionPanel extends StandardPanel {
         super.paintComponent(g);
         Image image = null;
         try {
-            image = new ImageIcon("src/main/resources/other_images/codex_game.jpg").getImage();
+          //  image = new ImageIcon(Objects.requireNonNull(getClass().getResource("codex_game.jpg"))).getImage();
+           image = new ImageIcon("src/main/resources/other_images/codex_game.jpg").getImage();
         }
         catch (Exception e){
             System.out.println("Path non rilevato");

@@ -46,10 +46,10 @@ public class RegisterPanel extends StandardPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     showLobbies();
+                    timer.stop();
                 }
                 catch (Exception ex) {
                     System.out.println(ex);
-                    timer.stop();
                 }
             }
         });

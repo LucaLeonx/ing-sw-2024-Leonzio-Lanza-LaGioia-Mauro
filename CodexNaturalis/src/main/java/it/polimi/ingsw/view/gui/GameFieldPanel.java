@@ -26,26 +26,28 @@ public class GameFieldPanel extends StandardPanel {
         //startGame.setAlignmentY(CENTER_ALIGNMENT);
         this.setLayout(new BorderLayout());
         this.add(waitingForOthers, BorderLayout.CENTER);
+        waitingForOthers.setAlignmentX(CENTER_ALIGNMENT);
+        waitingForOthers.setSize(100,100);
 
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    MainWindow.getClientController().waitForGameToStart();
+                    MainWindow.getClientController().isWaitingInLobby();
                     buildPanel();
+                    timer.stop();
                     }
                 catch (Exception ex) {
                     System.out.println(ex);
-                    timer.stop();
-                    timer.start();
                 }
             }
         });
-       // timer.start();
+        timer.start();
 
     }
 
     private void buildPanel(){
+        MainWindow.getClientController().waitForGameToStart();
         waitingForOthers.setVisible(false);
         this.setLayout(new BorderLayout());
 
@@ -76,7 +78,6 @@ public class GameFieldPanel extends StandardPanel {
         ImagePanel firstcard = new ImagePanel(cardsInHands.get(0).id());
         ImagePanel secondcard = new ImagePanel(cardsInHands.get(1).id());
         ImagePanel thirdcard = new ImagePanel(cardsInHands.get(2).id());
-        ImagePanel fourthcard = new ImagePanel(cardsInHands.get(3).id());
 
         JButton logout= new JButton("Exit and logout");
         JButton goBack= new JButton("Go Back");
@@ -112,13 +113,6 @@ public class GameFieldPanel extends StandardPanel {
             }
         });
 
-        fourthcard.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                fourthcard.changeSide();
-            }
-        });
 
         logout.addActionListener(new ActionListener() {
             @Override
@@ -163,9 +157,6 @@ public class GameFieldPanel extends StandardPanel {
 
         gbc.gridx=2;
         host.add(thirdcard, gbc);
-
-        gbc.gridx=3;
-        host.add(fourthcard, gbc);
 
         gbc.gridx=4;
         host.add(buttonPanel, gbc);
