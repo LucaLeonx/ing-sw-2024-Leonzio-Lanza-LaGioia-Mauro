@@ -179,7 +179,7 @@ public class GameFieldPanel extends StandardPanel {
         JButton player4 = new JButton();
 
         try {
-            numberOfPlyayers= MainWindow.getClientController().getLeaderboard().size();
+            numberOfPlyayers= MainWindow.getClientController().getPlayerNames().size();
             for(int i=0; i<numberOfPlyayers; i++) {
                 if(i==0)
                     player2.setText(MainWindow.getClientController().getPlayerNames().get(i));
