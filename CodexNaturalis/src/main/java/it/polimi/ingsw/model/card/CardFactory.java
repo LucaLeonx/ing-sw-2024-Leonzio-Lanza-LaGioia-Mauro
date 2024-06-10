@@ -1,8 +1,11 @@
 package it.polimi.ingsw.model.card;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 
 import com.google.gson.*;
@@ -57,7 +60,13 @@ public abstract class CardFactory {
     }
 
     public static List<Card> getInitialCards() throws FileNotFoundException {
-        FileReader reader= new FileReader("src/main/java/it/polimi/ingsw/model/card/JsonFiles/Initial.json");
+        FileReader reader;
+        /*try {
+            URL url = CardFactory.class.getResource("/src/main/resources/Cards/Initial.json");
+            reader = new FileReader(new File(url.toURI()));
+        }catch(URISyntaxException e){return null;}
+        */
+        reader= new FileReader("src/main/java/it/polimi/ingsw/model/card/JsonFiles/Initial.json");
         GsonBuilder builder = new GsonBuilder();
 
         builder.registerTypeAdapter(Card[].class,new InitialCardAdapter());
@@ -68,6 +77,12 @@ public abstract class CardFactory {
     }
 
     public static List<Card> getResourceCards() throws FileNotFoundException{
+        /*FileReader reader;
+        try {
+            URL url = CardFactory.class.getResource("/Cards/Resource.json");
+            reader = new FileReader(new File(url.toURI()));
+        }catch(URISyntaxException e){return null;}
+        */
         FileReader reader= new FileReader("src/main/java/it/polimi/ingsw/model/card/JsonFiles/Resource.json");
         GsonBuilder builder = new GsonBuilder();
 
@@ -79,6 +94,12 @@ public abstract class CardFactory {
     }
 
     public static List<Card> getGoldCards() throws FileNotFoundException{
+        /*FileReader reader;
+        try {
+            URL url = CardFactory.class.getResource("/Cards/Gold.json");
+            reader = new FileReader(new File(url.toURI()));
+        }catch(URISyntaxException e){return null;}
+        */
         FileReader reader= new FileReader("src/main/java/it/polimi/ingsw/model/card/JsonFiles/Gold.json");
         GsonBuilder builder = new GsonBuilder();
 
@@ -90,6 +111,12 @@ public abstract class CardFactory {
     }
 
     public static List<ObjectiveCard> getObjectiveCards() throws FileNotFoundException{
+        /*FileReader reader;
+        try {
+            URL url = CardFactory.class.getResource("/Cards/Objective.json");
+            reader = new FileReader(new File(url.toURI()));
+        }catch(URISyntaxException e){return null;}
+        */
         FileReader reader= new FileReader("src/main/java/it/polimi/ingsw/model/card/JsonFiles/Objective.json");
         GsonBuilder builder = new GsonBuilder();
 

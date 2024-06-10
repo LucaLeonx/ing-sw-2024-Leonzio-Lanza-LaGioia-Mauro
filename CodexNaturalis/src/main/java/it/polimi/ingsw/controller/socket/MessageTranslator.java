@@ -54,6 +54,7 @@ public class MessageTranslator {
             case LOGIN -> {
                 AbstractMap.SimpleEntry<String,Integer> tuple = message.getCredentials();
                 try {
+                    server.checkLoggedIn(tuple.getKey(), tuple.getValue());
                     server.login(tuple.getKey(), tuple.getValue());
                 }catch(InvalidOperationException e){
                     return new Message(null,null,e);

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.controller.socket.SocketClient;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
@@ -334,7 +335,8 @@ public class SocketClientController implements ClientController {
 
     @Override
     public boolean isInGame() throws RemoteException{
-        client.sendMessage(new Message(MessageType.GET_JOINED_LOBBY_INFO,getCredentials(),null));
-        return !(client.receiveMessage().getObj() instanceof Exception);
+        client.sendMessage(new Message(MessageType.GET_CURRENT_PLAYER_NAME,getCredentials(),null));
+        Message returnedMessage = client.receiveMessage();
+        return !(returnedMessage.getObj() instanceof WrongPhaseException);
     }
 }
