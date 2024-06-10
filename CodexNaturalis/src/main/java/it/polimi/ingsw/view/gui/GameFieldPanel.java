@@ -4,10 +4,12 @@ import com.sun.tools.javac.Main;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.dataobject.CardInfo;
 import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
+import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.model.card.Symbol;
 import it.polimi.ingsw.view.tui.Symbol_String;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -55,13 +57,14 @@ public class GameFieldPanel extends StandardPanel {
         JPanel otherPlayers = newOtherPlayers();
         JPanel rightInfo = newInfo();
         JPanel chat = newChat();
+        JPanel setupGame = newSetupGame();
         JPanel game = newGame();
 
         this.add(hostPlayer, BorderLayout.PAGE_END);
         this.add(otherPlayers, BorderLayout.PAGE_START);
         this.add(rightInfo, BorderLayout.LINE_END);
         this.add(chat, BorderLayout.LINE_START);
-        this.add(game, BorderLayout.CENTER);
+        this.add(setupGame, BorderLayout.CENTER);
 
     }
 
@@ -179,21 +182,16 @@ public class GameFieldPanel extends StandardPanel {
             numberOfPlyayers= MainWindow.getClientController().getLeaderboard().size();
             for(int i=0; i<numberOfPlyayers; i++) {
                 if(i==0)
-                    player2.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
+                    player2.setText(MainWindow.getClientController().getPlayerNames().get(i));
                 if(i==1)
-                    player3.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
+                    player3.setText(MainWindow.getClientController().getPlayerNames().get(i));
                 if(i==2)
-                    player4.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
+                    player4.setText(MainWindow.getClientController().getPlayerNames().get(i));
 
             }
-
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e + " button error");
         }
-
-
-
-        GridBagConstraints gbc= new GridBagConstraints();
 
         player2.addActionListener(new ActionListener() {
             @Override
@@ -202,8 +200,10 @@ public class GameFieldPanel extends StandardPanel {
             }
         });
 
+        GridBagConstraints gbc= new GridBagConstraints();
 
         for(int i = 0; i<numberOfPlyayers-1; i++) {
+            gbc.gridy=0;
             gbc.gridx = i;
             if(i==0)
                 otherPlayes.add(player2, gbc);
@@ -237,22 +237,19 @@ public class GameFieldPanel extends StandardPanel {
         fungiPoints.setText(Symbol_String.FUNGI_SYMBOL + symbolCounter.get(Symbol.FUNGI).toString());
         plantPoints.setText(Symbol_String.PLANT_SYMBOL + symbolCounter.get(Symbol.PLANT).toString());
 
-
-
-
         GridBagConstraints gbc= new GridBagConstraints();
 
         gbc.gridx=0;
         gbc.gridy=0;
         info.add(insectPoints, gbc);
 
-        gbc.gridy=1;
+        gbc.gridx=1;
         info.add(animalPoints, gbc);
 
-        gbc.gridy=2;
+        gbc.gridx=2;
         info.add(fungiPoints, gbc);
 
-        gbc.gridy=3;
+        gbc.gridx=3;
         info.add(plantPoints, gbc);
 
         return info;
@@ -264,10 +261,77 @@ public class GameFieldPanel extends StandardPanel {
         return player4;
     }
 
+    private JPanel newSetupGame(){
+        JPanel setupGame = new JPanel();
+        setupGame.setLayout(new GridBagLayout());
+
+        int firstObjectiveId;
+        int secondObjectiveId;
+        int initialCardId;
+
+        try {
+            firstObjectiveId= MainWindow.getClientController().getPlayerSetup().objective1().id();
+            secondObjectiveId = MainWindow.getClientController().getPlayerSetup().objective2().id();
+            initialCardId = MainWindow.getClientController().getPlayerSetup().initialCard().id();
+
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
+        ImagePanel firstObjective = new ImagePanel(firstObjectiveId);
+        ImagePanel secondObjective = new ImagePanel(secondObjectiveId);
+        ImagePanel initialCardFront = new ImagePanel(initialCardId);
+        ImagePanel initialCardBack = new ImagePanel(initialCardId);
+        initialCardBack.changeSide();
+
+        JLabel chooseYourObjective= new JLabel("Choose your Objective card");
+        chooseYourObjective.setAlignmentX(CENTER_ALIGNMENT);
+
+        JButton firstObjectiveButton= new JButton("Choose First");
+        JButton secondObjectiveButton= new JButton("Choose Second");
+        JButton frontSide= new JButton("Choose Front");
+        JButton backSide= new JButton("Choose back");
+
+        GridBagConstraints gbc= new GridBagConstraints();
+        gbc.gridx=0;
+        gbc.gridy=0;
+        gbc.weightx=2;
+        setupGame.add(chooseYourObjective, gbc);
+
+        gbc.gridy=1;
+        gbc.weightx=1;
+        setupGame.add(firstObjective, gbc);
+
+        gbc.gridx=1;
+        setupGame.add(secondObjective, gbc);
+
+        gbc.gridx=2;
+        setupGame.add(initialCardFront, gbc);
+
+        gbc.gridx=3;
+        setupGame.add(initialCardBack, gbc);
+
+        gbc.gridy=2;
+        gbc.gridx=0;
+        setupGame.add(firstObjectiveButton, gbc);
+
+        gbc.gridx=1;
+        setupGame.add(secondObjectiveButton, gbc);
+
+        gbc.gridx=2;
+        setupGame.add(frontSide, gbc);
+
+        gbc.gridx=3;
+        setupGame.add(backSide, gbc);
+
+        return setupGame;
+    }
+
     private JPanel newGame(){
         JPanel game = new JPanel();
 
         return game;
     }
+
 
 }

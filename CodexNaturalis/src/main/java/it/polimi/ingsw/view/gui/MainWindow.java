@@ -7,6 +7,8 @@ import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -22,6 +24,17 @@ public class MainWindow extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 700);
         setVisible(true);
+
+       /* this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    clientController.logout();
+                } catch (RemoteException ex) {
+                    System.out.println(ex);
+                }
+            }
+        });*/
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
