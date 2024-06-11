@@ -117,7 +117,9 @@ public abstract class InfoTranslator {
             type = CardType.INITIAL;
         }
 
-        return new CardSideInfo(angleSymbols,
+        return new CardSideInfo(
+                card.getId(),
+                angleSymbols,
                 new HashSet<>(side.getCenterSymbols()),
                 card.getCardColor(), orientation,
                 type,

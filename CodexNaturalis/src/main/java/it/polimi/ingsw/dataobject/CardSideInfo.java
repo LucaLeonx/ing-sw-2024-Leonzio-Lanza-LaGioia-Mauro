@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.*;
 
 public record CardSideInfo(
+                            int id,
                            HashMap<AnglePosition, Symbol> angleSymbols,
                            HashSet<Symbol> centerSymbols,
                            CardColor color,

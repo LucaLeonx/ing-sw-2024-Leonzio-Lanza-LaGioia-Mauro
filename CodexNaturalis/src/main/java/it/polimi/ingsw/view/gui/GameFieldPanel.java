@@ -180,7 +180,10 @@ public class GameFieldPanel extends StandardPanel {
 
         try {
             numberOfPlyayers= MainWindow.getClientController().getPlayerNames().size();
-            for(int i=0; i<numberOfPlyayers; i++) {
+            for(int i=0; i<=numberOfPlyayers; i++) {
+                if(MainWindow.getClientController().getLeaderboard().get(i).nickname().equals(MainWindow.getClientController().getCurrentPlayerName())){
+                    continue;
+                }
                 if(i==0)
                     player2.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
                 if(i==1)
