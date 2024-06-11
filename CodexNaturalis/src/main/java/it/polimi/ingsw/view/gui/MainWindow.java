@@ -74,7 +74,7 @@ public class MainWindow extends JFrame {
         clientController = new RMIClientController();
     }
 
-    public static void setSocketController() throws IOException {
+    public static void setSocketController()throws IOException {
         clientController = new SocketClientController();
         //waiting for socketcontroller implementation
     }

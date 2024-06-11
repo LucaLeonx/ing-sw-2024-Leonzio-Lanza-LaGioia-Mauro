@@ -70,9 +70,17 @@ public class MessageTranslator {
             }
 
             case LOBBY_LIST -> {
-                //return new Message (null,session.getLobbies());
-                User user = checkLogin(message.getCredentials().getKey(), message.getCredentials().getValue());
-                return new Message(null,null, server.getLobbies(user));
+                List<LobbyInfo> lobbies;
+                try{
+                    User user = checkLogin(message.getCredentials().getKey(), message.getCredentials().getValue());
+                    lobbies = server.getLobbies(user);
+                    if(message.getCredentials() == null){
+                        return new Message(null,null,new Exception("User not registered"));
+                    }
+                }catch (Exception e){
+                    return new Message(null,null,e);
+                }
+                return new Message(null,null,lobbies );
             }
 
             case CREATE_LOBBY -> {

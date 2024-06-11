@@ -94,8 +94,9 @@ public class SocketClientController implements ClientController {
     public List<LobbyInfo> getLobbyList() throws RemoteException {
         synchronized (this) {
             client.sendMessage(new Message(MessageType.LOBBY_LIST, getCredentials(), null));
-
-            return (List<LobbyInfo>) client.receiveMessage().getObj();
+            Message receivedMsg = client.receiveMessage();
+            checkExceptionOnMessage(receivedMsg);
+            return (List<LobbyInfo>) receivedMsg.getObj();
         }
     }
 
