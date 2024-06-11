@@ -5,6 +5,7 @@ import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhas
 import it.polimi.ingsw.dataobject.CardInfo;
 import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
 import it.polimi.ingsw.dataobject.ObjectiveInfo;
+import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.Symbol;
 import it.polimi.ingsw.view.tui.Symbol_String;
 
@@ -35,7 +36,7 @@ public class GameFieldPanel extends StandardPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    MainWindow.getClientController().isWaitingInLobby();
+                    MainWindow.getClientController().waitForGameToStart();
                     buildPanel();
                     timer.stop();
                     }
@@ -49,7 +50,6 @@ public class GameFieldPanel extends StandardPanel {
     }
 
     private void buildPanel(){
-        MainWindow.getClientController().waitForGameToStart();
         waitingForOthers.setVisible(false);
         this.setLayout(new BorderLayout());
 
@@ -182,11 +182,13 @@ public class GameFieldPanel extends StandardPanel {
             numberOfPlyayers= MainWindow.getClientController().getLeaderboard().size();
             for(int i=0; i<numberOfPlyayers; i++) {
                 if(i==0)
-                    player2.setText(MainWindow.getClientController().getPlayerNames().get(i));
+                    player2.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
                 if(i==1)
-                    player3.setText(MainWindow.getClientController().getPlayerNames().get(i));
+                    player3.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
                 if(i==2)
-                    player4.setText(MainWindow.getClientController().getPlayerNames().get(i));
+                    player4.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
+                if(i==3)
+                    player4.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
 
             }
         } catch (Exception e) {
@@ -203,7 +205,7 @@ public class GameFieldPanel extends StandardPanel {
         GridBagConstraints gbc= new GridBagConstraints();
 
         for(int i = 0; i<numberOfPlyayers-1; i++) {
-            gbc.gridy=0;
+            gbc.gridy= 0;
             gbc.gridx = i;
             if(i==0)
                 otherPlayes.add(player2, gbc);
@@ -218,6 +220,7 @@ public class GameFieldPanel extends StandardPanel {
 
     private JPanel newInfo(){
         JPanel info = new JPanel();
+        info.setLayout(new GridBagLayout());
 
         HashMap<Symbol, Integer> symbolCounter= new HashMap<>();
 
@@ -225,9 +228,27 @@ public class GameFieldPanel extends StandardPanel {
         JLabel animalPoints= new JLabel();
         JLabel fungiPoints= new JLabel();
         JLabel plantPoints= new JLabel();
+        JLabel inkwellPoints = new JLabel();
+        JLabel manuscriptPoints = new JLabel();
+        JLabel quillPoints = new JLabel();
+
+        int resourceCardsDeckId;
+        int resourceCard1Id;
+        int resourceCard2Id;
+        int goldCardsDeckId;
+        int goldCard1Id;
+        int goldCard2Id;
 
         try {
             symbolCounter= MainWindow.getClientController().getControlledPlayerInformation().field().symbolCounterMap();
+            resourceCardsDeckId = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.DECK_RESOURCE).id();
+            resourceCard1Id = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.RESOURCE_CARD_1).id();
+            resourceCard2Id = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.RESOURCE_CARD_2).id();
+
+            goldCardsDeckId = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.DECK_GOLD).id();
+            goldCard1Id = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.GOLD_CARD_1).id();
+            goldCard2Id= MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.GOLD_CARD_2).id();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -236,6 +257,18 @@ public class GameFieldPanel extends StandardPanel {
         animalPoints.setText(Symbol_String.ANIMAL_SYMBOL +symbolCounter.get(Symbol.ANIMAL).toString());
         fungiPoints.setText(Symbol_String.FUNGI_SYMBOL + symbolCounter.get(Symbol.FUNGI).toString());
         plantPoints.setText(Symbol_String.PLANT_SYMBOL + symbolCounter.get(Symbol.PLANT).toString());
+        inkwellPoints.setText(Symbol_String.INKWELL_SYMBOL + symbolCounter.get(Symbol.INKWELL).toString());
+        manuscriptPoints.setText(Symbol_String.MANUSCRIPT_SYMBOL + symbolCounter.get(Symbol.MANUSCRIPT).toString());
+        quillPoints.setText(Symbol_String.QUILL_SYMBOL + symbolCounter.get(Symbol.QUILL).toString());
+
+        ImagePanel resourceCardsDeck = new ImagePanel(resourceCardsDeckId);
+        resourceCardsDeck.changeSide();
+        ImagePanel resourceCard1 = new ImagePanel(resourceCard1Id);
+        ImagePanel resourceCard2 = new ImagePanel(resourceCard2Id);
+        ImagePanel goldCardsDeck = new ImagePanel(goldCardsDeckId);
+        goldCardsDeck.changeSide();
+        ImagePanel goldCard1 = new ImagePanel(goldCard1Id);
+        ImagePanel goldCard2 = new ImagePanel(goldCard2Id);
 
         GridBagConstraints gbc= new GridBagConstraints();
 
@@ -246,11 +279,46 @@ public class GameFieldPanel extends StandardPanel {
         gbc.gridx=1;
         info.add(animalPoints, gbc);
 
-        gbc.gridx=2;
+        gbc.gridy=1;
+        gbc.gridx=0;
         info.add(fungiPoints, gbc);
 
-        gbc.gridx=3;
+        gbc.gridx=1;
         info.add(plantPoints, gbc);
+
+        gbc.gridy=2;
+        gbc.gridx=0;
+        info.add(inkwellPoints, gbc);
+
+        gbc.gridx=1;
+        info.add(manuscriptPoints, gbc);
+
+        gbc.gridy=3;
+        gbc.gridx=0;
+        info.add(quillPoints, gbc);
+
+        gbc.weightx=2;
+
+        gbc.gridy=4;
+        gbc.gridx=0;
+        info.add(resourceCardsDeck, gbc);
+
+        gbc.gridx=1;
+        info.add(goldCardsDeck, gbc);
+
+        gbc.gridy=5;
+        gbc.gridx=0;
+        info.add(resourceCard1, gbc);
+
+        gbc.gridx=1;
+        info.add(goldCard1, gbc);
+
+        gbc.gridy=6;
+        gbc.gridx=0;
+        info.add(resourceCard2, gbc);
+
+        gbc.gridx=1;
+        info.add(goldCard2, gbc);
 
         return info;
     }
@@ -323,6 +391,7 @@ public class GameFieldPanel extends StandardPanel {
 
         gbc.gridx=3;
         setupGame.add(backSide, gbc);
+
 
         return setupGame;
     }

@@ -25,17 +25,6 @@ public class MainWindow extends JFrame {
         setSize(1200, 700);
         setVisible(true);
 
-       /* this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                try {
-                    clientController.logout();
-                } catch (RemoteException ex) {
-                    System.out.println(ex);
-                }
-            }
-        });*/
-
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
 
@@ -76,16 +65,11 @@ public class MainWindow extends JFrame {
 
     public static void setSocketController() throws IOException {
         clientController = new SocketClientController();
-        //waiting for socketcontroller implementation
     }
 
     public static void goToWindow(String name) {
         cardLayout.show(cardPanel, name);
     }
-
-  /*  public static void resetWindow(String name){
-        MainWindow.get
-    }*/
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MainWindow::new);

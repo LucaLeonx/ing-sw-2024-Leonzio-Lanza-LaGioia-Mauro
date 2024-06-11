@@ -130,7 +130,7 @@ public class RegisterPanel extends StandardPanel {
                 }
 
             } catch (RemoteException ex) {
-                System.out.println(ex.getMessage());
+                System.out.println(ex);
             }
     }
 
