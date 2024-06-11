@@ -1,0 +1,561 @@
+[
+  {
+    "id": 1,
+    "color": "RED",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "FUNGI",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "FUNGI",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
+  },
+  {
+    "id": 2,
+    "color": "RED",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "FUNGI",
+        "UP_RIGHT": "FUNGI",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+
+  {
+    "id": 3,
+    "color": "RED",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "HIDDEN",
+        "DOWN_LEFT": "FUNGI",
+        "DOWN_RIGHT": "FUNGI"
+      }
+    }
+  },
+
+  {
+    "id": 4,
+    "color": "RED",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "FUNGI",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "FUNGI"
+      }
+    }
+  },
+
+  {
+    "id": 5,
+    "color": "RED",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "QUILL",
+        "DOWN_LEFT": "PLANT",
+        "DOWN_RIGHT": "FUNGI"
+      }
+    }
+  },
+
+  {
+    "id": 6,
+    "color": "RED",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "INKWELL",
+        "UP_RIGHT": "FUNGI",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "ANIMAL"
+      }
+    }
+  },
+
+  {
+    "id": 7,
+    "color": "RED",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "FUNGI",
+        "UP_RIGHT": "INSECT",
+        "DOWN_LEFT": "MANUSCRIPT",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+
+  {
+    "id": 8,
+    "color": "RED",
+    "front": {
+      "RewardFunction": 1,
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "FUNGI",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
+  },
+
+  {
+    "id": 9,
+    "color": "RED",
+    "front": {
+      "RewardFunction": 1,
+      "angles": {
+        "UP_LEFT": "FUNGI",
+        "UP_RIGHT": "HIDDEN",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+
+  {
+    "id": 10,
+    "color": "RED",
+    "front": {
+      "RewardFunction": 1,
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "FUNGI",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+
+  {
+    "id": 11,
+    "color": "GREEN",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "PLANT",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "PLANT",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
+  },
+  {
+    "id": 12,
+    "color": "GREEN",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "PLANT",
+        "UP_RIGHT": "PLANT",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+
+  {
+    "id": 13,
+    "color": "GREEN",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "HIDDEN",
+        "DOWN_LEFT": "PLANT",
+        "DOWN_RIGHT": "PLANT"
+      }
+    }
+  },
+
+  {
+    "id": 14,
+    "color": "GREEN",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "PLANT",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "PLANT"
+      }
+    }
+  },
+
+  {
+    "id": 15,
+    "color": "GREEN",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "INSECT",
+        "DOWN_LEFT": "QUILL",
+        "DOWN_RIGHT": "PLANT"
+      }
+    }
+  },
+
+  {
+    "id": 16,
+    "color": "GREEN",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "FUNGI",
+        "UP_RIGHT": "PLANT",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "INKWELL"
+      }
+    }
+  },
+
+  {
+    "id": 17,
+    "color": "GREEN",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "MANUSCRIPT",
+        "UP_RIGHT": "HIDDEN",
+        "DOWN_LEFT": "PLANT",
+        "DOWN_RIGHT": "ANIMAL"
+      }
+    }
+  },
+
+  {
+    "id": 18,
+    "color": "GREEN",
+    "front": {
+      "RewardFunction": 1,
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "PLANT",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
+  },
+
+  {
+    "id": 19,
+    "color": "GREEN",
+    "front": {
+      "RewardFunction": 1,
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "PLANT"
+      }
+    }
+  },
+
+  {
+    "id": 20,
+    "color": "GREEN",
+    "front": {
+      "RewardFunction": 1,
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "PLANT",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+
+  {
+    "id": 21,
+    "color": "SKYBLUE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "ANIMAL",
+        "UP_RIGHT": "ANIMAL",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
+  },
+
+  {
+    "id": 22,
+    "color": "SKYBLUE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "ANIMAL",
+        "DOWN_RIGHT": "ANIMAL"
+      }
+    }
+  },
+
+  {
+    "id": 23,
+    "color": "SKYBLUE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "ANIMAL",
+        "UP_RIGHT": "HIDDEN",
+        "DOWN_LEFT": "ANIMAL",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+
+  {
+    "id": 24,
+    "color": "SKYBLUE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "ANIMAL",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "ANIMAL"
+      }
+    }
+  },
+
+  {
+    "id": 25,
+    "color": "SKYBLUE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "INSECT",
+        "DOWN_LEFT": "INKWELL",
+        "DOWN_RIGHT": "ANIMAL"
+      }
+    }
+  },
+
+  {
+    "id": 26,
+    "color": "SKYBLUE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "PLANT",
+        "UP_RIGHT": "ANIMAL",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "MANUSCRIPT"
+      }
+    }
+  },
+
+  {
+    "id": 27,
+    "color": "SKYBLUE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "QUILL",
+        "UP_RIGHT": "HIDDEN",
+        "DOWN_LEFT": "ANIMAL",
+        "DOWN_RIGHT": "FUNGI"
+      }
+    }
+  },
+
+  {
+    "id": 28,
+    "color": "SKYBLUE",
+    "front": {
+      "RewardFunction": 1,
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "ANIMAL",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+
+  {
+    "id": 29,
+    "color": "SKYBLUE",
+    "front": {
+      "RewardFunction": 1,
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "HIDDEN",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "ANIMAL"
+      }
+    }
+  },
+
+  {
+    "id": 30,
+    "color": "SKYBLUE",
+    "front": {
+      "RewardFunction": 1,
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "ANIMAL",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
+  },
+
+  {
+    "id": 31,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "INSECT",
+        "UP_RIGHT": "INSECT",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
+  },
+
+  {
+    "id": 32,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "INSECT",
+        "DOWN_RIGHT": "INSECT"
+      }
+    }
+  },
+
+  {
+    "id": 33,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "INSECT",
+        "UP_RIGHT": "HIDDEN",
+        "DOWN_LEFT": "INSECT",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+
+  {
+    "id": 34,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "INSECT",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "INSECT"
+      }
+    }
+  },
+
+  {
+    "id": 35,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "QUILL",
+        "DOWN_LEFT": "ANIMAL",
+        "DOWN_RIGHT": "INSECT"
+      }
+    }
+  },
+
+  {
+    "id": 36,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "MANUSCRIPT",
+        "UP_RIGHT": "INSECT",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "FUNGI"
+      }
+    }
+  },
+
+  {
+    "id": 37,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction": 0,
+      "angles": {
+        "UP_LEFT": "INSECT",
+        "UP_RIGHT": "PLANT",
+        "DOWN_LEFT": "INKWELL",
+        "DOWN_RIGHT": "HIDDEN"
+      }
+    }
+  },
+
+  {
+    "id": 38,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction": 1,
+      "angles": {
+        "UP_LEFT": "INSECT",
+        "UP_RIGHT": "HIDDEN",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  },
+
+  {
+    "id": 39,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction": 1,
+      "angles": {
+        "UP_LEFT": "BLANK",
+        "UP_RIGHT": "BLANK",
+        "DOWN_LEFT": "HIDDEN",
+        "DOWN_RIGHT": "INSECT"
+      }
+    }
+  },
+
+  {
+    "id": 40,
+    "color": "PURPLE",
+    "front": {
+      "RewardFunction": 1,
+      "angles": {
+        "UP_LEFT": "HIDDEN",
+        "UP_RIGHT": "INSECT",
+        "DOWN_LEFT": "BLANK",
+        "DOWN_RIGHT": "BLANK"
+      }
+    }
+  }
+
+
+]

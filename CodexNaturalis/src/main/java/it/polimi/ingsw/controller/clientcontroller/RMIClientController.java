@@ -194,11 +194,15 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
     @Override
     public void waitForGameToStart(){
         checkLogin();
-        try {
-            while(!isInGame()){
+        int currPlayer, reqPlayer;
+        LobbyInfo currentLobby;
+        try{
+            currentLobby = getJoinedLobbyInfo();
+            while(currentLobby != null && currentLobby.currNumPlayers()< currentLobby.reqPlayers() ){
                 Thread.sleep(1000);
+                currentLobby = getJoinedLobbyInfo();
             }
-        } catch (InterruptedException e) {
+        } catch(InterruptedException | RemoteException | InvalidOperationException e){
             return;
         }
     }
