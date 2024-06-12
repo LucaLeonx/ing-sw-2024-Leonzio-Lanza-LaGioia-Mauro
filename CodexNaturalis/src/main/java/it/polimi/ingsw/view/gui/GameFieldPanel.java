@@ -28,7 +28,7 @@ public class GameFieldPanel extends StandardPanel {
 
     public GameFieldPanel() {
         //startGame.setAlignmentY(CENTER_ALIGNMENT);
-        this.setLayout(new BorderLayout());
+        this.setLayout(new GridBagLayout());
         this.add(waitingForOthers, BorderLayout.CENTER);
         waitingForOthers.setAlignmentX(CENTER_ALIGNMENT);
         waitingForOthers.setSize(100,100);
@@ -37,7 +37,7 @@ public class GameFieldPanel extends StandardPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                     buildPanel();
+                    buildPanel();
                     timer.stop();
                     }
                 catch (Exception ex) {

@@ -18,6 +18,15 @@ public class MainWindow extends JFrame {
     private static CardLayout cardLayout;
     private static JPanel cardPanel;
     private static ClientController clientController;
+
+    ChooseConnectionPanel chooseConnectionPanel = new ChooseConnectionPanel();
+    ChooseLoginPanel chooseLoginPanel= new ChooseLoginPanel();
+    LoginPanel loginPanel = new LoginPanel();
+    RegisterPanel registerPanel = new RegisterPanel();
+    InsertNamePanel insertNamePanel = new InsertNamePanel();
+    CreateNewLobbyPanel createNewLobbyPanel = new CreateNewLobbyPanel();
+    GameFieldPanel gameFieldPanel = new GameFieldPanel();
+
     public MainWindow()
     {
         setTitle("Codex Naturalis");
@@ -27,14 +36,6 @@ public class MainWindow extends JFrame {
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
-
-        ChooseConnectionPanel chooseConnectionPanel = new ChooseConnectionPanel();
-        ChooseLoginPanel chooseLoginPanel= new ChooseLoginPanel();
-        LoginPanel loginPanel = new LoginPanel();
-        RegisterPanel registerPanel = new RegisterPanel();
-        InsertNamePanel insertNamePanel = new InsertNamePanel();
-        CreateNewLobbyPanel createNewLobbyPanel = new CreateNewLobbyPanel();
-        GameFieldPanel gameFieldPanel = new GameFieldPanel();
 
         cardPanel.add("chooseConnectionPanel",chooseConnectionPanel);
         cardPanel.add("chooseLoginPanel",chooseLoginPanel);
