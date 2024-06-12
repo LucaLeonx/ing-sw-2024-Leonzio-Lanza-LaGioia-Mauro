@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static java.lang.Thread.sleep;
 
 public class NewLobbyScreen extends TUIScreen {
     AtomicBoolean goBackToScreen = new AtomicBoolean(false);
@@ -124,24 +123,6 @@ public class NewLobbyScreen extends TUIScreen {
         }
 
         else {
-
-           /* while (true) {
-                try {
-                    if (controller.isWaitingInLobby()) {
-                        break;
-                    } else if (controller.isInGame()) {
-                        break;
-                    }
-                    sleep(200);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                catch(InvalidOperationException e){
-                    continue;
-                } catch (RemoteException e) {
-                    continue;
-                }
-            }*/
             transitionState(new NewLobbyWaitScreen(tui, scanner, controller));
         }
     }
@@ -152,6 +133,5 @@ public class NewLobbyScreen extends TUIScreen {
                 .toList();
     }
 }
-
 
 

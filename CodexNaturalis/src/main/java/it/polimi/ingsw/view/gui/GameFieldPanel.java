@@ -8,6 +8,7 @@ import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.card.Symbol;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.view.tui.Symbol_String;
 
 import javax.swing.*;
@@ -51,7 +52,6 @@ public class GameFieldPanel extends StandardPanel {
 
     private void buildPanel(){
         MainWindow.getClientController().waitForGameToStart(); //problem in this wait
-        waitingForOthers.setVisible(false);
         this.setLayout(new BorderLayout());
 
         JPanel hostPlayer = newHostPanel();
@@ -169,58 +169,52 @@ public class GameFieldPanel extends StandardPanel {
         return host;
     }
 
+    // panel used to print some button up above to click and see other players map.
+    // I added some debugging line but it seems like
     private JPanel newOtherPlayers() {
         JPanel otherPlayes = new JPanel();
         otherPlayes.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        int numberOfPlyayers = 0;
-
-        JButton player2 = new JButton();
-        JButton player3 = new JButton();
-        JButton player4 = new JButton();
+        List<JButton> playerButtons = new ArrayList<>();
 
         try {
-            numberOfPlyayers= MainWindow.getClientController().getPlayerNames().size();
-            for(int i=0; i<=numberOfPlyayers; i++) {
-                if(MainWindow.getClientController().getLeaderboard().get(i).nickname().equals(MainWindow.getClientController().getCurrentPlayerName())){
-                    continue;
-                }
-                if(i==0)
-                    player2.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
-                if(i==1)
-                    player3.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
-                if(i==2)
-                    player4.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
-                if(i==3)
-                    player4.setText(MainWindow.getClientController().getLeaderboard().get(i).nickname());
+            List<String> PlayerNames = MainWindow.getClientController().getPlayerNames();
+            String currentPlayerName = MainWindow.getClientController().getControlledPlayerInformation().nickname();
 
+            System.out.println("Current player name: " + currentPlayerName);
+            System.out.println("Leaderboard size: " + PlayerNames.size());
+
+            for (String playerName : PlayerNames) {
+                System.out.println("Checking player: " + playerName);
+                if (!playerName.equals(currentPlayerName)) {
+                    JButton playerButton = new JButton(playerName);
+                    playerButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // Action for player button
+                        }
+                    });
+                    playerButtons.add(playerButton);
+                    System.out.println("Added button for player: " + playerName);
+                }
             }
         } catch (Exception e) {
             System.out.println(e + " button error");
         }
 
-        player2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-
-        GridBagConstraints gbc= new GridBagConstraints();
-
-        for(int i = 0; i<numberOfPlyayers-1; i++) {
-            gbc.gridy= 0;
+        for (int i = 0; i < playerButtons.size(); i++) {
             gbc.gridx = i;
-            if(i==0)
-                otherPlayes.add(player2, gbc);
-            if(i==1)
-                otherPlayes.add(player3, gbc);
-            if(i==2)
-                otherPlayes.add(player4, gbc);
+            gbc.gridy = 0;
+            gbc.insets = new Insets(10, 0, 0, 10); // top padding of 10 pixels, right padding of 10 pixels
+            otherPlayes.add(playerButtons.get(i), gbc);
         }
+
+        System.out.println("Total buttons added: " + playerButtons.size());
 
         return otherPlayes;
     }
+
 
     private JPanel newInfo(){
         JPanel info = new JPanel();
