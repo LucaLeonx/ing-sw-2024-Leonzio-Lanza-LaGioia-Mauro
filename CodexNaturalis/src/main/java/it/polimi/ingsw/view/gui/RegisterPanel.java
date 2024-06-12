@@ -41,21 +41,6 @@ public class RegisterPanel extends StandardPanel {
 
         JButton joinLobby = new JButton("Join Lobby");
 
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    showLobbies();
-                    timer.stop();
-                }
-                catch (Exception ex) {
-                    System.out.println(ex);
-                }
-            }
-        });
-        timer.start();
-
-
         createLobby.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -87,7 +72,6 @@ public class RegisterPanel extends StandardPanel {
                     MainWindow.goToWindow("gameFieldPanel");
                 } catch (RemoteException | InvalidOperationException ex) {
                     System.out.println(ex.getMessage());
-                    return;
                 }
             }
         });
@@ -117,6 +101,20 @@ public class RegisterPanel extends StandardPanel {
         gbc.gridy = 4;
         add(joinLobby, gbc);
 
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    showLobbies();
+                    timer.stop();
+                    MainWindow.getClientController().waitForLobbyListUpdate();
+                }
+                catch (Exception ex) {
+                    System.out.println(ex);
+                }
+            }
+        });
+        timer.start();
     }
 
     public void showLobbies() {

@@ -6,6 +6,7 @@ import it.polimi.ingsw.dataobject.CardInfo;
 import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
 import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.model.DrawChoice;
+import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.card.Symbol;
 import it.polimi.ingsw.view.tui.Symbol_String;
 
@@ -36,8 +37,7 @@ public class GameFieldPanel extends StandardPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    MainWindow.getClientController().waitForGameToStart();
-                    buildPanel();
+                     buildPanel();
                     timer.stop();
                     }
                 catch (Exception ex) {
@@ -50,6 +50,7 @@ public class GameFieldPanel extends StandardPanel {
     }
 
     private void buildPanel(){
+        MainWindow.getClientController().waitForGameToStart(); //problem in this wait
         waitingForOthers.setVisible(false);
         this.setLayout(new BorderLayout());
 
@@ -282,45 +283,43 @@ public class GameFieldPanel extends StandardPanel {
         gbc.gridx=1;
         info.add(animalPoints, gbc);
 
-        gbc.gridy=1;
-        gbc.gridx=0;
+        gbc.gridx=2;
         info.add(fungiPoints, gbc);
 
-        gbc.gridx=1;
+        gbc.gridx=3;
         info.add(plantPoints, gbc);
 
-        gbc.gridy=2;
+        gbc.gridy=1;
         gbc.gridx=0;
         info.add(inkwellPoints, gbc);
 
         gbc.gridx=1;
         info.add(manuscriptPoints, gbc);
 
-        gbc.gridy=3;
-        gbc.gridx=0;
+        gbc.gridx=2;
         info.add(quillPoints, gbc);
 
-        gbc.weightx=2;
+        gbc.gridwidth=2;
 
-        gbc.gridy=4;
+        gbc.gridy=3;
         gbc.gridx=0;
         info.add(resourceCardsDeck, gbc);
 
-        gbc.gridx=1;
+        gbc.gridx=2;
         info.add(goldCardsDeck, gbc);
 
         gbc.gridy=5;
         gbc.gridx=0;
         info.add(resourceCard1, gbc);
 
-        gbc.gridx=1;
+        gbc.gridx=2;
         info.add(goldCard1, gbc);
 
         gbc.gridy=6;
         gbc.gridx=0;
         info.add(resourceCard2, gbc);
 
-        gbc.gridx=1;
+        gbc.gridx=2;
         info.add(goldCard2, gbc);
 
         return info;
@@ -336,23 +335,29 @@ public class GameFieldPanel extends StandardPanel {
         JPanel setupGame = new JPanel();
         setupGame.setLayout(new GridBagLayout());
 
-        int firstObjectiveId;
-        int secondObjectiveId;
-        int initialCardId;
+        ObjectiveInfo firstObjective;
+        ObjectiveInfo secondObjective;
+        CardInfo initialCard;
+
+        class ChosenSetUp{
+            ObjectiveInfo choosenObjective;
+            CardOrientation choosenOrientation;
+        }
+        ChosenSetUp chosenSetUp = new ChosenSetUp();
 
         try {
-            firstObjectiveId= MainWindow.getClientController().getPlayerSetup().objective1().id();
-            secondObjectiveId = MainWindow.getClientController().getPlayerSetup().objective2().id();
-            initialCardId = MainWindow.getClientController().getPlayerSetup().initialCard().id();
+            firstObjective= MainWindow.getClientController().getPlayerSetup().objective1();
+            secondObjective = MainWindow.getClientController().getPlayerSetup().objective2();
+            initialCard = MainWindow.getClientController().getPlayerSetup().initialCard();
 
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
 
-        ImagePanel firstObjective = new ImagePanel(firstObjectiveId);
-        ImagePanel secondObjective = new ImagePanel(secondObjectiveId);
-        ImagePanel initialCardFront = new ImagePanel(initialCardId);
-        ImagePanel initialCardBack = new ImagePanel(initialCardId);
+        ImagePanel firstObjectiveImage = new ImagePanel(firstObjective.id());
+        ImagePanel secondObjectiveImage = new ImagePanel(secondObjective.id());
+        ImagePanel initialCardFront = new ImagePanel(initialCard.id());
+        ImagePanel initialCardBack = new ImagePanel(initialCard.id());
         initialCardBack.changeSide();
 
         JLabel chooseYourObjective= new JLabel("Choose your Objective card");
@@ -363,6 +368,40 @@ public class GameFieldPanel extends StandardPanel {
         JButton frontSide= new JButton("Choose Front");
         JButton backSide= new JButton("Choose back");
 
+        firstObjectiveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chosenSetUp.choosenObjective = firstObjective;
+                setupGame.remove(firstObjectiveButton);
+                setupGame.remove(secondObjectiveButton);
+            }
+        });
+
+        secondObjectiveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chosenSetUp.choosenObjective = secondObjective;
+                setupGame.remove(firstObjectiveButton);
+                setupGame.remove(secondObjectiveButton);
+            }
+        });
+
+        frontSide.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chosenSetUp.choosenOrientation=initialCard.front().side();
+            }
+        });
+
+        backSide.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chosenSetUp.choosenOrientation=initialCard.back().side();
+            }
+        });
+
+
+
         GridBagConstraints gbc= new GridBagConstraints();
         gbc.gridx=0;
         gbc.gridy=0;
@@ -371,10 +410,10 @@ public class GameFieldPanel extends StandardPanel {
 
         gbc.gridy=1;
         gbc.weightx=1;
-        setupGame.add(firstObjective, gbc);
+        setupGame.add(firstObjectiveImage, gbc);
 
         gbc.gridx=1;
-        setupGame.add(secondObjective, gbc);
+        setupGame.add(secondObjectiveImage, gbc);
 
         gbc.gridx=2;
         setupGame.add(initialCardFront, gbc);
