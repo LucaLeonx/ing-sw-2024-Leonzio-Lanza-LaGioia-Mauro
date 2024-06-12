@@ -24,21 +24,17 @@ import java.util.HashMap;
 import java.util.List;
 
 public class GameFieldPanel extends StandardPanel {
-    JLabel waitingForOthers= new JLabel("Waiting for other players to join...");
+
     private final Timer timer;
 
     public GameFieldPanel() {
-        //startGame.setAlignmentY(CENTER_ALIGNMENT);
-        this.setLayout(new BorderLayout());
-        this.add(waitingForOthers, BorderLayout.CENTER);
-        waitingForOthers.setAlignmentX(CENTER_ALIGNMENT);
-        waitingForOthers.setSize(100,100);
+        this.setLayout(new GridBagLayout());
 
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                     buildPanel();
+                    buildPanel();
                     timer.stop();
                     }
                 catch (Exception ex) {
