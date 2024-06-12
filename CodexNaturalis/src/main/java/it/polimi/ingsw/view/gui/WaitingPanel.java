@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.gui;
 
 import com.sun.tools.javac.Main;
+import it.polimi.ingsw.controller.clientcontroller.ClientController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,15 +10,42 @@ import static java.lang.Thread.sleep;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class WaitingPanel extends StandardPanel {
+    private ExecutorService executor;
+    private volatile boolean isCancelled;
     public WaitingPanel() {
+
     }
 
     public void buildPanel() {
+        isCancelled=false;
+        removeAll();
+        ExecutorService executor =  Executors.newSingleThreadExecutor();
         JLabel waitingForOthers = new JLabel("Waiting for other players to join...");
         waitingForOthers.setHorizontalAlignment(SwingConstants.CENTER);
         waitingForOthers.setFont(new Font("Arial", Font.BOLD, 20));
+
+        JButton backButton = new JButton("Back to Lobby Creation");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    MainWindow.getClientController().exitFromLobby();
+                    isCancelled = true; // Set cancellation flag
+                    executor.shutdownNow();
+                    MainWindow.goToWindow("createNewLobbyPanel");
+                    //MainWindow.createNewLobbyPanel.buildPanel();
+                } catch (RemoteException ex) {
+                    System.out.println("Action not possible, game already started");
+                }
+            }
+        });
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -25,21 +53,21 @@ public class WaitingPanel extends StandardPanel {
         gbc.gridy = 0;
         add(waitingForOthers, gbc);
 
-        SwingWorker<Void, Void> worker = new SwingWorker<>() {
-            @Override
-            protected Void doInBackground() throws Exception {
+        gbc.gridy = 1; // Position the button below the label
+        add(backButton, gbc);
+
+        // Start a new thread for the background task
+        executor.submit(()-> {
+                // Perform the long-running task
                 MainWindow.getClientController().waitForGameToStart();
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                MainWindow.goToWindow("gameFieldPanel");
-                MainWindow.gameFieldPanel.buildPanel();
-            }
-        };
-
-        worker.execute(); // Start the background task
+                // Check cancellation flag before transitioning to game panel
+                if (!isCancelled) {
+                        MainWindow.goToWindow("gameFieldPanel");
+                        MainWindow.gameFieldPanel.buildPanel();
+                }
+        });
+        revalidate();
+        repaint();
     }
 
     protected void paintComponent(Graphics g) {

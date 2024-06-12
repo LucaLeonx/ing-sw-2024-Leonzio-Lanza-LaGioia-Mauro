@@ -16,7 +16,7 @@ public class CreateNewLobbyPanel extends StandardPanel  {
         buildPanel();
     }
 
-    private void buildPanel() {
+    public void buildPanel() {
         this.setLayout(new GridBagLayout());
         JButton createLobby = new JButton("Create Lobby");
         JTextField lobbyName = new JTextField(15);
