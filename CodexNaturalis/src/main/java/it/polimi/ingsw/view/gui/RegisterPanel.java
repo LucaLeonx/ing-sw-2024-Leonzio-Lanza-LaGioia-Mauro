@@ -69,7 +69,8 @@ public class RegisterPanel extends StandardPanel {
                 String lobbyrow = jList.getSelectedValue();
                 try {
                     MainWindow.getClientController().joinLobby(lobbyById.get(lobbyrow));
-                    MainWindow.goToWindow("gameFieldPanel");
+                    MainWindow.waitingPanel.buildPanel();
+                    MainWindow.goToWindow("waitingPanel");
                 } catch (RemoteException | InvalidOperationException ex) {
                     System.out.println(ex.getMessage());
                 }

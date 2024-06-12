@@ -19,14 +19,14 @@ public class MainWindow extends JFrame {
     private static JPanel cardPanel;
     private static ClientController clientController;
 
-    ChooseConnectionPanel chooseConnectionPanel = new ChooseConnectionPanel();
-    ChooseLoginPanel chooseLoginPanel= new ChooseLoginPanel();
-    LoginPanel loginPanel = new LoginPanel();
-    RegisterPanel registerPanel = new RegisterPanel();
-    InsertNamePanel insertNamePanel = new InsertNamePanel();
-    CreateNewLobbyPanel createNewLobbyPanel = new CreateNewLobbyPanel();
-    GameFieldPanel gameFieldPanel = new GameFieldPanel();
-        WaitingPanel waitingPanel= new WaitingPanel();
+    public static ChooseConnectionPanel chooseConnectionPanel = new ChooseConnectionPanel();
+    public static ChooseLoginPanel chooseLoginPanel= new ChooseLoginPanel();
+    public static LoginPanel loginPanel = new LoginPanel();
+    public static RegisterPanel registerPanel = new RegisterPanel();
+    public static InsertNamePanel insertNamePanel = new InsertNamePanel();
+    public static CreateNewLobbyPanel createNewLobbyPanel = new CreateNewLobbyPanel();
+    public static GameFieldPanel gameFieldPanel = new GameFieldPanel();
+    public static WaitingPanel waitingPanel= new WaitingPanel();
 
     public MainWindow()
     {

@@ -25,29 +25,11 @@ import java.util.List;
 
 public class GameFieldPanel extends StandardPanel {
 
-    private final Timer timer;
-
     public GameFieldPanel() {
         this.setLayout(new GridBagLayout());
-
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    buildPanel();
-                    timer.stop();
-                    }
-                catch (Exception ex) {
-                    System.out.println(ex);
-                }
-            }
-        });
-        timer.start();
-
     }
 
-    private void buildPanel(){
-        MainWindow.getClientController().waitForGameToStart(); //problem in this wait
+    public void buildPanel(){
         this.setLayout(new BorderLayout());
 
         JPanel hostPlayer = newHostPanel();

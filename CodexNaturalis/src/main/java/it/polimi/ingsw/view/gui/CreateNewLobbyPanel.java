@@ -46,11 +46,12 @@ public class CreateNewLobbyPanel extends StandardPanel  {
                 } catch (RemoteException ex) {
                     return;
                 }
-                //implement number of players
 
-                MainWindow.goToWindow("waitingPanel");
                 resetPanel();
                 buildPanel();
+                MainWindow.waitingPanel.buildPanel();
+                MainWindow.goToWindow("waitingPanel");
+
             }
         });
         goBack.addActionListener(new ActionListener() {

@@ -7,39 +7,52 @@ import java.awt.*;
 
 import static java.lang.Thread.sleep;
 
-public class WaitingPanel extends StandardPanel {
+import javax.swing.*;
+import java.awt.*;
 
-    public WaitingPanel(){
-        buildPanel();
+public class WaitingPanel extends StandardPanel {
+    public WaitingPanel() {
     }
-    private void buildPanel() {
+
+    public void buildPanel() {
         JLabel waitingForOthers = new JLabel("Waiting for other players to join...");
         waitingForOthers.setHorizontalAlignment(SwingConstants.CENTER);
         waitingForOthers.setFont(new Font("Arial", Font.BOLD, 20));
 
+        setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        this.add(waitingForOthers, gbc);
+        add(waitingForOthers, gbc);
 
-        while(true) {
-            try {
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() throws Exception {
                 MainWindow.getClientController().waitForGameToStart();
-                break;
-            }
-            catch(Exception e)
-            {
-                try {
-                    sleep(1000);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
+                return null;
             }
 
+            @Override
+            protected void done() {
+                MainWindow.goToWindow("gameFieldPanel");
+                MainWindow.gameFieldPanel.buildPanel();
+            }
+        };
+
+        worker.execute(); // Start the background task
+    }
+
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Image image = null;
+        try {
+            //  image = new ImageIcon(Objects.requireNonNull(getClass().getResource("codex_game.jpg"))).getImage();
+            image = new ImageIcon("src/main/resources/other_images/lobbyScreen.jpg").getImage();
         }
-        MainWindow.goToWindow("gameFieldPanel");
-
+        catch (Exception e){
+            System.out.println("Path non rilevato");
+        }
+        g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
     }
 }
-
 
