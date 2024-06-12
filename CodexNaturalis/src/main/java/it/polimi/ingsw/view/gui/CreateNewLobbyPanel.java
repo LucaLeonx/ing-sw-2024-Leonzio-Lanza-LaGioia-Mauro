@@ -48,7 +48,7 @@ public class CreateNewLobbyPanel extends StandardPanel  {
                 }
                 //implement number of players
 
-                MainWindow.goToWindow("gameFieldPanel");
+                MainWindow.goToWindow("waitingPanel");
                 resetPanel();
                 buildPanel();
             }
