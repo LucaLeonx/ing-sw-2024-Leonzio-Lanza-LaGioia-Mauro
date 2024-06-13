@@ -2,11 +2,14 @@ package it.polimi.ingsw.view.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MapTest extends StandardPanel{
-    private List<ImagePanel> placedCards = new ArrayList<ImagePanel>();
+    private Map<ImagePanel,Point> placedCards = new HashMap<ImagePanel,Point>();
     private List<JButton> availablePlaces = new ArrayList<JButton>();
     private final int CardWidth = 100;
     private final int CardHeight = 80;
@@ -14,10 +17,21 @@ public class MapTest extends StandardPanel{
     private final int CenterCardY = 410;
     private final int offsetX = 77;
     private final int offsetY = 47;
+    private int layer = 0;
     private JLayeredPane jLayeredPane = new JLayeredPane();
+
+    private List<Point> availablePoints = new ArrayList<Point>();
 
 
     public MapTest(){
+
+        //availablePoints.add(new Point(0,0));
+        availablePoints.add(new Point(2,2));
+        availablePoints.add(new Point(4,4));
+        availablePoints.add(new Point(6,4));
+        availablePoints.add(new Point(8,4));
+        availablePoints.add(new Point(2,4));
+        availablePoints.add(new Point(0,4));
 
         JFrame frame = new JFrame("JLayeredPane Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,21 +41,23 @@ public class MapTest extends StandardPanel{
         placeMode.setBounds(0,0,150,30);
         placeMode.setVisible(true);
 
-
         ImagePanel img1 = new ImagePanel(10);
         img1.setBounds(CenterCardX, CenterCardY, CardWidth, CardHeight);
-        addAvailablePlace(img1.getBounds());
-        jLayeredPane.add(img1, Integer.valueOf(0));
+        addAvailablePlace(img1.getBounds(),new Point(0,0));
+        jLayeredPane.add(img1, Integer.valueOf(layer));
+        placedCards.put(img1, new Point(0,0));
 
         frame.add(placeMode);
         frame.add(jLayeredPane);
         frame.setVisible(true);
 
         placeMode.addActionListener(e -> {
+            //Here we save the chosen card to place
             for(JButton b : availablePlaces){
                 b.setVisible(true);
             }
         });
+
 
     }
 
@@ -51,74 +67,73 @@ public class MapTest extends StandardPanel{
         }
     }
 
-    public void addAvailablePlace(Rectangle bounds){
-        JButton UpLSpace = new JButton("UL space");
-        UpLSpace.setVisible(false);
-        UpLSpace.setBackground(Color.GRAY);
-        UpLSpace.setBounds(bounds.x-offsetX, bounds.y-offsetY, CardWidth, CardHeight);
+    public void addAvailablePlace(Rectangle bounds, Point p){
+        Point ULPoint = new Point(p.x-2,p.y+2),URPoint = new Point(p.x+2,p.y+2),DLPoint = new Point(p.x-2,p.y-2),DRPoint = new Point(p.x+2,p.y-2);
+        JButton UpLSpace,UpRSpace,DownLSpace,DownRSpace;
 
-        JButton UpRSpace = new JButton("UR space");
-        UpRSpace.setVisible(false);
-        UpRSpace.setBackground(Color.GRAY);
-        UpRSpace.setBounds(bounds.x+offsetX, bounds.y-offsetY, CardWidth, CardHeight);
-
-        JButton DownLSpace = new JButton("DL space");
-        DownLSpace.setVisible(false);
-        DownLSpace.setBackground(Color.GRAY);
-        DownLSpace.setBounds(bounds.x-offsetX, bounds.y+offsetY, CardWidth, CardHeight);
-
-        JButton DownRSpace = new JButton("DR space");
-        DownRSpace.setVisible(false);
-        DownRSpace.setBackground(Color.GRAY);
-        DownRSpace.setBounds(bounds.x+offsetX, bounds.y+offsetY, CardWidth, CardHeight);
-
-        availablePlaces.add(UpLSpace);
-        availablePlaces.add(UpRSpace);
-        availablePlaces.add(DownLSpace);
-        availablePlaces.add(DownRSpace);
-        jLayeredPane.add(UpLSpace, Integer.valueOf(1));
-        jLayeredPane.add(UpRSpace, Integer.valueOf(1));
-        jLayeredPane.add(DownLSpace, Integer.valueOf(1));
-        jLayeredPane.add(DownRSpace, Integer.valueOf(1));
-
-        UpLSpace.addActionListener(e -> {
-            ImagePanel img2 = new ImagePanel(11);
-            img2.setBounds(UpLSpace.getBounds());
-            img2.setVisible(true);
-            addAvailablePlace(img2.getBounds());
-            jLayeredPane.add(img2, Integer.valueOf(1));
-            jLayeredPane.remove(UpLSpace);
-            hideAvailableSpaces();
-        });
-        UpRSpace.addActionListener(e -> {
-            ImagePanel img3 = new ImagePanel(13);
-            img3.setBounds(UpRSpace.getBounds());
-            img3.setVisible(true);
-            addAvailablePlace(img3.getBounds());
-            jLayeredPane.add(img3, Integer.valueOf(1));
-            jLayeredPane.remove(UpRSpace);
-            hideAvailableSpaces();
-        });
-        DownLSpace.addActionListener(e -> {
-            ImagePanel img4 = new ImagePanel(12);
-            img4.setBounds(DownLSpace.getBounds());
-            img4.setVisible(true);
-            addAvailablePlace(img4.getBounds());
-            jLayeredPane.add(img4, Integer.valueOf(1));
-            jLayeredPane.remove(DownLSpace);
-            hideAvailableSpaces();
-        });
-        DownRSpace.addActionListener(e -> {
-            ImagePanel img5 = new ImagePanel(12);
-            img5.setBounds(DownRSpace.getBounds());
-            img5.setVisible(true);
-            addAvailablePlace(img5.getBounds());
-            jLayeredPane.add(img5, Integer.valueOf(1));
-            jLayeredPane.remove(DownRSpace);
-            hideAvailableSpaces();
-        });
+        layer++;
+        if(availablePoints.contains(ULPoint)) {
+            UpLSpace = new JButton("UL (" + ULPoint.x + ", " + ULPoint.y + ")");
+            UpLSpace.setVisible(false);
+            UpLSpace.setBackground(Color.GRAY);
+            UpLSpace.setBounds(bounds.x - offsetX, bounds.y - offsetY, CardWidth, CardHeight);
+            availablePlaces.add(UpLSpace);
+            jLayeredPane.add(UpLSpace, Integer.valueOf(layer));
+            UpLSpace.addActionListener(e -> {
+                addCardImage(UpLSpace, ULPoint);
+            });
+        }
+        if(availablePoints.contains(URPoint)) {
+            UpRSpace = new JButton("UR (" + URPoint.x + ", " + URPoint.y + ")");
+            UpRSpace.setVisible(false);
+            UpRSpace.setBackground(Color.GRAY);
+            UpRSpace.setBounds(bounds.x + offsetX, bounds.y - offsetY, CardWidth, CardHeight);
+            availablePlaces.add(UpRSpace);
+            jLayeredPane.add(UpRSpace, Integer.valueOf(layer));
+            UpRSpace.addActionListener(e -> {
+                addCardImage(UpRSpace, URPoint);
+            });
+        }
+        if(availablePoints.contains(DLPoint)) {
+            DownLSpace = new JButton("DL (" + DLPoint.x + ", " + DLPoint.y + ")");
+            DownLSpace.setVisible(false);
+            DownLSpace.setBackground(Color.GRAY);
+            DownLSpace.setBounds(bounds.x - offsetX, bounds.y + offsetY, CardWidth, CardHeight);
+            availablePlaces.add(DownLSpace);
+            jLayeredPane.add(DownLSpace, Integer.valueOf(layer));
+            DownLSpace.addActionListener(e -> {
+                addCardImage(DownLSpace, DLPoint);
+            });
+        }
+        if(availablePoints.contains(DRPoint)) {
+            DownRSpace = new JButton("DR (" + DRPoint.x + ", " + DRPoint.y + ")");
+            DownRSpace.setVisible(false);
+            DownRSpace.setBackground(Color.GRAY);
+            DownRSpace.setBounds(bounds.x + offsetX, bounds.y + offsetY, CardWidth, CardHeight);
+            availablePlaces.add(DownRSpace);
+            jLayeredPane.add(DownRSpace, Integer.valueOf(layer));
+            DownRSpace.addActionListener(e -> {
+                addCardImage(DownRSpace, DRPoint);
+            });
+        }
 
     }
+
+    private void addCardImage(JButton availablePosition,Point p){
+        if(availablePoints.contains(p)) {
+            availablePoints.remove(p);
+            ImagePanel img = new ImagePanel(11);
+            img.setBounds(availablePosition.getBounds());
+            img.setVisible(true);
+            placedCards.put(img, new Point());
+            addAvailablePlace(img.getBounds(), p);
+            jLayeredPane.add(img, Integer.valueOf(layer));
+            jLayeredPane.remove(availablePosition);
+            hideAvailableSpaces();
+        }
+    }
+
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MapTest::new);
