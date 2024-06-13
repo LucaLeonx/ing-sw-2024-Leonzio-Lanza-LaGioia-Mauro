@@ -4,61 +4,64 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ImagePanel extends JPanel {
-    private final FrontPanel frontPanel;
-    private final BackPanel backPanel;
-    private boolean side= true; //true is front side set by default
+    private final JPanel cardPanel;
+    private final CardLayout cardLayout;
 
     public ImagePanel(Integer imageNumber) {
-        this.frontPanel = new FrontPanel(Toolkit.getDefaultToolkit().getImage("src/main/resources/cropped_fronte/img_" + imageNumber + ".jpeg"));
-        this.backPanel = new BackPanel(Toolkit.getDefaultToolkit().getImage("src/main/resources/cropped_retro/img_" + imageNumber + ".jpeg"));
+        cardLayout = new CardLayout();
+        cardPanel = new JPanel(cardLayout);
 
-        this.add(frontPanel);
-        this.add(backPanel);
+        FrontPanel frontPanel = new FrontPanel(Toolkit.getDefaultToolkit().getImage("src/main/resources/cropped_fronte/img_" + imageNumber + ".jpeg"));
+        BackPanel backPanel = new BackPanel(Toolkit.getDefaultToolkit().getImage("src/main/resources/cropped_retro/img_" + imageNumber + ".jpeg"));
 
-        if(side) {
-            frontPanel.setVisible(side); //by default when we create the ImagePanel with both Images one visibilty is set true the other false
-            backPanel.setVisible(!side);
-        }
+        cardPanel.add(frontPanel, "FRONT");
+        cardPanel.add(backPanel, "BACK");
+
+        setLayout(new BorderLayout());
+        add(cardPanel, BorderLayout.CENTER);
+
+        showFrontPanel(); // Show front panel by default
     }
 
-    public void changeSide()
-    {
-        this.side = !(this.side);
-
-        if(side) {
-            frontPanel.setVisible(true); //by default when we create the ImagePanel with both Images one visibilty is set true the other false
-            backPanel.setVisible(false);
-        }
-        else{
-            frontPanel.setVisible(false);
-            backPanel.setVisible(true);
-        }
+    public void changeSide() {
+        cardLayout.next(cardPanel);
     }
 
-    private class FrontPanel extends JPanel{
+    private void showFrontPanel() {
+        cardLayout.show(cardPanel, "FRONT");
+    }
+
+    private void showBackPanel() {
+        cardLayout.show(cardPanel, "BACK");
+    }
+
+    private class FrontPanel extends JPanel {
         private final Image frontPanelImage;
 
-        private FrontPanel(Image frontPanelNumber){
-            this.frontPanelImage= frontPanelNumber;
-            this.setPreferredSize(new Dimension(100,80));
+        private FrontPanel(Image frontPanelImage) {
+            this.frontPanelImage = frontPanelImage;
+            this.setPreferredSize(new Dimension(100, 80));
         }
+
         @Override
         protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
             g.drawImage(frontPanelImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
 
-    private class BackPanel extends JPanel{
+    private class BackPanel extends JPanel {
         private final Image backPanelImage;
 
-        private BackPanel(Image frontPanelNumber){
-            this.backPanelImage= frontPanelNumber;
-            this.setPreferredSize(new Dimension(100,80));
+        private BackPanel(Image backPanelImage) {
+            this.backPanelImage = backPanelImage;
+            this.setPreferredSize(new Dimension(100, 80));
         }
+
         @Override
         protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
             g.drawImage(backPanelImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
-
 }
