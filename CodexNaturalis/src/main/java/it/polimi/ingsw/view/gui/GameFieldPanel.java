@@ -23,12 +23,16 @@ import java.util.concurrent.Executors;
 import static java.lang.Thread.sleep;
 
 public class GameFieldPanel extends StandardPanel {
+
     private ExecutorService executor;
     public GameFieldPanel(){
 
     }
 
     public void buildPanel(){
+        removeAll();
+        revalidate();
+        repaint();
         this.setLayout(new BorderLayout());
         JPanel hostPlayer = newHostPanel();
         JPanel rightInfo = newInfo();
@@ -44,8 +48,21 @@ public class GameFieldPanel extends StandardPanel {
         this.add(chat, BorderLayout.LINE_START);
         this.add(game, BorderLayout.CENTER);
 
-        revalidate();
-        repaint();
+        new Thread(() -> {
+            try {
+                // Wait for 5 seconds (5000 milliseconds)
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Update the label text on the Event Dispatch Thread
+            SwingUtilities.invokeLater(() -> {
+                // Repaint and revalidate the frame
+                repaint();
+                revalidate();
+            });
+        }).start();
 
         executor.submit(() -> {
             MainWindow.getClientController().waitForGameEnded();
@@ -70,6 +87,7 @@ public class GameFieldPanel extends StandardPanel {
         ImagePanel firstcard = new ImagePanel(cardsInHands.get(0).id());
         ImagePanel secondcard = new ImagePanel(cardsInHands.get(1).id());
         ImagePanel thirdcard = new ImagePanel(cardsInHands.get(2).id());
+        System.out.println("Sto stampando le carte in mano di id: " + cardsInHands.get(0).id() + cardsInHands.get(1).id() + cardsInHands.get(2).id());
 
         JButton logout= new JButton("Exit and logout");
         JButton goBack= new JButton("Go Back");
@@ -279,6 +297,8 @@ public class GameFieldPanel extends StandardPanel {
         gbc.gridx=2;
         info.add(quillPoints, gbc);
 
+        gbc.insets = new Insets(10, 5, 10, 5); // Padding of 5 pixels on all sides
+
         gbc.gridwidth=2;
 
         gbc.gridy=3;
@@ -313,14 +333,14 @@ public class GameFieldPanel extends StandardPanel {
 
     private JPanel newGame(){
         JPanel game= new JPanel();
-        JLabel gameLabel = new JLabel("MAP");
+        /*JLabel gameLabel = new JLabel("MAP");
         gameLabel.setHorizontalAlignment(SwingConstants.CENTER);
         gameLabel.setFont(new Font("Arial", Font.BOLD, 30));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(gameLabel, gbc);
+        add(gameLabel, gbc);*/
         return game;
     }
 
