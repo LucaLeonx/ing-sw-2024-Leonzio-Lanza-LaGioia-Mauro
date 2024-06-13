@@ -24,6 +24,20 @@ public class GameFieldPanel extends StandardPanel {
         this.setLayout(new BorderLayout());
     }
 
+    public void buildPanel(){
+        JPanel hostPlayer = newHostPanel();
+        JPanel rightInfo = newInfo();
+        JPanel otherPlayers = newOtherPlayers();
+        JPanel chat = newChat();
+        JPanel game = newGame();
+
+        this.add(otherPlayers, BorderLayout.PAGE_START);
+        this.add(hostPlayer, BorderLayout.PAGE_END);
+        this.add(rightInfo, BorderLayout.LINE_END);
+        this.add(chat, BorderLayout.LINE_START);
+        this.add(game, BorderLayout.CENTER);
+    }
+
 
     private JPanel newHostPanel(){
         JPanel host= new JPanel();
@@ -161,7 +175,7 @@ public class GameFieldPanel extends StandardPanel {
         for (int i = 0; i < playerButtons.size(); i++) {
             gbc.gridx = i;
             gbc.gridy = 0;
-            gbc.insets = new Insets(10, 0, 0, 10); // top padding of 10 pixels, right padding of 10 pixels
+            gbc.insets = new Insets(10, 0, 0, 10);
             otherPlayes.add(playerButtons.get(i), gbc);
         }
 

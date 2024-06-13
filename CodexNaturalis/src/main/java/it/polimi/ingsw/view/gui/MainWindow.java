@@ -22,6 +22,10 @@ public class MainWindow extends JFrame {
     public static InsertNamePanel insertNamePanel = new InsertNamePanel();
     public static CreateNewLobbyPanel createNewLobbyPanel = new CreateNewLobbyPanel();
     public static WaitingPanel waitingPanel= new WaitingPanel();
+    public static SetUpGamePanel setUpGamePanel = new SetUpGamePanel();
+    public static SetUpGamePanel gameFieldPanel = new SetUpGamePanel();
+    public static EndGamePanel endGamePanel = new EndGamePanel();
+
 
     public MainWindow()
     {
@@ -40,7 +44,9 @@ public class MainWindow extends JFrame {
         cardPanel.add("insertNamePanel", insertNamePanel);
         cardPanel.add("createNewLobbyPanel", createNewLobbyPanel);
         cardPanel.add("waitingPanel", waitingPanel);
+        cardPanel.add("setUpGamePanel", setUpGamePanel);
         cardPanel.add("gameFieldPanel", gameFieldPanel);
+        cardPanel.add("endGamePanel", endGamePanel);
         add(cardPanel);
 
     }
