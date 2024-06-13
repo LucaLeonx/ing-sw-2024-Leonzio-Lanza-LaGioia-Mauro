@@ -23,7 +23,7 @@ public class MainWindow extends JFrame {
     public static CreateNewLobbyPanel createNewLobbyPanel = new CreateNewLobbyPanel();
     public static WaitingPanel waitingPanel= new WaitingPanel();
     public static SetUpGamePanel setUpGamePanel = new SetUpGamePanel();
-    public static SetUpGamePanel gameFieldPanel = new SetUpGamePanel();
+    public static GameFieldPanel gameFieldPanel = new GameFieldPanel();
     public static EndGamePanel endGamePanel = new EndGamePanel();
 
 

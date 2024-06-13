@@ -62,12 +62,10 @@ public class WaitingPanel extends StandardPanel {
                 MainWindow.getClientController().waitForGameToStart();
                 // Check cancellation flag before transitioning to game panel
                 if (!isCancelled) {
-                        MainWindow.goToWindow("waitingPanel");
+                        MainWindow.goToWindow("setUpGamePanel");
                         MainWindow.setUpGamePanel.buildPanel();
                 }
         });
-        revalidate();
-        repaint();
     }
 
     protected void paintComponent(Graphics g) {

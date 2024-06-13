@@ -25,10 +25,11 @@ import static java.lang.Thread.sleep;
 public class GameFieldPanel extends StandardPanel {
     private ExecutorService executor;
     public GameFieldPanel(){
-        this.setLayout(new BorderLayout());
+
     }
 
     public void buildPanel(){
+        this.setLayout(new BorderLayout());
         JPanel hostPlayer = newHostPanel();
         JPanel rightInfo = newInfo();
         JPanel otherPlayers = newOtherPlayers();
@@ -42,6 +43,9 @@ public class GameFieldPanel extends StandardPanel {
         this.add(rightInfo, BorderLayout.LINE_END);
         this.add(chat, BorderLayout.LINE_START);
         this.add(game, BorderLayout.CENTER);
+
+        revalidate();
+        repaint();
 
         executor.submit(() -> {
             MainWindow.getClientController().waitForGameEnded();
@@ -309,7 +313,14 @@ public class GameFieldPanel extends StandardPanel {
 
     private JPanel newGame(){
         JPanel game= new JPanel();
-
+        JLabel gameLabel = new JLabel("MAP");
+        gameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        gameLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        add(gameLabel, gbc);
         return game;
     }
 
