@@ -8,14 +8,14 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # Ignore game assets
-CodexNaturalis/assets/*
+CodexNaturalis/assets/**
 
 # User-specific stuff
 .DS_Store
-*/.DS_Store
+**/.DS_Store
 .idea
-*/.idea
-*/resources
+**/.idea
+**/resources
 CodexNaturalis/.gitignore
 CodexNaturalis/CodexNaturalis/.idea/**/workspace.xml
 CodexNaturalis/CodexNaturalis/.idea/**/tasks.xml
