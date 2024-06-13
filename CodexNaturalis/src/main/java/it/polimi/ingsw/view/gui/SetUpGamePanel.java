@@ -32,6 +32,8 @@ public class SetUpGamePanel extends StandardPanel {
 
     public void buildPanel(){
         removeAll();
+        revalidate();
+        repaint();
         executor =  Executors.newSingleThreadExecutor();
 
         this.setLayout(new BorderLayout());
@@ -45,7 +47,6 @@ public class SetUpGamePanel extends StandardPanel {
         this.add(rightInfo, BorderLayout.LINE_END);
         this.add(chat, BorderLayout.LINE_START);
         this.add(setupGame, BorderLayout.CENTER);
-
 
         executor.submit(() -> {
             while (true) {
