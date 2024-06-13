@@ -212,7 +212,7 @@ public class SetUpGamePanel extends StandardPanel {
         ImagePanel goldCard2 = new ImagePanel(goldCard2Id);
 
         GridBagConstraints gbc= new GridBagConstraints();
-
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.gridwidth=2;
 
         gbc.gridy=3;
