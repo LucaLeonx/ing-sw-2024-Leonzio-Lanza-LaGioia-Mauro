@@ -16,7 +16,11 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static java.lang.Thread.sleep;
 
 public class GameFieldPanel extends StandardPanel {
     private ExecutorService executor;
@@ -30,12 +34,22 @@ public class GameFieldPanel extends StandardPanel {
         JPanel otherPlayers = newOtherPlayers();
         JPanel chat = newChat();
         JPanel game = newGame();
+        executor =  Executors.newSingleThreadExecutor();
+
 
         this.add(otherPlayers, BorderLayout.PAGE_START);
         this.add(hostPlayer, BorderLayout.PAGE_END);
         this.add(rightInfo, BorderLayout.LINE_END);
         this.add(chat, BorderLayout.LINE_START);
         this.add(game, BorderLayout.CENTER);
+
+        executor.submit(() -> {
+            MainWindow.getClientController().waitForGameEnded();
+            MainWindow.goToWindow("endGamePanel");
+            MainWindow.endGamePanel.buildPanel();
+        });
+
+
     }
 
 
@@ -296,7 +310,7 @@ public class GameFieldPanel extends StandardPanel {
     private JPanel newGame(){
         JPanel game= new JPanel();
 
-        return newGame();
+        return game;
     }
 
     }

@@ -11,7 +11,7 @@ public class EndGamePanel extends StandardPanel {
 
     }
 
-    private void buildPanel(){
+    public void buildPanel(){
         List<String> leaderboard = new ArrayList<>();
 
         try {

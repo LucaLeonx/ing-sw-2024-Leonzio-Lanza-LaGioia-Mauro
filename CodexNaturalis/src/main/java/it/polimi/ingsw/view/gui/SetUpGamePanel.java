@@ -48,7 +48,6 @@ public class SetUpGamePanel extends StandardPanel {
 
 
         executor.submit(() -> {
-            // do nothing, it could create busy waiting problem. fix it if something goes wrong.
             while (true) {
                 if(choosenOrientation   != null && choosenObjective != null) {
                     try {
@@ -58,16 +57,19 @@ public class SetUpGamePanel extends StandardPanel {
                         System.out.println(e.getMessage());
                     }
                 }
-                try{
-                    sleep(500);
-                }
-                catch(InterruptedException e){
-                    System.out.println("bananaSimo");
+                else {
+                    try {
+                        sleep(1000);
+                        revalidate();
+                        repaint();
+                    } catch (InterruptedException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
-            MainWindow.getClientController().waitForGameToStart();
-            // Check cancellation flag before transitioning to game panel
-            executor.shutdownNow();
+            System.out.println("I have both initial choice obj id: " + choosenObjective.id() + " choice of initial card: " + choosenOrientation.toString());
+            MainWindow.getClientController().waitForSetupFinished();
+            System.out.println("i should go to game field panel");
             MainWindow.goToWindow("gameFieldPanel");
             MainWindow.gameFieldPanel.buildPanel();
         });
