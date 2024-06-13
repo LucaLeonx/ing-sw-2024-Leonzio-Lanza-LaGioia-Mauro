@@ -3,16 +3,12 @@ package it.polimi.ingsw.view.gui;
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
 import it.polimi.ingsw.controller.clientcontroller.SocketClientController;
-import it.polimi.ingsw.dataobject.LobbyInfo;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.List;
 
 public class MainWindow extends JFrame {
     private static CardLayout cardLayout;
@@ -25,7 +21,6 @@ public class MainWindow extends JFrame {
     public static RegisterPanel registerPanel = new RegisterPanel();
     public static InsertNamePanel insertNamePanel = new InsertNamePanel();
     public static CreateNewLobbyPanel createNewLobbyPanel = new CreateNewLobbyPanel();
-    public static GameFieldPanel gameFieldPanel = new GameFieldPanel();
     public static WaitingPanel waitingPanel= new WaitingPanel();
 
     public MainWindow()

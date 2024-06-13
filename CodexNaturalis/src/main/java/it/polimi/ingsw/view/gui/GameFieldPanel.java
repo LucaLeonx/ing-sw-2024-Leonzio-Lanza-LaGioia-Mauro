@@ -1,18 +1,12 @@
 package it.polimi.ingsw.view.gui;
 
-import com.sun.tools.javac.Main;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
+
 import it.polimi.ingsw.dataobject.CardInfo;
-import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
-import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.model.DrawChoice;
-import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.card.Symbol;
-import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.view.tui.Symbol_String;
 
 import javax.swing.*;
-import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,30 +16,14 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public class GameFieldPanel extends StandardPanel {
-
-    public GameFieldPanel() {
-        this.setLayout(new GridBagLayout());
-    }
-
-    public void buildPanel(){
+    private ExecutorService executor;
+    public GameFieldPanel(){
         this.setLayout(new BorderLayout());
-
-        JPanel hostPlayer = newHostPanel();
-        JPanel otherPlayers = newOtherPlayers();
-        JPanel rightInfo = newInfo();
-        JPanel chat = newChat();
-        JPanel setupGame = newSetupGame();
-        JPanel game = newGame();
-
-        this.add(hostPlayer, BorderLayout.PAGE_END);
-        this.add(otherPlayers, BorderLayout.PAGE_START);
-        this.add(rightInfo, BorderLayout.LINE_END);
-        this.add(chat, BorderLayout.LINE_START);
-        this.add(setupGame, BorderLayout.CENTER);
-
     }
+
 
     private JPanel newHostPanel(){
         JPanel host= new JPanel();
@@ -147,14 +125,13 @@ public class GameFieldPanel extends StandardPanel {
         return host;
     }
 
-    // panel used to print some button up above to click and see other players map.
-    // I added some debugging line but it seems like
+
     private JPanel newOtherPlayers() {
         JPanel otherPlayes = new JPanel();
         otherPlayes.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        List<JButton> playerButtons = new ArrayList<>();
+        java.util.List<JButton> playerButtons = new ArrayList<>();
 
         try {
             List<String> PlayerNames = MainWindow.getClientController().getPlayerNames();
@@ -192,7 +169,6 @@ public class GameFieldPanel extends StandardPanel {
 
         return otherPlayes;
     }
-
 
     private JPanel newInfo(){
         JPanel info = new JPanel();
@@ -298,123 +274,15 @@ public class GameFieldPanel extends StandardPanel {
     }
 
     private JPanel newChat(){
-        JPanel player4 = new JPanel();
+        JPanel chat= new JPanel();
 
-        return player4;
-    }
-
-    private JPanel newSetupGame(){
-        JPanel setupGame = new JPanel();
-        setupGame.setLayout(new GridBagLayout());
-
-        ObjectiveInfo firstObjective;
-        ObjectiveInfo secondObjective;
-        CardInfo initialCard;
-
-        class ChosenSetUp{
-            ObjectiveInfo choosenObjective;
-            CardOrientation choosenOrientation;
-        }
-        ChosenSetUp chosenSetUp = new ChosenSetUp();
-
-        try {
-            firstObjective= MainWindow.getClientController().getPlayerSetup().objective1();
-            secondObjective = MainWindow.getClientController().getPlayerSetup().objective2();
-            initialCard = MainWindow.getClientController().getPlayerSetup().initialCard();
-
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-
-        ImagePanel firstObjectiveImage = new ImagePanel(firstObjective.id());
-        ImagePanel secondObjectiveImage = new ImagePanel(secondObjective.id());
-        ImagePanel initialCardFront = new ImagePanel(initialCard.id());
-        ImagePanel initialCardBack = new ImagePanel(initialCard.id());
-        initialCardBack.changeSide();
-
-        JLabel chooseYourObjective= new JLabel("Choose your Objective card");
-        chooseYourObjective.setAlignmentX(CENTER_ALIGNMENT);
-
-        JButton firstObjectiveButton= new JButton("Choose First");
-        JButton secondObjectiveButton= new JButton("Choose Second");
-        JButton frontSide= new JButton("Choose Front");
-        JButton backSide= new JButton("Choose back");
-
-        firstObjectiveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                chosenSetUp.choosenObjective = firstObjective;
-                setupGame.remove(firstObjectiveButton);
-                setupGame.remove(secondObjectiveButton);
-            }
-        });
-
-        secondObjectiveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                chosenSetUp.choosenObjective = secondObjective;
-                setupGame.remove(firstObjectiveButton);
-                setupGame.remove(secondObjectiveButton);
-            }
-        });
-
-        frontSide.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                chosenSetUp.choosenOrientation=initialCard.front().side();
-            }
-        });
-
-        backSide.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                chosenSetUp.choosenOrientation=initialCard.back().side();
-            }
-        });
-
-
-
-        GridBagConstraints gbc= new GridBagConstraints();
-        gbc.gridx=0;
-        gbc.gridy=0;
-        gbc.weightx=2;
-        setupGame.add(chooseYourObjective, gbc);
-
-        gbc.gridy=1;
-        gbc.weightx=1;
-        setupGame.add(firstObjectiveImage, gbc);
-
-        gbc.gridx=1;
-        setupGame.add(secondObjectiveImage, gbc);
-
-        gbc.gridx=2;
-        setupGame.add(initialCardFront, gbc);
-
-        gbc.gridx=3;
-        setupGame.add(initialCardBack, gbc);
-
-        gbc.gridy=2;
-        gbc.gridx=0;
-        setupGame.add(firstObjectiveButton, gbc);
-
-        gbc.gridx=1;
-        setupGame.add(secondObjectiveButton, gbc);
-
-        gbc.gridx=2;
-        setupGame.add(frontSide, gbc);
-
-        gbc.gridx=3;
-        setupGame.add(backSide, gbc);
-
-
-        return setupGame;
+        return chat;
     }
 
     private JPanel newGame(){
-        JPanel game = new JPanel();
+        JPanel game= new JPanel();
 
-        return game;
+        return newGame();
     }
 
-
-}
+    }
