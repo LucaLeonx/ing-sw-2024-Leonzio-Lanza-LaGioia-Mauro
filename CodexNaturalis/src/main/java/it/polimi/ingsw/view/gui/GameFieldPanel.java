@@ -332,16 +332,8 @@ public class GameFieldPanel extends StandardPanel {
     }
 
     private JPanel newGame(){
-        JPanel game= new JPanel();
-        /*JLabel gameLabel = new JLabel("MAP");
-        gameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        gameLabel.setFont(new Font("Arial", Font.BOLD, 30));
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        add(gameLabel, gbc);*/
+        JPanel game= new MapPanel();
         return game;
     }
 
-    }
+}
