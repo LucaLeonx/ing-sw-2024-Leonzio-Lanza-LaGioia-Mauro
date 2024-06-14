@@ -32,8 +32,6 @@ public class SetUpGamePanel extends StandardPanel {
 
     public void buildPanel(){
         removeAll();
-        revalidate();
-        repaint();
         executor =  Executors.newSingleThreadExecutor();
 
         this.setLayout(new BorderLayout());

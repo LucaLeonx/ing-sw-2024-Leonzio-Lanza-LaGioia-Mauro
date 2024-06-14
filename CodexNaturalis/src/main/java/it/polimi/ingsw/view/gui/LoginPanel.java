@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
+import it.polimi.ingsw.view.tuiscreens.NewGamePlayScreen;
+import it.polimi.ingsw.view.tuiscreens.NewGameSetupScreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,11 +44,21 @@ public class LoginPanel extends StandardPanel {
                 }
 
                 try {
-                    if(MainWindow.getClientController().isInGame()){
-                        MainWindow.goToWindow("gameFieldPanel");
+                    if(MainWindow.getClientController().isWaitingInLobby()){
+                        MainWindow.goToWindow("waitingPanel");
+                        MainWindow.waitingPanel.buildPanel();
+                    }
+                    else if(MainWindow.getClientController().isInGame()){
+                        if(MainWindow.getClientController().getControlledPlayerInformation().secretObjective() == null){
+                            MainWindow.goToWindow("setUpGamePanel");
+                            MainWindow.setUpGamePanel.buildPanel();
+                        } else {
+                            MainWindow.goToWindow("gameFieldPanel");
+                            MainWindow.gameFieldPanel.buildPanel();
+                        }
                     }
                     else {
-                        MainWindow.goToWindow("registerPanel");
+                        MainWindow.goToWindow("createNewLobbyPanel");
                     }
                 } catch (RemoteException ex) {
                     ex.getMessage();
