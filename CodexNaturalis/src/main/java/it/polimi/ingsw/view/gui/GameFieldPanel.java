@@ -1,8 +1,12 @@
 package it.polimi.ingsw.view.gui;
 
 
+import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.dataobject.CardInfo;
+import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
+import it.polimi.ingsw.dataobject.DrawableCardsInfo;
 import it.polimi.ingsw.model.DrawChoice;
+import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.card.Symbol;
 import it.polimi.ingsw.view.tui.Symbol_String;
 
@@ -16,7 +20,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,35 +27,85 @@ import static java.lang.Thread.sleep;
 
 public class GameFieldPanel extends StandardPanel {
 
+    private ClientController controller;
+    MapPanel map;
+    private JLabel isYourTurn = new JLabel("Is your turn");
+    private JLabel waitingForOther = new JLabel("Waiting for other players to make their move");
+    private JLabel isLastTurn = new JLabel("\"ATTENTION: IT IS YOUR LAST TURN!!\"");
+    JButton placeCardButton = new JButton("Place card");
+
+
     private ExecutorService executor;
     public GameFieldPanel(){
 
     }
 
-    public void buildPanel(){
+    public void buildPanel(int id, CardOrientation orientation) throws RemoteException {
         removeAll();
         revalidate();
         repaint();
         this.setLayout(new BorderLayout());
+        this.setSize(1600,1100);
         JPanel hostPlayer = newHostPanel();
         JPanel rightInfo = newInfo();
         JPanel otherPlayers = newOtherPlayers();
         JPanel chat = newChat();
-        JPanel game = newGame();
+        this.map = new MapPanel(placeCardButton);
+        isYourTurn.setVisible(false);
+        waitingForOther.setVisible(false);
+        isLastTurn.setVisible(false);
         executor =  Executors.newSingleThreadExecutor();
 
-
+        //this.add(isYourTurn, BorderLayout.EAST);
+        //this.add(waitingForOther, BorderLayout.EAST);
         this.add(otherPlayers, BorderLayout.PAGE_START);
         this.add(hostPlayer, BorderLayout.PAGE_END);
         this.add(rightInfo, BorderLayout.LINE_END);
         this.add(chat, BorderLayout.LINE_START);
-        this.add(game, BorderLayout.CENTER);
+        this.add(map, BorderLayout.CENTER);
+
+        controller = MainWindow.getClientController();
 
         new Thread(() -> {
             try {
                 // Wait for 5 seconds (5000 milliseconds)
                 Thread.sleep(1000);
-            } catch (InterruptedException e) {
+
+                String currentPlayer = controller.getCurrentPlayerName();
+                ControlledPlayerInfo controlledPlayer = controller.getControlledPlayerInformation();
+                String controlledPlayerName = controlledPlayer.nickname();
+
+                map.setAvailablePoints(controlledPlayer.field().availablePositions());
+                map.insertInitialCard(id,orientation);
+
+                while(!controller.hasGameEnded()){
+                    String currentPlayerName = controller.getCurrentPlayerName();
+                    DrawableCardsInfo drawableCards = controller.getDrawableCards();
+                    waitingForOther.setVisible(true);
+                    if(currentPlayer.equals(controlledPlayerName)){
+                        controlledPlayer = controller.getControlledPlayerInformation();
+                        //is your turn label
+                        waitingForOther.setVisible(false);
+                        isYourTurn.setVisible(true);
+                        placeCardButton.setVisible(true);
+
+                        if(controller.isLastTurn()){
+                            isLastTurn.setVisible(true);
+                        }
+
+                        //wait until card Placed
+                        Thread.sleep(100000);
+                        //controller make move
+
+                        map.setAvailablePoints(controlledPlayer.field().availablePositions());
+                        //when turn ended label reset
+                        //waitingForOther.setVisible(true);
+                        //isYourTurn.setVisible(false);
+                        //placeCardButton.setVisible(false);
+                    }
+
+                }
+            } catch (RemoteException | InterruptedException e) {
                 e.printStackTrace();
             }
 
@@ -65,7 +118,7 @@ public class GameFieldPanel extends StandardPanel {
         }).start();
 
         executor.submit(() -> {
-            MainWindow.getClientController().waitForGameEnded();
+            controller.waitForGameEnded();
             MainWindow.goToWindow("endGamePanel");
             MainWindow.endGamePanel.buildPanel();
         });
@@ -87,23 +140,38 @@ public class GameFieldPanel extends StandardPanel {
         ImagePanel firstcard = new ImagePanel(cardsInHands.get(0).id());
         ImagePanel secondcard = new ImagePanel(cardsInHands.get(1).id());
         ImagePanel thirdcard = new ImagePanel(cardsInHands.get(2).id());
+        JButton rotateCards = new JButton("Rotate Cards");
         System.out.println("Sto stampando le carte in mano di id: " + cardsInHands.get(0).id() + cardsInHands.get(1).id() + cardsInHands.get(2).id());
 
-        JButton logout= new JButton("Exit and logout");
-        JButton goBack= new JButton("Go Back");
+        //JButton logout= new JButton("Exit and logout");
+        //JButton goBack= new JButton("Go Back");
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        logout.setAlignmentX(CENTER_ALIGNMENT);
-        goBack.setAlignmentX(CENTER_ALIGNMENT);
-        buttonPanel.add(logout);
-        buttonPanel.add(goBack);
+        JPanel LabelPanel = new JPanel();
+        LabelPanel.setLayout(new BoxLayout(LabelPanel, BoxLayout.Y_AXIS));
+        //logout.setAlignmentX(CENTER_ALIGNMENT);
+        //goBack.setAlignmentX(CENTER_ALIGNMENT);
+        LabelPanel.add(this.isYourTurn);
+        LabelPanel.add(this.waitingForOther);
+        LabelPanel.add(rotateCards);
+        placeCardButton.setVisible(false);
+        LabelPanel.add(placeCardButton);
+        this.isLastTurn.setBackground(Color.RED);
+        LabelPanel.add(this.isLastTurn);
+
+        rotateCards.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                firstcard.changeSide();
+                secondcard.changeSide();
+                thirdcard.changeSide();
+            }
+        });
 
         firstcard.addMouseListener( new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                firstcard.changeSide();
+                map.setCardToPlace(firstcard.getId(),firstcard.getVisibleOrientation());
             }
         });
 
@@ -111,7 +179,7 @@ public class GameFieldPanel extends StandardPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                secondcard.changeSide();
+                map.setCardToPlace(secondcard.getId(),secondcard.getVisibleOrientation());
             }
         });
 
@@ -119,11 +187,11 @@ public class GameFieldPanel extends StandardPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                thirdcard.changeSide();
+                map.setCardToPlace(thirdcard.getId(),thirdcard.getVisibleOrientation());
             }
         });
 
-
+        /*
         logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -151,7 +219,7 @@ public class GameFieldPanel extends StandardPanel {
                 }
                 buildPanel();
             }
-        });
+        });*/
 
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -169,7 +237,7 @@ public class GameFieldPanel extends StandardPanel {
         host.add(thirdcard, gbc);
 
         gbc.gridx=4;
-        host.add(buttonPanel, gbc);
+        host.add(LabelPanel, gbc);
 
 
         return host;
@@ -331,9 +399,6 @@ public class GameFieldPanel extends StandardPanel {
         return chat;
     }
 
-    private JPanel newGame(){
-        JPanel game= new MapPanel();
-        return game;
-    }
+
 
 }
