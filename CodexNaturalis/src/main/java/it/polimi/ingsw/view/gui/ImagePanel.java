@@ -1,15 +1,20 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.model.card.CardOrientation;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class ImagePanel extends JPanel {
     private final JPanel cardPanel;
     private final CardLayout cardLayout;
+    private CardOrientation currentOrientation = CardOrientation.FRONT;
+    private int id;
 
     public ImagePanel(Integer imageNumber) {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
+        id = imageNumber;
 
         FrontPanel frontPanel = new FrontPanel(Toolkit.getDefaultToolkit().getImage("src/main/resources/cropped_fronte/img_" + imageNumber + ".jpeg"));
         BackPanel backPanel = new BackPanel(Toolkit.getDefaultToolkit().getImage("src/main/resources/cropped_retro/img_" + imageNumber + ".jpeg"));
@@ -25,6 +30,7 @@ public class ImagePanel extends JPanel {
 
     public void changeSide() {
         cardLayout.next(cardPanel);
+        currentOrientation = (currentOrientation == CardOrientation.FRONT) ? CardOrientation.BACK : CardOrientation.FRONT ;
     }
 
     private void showFrontPanel() {
@@ -64,4 +70,8 @@ public class ImagePanel extends JPanel {
             g.drawImage(backPanelImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
+
+    public int getId(){ return id; }
+
+    public CardOrientation getVisibleOrientation(){ return this.currentOrientation; }
 }

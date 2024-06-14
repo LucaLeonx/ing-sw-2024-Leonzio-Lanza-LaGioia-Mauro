@@ -26,14 +26,13 @@ public class SetUpGamePanel extends StandardPanel {
     ExecutorService executor;
     ObjectiveInfo choosenObjective;
     CardOrientation choosenOrientation;
+    int InitialCardId;
 
     public SetUpGamePanel() {
     }
 
     public void buildPanel(){
         removeAll();
-        revalidate();
-        repaint();
         executor =  Executors.newSingleThreadExecutor();
 
         this.setLayout(new BorderLayout());
@@ -72,7 +71,12 @@ public class SetUpGamePanel extends StandardPanel {
             MainWindow.getClientController().waitForSetupFinished();
             System.out.println("i should go to game field panel");
             MainWindow.goToWindow("gameFieldPanel");
-            MainWindow.gameFieldPanel.buildPanel();
+            try {
+                MainWindow.gameFieldPanel.buildPanel();
+                MainWindow.gameFieldPanel.setInitialChoice(InitialCardId,choosenOrientation);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         });
 
 
@@ -261,7 +265,7 @@ public class SetUpGamePanel extends StandardPanel {
             firstObjective= MainWindow.getClientController().getPlayerSetup().objective1();
             secondObjective = MainWindow.getClientController().getPlayerSetup().objective2();
             initialCard = MainWindow.getClientController().getPlayerSetup().initialCard();
-
+            this.InitialCardId = initialCard.id();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -369,5 +373,4 @@ public class SetUpGamePanel extends StandardPanel {
 
         return setupGame;
     }
-
 }

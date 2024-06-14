@@ -11,9 +11,12 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static java.awt.GridBagConstraints.CENTER;
 import static java.awt.GridBagConstraints.LINE_END;
+import static java.lang.Thread.sleep;
 
 public class RegisterPanel extends StandardPanel {
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
@@ -102,7 +105,9 @@ public class RegisterPanel extends StandardPanel {
         gbc.gridy = 4;
         add(joinLobby, gbc);
 
-        timer = new Timer(1000, new ActionListener() {
+
+        //NO TIMER NEL BUILD PANEL SENNO L'EDT RIMANE BLOCCATO!!!
+        /*timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -115,7 +120,7 @@ public class RegisterPanel extends StandardPanel {
                 }
             }
         });
-        timer.start();
+        timer.start();*/
     }
 
     public void showLobbies() {

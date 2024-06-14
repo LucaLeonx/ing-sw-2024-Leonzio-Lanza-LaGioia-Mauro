@@ -1,14 +1,16 @@
-package it.polimi.ingsw.view.gui;
+package it.polimi.ingsw.test.view.gui;
+
+import it.polimi.ingsw.view.gui.ImagePanel;
+import it.polimi.ingsw.view.gui.StandardPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapTest extends StandardPanel{
+public class MapTest extends StandardPanel {
     private Map<ImagePanel,Point> placedCards = new HashMap<ImagePanel,Point>();
     private List<JButton> availablePlaces = new ArrayList<JButton>();
     private final int CardWidth = 100;
@@ -19,9 +21,7 @@ public class MapTest extends StandardPanel{
     private final int offsetY = 47;
     private int layer = 0;
     private JLayeredPane jLayeredPane = new JLayeredPane();
-
     private List<Point> availablePoints = new ArrayList<Point>();
-
 
     public MapTest(){
 

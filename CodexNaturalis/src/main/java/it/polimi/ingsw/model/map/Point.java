@@ -61,6 +61,8 @@ public record Point(int x, int y) implements Serializable {
                 .collect(Collectors.toUnmodifiableSet());
     }
 
+    public String toString(){ return " (" + this.x() + ", " + this.y() + ")"; }
+
     public static Set<Point> getAdjacentPositions(Point position){
         return getAdjacentPositions(position, 1);
     }
