@@ -52,8 +52,12 @@ In generale, indichiamo con x<sub>0, P</sub> e y<sub>0, P</sub>
 le coordinate in pixel della carta iniziale, ovvero quella di coordinate (0, 0).
 Allora, la posizione di ogni altra carta i sarà data da:
 
-- x<sub>i, P</sub> = x<sub>0, P</sub> + (x<sub>i, C</sub> /2) + (b + s)/2
-- y<sub>i, P</sub> = y<sub>0, P</sub> + (y<sub>i, C</sub> /2) + (b + s)/2
+- x<sub>i, P</sub> = x<sub>0, P</sub> + (x<sub>i, C</sub> /2) * (b + s)/2
+- y<sub>i, P</sub> = y<sub>0, P</sub> + (y<sub>i, C</sub> /2) * (b + s)/2
+
+Tenendo conto di come si misurano le coordinate nelle finestre
+- x<sub>i, P</sub> = x<sub>0, P</sub> + (x<sub>i, C</sub> /2) * (b + s)/2
+- y<sub>i, P</sub> = y<sub>0, P</sub> - (y<sub>i, C</sub> /2) * (b + s)/2
 
 Dove x<sub>i, C</sub> e y<sub>i, C</sub> sono le
 coordinate cartesiane delle carte (es (-2, 2))
