@@ -21,27 +21,26 @@ public class MapPanel extends StandardPanel{
     private JLayeredPane jLayeredPane = new JLayeredPane();
     private List<Point> availablePoints = new ArrayList<Point>();
 
-    public MapPanel(){
-
-        JPanel panel = new JPanel();
+    public MapPanel() {
+        this.setLayout(new BorderLayout()); // Imposta il layout manager del pannello principale
 
         JButton placeMode = new JButton("Place Mode");
-        placeMode.setBounds(0,0,150,30);
+        placeMode.setBounds(0, 0, 150, 30);
         placeMode.setVisible(true);
 
         ImagePanel img1 = new ImagePanel(10);
         img1.setBounds(CenterCardX, CenterCardY, CardWidth, CardHeight);
-        addAvailablePlace(img1.getBounds(),new Point(0,0));
+        addAvailablePlace(img1.getBounds(), new Point(0, 0));
         jLayeredPane.add(img1, Integer.valueOf(layer));
-        placedCards.put(img1, new Point(0,0));
+        placedCards.put(img1, new Point(0, 0));
 
-        panel.add(placeMode);
-        panel.add(jLayeredPane);
-        panel.setVisible(true);
+        this.add(placeMode);
+        this.add(jLayeredPane);
+        this.setVisible(true);
 
         placeMode.addActionListener(e -> {
             //Here we save the chosen card to place
-            for(JButton b : availablePlaces){
+            for (JButton b : availablePlaces) {
                 b.setVisible(true);
             }
         });
@@ -49,20 +48,22 @@ public class MapPanel extends StandardPanel{
 
     }
 
-    public void setAvailablePoints(List<Point> availablePoints){ this.availablePoints = availablePoints; }
+    public void setAvailablePoints(List<Point> availablePoints) {
+        this.availablePoints = availablePoints;
+    }
 
-    public void hideAvailableSpaces(){
-        for(JButton b: availablePlaces){
+    public void hideAvailableSpaces() {
+        for (JButton b : availablePlaces) {
             b.setVisible(false);
         }
     }
 
-    public void addAvailablePlace(Rectangle bounds, Point p){
-        Point ULPoint = new Point(p.x-2,p.y+2),URPoint = new Point(p.x+2,p.y+2),DLPoint = new Point(p.x-2,p.y-2),DRPoint = new Point(p.x+2,p.y-2);
-        JButton UpLSpace,UpRSpace,DownLSpace,DownRSpace;
+    public void addAvailablePlace(Rectangle bounds, Point p) {
+        Point ULPoint = new Point(p.x - 2, p.y + 2), URPoint = new Point(p.x + 2, p.y + 2), DLPoint = new Point(p.x - 2, p.y - 2), DRPoint = new Point(p.x + 2, p.y - 2);
+        JButton UpLSpace, UpRSpace, DownLSpace, DownRSpace;
 
         layer++;
-        if(availablePoints.contains(ULPoint)) {
+        if (availablePoints.contains(ULPoint)) {
             UpLSpace = new JButton("UL (" + ULPoint.x + ", " + ULPoint.y + ")");
             UpLSpace.setVisible(false);
             UpLSpace.setBackground(Color.GRAY);
@@ -73,7 +74,7 @@ public class MapPanel extends StandardPanel{
                 addCardImage(UpLSpace, ULPoint);
             });
         }
-        if(availablePoints.contains(URPoint)) {
+        if (availablePoints.contains(URPoint)) {
             UpRSpace = new JButton("UR (" + URPoint.x + ", " + URPoint.y + ")");
             UpRSpace.setVisible(false);
             UpRSpace.setBackground(Color.GRAY);
@@ -84,7 +85,7 @@ public class MapPanel extends StandardPanel{
                 addCardImage(UpRSpace, URPoint);
             });
         }
-        if(availablePoints.contains(DLPoint)) {
+        if (availablePoints.contains(DLPoint)) {
             DownLSpace = new JButton("DL (" + DLPoint.x + ", " + DLPoint.y + ")");
             DownLSpace.setVisible(false);
             DownLSpace.setBackground(Color.GRAY);
@@ -95,7 +96,7 @@ public class MapPanel extends StandardPanel{
                 addCardImage(DownLSpace, DLPoint);
             });
         }
-        if(availablePoints.contains(DRPoint)) {
+        if (availablePoints.contains(DRPoint)) {
             DownRSpace = new JButton("DR (" + DRPoint.x + ", " + DRPoint.y + ")");
             DownRSpace.setVisible(false);
             DownRSpace.setBackground(Color.GRAY);
@@ -109,8 +110,8 @@ public class MapPanel extends StandardPanel{
 
     }
 
-    private void addCardImage(JButton availablePosition,Point p){
-        if(availablePoints.contains(p)) {
+    private void addCardImage(JButton availablePosition, Point p) {
+        if (availablePoints.contains(p)) {
             availablePoints.remove(p);
             ImagePanel img = new ImagePanel(11);
             img.setBounds(availablePosition.getBounds());
@@ -122,5 +123,19 @@ public class MapPanel extends StandardPanel{
             hideAvailableSpaces();
         }
     }
+
+
+ /*   public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Map Panel");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(1000, 800);
+
+            MapPanel mapPanel = new MapPanel();
+
+            frame.add(mapPanel);
+            frame.setVisible(true);
+        });
+    }*/
 
 }
