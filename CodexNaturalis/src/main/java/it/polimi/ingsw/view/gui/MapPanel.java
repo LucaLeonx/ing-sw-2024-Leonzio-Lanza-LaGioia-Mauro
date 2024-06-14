@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.card.CardOrientation;
 import javax.swing.*;
 import java.awt.*;
 import it.polimi.ingsw.model.map.Point;
-import java.awt.event.ActionListener;
+
 import java.util.*;
 import java.util.List;
 
@@ -52,9 +52,9 @@ public class MapPanel extends StandardPanel{
         if(orientation.equals(CardOrientation.BACK))
             img1.changeSide();
         img1.setBounds(CenterCardX, CenterCardY, CardWidth, CardHeight);
-        addAvailablePlace(img1.getBounds(), new Point(0, 0));
         jLayeredPane.add(img1, Integer.valueOf(layer));
         placedCards.put(new Point(0, 0), img1);
+        addAvailablePlace();
     }
 
     public void setCardToPlace(int id, CardOrientation orientation){  this.cardToPlace = new AbstractMap.SimpleEntry<>(id,orientation);  }
@@ -65,56 +65,25 @@ public class MapPanel extends StandardPanel{
         }
     }
 
-    public void addAvailablePlace(Rectangle bounds, Point p) {
-        Point ULPoint = new Point(p.x() - 2, p.y() + 2), URPoint = new Point(p.x() + 2, p.y() + 2), DLPoint = new Point(p.x() - 2, p.y() - 2), DRPoint = new Point(p.x() + 2, p.y() - 2);
-        JButton UpLSpace, UpRSpace, DownLSpace, DownRSpace;
+    public void addAvailablePlace() {
+        for(Point p : placedCards.keySet()) {
+            Rectangle bounds = this.placedCards.get(p).getBounds();
+            Point ULPoint = new Point(p.x() - 2, p.y() + 2), URPoint = new Point(p.x() + 2, p.y() + 2), DLPoint = new Point(p.x() - 2, p.y() - 2), DRPoint = new Point(p.x() + 2, p.y() - 2);
 
-        layer++;
-        if (availablePoints.contains(ULPoint)) {
-            UpLSpace = new JButton("UL " + ULPoint.toString());
-            UpLSpace.setVisible(false);
-            UpLSpace.setBackground(Color.GRAY);
-            UpLSpace.setBounds(bounds.x - offsetX, bounds.y - offsetY, CardWidth, CardHeight);
-            availablePlaces.add(UpLSpace);
-            jLayeredPane.add(UpLSpace, Integer.valueOf(layer));
-            UpLSpace.addActionListener(e -> {
-                addCardImage(UpLSpace, ULPoint);
-            });
+            layer++;
+            if (availablePoints.contains(ULPoint)) {
+                addSpaceButton(ULPoint, bounds.x - offsetX, bounds.y - offsetY);
+            }
+            if (availablePoints.contains(URPoint)) {
+                addSpaceButton(URPoint, bounds.x + offsetX, bounds.y - offsetY);
+            }
+            if (availablePoints.contains(DLPoint)) {
+                addSpaceButton(DLPoint, bounds.x - offsetX, bounds.y + offsetY);
+            }
+            if (availablePoints.contains(DRPoint)) {
+                addSpaceButton(DRPoint, bounds.x + offsetX, bounds.y + offsetY);
+            }
         }
-        if (availablePoints.contains(URPoint)) {
-            UpRSpace = new JButton("UR " + URPoint.toString());
-            UpRSpace.setVisible(false);
-            UpRSpace.setBackground(Color.GRAY);
-            UpRSpace.setBounds(bounds.x + offsetX, bounds.y - offsetY, CardWidth, CardHeight);
-            availablePlaces.add(UpRSpace);
-            jLayeredPane.add(UpRSpace, Integer.valueOf(layer));
-            UpRSpace.addActionListener(e -> {
-                addCardImage(UpRSpace, URPoint);
-            });
-        }
-        if (availablePoints.contains(DLPoint)) {
-            DownLSpace = new JButton("DL " + DLPoint.toString());
-            DownLSpace.setVisible(false);
-            DownLSpace.setBackground(Color.GRAY);
-            DownLSpace.setBounds(bounds.x - offsetX, bounds.y + offsetY, CardWidth, CardHeight);
-            availablePlaces.add(DownLSpace);
-            jLayeredPane.add(DownLSpace, Integer.valueOf(layer));
-            DownLSpace.addActionListener(e -> {
-                addCardImage(DownLSpace, DLPoint);
-            });
-        }
-        if (availablePoints.contains(DRPoint)) {
-            DownRSpace = new JButton("DR " + DRPoint.toString());
-            DownRSpace.setVisible(false);
-            DownRSpace.setBackground(Color.GRAY);
-            DownRSpace.setBounds(bounds.x + offsetX, bounds.y + offsetY, CardWidth, CardHeight);
-            availablePlaces.add(DownRSpace);
-            jLayeredPane.add(DownRSpace, Integer.valueOf(layer));
-            DownRSpace.addActionListener(e -> {
-                addCardImage(DownRSpace, DRPoint);
-            });
-        }
-
     }
 
     private void addCardImage(JButton availablePosition, Point p) {
@@ -129,7 +98,7 @@ public class MapPanel extends StandardPanel{
             img.setBounds(availablePosition.getBounds());
             img.setVisible(true);
             placedCards.put(new Point(p.x(),p.y()),img);
-            addAvailablePlace(img.getBounds(), p);
+            //addAvailablePlace(img, p);
             jLayeredPane.add(img, Integer.valueOf(layer));
             jLayeredPane.remove(availablePosition);
             hideAvailableSpaces();
@@ -145,7 +114,16 @@ public class MapPanel extends StandardPanel{
         ImagePanel img = placedCards.get(p);
         jLayeredPane.remove(img);
 
-        addButtonSpace(p,img.getBounds().x,img.getBounds().y);
+        addSpaceButton(p,img.getBounds().x,img.getBounds().y);
+    }
+
+    public void removeAllAvailablePlaces(){
+        List<JButton> tempList = new ArrayList<>(availablePlaces);
+        for(JButton b : tempList) {
+            availablePlaces.remove(b);
+            b.setVisible(false);
+            jLayeredPane.remove(b);
+        }
     }
 
     public void setAvailablePoints(ArrayList<Point> points) {
@@ -168,7 +146,7 @@ public class MapPanel extends StandardPanel{
         lastOrientationPlaced = CardOrientation.FRONT;
     }
 
-    private void addButtonSpace(Point p, int boundsX, int boundsY){
+    private void addSpaceButton(Point p, int boundsX, int boundsY){
         JButton newButton = new JButton(p.toString());
         newButton.setVisible(false);
         newButton.setBackground(Color.GRAY);

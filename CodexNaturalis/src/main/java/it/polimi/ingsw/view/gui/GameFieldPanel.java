@@ -88,7 +88,6 @@ public class GameFieldPanel extends StandardPanel {
                 map.setAvailablePoints(controlledPlayer.field().availablePositions());
                 map.insertInitialCard(id,orientation);
 
-
                 while(!controller.hasGameEnded()){
                     Thread.sleep(500);
                     cannotPlaceThisCard.setVisible(false);
@@ -108,16 +107,17 @@ public class GameFieldPanel extends StandardPanel {
                             isLastTurn.setVisible(true);
                         }
 
+                        Point p;
                         boolean confirmed;
                         do {
                             confirmed = true;
+
                             CardInfo cardInfo = placeCardPhase();
                             System.out.println("test");
                             DrawChoice dChoice = drawCardPhase();
 
-                            //Ora devo capire come far in modo di attendere che tu posizioni una carta
                             // fare anche la stessa cosa per i deck e prendere la drawChoice relativa
-                            Point p = map.getLastPointPlaced();
+                            p = map.getLastPointPlaced();
                             try {
                                 controller.makeMove(
                                         cardInfo,
@@ -133,6 +133,12 @@ public class GameFieldPanel extends StandardPanel {
                             }
 
                         }while(!confirmed);
+
+                        controlledPlayer = controller.getControlledPlayerInformation();
+                        map.setAvailablePoints(controlledPlayer.field().availablePositions());
+                        map.removeAllAvailablePlaces();
+                        map.addAvailablePlace();
+
                         //when turn ended -> label reset
                         waitingForOther.setVisible(true);
                         isYourTurn.setVisible(false);
