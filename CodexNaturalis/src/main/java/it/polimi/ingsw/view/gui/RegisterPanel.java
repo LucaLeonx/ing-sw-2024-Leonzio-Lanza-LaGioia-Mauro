@@ -49,6 +49,7 @@ public class RegisterPanel extends StandardPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println(lobbyName.getText());
                 MainWindow.goToWindow("createNewLobbyPanel");
+                timer.stop();
             }
         });
 
@@ -74,6 +75,7 @@ public class RegisterPanel extends StandardPanel {
                     MainWindow.getClientController().joinLobby(lobbyById.get(lobbyrow));
                     MainWindow.waitingPanel.buildPanel();
                     MainWindow.goToWindow("waitingPanel");
+                    timer.stop();
                 } catch (RemoteException | InvalidOperationException ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -106,8 +108,7 @@ public class RegisterPanel extends StandardPanel {
         add(joinLobby, gbc);
 
 
-        //NO TIMER NEL BUILD PANEL SENNO L'EDT RIMANE BLOCCATO!!!
-        /*timer = new Timer(1000, new ActionListener() {
+        timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -120,7 +121,7 @@ public class RegisterPanel extends StandardPanel {
                 }
             }
         });
-        timer.start();*/
+        timer.start();
     }
 
     public void showLobbies() {

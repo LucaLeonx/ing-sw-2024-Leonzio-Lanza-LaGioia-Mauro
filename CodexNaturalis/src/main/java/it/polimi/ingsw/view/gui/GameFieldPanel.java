@@ -80,6 +80,10 @@ public class GameFieldPanel extends StandardPanel {
                 ControlledPlayerInfo controlledPlayer = controller.getControlledPlayerInformation();
                 String controlledPlayerName = controlledPlayer.nickname();
 
+              /*  Point initialCardPoint = new Point(0,0);
+                int initialCardId= MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(initialCardPoint).card().id();
+                CardOrientation initialCardOrientation = MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(initialCardPoint).orientation();
+              */
                 map.setAvailablePoints(controlledPlayer.field().availablePositions());
                 map.insertInitialCard(id,orientation);
 
@@ -144,8 +148,15 @@ public class GameFieldPanel extends StandardPanel {
         ImagePanel firstcard = new ImagePanel(cardsInHands.get(0).id());
         ImagePanel secondcard = new ImagePanel(cardsInHands.get(1).id());
         ImagePanel thirdcard = new ImagePanel(cardsInHands.get(2).id());
-        JButton rotateCards = new JButton("Rotate Cards");
-        System.out.println("Sto stampando le carte in mano di id: " + cardsInHands.get(0).id() + cardsInHands.get(1).id() + cardsInHands.get(2).id());
+        JButton rotateFirstCard = new JButton("Rotate this card");
+        JButton rotateSecondCard = new JButton("Rotate this card");
+        JButton rotateThirdCard = new JButton("Rotate this card");
+        JLabel shownCard1 = new JLabel("You have selected this card");
+        JLabel shownCard2 = new JLabel("You have selected this card");
+        JLabel shownCard3 = new JLabel("You have selected this card");
+        shownCard1.setVisible(false);
+        shownCard2.setVisible(false);
+        shownCard3.setVisible(false);
 
         //JButton logout= new JButton("Exit and logout");
         //JButton goBack= new JButton("Go Back");
@@ -156,17 +167,29 @@ public class GameFieldPanel extends StandardPanel {
         //goBack.setAlignmentX(CENTER_ALIGNMENT);
         LabelPanel.add(this.isYourTurn);
         LabelPanel.add(this.waitingForOther);
-        LabelPanel.add(rotateCards);
+
         placeCardButton.setVisible(false);
         LabelPanel.add(placeCardButton);
         this.isLastTurn.setBackground(Color.RED);
         LabelPanel.add(this.isLastTurn);
 
-        rotateCards.addActionListener(new ActionListener() {
+        rotateFirstCard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 firstcard.changeSide();
+            }
+        });
+
+        rotateSecondCard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 secondcard.changeSide();
+            }
+        });
+
+        rotateThirdCard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 thirdcard.changeSide();
             }
         });
@@ -175,6 +198,9 @@ public class GameFieldPanel extends StandardPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                shownCard1.setVisible(true);
+                shownCard2.setVisible(false);
+                shownCard3.setVisible(false);
                 map.setCardToPlace(firstcard.getId(),firstcard.getVisibleOrientation());
             }
         });
@@ -183,6 +209,9 @@ public class GameFieldPanel extends StandardPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                shownCard1.setVisible(false);
+                shownCard2.setVisible(true);
+                shownCard3.setVisible(false);
                 map.setCardToPlace(secondcard.getId(),secondcard.getVisibleOrientation());
             }
         });
@@ -191,6 +220,9 @@ public class GameFieldPanel extends StandardPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                shownCard1.setVisible(false);
+                shownCard2.setVisible(false);
+                shownCard3.setVisible(true);
                 map.setCardToPlace(thirdcard.getId(),thirdcard.getVisibleOrientation());
             }
         });
@@ -225,24 +257,46 @@ public class GameFieldPanel extends StandardPanel {
             }
         });*/
 
-
         GridBagConstraints gbc = new GridBagConstraints();
+
+
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
+        gbc.insets = new Insets(5,5,5,5);
 
         gbc.gridx=0;
         gbc.gridy=1;
         host.add(firstcard, gbc);
+        gbc.gridy=2;
+        host.add(rotateFirstCard, gbc);
 
         gbc.gridx=1;
+        gbc.gridy=1;
         host.add(secondcard, gbc);
+        gbc.gridy=2;
+        host.add(rotateSecondCard, gbc);
 
         gbc.gridx=2;
+        gbc.gridy=1;
         host.add(thirdcard, gbc);
+        gbc.gridy=2;
+        host.add(rotateThirdCard, gbc);
 
         gbc.gridx=4;
+        gbc.weighty = 2.0;
         host.add(LabelPanel, gbc);
 
+        gbc.gridy=0;
+        gbc.gridx=0;
+        host.add(shownCard1, gbc);
+
+        gbc.gridy=0;
+        gbc.gridx=1;
+        host.add(shownCard2, gbc);
+
+        gbc.gridy=0;
+        gbc.gridx=2;
+        host.add(shownCard3, gbc);
 
         return host;
     }
