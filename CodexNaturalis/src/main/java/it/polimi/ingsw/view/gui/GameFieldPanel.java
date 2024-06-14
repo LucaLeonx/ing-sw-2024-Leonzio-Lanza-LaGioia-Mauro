@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui;
 
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
 import it.polimi.ingsw.dataobject.CardInfo;
 import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
 import it.polimi.ingsw.dataobject.DrawableCardsInfo;
@@ -12,6 +13,7 @@ import it.polimi.ingsw.view.tui.Symbol_String;
 
 import javax.swing.*;
 import java.awt.*;
+import it.polimi.ingsw.model.map.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -23,27 +25,26 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static java.lang.Thread.sleep;
-
 public class GameFieldPanel extends StandardPanel {
 
     private ClientController controller;
     private MapPanel map;
-    private JLabel isYourTurn = new JLabel("Is your turn");
-    private JLabel waitingForOther = new JLabel("Waiting for other players to make their move");
-    private JLabel isLastTurn = new JLabel("\"ATTENTION: IT IS YOUR LAST TURN!!\"");
-    private JButton placeCardButton = new JButton("Place card");
+    private final JLabel isYourTurn = new JLabel("Is your turn");
+    private final JLabel waitingForOther = new JLabel("Waiting for other players to make their move");
+    private final JLabel isLastTurn = new JLabel("\"ATTENTION: IT IS YOUR LAST TURN!!\"");
+    private final JLabel cannotPlaceThisCard = new JLabel("\"ATTENTION: YOU CANNOT PLACE THIS CARD!!!!\"");
+    private final JButton placeCardButton = new JButton("Place card");
     private int id;
     private CardOrientation orientation;
-    JPanel info = new JPanel();
+    private ArrayList<CardInfo> cardsInHands;
 
     private ExecutorService executor;
     public GameFieldPanel(){   }
 
-    public void setInitialChoice(int id, CardOrientation orientation){
+    /*public void setInitialChoice(int id, CardOrientation orientation){
         this.id = id;
         this.orientation = orientation;
-    }
+    }*/
 
     public void buildPanel() throws RemoteException {
         removeAll();
@@ -51,21 +52,21 @@ public class GameFieldPanel extends StandardPanel {
         repaint();
         this.setLayout(new BorderLayout());
         this.setSize(1600,1100);
-        JPanel hostPlayer = newHostPanel();
-        JPanel rightInfo = newInfo();
         JPanel otherPlayers = newOtherPlayers();
         JPanel chat = newChat();
         this.map = new MapPanel(placeCardButton);
         isYourTurn.setVisible(false);
         waitingForOther.setVisible(false);
         isLastTurn.setVisible(false);
-        executor =  Executors.newSingleThreadExecutor();
+        cannotPlaceThisCard.setVisible(false);
+        executor = Executors.newSingleThreadExecutor();
+        id = MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(new Point(0,0)).card().id();
+        orientation = MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(new Point(0,0)).orientation();
 
         //this.add(isYourTurn, BorderLayout.EAST);
         //this.add(waitingForOther, BorderLayout.EAST);
         this.add(otherPlayers, BorderLayout.PAGE_START);
-        this.add(hostPlayer, BorderLayout.PAGE_END);
-        this.add(rightInfo, BorderLayout.LINE_END);
+
         this.add(chat, BorderLayout.LINE_START);
         this.add(map, BorderLayout.CENTER);
 
@@ -76,42 +77,77 @@ public class GameFieldPanel extends StandardPanel {
                 // Wait for 5 seconds (5000 milliseconds)
                 Thread.sleep(1000);
 
-                String currentPlayer = controller.getCurrentPlayerName();
+                JPanel hostPlayer = newHostPanel();
+                JPanel rightInfo = newInfo();
+                this.add(hostPlayer, BorderLayout.PAGE_END);
+                this.add(rightInfo, BorderLayout.LINE_END);
+
                 ControlledPlayerInfo controlledPlayer = controller.getControlledPlayerInformation();
                 String controlledPlayerName = controlledPlayer.nickname();
 
-              /*  Point initialCardPoint = new Point(0,0);
-                int initialCardId= MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(initialCardPoint).card().id();
-                CardOrientation initialCardOrientation = MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(initialCardPoint).orientation();
-              */
                 map.setAvailablePoints(controlledPlayer.field().availablePositions());
                 map.insertInitialCard(id,orientation);
 
+
                 while(!controller.hasGameEnded()){
+                    Thread.sleep(500);
+                    cannotPlaceThisCard.setVisible(false);
+
                     String currentPlayerName = controller.getCurrentPlayerName();
-                    DrawableCardsInfo drawableCards = controller.getDrawableCards();
+
                     waitingForOther.setVisible(true);
-                    if(currentPlayer.equals(controlledPlayerName)){
+                    if(currentPlayerName.equals(controlledPlayerName)){
+                        waitingForOther.setVisible(false);
+                        isYourTurn.setVisible(true);
+                        placeCardButton.setVisible(true);
+
                         controlledPlayer = controller.getControlledPlayerInformation();
+                        map.setAvailablePoints(controlledPlayer.field().availablePositions());//work only the first time, why??
 
                         if(controller.isLastTurn()){
                             isLastTurn.setVisible(true);
                         }
 
-                        placeCardPhase();
-                        //wait until card Placed
-                        Thread.sleep(100000);
-                        //controller make move
-                        DrawChoice dChoice = drawCardPhase();
+                        boolean confirmed;
+                        do {
+                            confirmed = true;
+                            CardInfo cardInfo = placeCardPhase();
+                            System.out.println("test");
+                            DrawChoice dChoice = drawCardPhase();
 
-                        //controller.makeMove(,map.getLastPointPlaced(),,dChoice);
-                        map.setAvailablePoints(controlledPlayer.field().availablePositions());
+                            //Ora devo capire come far in modo di attendere che tu posizioni una carta
+                            // fare anche la stessa cosa per i deck e prendere la drawChoice relativa
+                            Point p = map.getLastPointPlaced();
+                            try {
+                                controller.makeMove(
+                                        cardInfo,
+                                        p,
+                                        map.getLastOrientationPlaced(),
+                                        dChoice);
+                            } catch (InvalidParameterException e) {
+                                System.out.println("Cannot place this card here");
+                                map.removeCardImage(p);
+                                map.resetLastValues();
+                                cannotPlaceThisCard.setVisible(true);//need other test to this edge case
+                                confirmed = false;
+                            }
+
+                        }while(!confirmed);
                         //when turn ended -> label reset
-                        //waitingForOther.setVisible(true);
-                        //isYourTurn.setVisible(false);
-                        //placeCardButton.setVisible(false);
-                    }
+                        waitingForOther.setVisible(true);
+                        isYourTurn.setVisible(false);
+                        placeCardButton.setVisible(false);
 
+                        map.resetLastValues();//??
+
+                        //Deck and Hand update
+                        this.remove(hostPlayer);
+                        this.remove(rightInfo);
+                        hostPlayer = newHostPanel();
+                        rightInfo = newInfo();
+                        this.add(hostPlayer, BorderLayout.PAGE_END);
+                        this.add(rightInfo, BorderLayout.LINE_END);
+                    }
                 }
             } catch (RemoteException | InterruptedException e) {
                 e.printStackTrace();
@@ -136,9 +172,9 @@ public class GameFieldPanel extends StandardPanel {
 
 
     private JPanel newHostPanel(){
-        JPanel host= new JPanel();
+        JPanel host = new JPanel();
         host.setLayout(new GridBagLayout());
-        ArrayList<CardInfo> cardsInHands = new ArrayList<>();
+        cardsInHands = new ArrayList<>();
 
         try {
             cardsInHands = MainWindow.getClientController().getControlledPlayerInformation().cardsInHand();
@@ -167,6 +203,7 @@ public class GameFieldPanel extends StandardPanel {
         //goBack.setAlignmentX(CENTER_ALIGNMENT);
         LabelPanel.add(this.isYourTurn);
         LabelPanel.add(this.waitingForOther);
+        LabelPanel.add(this.cannotPlaceThisCard);
 
         placeCardButton.setVisible(false);
         LabelPanel.add(placeCardButton);
@@ -298,6 +335,8 @@ public class GameFieldPanel extends StandardPanel {
         gbc.gridx=2;
         host.add(shownCard3, gbc);
 
+        this.repaint();
+        this.revalidate();
         return host;
     }
 
@@ -347,6 +386,7 @@ public class GameFieldPanel extends StandardPanel {
     }
 
     private JPanel newInfo(){
+        JPanel info = new JPanel();
         info.setLayout(new GridBagLayout());
 
         HashMap<Symbol, Integer> symbolCounter= new HashMap<>();
@@ -447,21 +487,31 @@ public class GameFieldPanel extends StandardPanel {
         gbc.gridx=2;
         info.add(goldCard2, gbc);
 
+        this.repaint();
+        this.revalidate();
         return info;
     }
 
     private DrawChoice drawCardPhase(){
-        DrawChoice dC = null;
+        DrawChoice dC = DrawChoice.DECK_RESOURCE;
 
         return dC;
     }
 
-    private void placeCardPhase(){
-        waitingForOther.setVisible(false);
-        isYourTurn.setVisible(true);
-        placeCardButton.setVisible(true);
+    private CardInfo placeCardPhase() throws InterruptedException {
+        map.resetActionMade();
+        while(!map.actionMade()){
+            Thread.sleep(1000);
+        }
 
-
+        for(CardInfo c : cardsInHands ){
+            if(c.id() == map.getLastCardIdPlaced()){
+                return c;
+            }
+        }
+        map.resetActionMade();
+        placeCardButton.setVisible(false);
+        return null;
     }
 
     private JPanel newChat(){
