@@ -14,7 +14,6 @@ import java.util.*;
  */
 public record GameFieldInfo(HashMap<Point, CardCellInfo> placedCards,
                             HashMap<Point, AngleCellInfo> placedAngles,
-
                             ArrayList<Point> availablePositions,
                             HashMap<Symbol, Integer> symbolCounterMap
 ) implements Serializable {}

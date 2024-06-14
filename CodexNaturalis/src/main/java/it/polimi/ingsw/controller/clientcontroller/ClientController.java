@@ -214,13 +214,87 @@ public interface ClientController {
     public DrawableCardsInfo getDrawableCards() throws RemoteException;
 
 
+    /**
+     * Returns true if it is the last turn of the game
+     * @return True if it is the last turn of the game
+     * @throws WrongPhaseException If the user is not in any game
+     * @throws InvalidOperationException If the operation is not possible. In particular, if the user is not logged in,
+     *      *                                   it cannot perform game-related operations
+     * @throws RemoteException If there are issues with the remote execution of the method
+     */
     public boolean isLastTurn() throws RemoteException;
+
+    /**
+     * Returns true if the game has ended
+     * @return True if the game has ended
+     * @throws WrongPhaseException If the user is not in any game
+     * @throws InvalidOperationException If the operation is not possible. In particular, if the user is not logged in,
+     *      *                                   it cannot perform game-related operations
+     * @throws RemoteException If there are issues with the remote execution of the method
+     */
     public boolean hasGameEnded() throws RemoteException;
+
+    /**
+     * Returns the name of the winner of the game, if available
+     * @return The name of the winner of the game
+     * @throws WrongPhaseException If the user is not in any game, or the game has not finished yet
+     * @throws InvalidOperationException If the operation is not possible. In particular, if the user is not logged in,
+     *                                   it cannot perform game-related operations
+     * @throws RemoteException If there are issues with the remote execution of the method
+     */
     public String getWinner() throws RemoteException;
+
+    /**
+     * Returns the leaderboard of the game. It can be requested only at the end of a game.
+     * The leaderboard is a list with the information of each player, sorted in decreasing order of points
+     * (e.g. The 0-index element of the list is the winner, the 1-index element of the list is the
+     * player with the second-highest score...).
+     * @return The leaderboard of an ended game
+     * @throws WrongPhaseException If the user is not in any game, or the game has not finished yet
+     * @throws InvalidOperationException If the operation is not possible. In particular, if the user is not logged in,
+     *                                   it cannot perform game-related operations
+     * @throws RemoteException If there are issues with the remote execution of the method
+     */
     public List<ControlledPlayerInfo> getLeaderboard() throws RemoteException;
+
+    /**
+     * Returns the leaderboard of the game. It can be requested only at the end of a game.
+     * The leaderboard is a list with the information of each player, sorted in decreasing order of points
+     * (e.g. The 0-index element of the list is the winner, the 1-index element of the list is the
+     * player with the second-highest score...).
+     * @return The leaderboard of an ended game
+     * @throws WrongPhaseException If the user is not in any game, or the game has not finished yet
+     * @throws InvalidOperationException If the operation is not possible. In particular, if the user is not logged in,
+     *                                   it cannot perform game-related operations
+     * @throws RemoteException If there are issues with the remote execution of the method
+     */
     public void setPlayerSetup(ObjectiveInfo chosenObjective, CardOrientation initialCardSide) throws RemoteException;
+
+    /**
+     * Perform a move with the controlled player, playing a card on her own map and drawing another one.
+     * @param card The information about the card to play
+     * @param placementPoint The point of the map where the card is played
+     * @param chosenSide The side chosen to play the card
+     * @param drawChoice The card on the field or on the deck to draw at the end of the move
+     * @throws WrongPhaseException If the user is not in any game, or it is not its turn
+     * @throws InvalidParameterException If it is not possible to perform the move (either the card cannot be played
+     * @throws ElementNotFoundException If the card that the player is attempting to draw is non-existent
+     * @throws RemoteException If there are issues with the remote execution of the method
+     */
     public void makeMove(CardInfo card, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException;
+
+
+    /**
+     * Exit from the game. It is possible doing it only at the end of the game
+     * @throws WrongPhaseException If the game has not finished yet
+     * @throws RemoteException If there are issues with the remote execution of the method
+     */
     public void exitGame() throws InvalidOperationException, RemoteException;
+
+    /**
+     * Returns true if the player is waiting in a joined lobby to start a game
+     * @return True if the player is waiting in a joined lobby to start a game
+     */
     boolean isWaitingInLobby();
 }
 
