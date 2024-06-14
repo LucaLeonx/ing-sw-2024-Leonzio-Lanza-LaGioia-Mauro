@@ -23,6 +23,7 @@ public class MapPanel extends StandardPanel{
     private JLayeredPane jLayeredPane = new JLayeredPane();
     private List<Point> availablePoints = new ArrayList<Point>();
     private JButton placeMode;
+    private Point lastPointPlaced = new Point(0,0);
 
     public MapPanel(JButton placebutton) {
         this.setLayout(new BorderLayout()); // Imposta il layout manager del pannello principale
@@ -123,6 +124,7 @@ public class MapPanel extends StandardPanel{
             jLayeredPane.add(img, Integer.valueOf(layer));
             jLayeredPane.remove(availablePosition);
             hideAvailableSpaces();
+            lastPointPlaced = p;
         }
     }
 
@@ -130,6 +132,7 @@ public class MapPanel extends StandardPanel{
         this.availablePoints = points;
     }
 
+    public Point getLastPointPlaced() { return lastPointPlaced; }
 
  /*   public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

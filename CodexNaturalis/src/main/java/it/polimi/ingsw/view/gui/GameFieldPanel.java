@@ -28,19 +28,24 @@ import static java.lang.Thread.sleep;
 public class GameFieldPanel extends StandardPanel {
 
     private ClientController controller;
-    MapPanel map;
+    private MapPanel map;
     private JLabel isYourTurn = new JLabel("Is your turn");
     private JLabel waitingForOther = new JLabel("Waiting for other players to make their move");
     private JLabel isLastTurn = new JLabel("\"ATTENTION: IT IS YOUR LAST TURN!!\"");
-    JButton placeCardButton = new JButton("Place card");
-
+    private JButton placeCardButton = new JButton("Place card");
+    private int id;
+    private CardOrientation orientation;
+    JPanel info = new JPanel();
 
     private ExecutorService executor;
-    public GameFieldPanel(){
+    public GameFieldPanel(){   }
 
+    public void setInitialChoice(int id, CardOrientation orientation){
+        this.id = id;
+        this.orientation = orientation;
     }
 
-    public void buildPanel(int id, CardOrientation orientation) throws RemoteException {
+    public void buildPanel() throws RemoteException {
         removeAll();
         revalidate();
         repaint();
@@ -84,21 +89,20 @@ public class GameFieldPanel extends StandardPanel {
                     waitingForOther.setVisible(true);
                     if(currentPlayer.equals(controlledPlayerName)){
                         controlledPlayer = controller.getControlledPlayerInformation();
-                        //is your turn label
-                        waitingForOther.setVisible(false);
-                        isYourTurn.setVisible(true);
-                        placeCardButton.setVisible(true);
 
                         if(controller.isLastTurn()){
                             isLastTurn.setVisible(true);
                         }
 
+                        placeCardPhase();
                         //wait until card Placed
                         Thread.sleep(100000);
                         //controller make move
+                        DrawChoice dChoice = drawCardPhase();
 
+                        //controller.makeMove(,map.getLastPointPlaced(),,dChoice);
                         map.setAvailablePoints(controlledPlayer.field().availablePositions());
-                        //when turn ended label reset
+                        //when turn ended -> label reset
                         //waitingForOther.setVisible(true);
                         //isYourTurn.setVisible(false);
                         //placeCardButton.setVisible(false);
@@ -289,7 +293,6 @@ public class GameFieldPanel extends StandardPanel {
     }
 
     private JPanel newInfo(){
-        JPanel info = new JPanel();
         info.setLayout(new GridBagLayout());
 
         HashMap<Symbol, Integer> symbolCounter= new HashMap<>();
@@ -393,9 +396,22 @@ public class GameFieldPanel extends StandardPanel {
         return info;
     }
 
+    private DrawChoice drawCardPhase(){
+        DrawChoice dC = null;
+
+        return dC;
+    }
+
+    private void placeCardPhase(){
+        waitingForOther.setVisible(false);
+        isYourTurn.setVisible(true);
+        placeCardButton.setVisible(true);
+
+
+    }
+
     private JPanel newChat(){
         JPanel chat= new JPanel();
-
         return chat;
     }
 
