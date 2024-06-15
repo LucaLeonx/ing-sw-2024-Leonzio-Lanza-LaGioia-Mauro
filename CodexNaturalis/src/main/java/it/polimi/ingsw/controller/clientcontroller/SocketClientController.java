@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.controller.socket.SocketClient;
 import it.polimi.ingsw.dataobject.*;
@@ -153,7 +154,7 @@ public class SocketClientController implements ClientController {
                 Thread.sleep(1000);
                 newSize = getLobbyList().size();
             }
-        }catch(RemoteException | InterruptedException e){
+        }catch(RemoteException | InterruptedException | InvalidParameterException e){
             return;
         }
     }
@@ -164,7 +165,7 @@ public class SocketClientController implements ClientController {
         LobbyInfo currentLobby;
         try{
             currentLobby = getJoinedLobbyInfo();
-            while(currentLobby != null && currentLobby.currNumPlayers()< currentLobby.reqPlayers() ){
+            while(currentLobby != null && currentLobby.currNumPlayers() < currentLobby.reqPlayers() ){
                 Thread.sleep(1000);
                 currentLobby = getJoinedLobbyInfo();
             }
@@ -262,8 +263,10 @@ public class SocketClientController implements ClientController {
 
     @Override
     public ControlledPlayerInfo getControlledPlayerInformation() throws RemoteException {
-        client.sendMessage(new Message(MessageType.GET_CONTROLLED_PLAYER_INFO,getCredentials(),null));
-        return (ControlledPlayerInfo) client.receiveMessage().getObj();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.GET_CONTROLLED_PLAYER_INFO, getCredentials(), null));
+            return (ControlledPlayerInfo) client.receiveMessage().getObj();
+        }
     }
 
     @Override
@@ -286,8 +289,10 @@ public class SocketClientController implements ClientController {
 
     @Override
     public boolean hasGameEnded() throws RemoteException {
-        client.sendMessage(new Message(MessageType.HAS_GAME_ENDED,getCredentials(),null));
-        return (boolean) client.receiveMessage().getObj();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.HAS_GAME_ENDED, getCredentials(), null));
+            return (boolean) client.receiveMessage().getObj();
+        }
     }
 
     @Override
@@ -301,8 +306,10 @@ public class SocketClientController implements ClientController {
 
     @Override
     public List<ControlledPlayerInfo> getLeaderboard() throws RemoteException {
-        client.sendMessage(new Message(MessageType.HAS_GAME_ENDED,getCredentials(),null));
-        return (List<ControlledPlayerInfo>) client.receiveMessage().getObj();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.HAS_GAME_ENDED, getCredentials(), null));
+            return (List<ControlledPlayerInfo>) client.receiveMessage().getObj();
+        }
     }
 
     @Override

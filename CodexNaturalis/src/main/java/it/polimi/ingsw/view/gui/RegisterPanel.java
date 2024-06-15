@@ -22,6 +22,7 @@ public class RegisterPanel extends StandardPanel {
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
     private final Map<String, Integer> lobbyById = new HashMap<String, Integer>();
     private Timer timer;
+    private Thread timerThread;
 
     public RegisterPanel() {
         buildPanel();
@@ -49,7 +50,8 @@ public class RegisterPanel extends StandardPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println(lobbyName.getText());
                 MainWindow.goToWindow("createNewLobbyPanel");
-                timer.stop();
+                timerThread.interrupt();
+                //timer.stop();
             }
         });
 
@@ -57,6 +59,7 @@ public class RegisterPanel extends StandardPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainWindow.goToWindow("chooseLoginPanel");
+                timerThread.interrupt();
             }
         });
 
@@ -75,7 +78,7 @@ public class RegisterPanel extends StandardPanel {
                     MainWindow.getClientController().joinLobby(lobbyById.get(lobbyrow));
                     MainWindow.waitingPanel.buildPanel();
                     MainWindow.goToWindow("waitingPanel");
-                    timer.stop();
+                    //timer.stop();
                 } catch (RemoteException | InvalidOperationException ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -107,21 +110,7 @@ public class RegisterPanel extends StandardPanel {
         gbc.gridy = 4;
         add(joinLobby, gbc);
 
-
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    showLobbies();
-                    timer.stop();
-                    MainWindow.getClientController().waitForLobbyListUpdate();
-                }
-                catch (Exception ex) {
-                    System.out.println(ex);
-                }
-            }
-        });
-        timer.start();
+        //timer.start();
     }
 
     public void showLobbies() {
@@ -149,5 +138,19 @@ public class RegisterPanel extends StandardPanel {
             System.out.println("Path non rilevato");
         }
         g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+        //showLobbies();
+        timerThread = new Thread(() -> {
+            try {
+                while (true) {
+                    showLobbies();
+                    MainWindow.getClientController().waitForLobbyListUpdate();
+                }
+            }
+            catch (Exception ex) {
+                System.out.println(ex);
+            }
+
+        });
+        timerThread.start();
     }
 }
