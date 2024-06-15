@@ -96,6 +96,10 @@ public class GameFieldPanel extends StandardPanel {
 
                     waitingForOther.setVisible(true);
                     if(currentPlayerName.equals(controlledPlayerName)){
+                        this.remove(rightInfo);
+                        rightInfo = newInfo();
+                        this.add(rightInfo, BorderLayout.LINE_END);
+
                         waitingForOther.setVisible(false);
                         isYourTurn.setVisible(true);
                         placeCardButton.setVisible(true);
@@ -109,30 +113,27 @@ public class GameFieldPanel extends StandardPanel {
 
                         Point p;
                         boolean confirmed;
-                        do {
-                            confirmed = true;
 
-                            CardInfo cardInfo = placeCardPhase();
-                            System.out.println("Trying to place a card");
-                            DrawChoice dChoice = drawCardPhase();
+                        CardInfo cardInfo = placeCardPhase();
 
-                            // fare anche la stessa cosa per i deck e prendere la drawChoice relativa
-                            p = map.getLastPointPlaced();
-                            try {
-                                controller.makeMove(
-                                        cardInfo,
-                                        p,
-                                        map.getLastOrientationPlaced(),
-                                        dChoice);
-                            } catch (InvalidParameterException e) {
-                                System.out.println("Cannot place this card here");
-                                map.removeCardImage(p);
-                                map.resetLastValues();
-                                cannotPlaceThisCard.setVisible(true);//need other test to this edge case
-                                confirmed = false;
-                            }
+                        p = map.getLastPointPlaced();
+                        if(!cardInfo.getSide(map.getLastOrientationPlaced()).isPlayable()) {
+                            System.out.println("Cannot place this card here");
+                            map.removeCardImage(p);
+                            map.resetLastValues();
+                            cannotPlaceThisCard.setVisible(true);//need other test to this edge case
+                            continue;
+                        }
+                        System.out.println("Trying to place a card");
+                        DrawChoice dChoice = drawCardPhase();
 
-                        }while(!confirmed);
+                        // fare anche la stessa cosa per i deck e prendere la drawChoice relativa
+
+                        controller.makeMove(
+                                cardInfo,
+                                p,
+                                map.getLastOrientationPlaced(),
+                                dChoice);
 
                         controlledPlayer = controller.getControlledPlayerInformation();
                         map.setAvailablePoints(controlledPlayer.field().availablePositions());
@@ -147,12 +148,13 @@ public class GameFieldPanel extends StandardPanel {
                         map.resetLastValues();//??
 
                         //Deck and Hand update
-                        this.remove(hostPlayer);
                         this.remove(rightInfo);
-                        hostPlayer = newHostPanel();
                         rightInfo = newInfo();
-                        this.add(hostPlayer, BorderLayout.PAGE_END);
                         this.add(rightInfo, BorderLayout.LINE_END);
+
+                        this.remove(hostPlayer);
+                        hostPlayer = newHostPanel();
+                        this.add(hostPlayer, BorderLayout.PAGE_END);
                     }
                 }
             } catch (RemoteException | InterruptedException e) {
