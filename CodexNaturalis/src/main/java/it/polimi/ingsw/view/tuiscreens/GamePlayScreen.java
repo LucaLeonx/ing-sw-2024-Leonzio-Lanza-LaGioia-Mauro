@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class NewGamePlayScreen extends TUIScreen {
-    public NewGamePlayScreen(TUI tui, Scanner scanner, ClientController controller) {
+public class GamePlayScreen extends TUIScreen {
+    public GamePlayScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
     }
 
@@ -98,7 +98,7 @@ public class NewGamePlayScreen extends TUIScreen {
 
                 }
             }
-            transitionState(new NewGameEndState(tui, scanner, controller));
+            transitionState(new GameEndState(tui, scanner, controller));
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

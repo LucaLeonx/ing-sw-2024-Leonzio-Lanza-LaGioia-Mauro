@@ -1,9 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
-import it.polimi.ingsw.view.tuiscreens.NewGamePlayScreen;
-import it.polimi.ingsw.view.tuiscreens.NewGameSetupScreen;
 
 import javax.swing.*;
 import java.awt.*;

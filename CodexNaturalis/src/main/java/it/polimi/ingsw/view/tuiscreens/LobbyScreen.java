@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.tuiscreens;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.ElementNotFoundException;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.dataobject.LobbyInfo;
@@ -15,7 +14,7 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
-public class NewLobbyScreen extends TUIScreen {
+public class LobbyScreen extends TUIScreen {
     AtomicBoolean goBackToScreen = new AtomicBoolean(false);
     AtomicBoolean goBackToThisScreen = new AtomicBoolean(false);
 
@@ -93,7 +92,7 @@ public class NewLobbyScreen extends TUIScreen {
     }, "LobbyDisplay");
 
 
-    public NewLobbyScreen(TUI tui, Scanner scanner, ClientController controller) {
+    public LobbyScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
         goBackToScreen = new AtomicBoolean(false);
         goBackToThisScreen = new AtomicBoolean(false);
@@ -116,14 +115,14 @@ public class NewLobbyScreen extends TUIScreen {
         }
         if(goBackToThisScreen.get()) // first I check this condition because in this case the other boolean will be true.
         {
-            transitionState(new NewLobbyScreen(tui, scanner, controller));
+            transitionState(new LobbyScreen(tui, scanner, controller));
         }
         else if (goBackToScreen.get()) {
-            transitionState(new NewLoginScreen(tui, scanner, controller));
+            transitionState(new LoginScreen(tui, scanner, controller));
         }
 
         else {
-            transitionState(new NewLobbyWaitScreen(tui, scanner, controller));
+            transitionState(new LobbyWaitScreen(tui, scanner, controller));
         }
     }
 

@@ -3,24 +3,22 @@ package it.polimi.ingsw.view.tuiscreens;
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
-import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.view.tui.TUI;
 import it.polimi.ingsw.view.tui.TUIScreen;
 
 import java.rmi.RemoteException;
 import java.util.Scanner;
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class NewLoginScreen extends TUIScreen {
+public class LoginScreen extends TUIScreen {
 
     private final AtomicReference<TUIScreen> nextState = new AtomicReference<>();
     AtomicBoolean goBackToThisScreen = new AtomicBoolean(false);
 
-    public NewLoginScreen(TUI tui, Scanner scanner, ClientController controller) {
+    public LoginScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
-        this.nextState.set(new NewLobbyScreen(tui,scanner,controller));
+        this.nextState.set(new LobbyScreen(tui,scanner,controller));
         this.goBackToThisScreen.set(false); // at the beginning if CancelException arise I should go back to previous panel
     }
 
@@ -87,7 +85,7 @@ public class NewLoginScreen extends TUIScreen {
         try {
             if(controller.isWaitingInLobby()){
                 System.out.println("Getting into joined lobby");
-                nextState.set(new NewLobbyWaitScreen(tui, scanner, controller));
+                nextState.set(new LobbyWaitScreen(tui, scanner, controller));
             }
         } catch (InvalidOperationException e){
             // Just skip
@@ -97,9 +95,9 @@ public class NewLoginScreen extends TUIScreen {
             if(controller.isInGame()){
                 System.out.println("A previous game is available. Coming back...");
                 if(controller.getControlledPlayerInformation().secretObjective() == null){
-                        nextState.set(new NewGameSetupScreen(tui, scanner, controller));
+                        nextState.set(new GameSetupScreen(tui, scanner, controller));
                 } else {
-                        nextState.set(new NewGamePlayScreen(tui, scanner, controller));
+                        nextState.set(new GamePlayScreen(tui, scanner, controller));
                 }
             }
         } catch (InvalidOperationException | RemoteException e){
@@ -120,10 +118,10 @@ public class NewLoginScreen extends TUIScreen {
             transitionState(nextState.get());
         } catch (CancelChoiceException e) {
             if(!goBackToThisScreen.get()) {
-                transitionState(new NewConnectionChoiceScreen(tui, scanner, controller));
+                transitionState(new ConnectionChoiceScreen(tui, scanner, controller));
             }
             else{
-                transitionState(new NewLoginScreen(tui, scanner, controller));
+                transitionState(new LoginScreen(tui, scanner, controller));
             }
         }
     }

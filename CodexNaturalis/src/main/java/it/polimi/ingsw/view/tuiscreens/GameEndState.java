@@ -10,8 +10,8 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Scanner;
 
-public class NewGameEndState extends TUIScreen {
-    public NewGameEndState(TUI tui, Scanner scanner, ClientController controller) {
+public class GameEndState extends TUIScreen {
+    public GameEndState(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
     }
 
@@ -30,7 +30,7 @@ public class NewGameEndState extends TUIScreen {
             System.out.println("Press any key to go back to lobby choice");
             String command = scanner.nextLine().trim();
             controller.exitGame();
-            transitionState(new NewLobbyScreen(tui, scanner, controller));
+            transitionState(new LobbyScreen(tui, scanner, controller));
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

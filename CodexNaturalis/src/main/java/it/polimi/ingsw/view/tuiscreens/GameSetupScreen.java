@@ -12,8 +12,8 @@ import it.polimi.ingsw.view.tui.TUIScreen;
 import java.rmi.RemoteException;
 import java.util.Scanner;
 
-public class NewGameSetupScreen extends TUIScreen {
-    public NewGameSetupScreen(TUI tui, Scanner scanner, ClientController controller) {
+public class GameSetupScreen extends TUIScreen {
+    public GameSetupScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
     }
 
@@ -59,7 +59,7 @@ public class NewGameSetupScreen extends TUIScreen {
             controller.setPlayerSetup(chosenObjective, initialCardOrientation);
             System.out.println("Waiting for other players to finish their setup");
             controller.waitForSetupFinished();
-            transitionState(new NewGamePlayScreen(tui, scanner, controller));
+            transitionState(new GamePlayScreen(tui, scanner, controller));
 
         } catch (RemoteException e) {
             throw new RuntimeException(e);
