@@ -15,8 +15,8 @@ public class MapPanel extends StandardPanel{
 
     private final int CardWidth = 100;
     private final int CardHeight = 80;
-    private final int CenterCardX = 450;
-    private final int CenterCardY = 410;
+    private final int CenterCardX = 850;
+    private final int CenterCardY = 610;
     private final int offsetX = 77;
     private final int offsetY = 47;
     private int layer = 0;
@@ -37,7 +37,7 @@ public class MapPanel extends StandardPanel{
     public MapPanel(JButton placebutton) {
         this.setLayout(new BorderLayout()); // Imposta il layout manager del pannello principale
 
-        jLayeredPane.setPreferredSize(new Dimension(1500, 1000));
+        jLayeredPane.setPreferredSize(new Dimension(2000, 1400));
         jLayeredPane.setLayout(null);
         this.placeMode = placebutton;
         this.add(jScrollPane, BorderLayout.CENTER);
