@@ -30,6 +30,7 @@ public class MapPanel extends StandardPanel{
     private int lastCardIdPlaced = 0;
     private CardOrientation lastOrientationPlaced = CardOrientation.FRONT;
     private boolean actionMade = false;
+    boolean buttonShown = false;
 
     public MapPanel(JButton placebutton) {
         this.setLayout(new BorderLayout()); // Imposta il layout manager del pannello principale
@@ -38,12 +39,22 @@ public class MapPanel extends StandardPanel{
         this.add(jLayeredPane);
         this.setVisible(true);
 
+
         this.placeMode.addActionListener(e -> {
-            //Here we save the chosen card to place
             if(cardToPlace == null) {return; }
-            for (JButton b : availablePlaces) {
-                b.setVisible(true);
+
+            if(buttonShown) {
+                for (JButton b : availablePlaces) {
+                    b.setVisible(false);
+                }
+                buttonShown = false;
+            }else{
+                for (JButton b : availablePlaces) {
+                    b.setVisible(true);
+                }
+                buttonShown = true;
             }
+
         });
     }
 
@@ -102,6 +113,7 @@ public class MapPanel extends StandardPanel{
             jLayeredPane.add(img, Integer.valueOf(layer));
             jLayeredPane.remove(availablePosition);
             hideAvailableSpaces();
+            buttonShown = false;
 
             actionMade = true;
             lastPointPlaced = p;
@@ -113,8 +125,12 @@ public class MapPanel extends StandardPanel{
     public void removeCardImage(Point p){
         ImagePanel img = placedCards.get(p);
         jLayeredPane.remove(img);
+        placedCards.remove(p,img);
+        availablePoints.add(p);
 
         addSpaceButton(p,img.getBounds().x,img.getBounds().y);
+        resetLastValues();
+        resetActionMade();
     }
 
     public void removeAllAvailablePlaces(){

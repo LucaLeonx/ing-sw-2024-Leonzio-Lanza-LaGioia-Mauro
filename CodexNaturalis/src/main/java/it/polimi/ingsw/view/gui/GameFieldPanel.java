@@ -113,7 +113,7 @@ public class GameFieldPanel extends StandardPanel {
                             confirmed = true;
 
                             CardInfo cardInfo = placeCardPhase();
-                            System.out.println("test");
+                            System.out.println("Trying to place a card");
                             DrawChoice dChoice = drawCardPhase();
 
                             // fare anche la stessa cosa per i deck e prendere la drawChoice relativa
