@@ -37,6 +37,11 @@ public class GameFieldPanel extends StandardPanel {
     private int id;
     private CardOrientation orientation;
     private ArrayList<CardInfo> cardsInHands;
+    private final JButton chooseWhereDraw = new JButton("Choose Draw");
+    private JLabel choosenDrawLabel = new JLabel("Choosen Draw: ");
+    private DrawChoice lastDrawChoice = DrawChoice.DECK_RESOURCE;
+    private boolean unlock = false;
+
 
     private ExecutorService executor;
     public GameFieldPanel(){   }
@@ -112,8 +117,6 @@ public class GameFieldPanel extends StandardPanel {
                         }
 
                         Point p;
-                        boolean confirmed;
-
                         CardInfo cardInfo = placeCardPhase();
 
                         p = map.getLastPointPlaced();
@@ -121,7 +124,8 @@ public class GameFieldPanel extends StandardPanel {
                             System.out.println("Cannot place this card here");
                             map.removeCardImage(p);
                             map.resetLastValues();
-                            cannotPlaceThisCard.setVisible(true);//need other test to this edge case
+                            cannotPlaceThisCard.setVisible(true);
+                            Thread.sleep(500);
                             continue;
                         }
                         System.out.println("Trying to place a card");
@@ -146,6 +150,8 @@ public class GameFieldPanel extends StandardPanel {
                         placeCardButton.setVisible(false);
 
                         map.resetLastValues();//??
+
+                        lastDrawChoice = null;
 
                         //Deck and Hand update
                         this.remove(rightInfo);
@@ -243,6 +249,7 @@ public class GameFieldPanel extends StandardPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                shownCard1.setText("You have selected this card on " + firstcard.getVisibleOrientation().toString());
                 shownCard1.setVisible(true);
                 shownCard2.setVisible(false);
                 shownCard3.setVisible(false);
@@ -254,6 +261,7 @@ public class GameFieldPanel extends StandardPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                shownCard2.setText("You have selected this card on " + secondcard.getVisibleOrientation().toString());
                 shownCard1.setVisible(false);
                 shownCard2.setVisible(true);
                 shownCard3.setVisible(false);
@@ -265,6 +273,7 @@ public class GameFieldPanel extends StandardPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                shownCard3.setText("You have selected this card on " + thirdcard.getVisibleOrientation().toString());
                 shownCard1.setVisible(false);
                 shownCard2.setVisible(false);
                 shownCard3.setVisible(true);
@@ -303,7 +312,6 @@ public class GameFieldPanel extends StandardPanel {
         });*/
 
         GridBagConstraints gbc = new GridBagConstraints();
-
 
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
@@ -447,6 +455,47 @@ public class GameFieldPanel extends StandardPanel {
 
         GridBagConstraints gbc= new GridBagConstraints();
 
+        resourceCardsDeck.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                lastDrawChoice = DrawChoice.DECK_RESOURCE;
+                choosenDrawLabel.setText("Selected" + DrawChoice.DECK_RESOURCE);
+            }
+        });
+
+        resourceCard1.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                lastDrawChoice = DrawChoice.RESOURCE_CARD_1;
+                choosenDrawLabel.setText("Selected" + DrawChoice.RESOURCE_CARD_1);
+            }
+        });
+
+        resourceCard2.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                lastDrawChoice = DrawChoice.RESOURCE_CARD_2;
+                choosenDrawLabel.setText("Selected" + DrawChoice.RESOURCE_CARD_2);
+            }
+        });
+
+        goldCardsDeck.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                lastDrawChoice = DrawChoice.DECK_GOLD;
+                choosenDrawLabel.setText("Selected" + DrawChoice.DECK_GOLD);
+            }
+        });
+
+        goldCard1.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                lastDrawChoice = DrawChoice.GOLD_CARD_1;
+                choosenDrawLabel.setText("Selected" + DrawChoice.GOLD_CARD_1);
+            }
+        });
+
+        goldCard2.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                lastDrawChoice = DrawChoice.GOLD_CARD_2;
+                choosenDrawLabel.setText("Selected" + DrawChoice.GOLD_CARD_2);
+            }
+        });
         gbc.gridx=0;
         gbc.gridy=0;
         info.add(insectPoints, gbc);
@@ -495,14 +544,39 @@ public class GameFieldPanel extends StandardPanel {
         gbc.gridx=2;
         info.add(goldCard2, gbc);
 
+        info.add(chooseWhereDraw);
+        info.add(choosenDrawLabel);
+        choosenDrawLabel.setVisible(false);
+        chooseWhereDraw.setVisible(false);
+
         this.repaint();
         this.revalidate();
         return info;
     }
 
-    private DrawChoice drawCardPhase(){
-        DrawChoice dC = DrawChoice.DECK_RESOURCE;
+    private DrawChoice drawCardPhase() throws InterruptedException {
+        DrawChoice dC;
+        choosenDrawLabel.setVisible(true);
+        chooseWhereDraw.setVisible(true);
+        isYourTurn.setVisible(false);
+        placeCardButton.setVisible(false);
 
+        chooseWhereDraw.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                unlock = true;
+            }
+        });
+
+        while(!unlock){
+            Thread.sleep(1000);
+        }
+
+        dC = lastDrawChoice;
+        unlock = false;
+        choosenDrawLabel.setVisible(false);
+        chooseWhereDraw.setVisible(false);
+        isYourTurn.setVisible(true);
+        placeCardButton.setVisible(true);
         return dC;
     }
 

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.test.view.gui;
 
+import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.view.gui.ImagePanel;
 import it.polimi.ingsw.view.gui.StandardPanel;
 
@@ -138,4 +139,5 @@ public class MapTest extends StandardPanel {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MapTest::new);
     }
+
 }
