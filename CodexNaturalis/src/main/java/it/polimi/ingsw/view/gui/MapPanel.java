@@ -23,6 +23,8 @@ public class MapPanel extends StandardPanel{
 
     private AbstractMap.SimpleEntry<Integer,CardOrientation> cardToPlace;
     private JLayeredPane jLayeredPane = new JLayeredPane();
+
+    private JScrollPane jScrollPane = new JScrollPane(jLayeredPane);
     private List<Point> availablePoints = new ArrayList<Point>();
     private JButton placeMode;
 
@@ -35,8 +37,10 @@ public class MapPanel extends StandardPanel{
     public MapPanel(JButton placebutton) {
         this.setLayout(new BorderLayout()); // Imposta il layout manager del pannello principale
 
+        jLayeredPane.setPreferredSize(new Dimension(1500, 1000));
+        jLayeredPane.setLayout(null);
         this.placeMode = placebutton;
-        this.add(jLayeredPane);
+        this.add(jScrollPane, BorderLayout.CENTER);
         this.setVisible(true);
 
 
@@ -173,18 +177,5 @@ public class MapPanel extends StandardPanel{
             addCardImage(newButton, p);
         });
     }
-
- /*   public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Map Panel");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1000, 800);
-
-            MapPanel mapPanel = new MapPanel();
-
-            frame.add(mapPanel);
-            frame.setVisible(true);
-        });
-    }*/
 
 }

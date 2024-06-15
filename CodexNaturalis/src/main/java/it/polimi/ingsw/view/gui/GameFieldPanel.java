@@ -41,15 +41,9 @@ public class GameFieldPanel extends StandardPanel {
     private JLabel choosenDrawLabel = new JLabel("Choosen Draw: ");
     private DrawChoice lastDrawChoice = DrawChoice.DECK_RESOURCE;
     private boolean unlock = false;
-
-
     private ExecutorService executor;
-    public GameFieldPanel(){   }
 
-    /*public void setInitialChoice(int id, CardOrientation orientation){
-        this.id = id;
-        this.orientation = orientation;
-    }*/
+    public GameFieldPanel(){   }
 
     public void buildPanel() throws RemoteException {
         removeAll();
@@ -68,10 +62,12 @@ public class GameFieldPanel extends StandardPanel {
         id = MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(new Point(0,0)).card().id();
         orientation = MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(new Point(0,0)).orientation();
 
+        //  JPanel mapContainer = new JPanel();
+       // mapContainer.add(scrollPane);
+
         //this.add(isYourTurn, BorderLayout.EAST);
         //this.add(waitingForOther, BorderLayout.EAST);
         this.add(otherPlayers, BorderLayout.PAGE_START);
-
         this.add(chat, BorderLayout.LINE_START);
         this.add(map, BorderLayout.CENTER);
 
@@ -211,18 +207,18 @@ public class GameFieldPanel extends StandardPanel {
         //JButton logout= new JButton("Exit and logout");
         //JButton goBack= new JButton("Go Back");
 
-        JPanel LabelPanel = new JPanel();
-        LabelPanel.setLayout(new BoxLayout(LabelPanel, BoxLayout.Y_AXIS));
+        JPanel labelPane = new JPanel();
+        labelPane.setLayout(new BoxLayout(labelPane, BoxLayout.Y_AXIS));
         //logout.setAlignmentX(CENTER_ALIGNMENT);
         //goBack.setAlignmentX(CENTER_ALIGNMENT);
-        LabelPanel.add(this.isYourTurn);
-        LabelPanel.add(this.waitingForOther);
-        LabelPanel.add(this.cannotPlaceThisCard);
+        labelPane.add(this.isYourTurn);
+        labelPane.add(this.waitingForOther);
+        labelPane.add(this.cannotPlaceThisCard);
 
         placeCardButton.setVisible(false);
-        LabelPanel.add(placeCardButton);
+        labelPane.add(placeCardButton);
         this.isLastTurn.setBackground(Color.RED);
-        LabelPanel.add(this.isLastTurn);
+        labelPane.add(this.isLastTurn);
 
         rotateFirstCard.addActionListener(new ActionListener() {
             @Override
@@ -335,9 +331,12 @@ public class GameFieldPanel extends StandardPanel {
         gbc.gridy=2;
         host.add(rotateThirdCard, gbc);
 
+        labelPane.setPreferredSize(new Dimension(200, 60));
+
+        gbc.gridy=1;
         gbc.gridx=4;
         gbc.weighty = 2.0;
-        host.add(LabelPanel, gbc);
+        host.add(labelPane, gbc);
 
         gbc.gridy=0;
         gbc.gridx=0;
@@ -453,7 +452,9 @@ public class GameFieldPanel extends StandardPanel {
         ImagePanel goldCard1 = new ImagePanel(goldCard1Id);
         ImagePanel goldCard2 = new ImagePanel(goldCard2Id);
 
-        GridBagConstraints gbc= new GridBagConstraints();
+        JLabel deckLabel = new JLabel("Drawable Decks:\n");
+        JLabel resourceLabel = new JLabel("Resource Cards:\n");
+        JLabel goldLabel= new JLabel("Gold Cards: \n");
 
         resourceCardsDeck.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -496,6 +497,9 @@ public class GameFieldPanel extends StandardPanel {
                 choosenDrawLabel.setText("Selected" + DrawChoice.GOLD_CARD_2);
             }
         });
+
+        GridBagConstraints gbc= new GridBagConstraints();
+
         gbc.gridx=0;
         gbc.gridy=0;
         info.add(insectPoints, gbc);
@@ -523,6 +527,10 @@ public class GameFieldPanel extends StandardPanel {
 
         gbc.gridwidth=2;
 
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        info.add(deckLabel, gbc);
+
         gbc.gridy=3;
         gbc.gridx=0;
         info.add(resourceCardsDeck, gbc);
@@ -530,22 +538,40 @@ public class GameFieldPanel extends StandardPanel {
         gbc.gridx=2;
         info.add(goldCardsDeck, gbc);
 
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        info.add(resourceLabel, gbc);
+
         gbc.gridy=5;
         gbc.gridx=0;
         info.add(resourceCard1, gbc);
 
         gbc.gridx=2;
-        info.add(goldCard1, gbc);
-
-        gbc.gridy=6;
-        gbc.gridx=0;
         info.add(resourceCard2, gbc);
+
+        gbc.gridy = 6;
+        gbc.gridx = 0;
+        info.add(goldLabel, gbc);
+
+        gbc.gridy = 7;
+        gbc.gridx = 0;
+        info.add(goldCard1, gbc);
 
         gbc.gridx=2;
         info.add(goldCard2, gbc);
 
-        info.add(chooseWhereDraw);
-        info.add(choosenDrawLabel);
+        gbc.gridx = 0;
+        gbc.gridy = 8;
+        gbc.gridwidth=5;
+        info.add(chooseWhereDraw, gbc);
+
+    /*    choosenDrawLabel.setPreferredSize(new Dimension(200, 20));
+        choosenDrawLabel.setMinimumSize(new Dimension(200,20));
+        choosenDrawLabel.setMaximumSize(new Dimension(200,20));*/
+
+        gbc.gridy = 9;
+        info.add(choosenDrawLabel, gbc);
+
         choosenDrawLabel.setVisible(false);
         chooseWhereDraw.setVisible(false);
 
