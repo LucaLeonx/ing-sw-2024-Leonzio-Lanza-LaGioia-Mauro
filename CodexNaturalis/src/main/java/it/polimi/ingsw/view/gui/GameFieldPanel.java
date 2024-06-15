@@ -523,7 +523,7 @@ public class GameFieldPanel extends StandardPanel {
         gbc.gridx=2;
         info.add(quillPoints, gbc);
 
-        gbc.insets = new Insets(10, 5, 10, 5); // Padding of 5 pixels on all sides
+        gbc.insets = new Insets(5, 5, 5, 5); // Padding of 5 pixels on all sides
 
         gbc.gridwidth=2;
 
