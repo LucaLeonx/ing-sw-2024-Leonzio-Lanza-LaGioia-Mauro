@@ -2,6 +2,10 @@ package it.polimi.ingsw.view.tuiscreens;
 
 import java.util.*;
 
+/**
+ * general class to handle the input in system.in from the user.
+ * @param <T> : general type of the choice
+ */
 public class AssignmentDialog<T> {
 
     private final String header;

@@ -9,9 +9,9 @@ import it.polimi.ingsw.view.tui.TUIScreen;
 import java.rmi.ConnectException;
 import java.util.Scanner;
 
-public class NewConnectionChoiceScreen extends TUIScreen {
+public class ConnectionChoiceScreen extends TUIScreen {
 
-    public NewConnectionChoiceScreen(TUI tui, Scanner scanner, ClientController controller) {
+    public ConnectionChoiceScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
     }
 
@@ -32,7 +32,7 @@ public class NewConnectionChoiceScreen extends TUIScreen {
 
         try{
             ClientController controller = connectionChoiceDialog.askForChoice(scanner);
-            transitionState(new NewLoginScreen(tui, scanner, controller));
+            transitionState(new LoginScreen(tui, scanner, controller));
         } catch (CancelChoiceException e){
             System.out.println("Quitting...");
         }

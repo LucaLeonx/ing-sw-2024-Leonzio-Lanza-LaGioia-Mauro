@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.tuiscreens;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
-import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.view.tui.TUI;
 import it.polimi.ingsw.view.tui.TUIMethods;
 import it.polimi.ingsw.view.tui.TUIScreen;
@@ -13,15 +12,21 @@ import java.util.Scanner;
 import java.util.concurrent.*;
 
 
+/**
+ * we used an executor to handle the fact we simultaneously want to take an input from the user and check if the
+ * correct number of player is reached. The second case we use the shutdownNow method to kill immediately the executor.
+ * Since there are 2 scanner opened at the same time and we can't simply close one in system.in because then also the other
+ * scanner would close we used System.filtered.in.
+ *
+ */
 
-
-public class NewLobbyWaitScreen extends TUIScreen{
+public class LobbyWaitScreen extends TUIScreen{
     private Future <Boolean> waitForGameStarting;
     private ExecutorService executor;
     private volatile boolean isRunning;
     Scanner sc;
 
-    public NewLobbyWaitScreen (TUI tui, Scanner scanner ,ClientController controller){
+    public LobbyWaitScreen(TUI tui, Scanner scanner , ClientController controller){
         super(tui, scanner, controller);
         this.executor=Executors.newFixedThreadPool(3);
         this.isRunning=true;
@@ -76,24 +81,24 @@ public class NewLobbyWaitScreen extends TUIScreen{
                 System.out.println("Correct number of player reached, press enter to continue: ");
                 sc.close();
                 executor.shutdownNow();
-                transitionState(new NewGameSetupScreen(tui,scanner,controller));
+                transitionState(new GameSetupScreen(tui,scanner,controller));
             }else{
                 isRunning=false;
                 sc.close();
                 executor.shutdownNow();
-                transitionState(new NewLobbyScreen(tui,scanner,controller));
+                transitionState(new LobbyScreen(tui,scanner,controller));
             }
         }catch(CancellationException e){
             isRunning=false;
             sc.close();
             executor.shutdownNow();
             System.out.println("You exited from the lobby");
-            transitionState(new NewLobbyScreen(tui,scanner,controller));
+            transitionState(new LobbyScreen(tui,scanner,controller));
         }catch(InterruptedException|ExecutionException e){
             isRunning=false;
             sc.close();
             executor.shutdownNow();
-            transitionState(new NewLobbyScreen(tui,scanner,controller));
+            transitionState(new LobbyScreen(tui,scanner,controller));
         }
     }
 }

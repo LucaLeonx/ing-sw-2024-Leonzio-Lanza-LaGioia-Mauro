@@ -7,9 +7,9 @@ import it.polimi.ingsw.view.tui.TUIScreen;
 
 import java.util.Scanner;
 
-public class NewInitialScreen extends TUIScreen {
+public class InitialScreen extends TUIScreen {
 
-    public NewInitialScreen(TUI tui, Scanner scanner, ClientController controller) {
+    public InitialScreen(TUI tui, Scanner scanner, ClientController controller) {
         super(tui, scanner, controller);
     }
 
@@ -22,7 +22,7 @@ public class NewInitialScreen extends TUIScreen {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        transitionState(new NewConnectionChoiceScreen(tui, scanner, controller));
+        transitionState(new ConnectionChoiceScreen(tui, scanner, controller));
     }
 
 

@@ -10,8 +10,18 @@ import java.util.List;
 
 import static java.lang.Math.abs;
 
+/**
+ * a class used for drawing or sketching the various card in the terminal using emoji and our model.
+ */
 
 public class TUIMethods {
+
+    /**
+     * Draw the entire map of a player in the terminal
+     * @param playerColor : color of the token of the player
+     * @param gameField : game field we want to draw
+     * @param isWithAvailablePosition : parameter used to say if the map should have placeholders where the player could put his cards
+     */
     public static void drawMap(PlayerColor playerColor, GameFieldInfo gameField, boolean isWithAvailablePosition) {
         System.out.println("map: ");
         // 1 find the max and min row and column in order to create a matrix of the right dimension
@@ -204,6 +214,10 @@ public class TUIMethods {
     }
 
 
+    /**
+     *
+     * @param player that we need to print the hand in the terminal
+     */
     public static void showHand(ControlledPlayerInfo player) {
         System.out.println("Your hand: ");
         String[][] matrixHand = new String[3][23]; // 20 columns for 3 cards +3 cells for tabs
@@ -252,6 +266,12 @@ public class TUIMethods {
 
     }
 
+    /**
+     * Helper method to show either the 2 common objectives cards in the table or at the beginning of the game
+     * or the 2 secret objective to chose from
+     * @param objectiveCard1
+     * @param objectiveCard2
+     */
     public  static void show2Objectives(ObjectiveInfo objectiveCard1, ObjectiveInfo objectiveCard2){
         String[][] objectives = new String[3][11];
         //I add the space between the card.
@@ -284,6 +304,12 @@ public class TUIMethods {
 
     }
 
+    /**
+     * to sketch drawable cards and the 2 common objective cards
+     * @param objectiveCard1
+     * @param objectiveCard2
+     * @param drawable
+     */
     public static void showCardsOnTable(ObjectiveInfo objectiveCard1, ObjectiveInfo objectiveCard2, DrawableCardsInfo drawable) {
         System.out.println("Cards on the table: ");
         CardSideInfo goldDeck = drawable.drawableCards().get(DrawChoice.DECK_GOLD);
@@ -399,6 +425,10 @@ public class TUIMethods {
         show2Objectives(objectiveCard1, objectiveCard2);
     }
 
+    /**
+     *
+     * @param card initial card to show to the player in order for him/her to chose if he/she wants the front one or the back side of the card
+     */
     public static void showInitialCard(CardInfo card){
         String[][] Front = new String[5][3];
         String[][] Back = new String[5][3];
@@ -441,6 +471,12 @@ public class TUIMethods {
         System.out.println("\n"); // just some spacing.
     }
 
+    /**
+     * print a decorated message
+     * @param message string to print
+     * @param borderColor
+     * @param textColor
+     */
     public static void printStylishMessage(String message, String borderColor, String textColor) {
         // Define ASCII art characters for styling
         final String TOP_LEFT = borderColor + "╔";
@@ -479,6 +515,9 @@ public class TUIMethods {
         System.out.print("\u001B[0m");
     }
 
+    /**
+     * makes an ascii art with a fungi and a butterfly
+     */
     public static void printMushroom(){
         System.out.println("\u001B[31m"+ "                                __.....__ ");
         System.out.println("\u001B[31m"+"                             .'\"         \"`." );
@@ -498,6 +537,10 @@ public class TUIMethods {
         // Reset colors after printing
         System.out.print("\u001B[0m");
     }
+
+    /**
+     * makes a wolf ascii art
+     */
 
     public static void printWolf(){
         System.out.println("\u001B[34m"+ "                                           ,     ,");

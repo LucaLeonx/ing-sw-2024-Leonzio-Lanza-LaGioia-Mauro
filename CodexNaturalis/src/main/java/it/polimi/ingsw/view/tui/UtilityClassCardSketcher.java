@@ -8,6 +8,10 @@ import it.polimi.ingsw.model.card.AnglePosition;
 import it.polimi.ingsw.model.card.CardColor;
 import it.polimi.ingsw.model.card.Symbol;
 
+/**
+ * sketch the cards in hand and to draw from in a more detailed way than the cards on the map since when cards are in hand
+ * we need more information.
+ */
 public final class UtilityClassCardSketcher {
 
     private UtilityClassCardSketcher (){};
@@ -24,6 +28,10 @@ public final class UtilityClassCardSketcher {
         }
     }
 
+    /**
+     * used to return a card with black dots helpful when there is no card in hand at the end of a game due to the finishing of the decks
+     * @return
+     */
     public static String[][] sketchEmptyCard() {
         String[][] cardSketched = new String[3][5];
         for(int i=0; i<3; i++){
@@ -34,6 +42,11 @@ public final class UtilityClassCardSketcher {
         return cardSketched;
     }
 
+    /**
+     * to sketch the color of the card
+     * @param color
+     * @return
+     */
     public static String[][] sketchBackground(CardColor color) {
         String[][] cardSketched = new String[3][5];
         String background=Symbol_String.BLACK_SQUARE_SYMBOL;

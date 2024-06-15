@@ -1,15 +1,18 @@
 package it.polimi.ingsw.view.tui;
 
-import it.polimi.ingsw.view.tuiscreens.NewInitialScreen;
+import it.polimi.ingsw.view.tuiscreens.InitialScreen;
 
 import java.util.Scanner;
 
+/**
+ * A class to implement pattern state
+ */
 public class TUI {
     private TUIScreen screen;
 
     public TUI() {
         Scanner scanner = new Scanner(System.in);
-        setScreen(new NewInitialScreen(this, scanner, null));
+        setScreen(new InitialScreen(this, scanner, null));
     }
 
     public void display() {
