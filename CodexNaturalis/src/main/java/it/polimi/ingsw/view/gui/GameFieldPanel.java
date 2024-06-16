@@ -551,15 +551,14 @@ public class GameFieldPanel extends StandardPanel {
 
         gbc.gridx=2;
         info.add(quillPoints, gbc);*/
-        gbc.gridy=0;
-        gbc.gridx=0;
 
         JLabel scoreboard = new JLabel("SCOREBOARD:");
         scoreboard.setFont(new Font("Arial", Font.BOLD, 16));
         scoreboard.setForeground(Color.BLUE);
         scoreboard.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.gridy=0;
-        info.add(scoreboard, gbc);
+
+        gbc.gridwidth=4;
+
         for(j=0;j<playerNames.size(); j++){
             try {
                 JLabel player = new JLabel(playerNames.get(j) + " has " + MainWindow.getClientController().getOpponentInformation(playerNames.get(j)).score() + " points");
@@ -572,14 +571,17 @@ public class GameFieldPanel extends StandardPanel {
             }
         }
 
+        gbc.gridy=0;
+        gbc.gridx=0;
+        info.add(scoreboard, gbc);
+
         gbc.gridwidth=2;
-
-        j=j+10;
-        gbc.gridy = 0+j;
-        gbc.gridx = 0;
-        info.add(deckLabel, gbc);
-
         gbc.insets = new Insets(5, 5, 5, 5); // Padding of 5 pixels on all sides
+
+        j=j+5;
+        gbc.gridy=0+j;
+        gbc.gridx=0;
+        info.add(deckLabel, gbc);
 
         gbc.gridy=1+j;
         gbc.gridx=0;

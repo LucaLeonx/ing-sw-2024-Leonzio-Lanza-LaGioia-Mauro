@@ -55,7 +55,8 @@ public class LoginPanel extends StandardPanel {
                         }
                     }
                     else {
-                        MainWindow.goToWindow("createNewLobbyPanel");
+                        MainWindow.registerPanel.showLobbies();
+                        MainWindow.goToWindow("registerPanel");
                     }
                 } catch (RemoteException ex) {
                     ex.getMessage();

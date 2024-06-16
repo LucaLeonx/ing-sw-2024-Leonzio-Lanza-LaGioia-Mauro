@@ -80,6 +80,7 @@ public class InsertNamePanel extends StandardPanel {
         readyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                MainWindow.registerPanel.showLobbies();
                 MainWindow.goToWindow("registerPanel");
                 resetPanel();
                 buildPanel();

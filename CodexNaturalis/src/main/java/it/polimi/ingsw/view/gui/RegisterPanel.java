@@ -1,8 +1,6 @@
 package it.polimi.ingsw.view.gui;
-
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
 import it.polimi.ingsw.dataobject.LobbyInfo;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -22,8 +20,6 @@ public class RegisterPanel extends StandardPanel {
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
     private final Map<String, Integer> lobbyById = new HashMap<String, Integer>();
     private Timer timer;
-    private Thread timerThread;
-
     public RegisterPanel() {
         buildPanel();
     }
@@ -50,8 +46,6 @@ public class RegisterPanel extends StandardPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println(lobbyName.getText());
                 MainWindow.goToWindow("createNewLobbyPanel");
-                timerThread.interrupt();
-                //timer.stop();
             }
         });
 
@@ -59,7 +53,6 @@ public class RegisterPanel extends StandardPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainWindow.goToWindow("chooseLoginPanel");
-                timerThread.interrupt();
             }
         });
 
@@ -78,7 +71,6 @@ public class RegisterPanel extends StandardPanel {
                     MainWindow.getClientController().joinLobby(lobbyById.get(lobbyrow));
                     MainWindow.waitingPanel.buildPanel();
                     MainWindow.goToWindow("waitingPanel");
-                    //timer.stop();
                 } catch (RemoteException | InvalidOperationException ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -139,18 +131,5 @@ public class RegisterPanel extends StandardPanel {
         }
         g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
         //showLobbies();
-        timerThread = new Thread(() -> {
-            try {
-                while (true) {
-                    showLobbies();
-                    MainWindow.getClientController().waitForLobbyListUpdate();
-                }
-            }
-            catch (Exception ex) {
-                System.out.println(ex);
-            }
-
-        });
-        timerThread.start();
     }
 }
