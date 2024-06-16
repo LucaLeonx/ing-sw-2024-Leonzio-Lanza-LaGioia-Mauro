@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+/**
+ * MainWindow is the frame container of all the JPanels of the GUI
+ */
 public class MainWindow extends JFrame {
     private static CardLayout cardLayout;
     private static JPanel cardPanel;
@@ -25,7 +28,6 @@ public class MainWindow extends JFrame {
     public static SetUpGamePanel setUpGamePanel = new SetUpGamePanel();
     public static GameFieldPanel gameFieldPanel = new GameFieldPanel();
     public static EndGamePanel endGamePanel = new EndGamePanel();
-
 
     public MainWindow()
     {

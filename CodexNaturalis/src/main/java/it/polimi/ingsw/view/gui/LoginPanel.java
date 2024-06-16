@@ -8,6 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
+/**
+ * This Panels permits players to access the game if they are already registered
+ */
 public class LoginPanel extends StandardPanel {
     private JTextField user;
     private JPasswordField password;

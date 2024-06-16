@@ -129,12 +129,14 @@ public class MessageTranslator {
 
             case GET_CURRENT_PLAYER_NAME -> {
                 User user;
+                String name;
                 try {
                     user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
+                    name = server.getCurrentPlayer(user);
                 }catch(InvalidOperationException e){
                     return new Message(null,null,e);
                 }
-                return new Message(null,null,server.getCurrentPlayer(user));
+                return new Message(null,null,name);
             }
 
             case GET_PLAYER_NAMES -> {

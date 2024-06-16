@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * This panel lets players decide if they want to register to the Server or they already have credentials to login.
+ */
 public class ChooseLoginPanel extends StandardPanel {
     public ChooseLoginPanel(){
         buildPanel();

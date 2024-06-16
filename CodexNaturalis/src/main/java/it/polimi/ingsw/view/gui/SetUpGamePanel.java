@@ -22,6 +22,9 @@ import java.util.concurrent.Executors;
 
 import static java.lang.Thread.sleep;
 
+/**
+ * When all the players are ready they can decide theis set-up cards
+ */
 public class SetUpGamePanel extends StandardPanel {
     private final Color gray = new Color(220,220,220); // RGB values
     ExecutorService executor;

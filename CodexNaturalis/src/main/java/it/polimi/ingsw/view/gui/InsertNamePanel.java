@@ -8,6 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
+/**
+ * Login Panel in which players can Register and get their code as password
+ */
 public class InsertNamePanel extends StandardPanel {
     private JTextArea registerName;
     private int generatedPassword;

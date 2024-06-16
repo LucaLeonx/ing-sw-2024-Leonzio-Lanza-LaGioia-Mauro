@@ -9,6 +9,9 @@ import it.polimi.ingsw.model.map.Point;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Panel of the map inserted inside the GameField
+ */
 public class MapPanel extends StandardPanel{
     private Map<Point,ImagePanel> placedCards = new HashMap<Point,ImagePanel>();
     private List<JButton> availablePlaces = new ArrayList<JButton>();

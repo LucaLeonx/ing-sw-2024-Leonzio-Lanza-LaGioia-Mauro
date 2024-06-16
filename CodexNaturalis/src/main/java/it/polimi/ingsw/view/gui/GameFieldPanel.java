@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Actual Panel of the Game where a player can interact with its map
+ */
 public class GameFieldPanel extends StandardPanel {
 
     private final Color gray = new Color(220,220,220); // RGB values

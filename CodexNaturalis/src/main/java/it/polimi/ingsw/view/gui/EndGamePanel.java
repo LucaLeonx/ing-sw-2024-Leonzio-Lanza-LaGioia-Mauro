@@ -14,7 +14,9 @@ import java.util.List;
 
 import java.awt.*;
 
-
+/**
+ * Last Panel of the game where final results of the game are shown
+ */
 public class EndGamePanel extends StandardPanel {
     public EndGamePanel() {
     }

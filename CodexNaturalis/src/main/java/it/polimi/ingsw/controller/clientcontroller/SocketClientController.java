@@ -139,8 +139,10 @@ public class SocketClientController implements ClientController {
 
     @Override
     public void exitFromLobby() throws RemoteException {
-        client.sendMessage(new Message(MessageType.EXIT_FROM_LOBBY, getCredentials(),null));
-        client.receiveMessage();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.EXIT_FROM_LOBBY, getCredentials(), null));
+            client.receiveMessage();
+        }
     }
 
     @Override
@@ -192,8 +194,10 @@ public class SocketClientController implements ClientController {
     }
 
     private boolean allPlayersHaveSetup(){
-        client.sendMessage(new Message(MessageType.ALL_PLAYERS_HAVE_SETUP,getCredentials(),null));
-        return (boolean) client.receiveMessage().getObj();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.ALL_PLAYERS_HAVE_SETUP, getCredentials(), null));
+            return (boolean) client.receiveMessage().getObj();
+        }
     }
 
     @Override
@@ -235,7 +239,9 @@ public class SocketClientController implements ClientController {
     public String getCurrentPlayerName() throws RemoteException {
         synchronized (this) {
             client.sendMessage(new Message(MessageType.GET_CURRENT_PLAYER_NAME, getCredentials(), null));
-            return client.receiveMessage().getObj().toString();
+            Message response = client.receiveMessage();
+            checkExceptionOnMessage(response);
+            return response.getObj().toString();
         }
     }
 
@@ -251,40 +257,52 @@ public class SocketClientController implements ClientController {
 
     @Override
     public PlayerSetupInfo getPlayerSetup() throws RemoteException {
-        client.sendMessage(new Message(MessageType.GET_PLAYER_SETUP,getCredentials(),null));
-        return (PlayerSetupInfo) client.receiveMessage().getObj();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.GET_PLAYER_SETUP, getCredentials(), null));
+            return (PlayerSetupInfo) client.receiveMessage().getObj();
+        }
     }
 
     @Override
     public List<ObjectiveInfo> getCommonObjectives() throws RemoteException {
-        client.sendMessage(new Message(MessageType.GET_COMMON_OBJECTIVES,getCredentials(),null));
-        return (List<ObjectiveInfo>) client.receiveMessage().getObj();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.GET_COMMON_OBJECTIVES, getCredentials(), null));
+            return (List<ObjectiveInfo>) client.receiveMessage().getObj();
+        }
     }
 
     @Override
     public ControlledPlayerInfo getControlledPlayerInformation() throws RemoteException {
         synchronized (this) {
             client.sendMessage(new Message(MessageType.GET_CONTROLLED_PLAYER_INFO, getCredentials(), null));
-            return (ControlledPlayerInfo) client.receiveMessage().getObj();
+            Message response = client.receiveMessage();
+            checkExceptionOnMessage(response);
+            return (ControlledPlayerInfo) response.getObj();
         }
     }
 
     @Override
     public OpponentInfo getOpponentInformation(String opponentName) throws RemoteException {
-        client.sendMessage(new Message(MessageType.GET_OPPONENT_INFORMATION,getCredentials(),opponentName));
-        return (OpponentInfo) client.receiveMessage().getObj();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.GET_OPPONENT_INFORMATION, getCredentials(), opponentName));
+            return (OpponentInfo) client.receiveMessage().getObj();
+        }
     }
 
     @Override
     public DrawableCardsInfo getDrawableCards() throws RemoteException {
-        client.sendMessage(new Message(MessageType.GET_DRAWABLE_CARDS,getCredentials(),null));
-        return (DrawableCardsInfo) client.receiveMessage().getObj();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.GET_DRAWABLE_CARDS, getCredentials(), null));
+            return (DrawableCardsInfo) client.receiveMessage().getObj();
+        }
     }
 
     @Override
     public boolean isLastTurn() throws RemoteException {
-        client.sendMessage(new Message(MessageType.IS_LAST_TURN,getCredentials(),null));
-        return (boolean) client.receiveMessage().getObj();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.IS_LAST_TURN, getCredentials(), null));
+            return (boolean) client.receiveMessage().getObj();
+        }
     }
 
     @Override
@@ -315,26 +333,37 @@ public class SocketClientController implements ClientController {
     @Override
     public void setPlayerSetup(ObjectiveInfo chosenObjective, CardOrientation initialCardSide) throws RemoteException {
         Tuple data = new Tuple(chosenObjective, initialCardSide);
-        client.sendMessage(new Message(MessageType.SET_PLAYER_SETUP,getCredentials(),data));
-        client.receiveMessage();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.SET_PLAYER_SETUP, getCredentials(), data));
+            client.receiveMessage();
+        }
     }
 
     @Override
     public void makeMove(CardInfo card, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException {
-        client.sendMessage(new Message(MessageType.MAKE_MOVE,getCredentials(),new MoveInfo(card,placementPoint,chosenSide,drawChoice)));
-        client.receiveMessage();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.MAKE_MOVE, getCredentials(), new MoveInfo(card, placementPoint, chosenSide, drawChoice)));
+            client.receiveMessage();
+        }
     }
 
     @Override
     public void exitGame() throws InvalidOperationException {
-        client.sendMessage(new Message(MessageType.EXIT_GAME,getCredentials(),null));
-        client.receiveMessage();
+        synchronized (this) {
+            client.sendMessage(new Message(MessageType.EXIT_GAME, getCredentials(), null));
+            client.receiveMessage();
+        }
     }
 
     @Override
     public boolean isWaitingInLobby() {
-        client.sendMessage(new Message(MessageType.GET_JOINED_LOBBY_INFO,getCredentials(),null));
-        return !(client.receiveMessage().getObj() instanceof Exception);
+        synchronized (this) {
+            try{
+                return getJoinedLobbyInfo() != null;
+            }catch(Exception e){
+                return false;
+            }
+        }
     }
 
     public void closeSocket() throws IOException {
@@ -343,8 +372,13 @@ public class SocketClientController implements ClientController {
 
     @Override
     public boolean isInGame() throws RemoteException{
-        client.sendMessage(new Message(MessageType.GET_CURRENT_PLAYER_NAME,getCredentials(),null));
-        Message returnedMessage = client.receiveMessage();
-        return !(returnedMessage.getObj() instanceof WrongPhaseException);
+        synchronized (this) {
+            try {
+                getCurrentPlayerName();
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        }
     }
 }

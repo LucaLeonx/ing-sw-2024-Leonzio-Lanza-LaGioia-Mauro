@@ -11,6 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
+/**
+ * This Panel lets players create a new Lobby with name and players and directly access it
+ */
 public class CreateNewLobbyPanel extends StandardPanel  {
     public CreateNewLobbyPanel() {
         buildPanel();
