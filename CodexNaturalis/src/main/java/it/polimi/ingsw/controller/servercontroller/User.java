@@ -26,6 +26,7 @@ public class User {
         this.username = nickname;
         status = UserStatus.LOBBY_CHOICE;
         joinedLobbyId = Optional.empty();
+        joinedGameId = Optional.empty();
     }
 
     public int generateNewPass(){
