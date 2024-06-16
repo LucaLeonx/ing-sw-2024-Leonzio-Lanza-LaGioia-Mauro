@@ -16,6 +16,9 @@ import static java.awt.GridBagConstraints.CENTER;
 import static java.awt.GridBagConstraints.LINE_END;
 import static java.lang.Thread.sleep;
 
+/**
+ * This Panel show all the existing lobbies and permits user to access them
+ */
 public class RegisterPanel extends StandardPanel {
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
     private final Map<String, Integer> lobbyById = new HashMap<String, Integer>();

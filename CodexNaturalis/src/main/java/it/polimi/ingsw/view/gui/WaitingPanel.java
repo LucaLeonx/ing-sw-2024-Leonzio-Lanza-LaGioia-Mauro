@@ -16,6 +16,9 @@ import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * In this Window players wait for other players to join the lobby
+ */
 public class WaitingPanel extends StandardPanel {
     private ExecutorService executor;
     private volatile boolean isCancelled;

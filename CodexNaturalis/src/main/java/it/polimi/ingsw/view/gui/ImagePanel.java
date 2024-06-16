@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.card.CardOrientation;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This Panel is the container of all the images of the cards of the game
+ */
 public class ImagePanel extends JPanel {
     private final JPanel cardPanel;
     private final CardLayout cardLayout;
