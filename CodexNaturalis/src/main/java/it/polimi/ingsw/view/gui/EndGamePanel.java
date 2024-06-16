@@ -80,7 +80,7 @@ public class EndGamePanel extends StandardPanel {
 
     }
 
-
+/*
     public static void main(String[] args) {
         JFrame frame = new JFrame("Leaderboard");
         EndGamePanel panel = new EndGamePanel();
@@ -90,6 +90,7 @@ public class EndGamePanel extends StandardPanel {
         frame.setSize(400, 400);
         frame.setVisible(true);
     }
+ */
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
