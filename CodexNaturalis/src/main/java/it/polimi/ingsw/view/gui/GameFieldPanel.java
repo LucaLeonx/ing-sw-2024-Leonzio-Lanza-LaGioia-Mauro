@@ -23,6 +23,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -45,7 +46,7 @@ public class GameFieldPanel extends StandardPanel {
     private ObjectiveInfo secretObjective;
     private final JButton chooseWhereDraw = new JButton("Choose Draw");
     private JLabel choosenDrawLabel = new JLabel("Choosen Draw: ");
-    private DrawChoice lastDrawChoice = DrawChoice.DECK_RESOURCE;
+    private Optional<DrawChoice> lastDrawChoice = Optional.empty();
     private boolean unlock = false;
     private ExecutorService executor;
 
@@ -157,7 +158,7 @@ public class GameFieldPanel extends StandardPanel {
 
                         map.resetLastValues();//??
 
-                        lastDrawChoice = null;
+                        lastDrawChoice = Optional.empty();
 
                         //Deck and Hand update
                         this.remove(rightInfo);
@@ -495,43 +496,43 @@ public class GameFieldPanel extends StandardPanel {
 
         resourceCardsDeck.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                lastDrawChoice = DrawChoice.DECK_RESOURCE;
-                choosenDrawLabel.setText("Selected " + DrawChoice.DECK_RESOURCE);
+                lastDrawChoice = Optional.of(DrawChoice.DECK_RESOURCE);
+                choosenDrawLabel.setText("Selected: " + DrawChoice.DECK_RESOURCE);
             }
         });
 
         resourceCard1.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                lastDrawChoice = DrawChoice.RESOURCE_CARD_1;
-                choosenDrawLabel.setText("Selected " + DrawChoice.RESOURCE_CARD_1);
+                lastDrawChoice = Optional.of(DrawChoice.RESOURCE_CARD_1);
+                choosenDrawLabel.setText("Selected: " + DrawChoice.RESOURCE_CARD_1);
             }
         });
 
         resourceCard2.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                lastDrawChoice = DrawChoice.RESOURCE_CARD_2;
-                choosenDrawLabel.setText("Selected " + DrawChoice.RESOURCE_CARD_2);
+                lastDrawChoice = Optional.of(DrawChoice.RESOURCE_CARD_2);
+                choosenDrawLabel.setText("Selected: " + DrawChoice.RESOURCE_CARD_2);
             }
         });
 
         goldCardsDeck.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                lastDrawChoice = DrawChoice.DECK_GOLD;
-                choosenDrawLabel.setText("Selected " + DrawChoice.DECK_GOLD);
+                lastDrawChoice = Optional.of(DrawChoice.DECK_GOLD);
+                choosenDrawLabel.setText("Selected: " + DrawChoice.DECK_GOLD);
             }
         });
 
         goldCard1.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                lastDrawChoice = DrawChoice.GOLD_CARD_1;
-                choosenDrawLabel.setText("Selected " + DrawChoice.GOLD_CARD_1);
+                lastDrawChoice = Optional.of(DrawChoice.GOLD_CARD_1);
+                choosenDrawLabel.setText("Selected: " + DrawChoice.GOLD_CARD_1);
             }
         });
 
         goldCard2.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                lastDrawChoice = DrawChoice.GOLD_CARD_2;
-                choosenDrawLabel.setText("Selected " + DrawChoice.GOLD_CARD_2);
+                lastDrawChoice = Optional.of(DrawChoice.GOLD_CARD_2);
+                choosenDrawLabel.setText("Selected: " + DrawChoice.GOLD_CARD_2);
             }
         });
 
@@ -683,7 +684,8 @@ public class GameFieldPanel extends StandardPanel {
 
         chooseWhereDraw.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                unlock = true;
+                if(lastDrawChoice.isPresent())
+                    unlock = true;
             }
         });
 
@@ -691,8 +693,10 @@ public class GameFieldPanel extends StandardPanel {
             Thread.sleep(1000);
         }
 
-        dC = lastDrawChoice;
+        dC = lastDrawChoice.get();
         unlock = false;
+        lastDrawChoice = Optional.empty();
+        choosenDrawLabel.setText("Selected: ");
         choosenDrawLabel.setVisible(false);
         chooseWhereDraw.setVisible(false);
         isYourTurn.setVisible(true);
