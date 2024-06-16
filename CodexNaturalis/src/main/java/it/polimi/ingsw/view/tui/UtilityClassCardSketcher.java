@@ -78,6 +78,11 @@ public final class UtilityClassCardSketcher {
         return  cardSketched;
     }
 
+    /**
+     * Used to sketch a card of the type resource
+     * @param card
+     * @return
+     */
     public static String[][] sketchResourceCard(CardSideInfo card) {
         String[][] cardSketched = new String[3][5];
         cardSketched=sketchBackground(card.color());
@@ -121,8 +126,11 @@ public final class UtilityClassCardSketcher {
         return cardSketched;
     }
 
-
-
+    /**
+     * Used to sketch a card of type gold
+     * @param card
+     * @return
+     */
     public static String[][] sketchGoldenCard(CardSideInfo card) {
         String[][] cardSketched = new String[3][5];
         cardSketched=sketchResourceCard(card); // Golden card doesn't differ from Golden Card In terms of angles
@@ -181,9 +189,11 @@ public final class UtilityClassCardSketcher {
     }
 
 
-
-
-
+    /**
+     * Used to sketch a card of the type objectiveCard
+     * @param card
+     * @return
+     */
 
     public static String[][] sketchObjectiveCard(ObjectiveInfo card){
         String[][] cardSketched = new String[3][5];
@@ -293,6 +303,11 @@ public final class UtilityClassCardSketcher {
         return cardSketched;
     }
 
+    /**
+     * Used to sketch the back of the card that is on the top of the deck that contains card of the type gold
+     * @param colorDeck we don't need the whole card, just the color of the topmost card in the gold deck
+     * @return
+     */
     public static String[][] sketchGoldenDeck(CardColor colorDeck){
         String[][] goldenDeck = new String[3][5];
         goldenDeck=sketchBackground(colorDeck);
@@ -305,6 +320,11 @@ public final class UtilityClassCardSketcher {
         return goldenDeck;
     }
 
+    /**
+     * Used to sketch the back of the card that is on the top of the deck that contains card of the type resource
+     * @param colorDeck we don't need the whole card, just the color of the topmost card in the gold deck
+     * @return
+     */
     public static String[][] sketchResourceDeck(CardColor colorDeck){
         String[][] resourceDeck = new String[3][5];
         resourceDeck=sketchBackground(colorDeck);
@@ -313,6 +333,11 @@ public final class UtilityClassCardSketcher {
         return resourceDeck;
     }
 
+    /**
+     * Helper method used to represent the blank spaces in the corner of the card to sketch
+     * @param sketchedCard matrix of the card sketched since now that we need to add the white blank spaces
+     * @return
+     */
     public static String[][] addBlankAngles(String[][] sketchedCard) {
         sketchedCard[0][0]=Symbol_String.WHITE_SQUARE_SYMBOL;
         sketchedCard[0][4]=Symbol_String.WHITE_SQUARE_SYMBOL;
@@ -321,6 +346,12 @@ public final class UtilityClassCardSketcher {
         return sketchedCard;
     }
 
+    /**
+     * Helper method use to sketch the central symbol in a card
+      * @param sketchedCard : matrix representing the card sketched since now
+     * @param color : color of the card sketched since now passed in this method to add the central symbol
+     * @return
+     */
     public static String[][] addCentralSymbol(String[][] sketchedCard,CardColor color){
         String symbol = Symbol_String.BLACK_SQUARE_SYMBOL;
         switch (color){
