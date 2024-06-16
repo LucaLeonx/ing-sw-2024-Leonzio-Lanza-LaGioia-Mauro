@@ -72,7 +72,6 @@ public class WaitingPanel extends StandardPanel {
         super.paintComponent(g);
         Image image = null;
         try {
-            //  image = new ImageIcon(Objects.requireNonNull(getClass().getResource("codex_game.jpg"))).getImage();
             image = new ImageIcon("src/main/resources/other_images/lobbyScreen.jpg").getImage();
         }
         catch (Exception e){

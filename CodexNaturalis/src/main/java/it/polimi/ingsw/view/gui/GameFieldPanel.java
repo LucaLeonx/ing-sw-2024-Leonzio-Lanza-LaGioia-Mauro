@@ -6,6 +6,7 @@ import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidPa
 import it.polimi.ingsw.dataobject.CardInfo;
 import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
 import it.polimi.ingsw.dataobject.DrawableCardsInfo;
+import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.card.Symbol;
@@ -27,28 +28,34 @@ import java.util.concurrent.Executors;
 
 public class GameFieldPanel extends StandardPanel {
 
+    private final Color beige = new Color(238,217,196); // RGB values
     private ClientController controller;
     private MapPanel map;
-    private final JLabel isYourTurn = new JLabel("Is your turn");
-    private final JLabel waitingForOther = new JLabel("Waiting for other players to make their move");
-    private final JLabel isLastTurn = new JLabel("\"ATTENTION: IT IS YOUR LAST TURN!!\"");
-    private final JLabel cannotPlaceThisCard = new JLabel("\"ATTENTION: YOU CANNOT PLACE THIS CARD!!!!\"");
+    private final JLabel isYourTurn = new JLabel("Your turn");
+    private final JLabel waitingForOther = new JLabel("Not your turn");
+    private JLabel isLastTurn = new JLabel("\"LAST TURN!\"");
+    private JLabel cannotPlaceThisCard = new JLabel("\"INVALID MOVE!\"");
     private final JButton placeCardButton = new JButton("Place card");
     private int id;
     private CardOrientation orientation;
     private ArrayList<CardInfo> cardsInHands;
+    private ObjectiveInfo secretObjective;
     private final JButton chooseWhereDraw = new JButton("Choose Draw");
     private JLabel choosenDrawLabel = new JLabel("Choosen Draw: ");
     private DrawChoice lastDrawChoice = DrawChoice.DECK_RESOURCE;
     private boolean unlock = false;
     private ExecutorService executor;
 
-    public GameFieldPanel(){   }
+    public GameFieldPanel(){
+
+    }
 
     public void buildPanel() throws RemoteException {
         removeAll();
         revalidate();
         repaint();
+        cannotPlaceThisCard.setForeground(Color.RED);
+        isLastTurn.setForeground(Color.RED);
         this.setLayout(new BorderLayout());
         this.setSize(1600,1100);
         JPanel otherPlayers = newOtherPlayers();
@@ -186,14 +193,17 @@ public class GameFieldPanel extends StandardPanel {
         host.setLayout(new GridBagLayout());
         cardsInHands = new ArrayList<>();
 
+
         try {
             cardsInHands = MainWindow.getClientController().getControlledPlayerInformation().cardsInHand();
+            secretObjective = MainWindow.getClientController().getControlledPlayerInformation().secretObjective();
         } catch (Exception e) {
             System.out.println(e);
         }
         ImagePanel firstcard = new ImagePanel(cardsInHands.get(0).id());
         ImagePanel secondcard = new ImagePanel(cardsInHands.get(1).id());
         ImagePanel thirdcard = new ImagePanel(cardsInHands.get(2).id());
+        ImagePanel fourthCard= new ImagePanel(secretObjective.id());
         JButton rotateFirstCard = new JButton("Rotate this card");
         JButton rotateSecondCard = new JButton("Rotate this card");
         JButton rotateThirdCard = new JButton("Rotate this card");
@@ -214,6 +224,8 @@ public class GameFieldPanel extends StandardPanel {
         labelPane.add(this.isYourTurn);
         labelPane.add(this.waitingForOther);
         labelPane.add(this.cannotPlaceThisCard);
+
+        labelPane.setBackground(beige);
 
         placeCardButton.setVisible(false);
         labelPane.add(placeCardButton);
@@ -331,6 +343,10 @@ public class GameFieldPanel extends StandardPanel {
         gbc.gridy=2;
         host.add(rotateThirdCard, gbc);
 
+        gbc.gridx=3;
+        gbc.gridy=1;
+        host.add(fourthCard, gbc);
+
         labelPane.setPreferredSize(new Dimension(200, 60));
 
         gbc.gridy=1;
@@ -350,6 +366,8 @@ public class GameFieldPanel extends StandardPanel {
         gbc.gridx=2;
         host.add(shownCard3, gbc);
 
+        host.setBackground(beige);
+
         this.repaint();
         this.revalidate();
         return host;
@@ -367,11 +385,8 @@ public class GameFieldPanel extends StandardPanel {
             List<String> PlayerNames = MainWindow.getClientController().getPlayerNames();
             String currentPlayerName = MainWindow.getClientController().getControlledPlayerInformation().nickname();
 
-            System.out.println("Current player name: " + currentPlayerName);
-            System.out.println("Leaderboard size: " + PlayerNames.size());
 
             for (String playerName : PlayerNames) {
-                System.out.println("Checking player: " + playerName);
                 if (!playerName.equals(currentPlayerName)) {
                     JButton playerButton = new JButton(playerName);
                     playerButton.addActionListener(new ActionListener() {
@@ -381,7 +396,6 @@ public class GameFieldPanel extends StandardPanel {
                         }
                     });
                     playerButtons.add(playerButton);
-                    System.out.println("Added button for player: " + playerName);
                 }
             }
         } catch (Exception e) {
@@ -401,9 +415,11 @@ public class GameFieldPanel extends StandardPanel {
     }
 
     private JPanel newInfo(){
+        int j=0;
         JPanel info = new JPanel();
         info.setLayout(new GridBagLayout());
 
+        /*
         HashMap<Symbol, Integer> symbolCounter= new HashMap<>();
 
         JLabel insectPoints= new JLabel();
@@ -412,7 +428,10 @@ public class GameFieldPanel extends StandardPanel {
         JLabel plantPoints= new JLabel();
         JLabel inkwellPoints = new JLabel();
         JLabel manuscriptPoints = new JLabel();
-        JLabel quillPoints = new JLabel();
+        JLabel quillPoints = new JLabel(); */
+
+        List<JLabel> playerPoints = new ArrayList<>();
+        List<String> playerNames = new ArrayList<>();
 
         int resourceCardsDeckId;
         int resourceCard1Id;
@@ -420,9 +439,14 @@ public class GameFieldPanel extends StandardPanel {
         int goldCardsDeckId;
         int goldCard1Id;
         int goldCard2Id;
+        int commonObjective1Id;
+        int commonObjective2Id;
+
 
         try {
-            symbolCounter= MainWindow.getClientController().getControlledPlayerInformation().field().symbolCounterMap();
+            //symbolCounter= MainWindow.getClientController().getControlledPlayerInformation().field().symbolCounterMap();
+            playerNames = MainWindow.getClientController().getPlayerNames();
+
             resourceCardsDeckId = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.DECK_RESOURCE).id();
             resourceCard1Id = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.RESOURCE_CARD_1).id();
             resourceCard2Id = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.RESOURCE_CARD_2).id();
@@ -430,18 +454,20 @@ public class GameFieldPanel extends StandardPanel {
             goldCardsDeckId = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.DECK_GOLD).id();
             goldCard1Id = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.GOLD_CARD_1).id();
             goldCard2Id= MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.GOLD_CARD_2).id();
+            commonObjective1Id=MainWindow.getClientController().getCommonObjectives().get(0).id();
+            commonObjective2Id=MainWindow.getClientController().getCommonObjectives().get(1).id();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        insectPoints.setText(Symbol_String.INSECT_SYMBOL + symbolCounter.get(Symbol.INSECT).toString());
+        /*insectPoints.setText(Symbol_String.INSECT_SYMBOL + symbolCounter.get(Symbol.INSECT).toString());
         animalPoints.setText(Symbol_String.ANIMAL_SYMBOL +symbolCounter.get(Symbol.ANIMAL).toString());
         fungiPoints.setText(Symbol_String.FUNGI_SYMBOL + symbolCounter.get(Symbol.FUNGI).toString());
         plantPoints.setText(Symbol_String.PLANT_SYMBOL + symbolCounter.get(Symbol.PLANT).toString());
         inkwellPoints.setText(Symbol_String.INKWELL_SYMBOL + symbolCounter.get(Symbol.INKWELL).toString());
         manuscriptPoints.setText(Symbol_String.MANUSCRIPT_SYMBOL + symbolCounter.get(Symbol.MANUSCRIPT).toString());
-        quillPoints.setText(Symbol_String.QUILL_SYMBOL + symbolCounter.get(Symbol.QUILL).toString());
+        quillPoints.setText(Symbol_String.QUILL_SYMBOL + symbolCounter.get(Symbol.QUILL).toString());*/
 
         ImagePanel resourceCardsDeck = new ImagePanel(resourceCardsDeckId);
         resourceCardsDeck.changeSide();
@@ -451,56 +477,59 @@ public class GameFieldPanel extends StandardPanel {
         goldCardsDeck.changeSide();
         ImagePanel goldCard1 = new ImagePanel(goldCard1Id);
         ImagePanel goldCard2 = new ImagePanel(goldCard2Id);
+        ImagePanel commonObjective1 = new ImagePanel(commonObjective1Id);
+        ImagePanel commonObjective2 = new ImagePanel(commonObjective2Id);
 
         JLabel deckLabel = new JLabel("Drawable Decks:\n");
         JLabel resourceLabel = new JLabel("Resource Cards:\n");
         JLabel goldLabel= new JLabel("Gold Cards: \n");
+        JLabel objectiveLabel= new JLabel("Objective Cards: \n");
 
         resourceCardsDeck.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 lastDrawChoice = DrawChoice.DECK_RESOURCE;
-                choosenDrawLabel.setText("Selected" + DrawChoice.DECK_RESOURCE);
+                choosenDrawLabel.setText("Selected " + DrawChoice.DECK_RESOURCE);
             }
         });
 
         resourceCard1.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 lastDrawChoice = DrawChoice.RESOURCE_CARD_1;
-                choosenDrawLabel.setText("Selected" + DrawChoice.RESOURCE_CARD_1);
+                choosenDrawLabel.setText("Selected " + DrawChoice.RESOURCE_CARD_1);
             }
         });
 
         resourceCard2.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 lastDrawChoice = DrawChoice.RESOURCE_CARD_2;
-                choosenDrawLabel.setText("Selected" + DrawChoice.RESOURCE_CARD_2);
+                choosenDrawLabel.setText("Selected " + DrawChoice.RESOURCE_CARD_2);
             }
         });
 
         goldCardsDeck.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 lastDrawChoice = DrawChoice.DECK_GOLD;
-                choosenDrawLabel.setText("Selected" + DrawChoice.DECK_GOLD);
+                choosenDrawLabel.setText("Selected " + DrawChoice.DECK_GOLD);
             }
         });
 
         goldCard1.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 lastDrawChoice = DrawChoice.GOLD_CARD_1;
-                choosenDrawLabel.setText("Selected" + DrawChoice.GOLD_CARD_1);
+                choosenDrawLabel.setText("Selected " + DrawChoice.GOLD_CARD_1);
             }
         });
 
         goldCard2.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 lastDrawChoice = DrawChoice.GOLD_CARD_2;
-                choosenDrawLabel.setText("Selected" + DrawChoice.GOLD_CARD_2);
+                choosenDrawLabel.setText("Selected " + DrawChoice.GOLD_CARD_2);
             }
         });
 
         GridBagConstraints gbc= new GridBagConstraints();
 
-        gbc.gridx=0;
+        /*gbc.gridx=0;
         gbc.gridy=0;
         info.add(insectPoints, gbc);
 
@@ -521,47 +550,79 @@ public class GameFieldPanel extends StandardPanel {
         info.add(manuscriptPoints, gbc);
 
         gbc.gridx=2;
-        info.add(quillPoints, gbc);
+        info.add(quillPoints, gbc);*/
+        gbc.gridy=0;
+        gbc.gridx=0;
 
-        gbc.insets = new Insets(5, 5, 5, 5); // Padding of 5 pixels on all sides
+        JLabel scoreboard = new JLabel("SCOREBOARD:");
+        scoreboard.setFont(new Font("Arial", Font.BOLD, 16));
+        scoreboard.setForeground(Color.BLUE);
+        scoreboard.setHorizontalAlignment(SwingConstants.CENTER);
+        gbc.gridy=0;
+        info.add(scoreboard, gbc);
+        for(j=0;j<playerNames.size(); j++){
+            try {
+                JLabel player = new JLabel(playerNames.get(j) + " has " + MainWindow.getClientController().getOpponentInformation(playerNames.get(j)).score() + " points");
+                gbc.gridy=j+1;
+                player.setHorizontalAlignment(SwingConstants.CENTER);
+                info.add(player, gbc);
+            }
+            catch(RemoteException e){
+                System.out.println(e.getMessage());
+            }
+        }
 
         gbc.gridwidth=2;
 
-        gbc.gridy = 2;
+        j=j+10;
+        gbc.gridy = 0+j;
         gbc.gridx = 0;
         info.add(deckLabel, gbc);
 
-        gbc.gridy=3;
+        gbc.insets = new Insets(5, 5, 5, 5); // Padding of 5 pixels on all sides
+
+        gbc.gridy=1+j;
         gbc.gridx=0;
         info.add(resourceCardsDeck, gbc);
 
         gbc.gridx=2;
         info.add(goldCardsDeck, gbc);
 
-        gbc.gridy = 4;
+        gbc.gridy = 2+j;
         gbc.gridx = 0;
         info.add(resourceLabel, gbc);
 
-        gbc.gridy=5;
+        gbc.gridy=3+j;
         gbc.gridx=0;
         info.add(resourceCard1, gbc);
 
         gbc.gridx=2;
         info.add(resourceCard2, gbc);
 
-        gbc.gridy = 6;
+        gbc.gridy = 4+j;
         gbc.gridx = 0;
         info.add(goldLabel, gbc);
 
-        gbc.gridy = 7;
+        gbc.gridy = 5+j;
         gbc.gridx = 0;
         info.add(goldCard1, gbc);
 
         gbc.gridx=2;
         info.add(goldCard2, gbc);
 
+        gbc.gridy = 6+j;
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        info.add(objectiveLabel, gbc);
+
+        gbc.gridy = 7+j;
+        gbc.gridx = 0;
+        info.add(commonObjective1, gbc);
+
+        gbc.gridx=2;
+        info.add(commonObjective2, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 8+j;
         gbc.gridwidth=5;
         info.add(chooseWhereDraw, gbc);
 
@@ -569,11 +630,17 @@ public class GameFieldPanel extends StandardPanel {
         choosenDrawLabel.setMinimumSize(new Dimension(200,20));
         choosenDrawLabel.setMaximumSize(new Dimension(200,20));*/
 
-        gbc.gridy = 9;
+        gbc.gridy = 9+j;
         info.add(choosenDrawLabel, gbc);
 
         choosenDrawLabel.setVisible(false);
         chooseWhereDraw.setVisible(false);
+        // Set the background color of the panel
+
+        info.setBackground(beige);
+
+        // Make the frame visible
+        info.setVisible(true);
 
         this.repaint();
         this.revalidate();

@@ -23,6 +23,7 @@ import java.util.concurrent.Executors;
 import static java.lang.Thread.sleep;
 
 public class SetUpGamePanel extends StandardPanel {
+    private final Color beige = new Color(238,217,196); // RGB values
     ExecutorService executor;
     ObjectiveInfo choosenObjective;
     CardOrientation choosenOrientation;
@@ -67,9 +68,7 @@ public class SetUpGamePanel extends StandardPanel {
                     }
                 }
             }
-            System.out.println("I have both initial choice obj id: " + choosenObjective.id() + " choice of initial card: " + choosenOrientation.toString());
             MainWindow.getClientController().waitForSetupFinished();
-            System.out.println("i should go to game field panel");
             MainWindow.goToWindow("gameFieldPanel");
             try {
                 MainWindow.gameFieldPanel.buildPanel();
@@ -96,7 +95,7 @@ public class SetUpGamePanel extends StandardPanel {
         ImagePanel secondcard = new ImagePanel(cardsInHands.get(1).id());
         ImagePanel thirdcard = new ImagePanel(cardsInHands.get(2).id());
 
-        JButton logout= new JButton("Exit and logout");
+        /*JButton logout= new JButton("Exit and logout");
         JButton goBack= new JButton("Go Back");
 
         JPanel buttonPanel = new JPanel();
@@ -104,7 +103,7 @@ public class SetUpGamePanel extends StandardPanel {
         logout.setAlignmentX(CENTER_ALIGNMENT);
         goBack.setAlignmentX(CENTER_ALIGNMENT);
         buttonPanel.add(logout);
-        buttonPanel.add(goBack);
+        buttonPanel.add(goBack);*/
 
         firstcard.addMouseListener( new MouseAdapter() {
             @Override
@@ -147,7 +146,7 @@ public class SetUpGamePanel extends StandardPanel {
             }
         });*/
 
-        goBack.addActionListener(new ActionListener() {
+        /*goBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 executor.shutdownNow();
@@ -160,7 +159,7 @@ public class SetUpGamePanel extends StandardPanel {
                 }
                 buildPanel();
             }
-        });
+        });*/
 
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -178,7 +177,9 @@ public class SetUpGamePanel extends StandardPanel {
         host.add(thirdcard, gbc);
 
         gbc.gridx=4;
-        host.add(buttonPanel, gbc);
+        //host.add(buttonPanel, gbc);
+
+        host.setBackground(beige);
 
 
         return host;
@@ -186,8 +187,10 @@ public class SetUpGamePanel extends StandardPanel {
 
 
     private JPanel newInfo(){
+        int j=0;
         JPanel info = new JPanel();
         info.setLayout(new GridBagLayout());
+
 
         int resourceCardsDeckId;
         int resourceCard1Id;
@@ -195,6 +198,9 @@ public class SetUpGamePanel extends StandardPanel {
         int goldCardsDeckId;
         int goldCard1Id;
         int goldCard2Id;
+        int commonObjective1Id;
+        int commonObjective2Id;
+
 
         try {
             resourceCardsDeckId = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.DECK_RESOURCE).id();
@@ -204,6 +210,8 @@ public class SetUpGamePanel extends StandardPanel {
             goldCardsDeckId = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.DECK_GOLD).id();
             goldCard1Id = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.GOLD_CARD_1).id();
             goldCard2Id= MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.GOLD_CARD_2).id();
+            commonObjective1Id=MainWindow.getClientController().getCommonObjectives().get(0).id();
+            commonObjective2Id=MainWindow.getClientController().getCommonObjectives().get(1).id();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -217,39 +225,74 @@ public class SetUpGamePanel extends StandardPanel {
         goldCardsDeck.changeSide();
         ImagePanel goldCard1 = new ImagePanel(goldCard1Id);
         ImagePanel goldCard2 = new ImagePanel(goldCard2Id);
+        ImagePanel commonObjective1 = new ImagePanel(commonObjective1Id);
+        ImagePanel commonObjective2 = new ImagePanel(commonObjective2Id);
+
+        JLabel deckLabel = new JLabel("Drawable Decks:\n");
+        JLabel resourceLabel = new JLabel("Resource Cards:\n");
+        JLabel goldLabel= new JLabel("Gold Cards: \n");
+        JLabel objectiveLabel= new JLabel("Objective Cards: \n");
 
         GridBagConstraints gbc= new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+
+
+        gbc.insets = new Insets(5, 5, 5, 5); // Padding of 5 pixels on all sides
+
         gbc.gridwidth=2;
 
-        gbc.gridy=3;
+
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        info.add(deckLabel, gbc);
+
+        gbc.gridy=1;
         gbc.gridx=0;
         info.add(resourceCardsDeck, gbc);
 
         gbc.gridx=2;
         info.add(goldCardsDeck, gbc);
 
-        gbc.gridy=5;
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        info.add(resourceLabel, gbc);
+
+        gbc.gridy=3;
         gbc.gridx=0;
         info.add(resourceCard1, gbc);
 
         gbc.gridx=2;
-        info.add(goldCard1, gbc);
-
-        gbc.gridy=6;
-        gbc.gridx=0;
         info.add(resourceCard2, gbc);
+
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        info.add(goldLabel, gbc);
+
+        gbc.gridy = 5;
+        gbc.gridx = 0;
+        info.add(goldCard1, gbc);
 
         gbc.gridx=2;
         info.add(goldCard2, gbc);
 
+        gbc.gridy = 6;
+        gbc.gridx = 0;
+        info.add(objectiveLabel, gbc);
+
+        gbc.gridy = 7;
+        gbc.gridx = 0;
+        info.add(commonObjective1, gbc);
+
+        gbc.gridx=2;
+        info.add(commonObjective2, gbc);
+
+        info.setBackground(beige);
+
+        // Make the frame visible
+        info.setVisible(true);
+
+        this.repaint();
+        this.revalidate();
         return info;
-    }
-
-    private JPanel newChat(){
-        JPanel player4 = new JPanel();
-
-        return player4;
     }
 
     private JPanel newSetupGame(){
@@ -372,5 +415,10 @@ public class SetUpGamePanel extends StandardPanel {
         setupGame.add(initialChoosen, gbc);
 
         return setupGame;
+    }
+
+    private JPanel newChat(){
+        JPanel chat= new JPanel();
+        return chat;
     }
 }
