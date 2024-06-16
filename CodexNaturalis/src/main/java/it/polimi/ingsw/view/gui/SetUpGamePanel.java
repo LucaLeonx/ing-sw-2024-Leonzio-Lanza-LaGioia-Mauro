@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 import static java.lang.Thread.sleep;
 
 public class SetUpGamePanel extends StandardPanel {
-    private final Color beige = new Color(238,217,196); // RGB values
+    private final Color gray = new Color(220,220,220); // RGB values
     ExecutorService executor;
     ObjectiveInfo choosenObjective;
     CardOrientation choosenOrientation;
@@ -179,7 +179,7 @@ public class SetUpGamePanel extends StandardPanel {
         gbc.gridx=4;
         //host.add(buttonPanel, gbc);
 
-        host.setBackground(beige);
+        host.setBackground(gray);
 
 
         return host;
@@ -232,6 +232,9 @@ public class SetUpGamePanel extends StandardPanel {
         JLabel resourceLabel = new JLabel("Resource Cards:\n");
         JLabel goldLabel= new JLabel("Gold Cards: \n");
         JLabel objectiveLabel= new JLabel("Objective Cards: \n");
+        JLabel splitter = new JLabel("\n\n\n\n\n\n\n\n\n\n");
+        splitter.setForeground(gray);
+
 
         GridBagConstraints gbc= new GridBagConstraints();
 
@@ -276,16 +279,20 @@ public class SetUpGamePanel extends StandardPanel {
 
         gbc.gridy = 6;
         gbc.gridx = 0;
-        info.add(objectiveLabel, gbc);
+        info.add(splitter, gbc);
 
         gbc.gridy = 7;
+        gbc.gridx = 0;
+        info.add(objectiveLabel, gbc);
+
+        gbc.gridy = 8;
         gbc.gridx = 0;
         info.add(commonObjective1, gbc);
 
         gbc.gridx=2;
         info.add(commonObjective2, gbc);
 
-        info.setBackground(beige);
+        info.setBackground(gray);
 
         // Make the frame visible
         info.setVisible(true);

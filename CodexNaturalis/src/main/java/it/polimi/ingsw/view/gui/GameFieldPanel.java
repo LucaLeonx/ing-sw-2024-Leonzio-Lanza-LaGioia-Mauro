@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
 
 public class GameFieldPanel extends StandardPanel {
 
-    private final Color beige = new Color(238,217,196); // RGB values
+    private final Color gray = new Color(220,220,220); // RGB values
     private ClientController controller;
     private MapPanel map;
     private final JLabel isYourTurn = new JLabel("Your turn");
@@ -225,7 +225,7 @@ public class GameFieldPanel extends StandardPanel {
         labelPane.add(this.waitingForOther);
         labelPane.add(this.cannotPlaceThisCard);
 
-        labelPane.setBackground(beige);
+        labelPane.setBackground(gray);
 
         placeCardButton.setVisible(false);
         labelPane.add(placeCardButton);
@@ -366,7 +366,7 @@ public class GameFieldPanel extends StandardPanel {
         gbc.gridx=2;
         host.add(shownCard3, gbc);
 
-        host.setBackground(beige);
+        host.setBackground(gray);
 
         this.repaint();
         this.revalidate();
@@ -484,6 +484,11 @@ public class GameFieldPanel extends StandardPanel {
         JLabel resourceLabel = new JLabel("Resource Cards:\n");
         JLabel goldLabel= new JLabel("Gold Cards: \n");
         JLabel objectiveLabel= new JLabel("Objective Cards: \n");
+        JLabel splitter = new JLabel("\n\n\n\n\n\n\n\n\n\n");
+        JLabel splitter1 = new JLabel("\n\n\n\n\n\n\n\n\n\n");
+        JLabel splitter2 = new JLabel("\n\n\n\n\n\n\n\n\n\n");
+        splitter.setForeground(gray);
+        splitter1.setForeground(gray);
 
         resourceCardsDeck.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -554,7 +559,7 @@ public class GameFieldPanel extends StandardPanel {
 
         JLabel scoreboard = new JLabel("SCOREBOARD:");
         scoreboard.setFont(new Font("Arial", Font.BOLD, 16));
-        scoreboard.setForeground(Color.BLUE);
+        scoreboard.setForeground(Color.gray);
         scoreboard.setHorizontalAlignment(SwingConstants.CENTER);
 
         gbc.gridwidth=4;
@@ -564,6 +569,7 @@ public class GameFieldPanel extends StandardPanel {
                 JLabel player = new JLabel(playerNames.get(j) + " has " + MainWindow.getClientController().getOpponentInformation(playerNames.get(j)).score() + " points");
                 gbc.gridy=j+1;
                 player.setHorizontalAlignment(SwingConstants.CENTER);
+                player.setForeground(Color.gray);
                 info.add(player, gbc);
             }
             catch(RemoteException e){
@@ -576,47 +582,63 @@ public class GameFieldPanel extends StandardPanel {
         info.add(scoreboard, gbc);
 
         gbc.gridwidth=2;
+
+
+
         gbc.insets = new Insets(5, 5, 5, 5); // Padding of 5 pixels on all sides
 
         j=j+5;
         gbc.gridy=0+j;
         gbc.gridx=0;
-        info.add(deckLabel, gbc);
+        info.add(splitter1, gbc);
 
         gbc.gridy=1+j;
+        gbc.gridx=0;
+        info.add(splitter2, gbc);
+
+
+        gbc.gridy=2+j;
+        gbc.gridx=0;
+        info.add(deckLabel, gbc);
+
+        gbc.gridy=3+j;
         gbc.gridx=0;
         info.add(resourceCardsDeck, gbc);
 
         gbc.gridx=2;
         info.add(goldCardsDeck, gbc);
 
-        gbc.gridy = 2+j;
+        gbc.gridy = 4+j;
         gbc.gridx = 0;
         info.add(resourceLabel, gbc);
 
-        gbc.gridy=3+j;
+        gbc.gridy=5+j;
         gbc.gridx=0;
         info.add(resourceCard1, gbc);
 
         gbc.gridx=2;
         info.add(resourceCard2, gbc);
 
-        gbc.gridy = 4+j;
+        gbc.gridy = 6+j;
         gbc.gridx = 0;
         info.add(goldLabel, gbc);
 
-        gbc.gridy = 5+j;
+        gbc.gridy = 7+j;
         gbc.gridx = 0;
         info.add(goldCard1, gbc);
 
         gbc.gridx=2;
         info.add(goldCard2, gbc);
 
-        gbc.gridy = 6+j;
+        gbc.gridy=8+j;
+        gbc.gridx=0;
+        info.add(splitter, gbc);
+
+        gbc.gridy = 9+j;
         gbc.gridx = 0;
         info.add(objectiveLabel, gbc);
 
-        gbc.gridy = 7+j;
+        gbc.gridy = 10+j;
         gbc.gridx = 0;
         info.add(commonObjective1, gbc);
 
@@ -624,7 +646,7 @@ public class GameFieldPanel extends StandardPanel {
         info.add(commonObjective2, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 8+j;
+        gbc.gridy = 11+j;
         gbc.gridwidth=5;
         info.add(chooseWhereDraw, gbc);
 
@@ -632,14 +654,14 @@ public class GameFieldPanel extends StandardPanel {
         choosenDrawLabel.setMinimumSize(new Dimension(200,20));
         choosenDrawLabel.setMaximumSize(new Dimension(200,20));*/
 
-        gbc.gridy = 9+j;
+        gbc.gridy = 12+j;
         info.add(choosenDrawLabel, gbc);
 
         choosenDrawLabel.setVisible(false);
         chooseWhereDraw.setVisible(false);
         // Set the background color of the panel
 
-        info.setBackground(beige);
+        info.setBackground(gray);
 
         // Make the frame visible
         info.setVisible(true);

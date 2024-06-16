@@ -1,10 +1,14 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.dataobject.CardInfo;
 import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
 import it.polimi.ingsw.dataobject.ObjectiveInfo;
+import it.polimi.ingsw.model.DrawChoice;
+import it.polimi.ingsw.model.map.Point;
 import it.polimi.ingsw.model.player.PlayerColor;
 
 import javax.swing.*;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +81,22 @@ public class EndGamePanel extends StandardPanel {
             add(player, gbc);
         }
 
+        new Thread(() -> {
+            try {
+                // Wait for 5 seconds (5000 milliseconds)
+                Thread.sleep(1000);
+            }
+                catch(InterruptedException IE){
+                System.out.println();
+                }
+
+            // Update the label text on the Event Dispatch Thread
+            SwingUtilities.invokeLater(() -> {
+                // Repaint and revalidate the frame
+                repaint();
+                revalidate();
+            });
+        }).start();
 
     }
 
