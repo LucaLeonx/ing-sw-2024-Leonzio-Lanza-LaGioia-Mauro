@@ -235,7 +235,7 @@ public class SetUpGamePanel extends StandardPanel {
         JLabel resourceLabel = new JLabel("Resource Cards:\n");
         JLabel goldLabel= new JLabel("Gold Cards: \n");
         JLabel objectiveLabel= new JLabel("Objective Cards: \n");
-        JLabel splitter = new JLabel("\n\n\n\n\n\n\n\n\n\n");
+        JLabel splitter = new JLabel("\n\n");
         splitter.setForeground(gray);
 
 
