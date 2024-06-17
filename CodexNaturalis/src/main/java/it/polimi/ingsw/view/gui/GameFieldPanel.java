@@ -73,8 +73,8 @@ public class GameFieldPanel extends StandardPanel {
         id = MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(new Point(0,0)).card().id();
         orientation = MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(new Point(0,0)).orientation();
 
-        //  JPanel mapContainer = new JPanel();
-       // mapContainer.add(scrollPane);
+        //Panel mapContainer = new JPanel();
+        //MapContainer.add(scrollPane);
 
         //this.add(isYourTurn, BorderLayout.EAST);
         //this.add(waitingForOther, BorderLayout.EAST);
@@ -86,9 +86,6 @@ public class GameFieldPanel extends StandardPanel {
 
         new Thread(() -> {
             try {
-                // Wait for 5 seconds (5000 milliseconds)
-                Thread.sleep(1000);
-
                 JPanel hostPlayer = newHostPanel();
                 JPanel rightInfo = newInfo();
                 this.add(hostPlayer, BorderLayout.PAGE_END);
@@ -396,7 +393,13 @@ public class GameFieldPanel extends StandardPanel {
                     playerButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            // Action for player button
+                            try {
+                                JButton goBack = new JButton("Go back");
+                                JPanel panel = new OtherMapsPanel(MainWindow.getClientController().getOpponentInformation(playerName),goBack);
+                                //put this panel in the central part of the layout
+                            } catch (RemoteException ex) {
+                                throw new RuntimeException(ex);
+                            }
                         }
                     });
                     playerButtons.add(playerButton);
