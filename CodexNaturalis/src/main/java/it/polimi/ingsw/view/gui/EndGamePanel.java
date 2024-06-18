@@ -31,16 +31,16 @@ public class EndGamePanel extends StandardPanel {
 
         String winnerName = "";
         try {
-//            String winner = MainWindow.getClientController().getWinner();
-//            List<ControlledPlayerInfo> players = MainWindow.getClientController().getLeaderboard();
+            String winner = MainWindow.getClientController().getWinner();
+            List<ControlledPlayerInfo> players = MainWindow.getClientController().getLeaderboard();
 //            Testing
-            String winner = "Asdrubale";
-            ControlledPlayerInfo Asdrubale = new ControlledPlayerInfo("Asdrubale", PlayerColor.RED, new ObjectiveInfo(5), 28, null, null);
-            ControlledPlayerInfo Fabio = new ControlledPlayerInfo("Fabio", PlayerColor.YELLOW, new ObjectiveInfo(10), 23, null, null);
-
-            List<ControlledPlayerInfo> players = new ArrayList<>();
-            players.add(Asdrubale);
-            players.add(Fabio);
+//            String winner = "Asdrubale";
+//            ControlledPlayerInfo Asdrubale = new ControlledPlayerInfo("Asdrubale", PlayerColor.RED, new ObjectiveInfo(5), 28, null, null);
+//            ControlledPlayerInfo Fabio = new ControlledPlayerInfo("Fabio", PlayerColor.YELLOW, new ObjectiveInfo(10), 23, null, null);
+//
+//            List<ControlledPlayerInfo> players = new ArrayList<>();
+//            players.add(Asdrubale);
+//            players.add(Fabio);
 
             for (ControlledPlayerInfo player : players) {
                 leaderboard.add(player.nickname() + " has reached " + player.score() + " points");
@@ -130,15 +130,15 @@ public class EndGamePanel extends StandardPanel {
     }
 
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Leaderboard");
-        EndGamePanel panel = new EndGamePanel();
-        panel.buildPanel();
-        frame.add(panel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400);
-        frame.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//        JFrame frame = new JFrame("Leaderboard");
+//        EndGamePanel panel = new EndGamePanel();
+//        panel.buildPanel();
+//        frame.add(panel);
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setSize(400, 400);
+//        frame.setVisible(true);
+//    }
 
 
     protected void paintComponent(Graphics g) {
