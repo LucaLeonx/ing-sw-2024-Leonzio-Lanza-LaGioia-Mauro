@@ -16,12 +16,12 @@ public class MapPanel extends StandardPanel{
     private Map<Point,ImagePanel> placedCards = new HashMap<Point,ImagePanel>();
     private List<JButton> availablePlaces = new ArrayList<JButton>();
 
-    private final int CardWidth = 100;
-    private final int CardHeight = 80;
-    private final int CenterCardX = 850;
-    private final int CenterCardY = 610;
-    private final int offsetX = 77;
-    private final int offsetY = 47;
+    private final int CardWidth = DefaultCardSizeInfo.CardWidth;
+    private final int CardHeight = DefaultCardSizeInfo.CardHeight;
+    private final int CenterCardX = DefaultCardSizeInfo.CenterCardX;
+    private final int CenterCardY = DefaultCardSizeInfo.CenterCardY;
+    private final int offsetX = DefaultCardSizeInfo.offsetX;
+    private final int offsetY = DefaultCardSizeInfo.offsetY;
     private int layer = 0;
 
     private AbstractMap.SimpleEntry<Integer,CardOrientation> cardToPlace;
