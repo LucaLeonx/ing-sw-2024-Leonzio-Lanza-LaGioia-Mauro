@@ -24,6 +24,7 @@ public class RegisterPanel extends StandardPanel {
     private final Map<String, Integer> lobbyById = new HashMap<String, Integer>();
     private Timer timer;
     public RegisterPanel() {
+        removeAll();
         buildPanel();
     }
 
