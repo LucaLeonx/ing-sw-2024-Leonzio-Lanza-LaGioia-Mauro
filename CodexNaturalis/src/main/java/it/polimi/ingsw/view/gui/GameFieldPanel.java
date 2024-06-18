@@ -491,11 +491,6 @@ public class GameFieldPanel extends StandardPanel {
         JLabel resourceLabel = new JLabel("Resource Cards:\n");
         JLabel goldLabel= new JLabel("Gold Cards: \n");
         JLabel objectiveLabel= new JLabel("Objective Cards: \n");
-        JLabel splitter = new JLabel("\n\n");
-        JLabel splitter1 = new JLabel("\n\n");
-        JLabel splitter2 = new JLabel("\n\n");
-        splitter.setForeground(gray);
-        splitter1.setForeground(gray);
 
         resourceCardsDeck.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -590,19 +585,7 @@ public class GameFieldPanel extends StandardPanel {
 
         gbc.gridwidth=2;
 
-
-
         gbc.insets = new Insets(5, 5, 5, 5); // Padding of 5 pixels on all sides
-
-        j=j+5;
-        gbc.gridy=0+j;
-        gbc.gridx=0;
-        info.add(splitter1, gbc);
-
-        gbc.gridy=1+j;
-        gbc.gridx=0;
-        info.add(splitter2, gbc);
-
 
         gbc.gridy=2+j;
         gbc.gridx=0;
@@ -636,10 +619,6 @@ public class GameFieldPanel extends StandardPanel {
 
         gbc.gridx=2;
         info.add(goldCard2, gbc);
-
-        gbc.gridy=8+j;
-        gbc.gridx=0;
-        info.add(splitter, gbc);
 
         gbc.gridy = 9+j;
         gbc.gridx = 0;
