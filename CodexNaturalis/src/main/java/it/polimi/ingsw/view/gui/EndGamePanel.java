@@ -47,7 +47,8 @@ public class EndGamePanel extends StandardPanel {
             }
             winnerName = winner;
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("error in GUI endstate: " + e);
+            e.printStackTrace();
         }
 
         JButton goBack = new JButton("Go Back");
