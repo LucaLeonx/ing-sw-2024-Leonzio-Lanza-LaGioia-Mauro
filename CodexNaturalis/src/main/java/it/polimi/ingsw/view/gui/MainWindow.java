@@ -27,6 +27,7 @@ public class MainWindow extends JFrame {
     public static WaitingPanel waitingPanel= new WaitingPanel();
     public static SetUpGamePanel setUpGamePanel = new SetUpGamePanel();
     public static GameFieldPanel gameFieldPanel = new GameFieldPanel();
+    //public static OtherMapsPanel otherMapsPanel = new OtherMapsPanel();
     public static EndGamePanel endGamePanel = new EndGamePanel();
 
     public MainWindow()
@@ -50,6 +51,7 @@ public class MainWindow extends JFrame {
         cardPanel.add("setUpGamePanel", setUpGamePanel);
         cardPanel.add("gameFieldPanel", gameFieldPanel);
         cardPanel.add("endGamePanel", endGamePanel);
+        //cardPanel.add("otherMapsPanel", otherMapsPanel);
         add(cardPanel);
 
     }

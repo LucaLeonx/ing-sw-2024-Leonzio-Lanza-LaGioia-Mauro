@@ -73,11 +73,6 @@ public class GameFieldPanel extends StandardPanel {
         id = MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(new Point(0,0)).card().id();
         orientation = MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(new Point(0,0)).orientation();
 
-        //Panel mapContainer = new JPanel();
-        //MapContainer.add(scrollPane);
-
-        //this.add(isYourTurn, BorderLayout.EAST);
-        //this.add(waitingForOther, BorderLayout.EAST);
         this.add(otherPlayers, BorderLayout.PAGE_START);
         this.add(chat, BorderLayout.LINE_START);
         this.add(map, BorderLayout.CENTER);
@@ -125,17 +120,13 @@ public class GameFieldPanel extends StandardPanel {
 
                         p = map.getLastPointPlaced();
                         if(!cardInfo.getSide(map.getLastOrientationPlaced()).isPlayable()) {
-                            System.out.println("Cannot place this card here");
                             map.removeCardImage(p);
                             map.resetLastValues();
                             cannotPlaceThisCard.setVisible(true);
                             Thread.sleep(500);
                             continue;
                         }
-                        System.out.println("Trying to place a card");
                         DrawChoice dChoice = drawCardPhase();
-
-                        // fare anche la stessa cosa per i deck e prendere la drawChoice relativa
 
                         controller.makeMove(
                                 cardInfo,
@@ -153,7 +144,7 @@ public class GameFieldPanel extends StandardPanel {
                         isYourTurn.setVisible(false);
                         placeCardButton.setVisible(false);
 
-                        map.resetLastValues();//??
+                        map.resetLastValues();
 
                         lastDrawChoice = Optional.empty();
 
@@ -394,9 +385,9 @@ public class GameFieldPanel extends StandardPanel {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             try {
-                                JButton goBack = new JButton("Go back");
-                                JPanel panel = new OtherMapsPanel(MainWindow.getClientController().getOpponentInformation(playerName),goBack);
-                                //put this panel in the central part of the layout
+                                //MainWindow.goToWindow("otherMapsPanel");
+                                //MainWindow.otherMapsPanel.buildPanel(playerName);
+                                JFrame otherMap = new OtherMapsPanel(playerName);
                             } catch (RemoteException ex) {
                                 throw new RuntimeException(ex);
                             }
