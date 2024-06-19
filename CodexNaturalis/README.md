@@ -40,6 +40,8 @@ digitare sul terminale il comando per aprire il programma facendo attenzione di 
 
 \java.exe -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -jar client_tui.jar
 
+Se dovesse dare problemi la specifica dell'encoding toglierla. 
+
 ### Avvio del gioco - Interfaccia testuale
 
 Avendo a disposizione il JAR eseguibile corrispondente, usare il comando:
