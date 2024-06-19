@@ -73,11 +73,6 @@ public class GameFieldPanel extends StandardPanel {
         id = MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(new Point(0,0)).card().id();
         orientation = MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(new Point(0,0)).orientation();
 
-        //Panel mapContainer = new JPanel();
-        //MapContainer.add(scrollPane);
-
-        //this.add(isYourTurn, BorderLayout.EAST);
-        //this.add(waitingForOther, BorderLayout.EAST);
         this.add(otherPlayers, BorderLayout.PAGE_START);
         this.add(chat, BorderLayout.LINE_START);
         this.add(map, BorderLayout.CENTER);
@@ -125,17 +120,13 @@ public class GameFieldPanel extends StandardPanel {
 
                         p = map.getLastPointPlaced();
                         if(!cardInfo.getSide(map.getLastOrientationPlaced()).isPlayable()) {
-                            System.out.println("Cannot place this card here");
                             map.removeCardImage(p);
                             map.resetLastValues();
                             cannotPlaceThisCard.setVisible(true);
                             Thread.sleep(500);
                             continue;
                         }
-                        System.out.println("Trying to place a card");
                         DrawChoice dChoice = drawCardPhase();
-
-                        // fare anche la stessa cosa per i deck e prendere la drawChoice relativa
 
                         controller.makeMove(
                                 cardInfo,
@@ -153,7 +144,7 @@ public class GameFieldPanel extends StandardPanel {
                         isYourTurn.setVisible(false);
                         placeCardButton.setVisible(false);
 
-                        map.resetLastValues();//??
+                        map.resetLastValues();
 
                         lastDrawChoice = Optional.empty();
 
@@ -394,9 +385,9 @@ public class GameFieldPanel extends StandardPanel {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             try {
-                                JButton goBack = new JButton("Go back");
-                                JPanel panel = new OtherMapsPanel(MainWindow.getClientController().getOpponentInformation(playerName),goBack);
-                                //put this panel in the central part of the layout
+                                //MainWindow.goToWindow("otherMapsPanel");
+                                //MainWindow.otherMapsPanel.buildPanel(playerName);
+                                JFrame otherMap = new OtherMapsPanel(playerName);
                             } catch (RemoteException ex) {
                                 throw new RuntimeException(ex);
                             }
@@ -491,11 +482,6 @@ public class GameFieldPanel extends StandardPanel {
         JLabel resourceLabel = new JLabel("Resource Cards:\n");
         JLabel goldLabel= new JLabel("Gold Cards: \n");
         JLabel objectiveLabel= new JLabel("Objective Cards: \n");
-        JLabel splitter = new JLabel("\n\n");
-        JLabel splitter1 = new JLabel("\n\n");
-        JLabel splitter2 = new JLabel("\n\n");
-        splitter.setForeground(gray);
-        splitter1.setForeground(gray);
 
         resourceCardsDeck.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -590,19 +576,7 @@ public class GameFieldPanel extends StandardPanel {
 
         gbc.gridwidth=2;
 
-
-
         gbc.insets = new Insets(5, 5, 5, 5); // Padding of 5 pixels on all sides
-
-        j=j+5;
-        gbc.gridy=0+j;
-        gbc.gridx=0;
-        info.add(splitter1, gbc);
-
-        gbc.gridy=1+j;
-        gbc.gridx=0;
-        info.add(splitter2, gbc);
-
 
         gbc.gridy=2+j;
         gbc.gridx=0;
@@ -636,10 +610,6 @@ public class GameFieldPanel extends StandardPanel {
 
         gbc.gridx=2;
         info.add(goldCard2, gbc);
-
-        gbc.gridy=8+j;
-        gbc.gridx=0;
-        info.add(splitter, gbc);
 
         gbc.gridy = 9+j;
         gbc.gridx = 0;

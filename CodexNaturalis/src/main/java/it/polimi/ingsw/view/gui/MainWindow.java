@@ -27,14 +27,15 @@ public class MainWindow extends JFrame {
     public static WaitingPanel waitingPanel= new WaitingPanel();
     public static SetUpGamePanel setUpGamePanel = new SetUpGamePanel();
     public static GameFieldPanel gameFieldPanel = new GameFieldPanel();
+    //public static OtherMapsPanel otherMapsPanel = new OtherMapsPanel();
     public static EndGamePanel endGamePanel = new EndGamePanel();
 
     public MainWindow()
     {
         setTitle("Codex Naturalis");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1300, 800);
-        setMinimumSize(new Dimension(1100, 800));
+        setSize(1300, 850);
+        setMinimumSize(new Dimension(1100, 850));
         setVisible(true);
 
         cardLayout = new CardLayout();
@@ -50,6 +51,7 @@ public class MainWindow extends JFrame {
         cardPanel.add("setUpGamePanel", setUpGamePanel);
         cardPanel.add("gameFieldPanel", gameFieldPanel);
         cardPanel.add("endGamePanel", endGamePanel);
+        //cardPanel.add("otherMapsPanel", otherMapsPanel);
         add(cardPanel);
 
     }
