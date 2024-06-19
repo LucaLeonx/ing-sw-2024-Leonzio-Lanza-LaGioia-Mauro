@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
  * This panel lets players decide if they want to register to the Server or they already have credentials to login.
  */
 public class ChooseLoginPanel extends StandardPanel {
+    public final Color beige = new Color(255,240,219); // RGB values
     public ChooseLoginPanel(){
         buildPanel();
     }
@@ -16,7 +17,7 @@ public class ChooseLoginPanel extends StandardPanel {
     private void buildPanel(){
         this.setLayout(new GridBagLayout());
         JLabel incipitTextArea = new JLabel("Choose your authentication:\n");
-        incipitTextArea.setBackground(Color.white);
+        incipitTextArea.setBackground(beige);
         incipitTextArea.setHorizontalAlignment(SwingConstants.CENTER);
         incipitTextArea.setOpaque(true);
         incipitTextArea.setFont(new Font("Arial", Font.BOLD, 20));  // Font ingrandito

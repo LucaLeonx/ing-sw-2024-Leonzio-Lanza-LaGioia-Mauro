@@ -75,7 +75,6 @@ public class MainWindow extends JFrame {
     public static void setSocketController()throws IOException {
         clientController = new SocketClientController();
     }
-
     public static void goToWindow(String name) {
         cardLayout.show(cardPanel, name);
     }
