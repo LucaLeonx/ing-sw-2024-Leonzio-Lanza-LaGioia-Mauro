@@ -29,7 +29,8 @@ public class InsertNamePanel extends StandardPanel {
         JLabel incorrectNameMessage= new JLabel();
         incorrectNameMessage.setForeground(Color.RED);
 
-        JLabel password = new JLabel();
+        JLabel password = new JLabel("Password Given:");
+        password.setVisible(false);
         JTextArea passwordValue = new JTextArea();
         passwordValue.setVisible(false);
 
@@ -57,7 +58,7 @@ public class InsertNamePanel extends StandardPanel {
                 registerButton.setVisible(false);
                 incorrectNameMessage.setVisible(false);
 
-                password.setText("Password given: ");
+                password.setVisible(true);
                 warningMessage.setText("Be Careful! Remember your password before Playing!");
                 readyButton.setVisible(true);
 
