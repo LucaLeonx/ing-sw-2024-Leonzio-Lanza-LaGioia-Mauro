@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.socket;
 
+import it.polimi.ingsw.controller.clientcontroller.ConnectionDefaultSettings;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.dataobject.Message;
 import it.polimi.ingsw.dataobject.MessageType;
@@ -20,7 +21,7 @@ public class SocketClient {
     }
 
     public void startClientConnection() throws IOException {
-        this.socket = new Socket("localhost", port);
+        this.socket = new Socket(ConnectionDefaultSettings.RMIRegistryHost, port);
         System.out.println("connection established");
         socketOut = new ObjectOutputStream(socket.getOutputStream());
         socketIn = new ObjectInputStream(socket.getInputStream());
