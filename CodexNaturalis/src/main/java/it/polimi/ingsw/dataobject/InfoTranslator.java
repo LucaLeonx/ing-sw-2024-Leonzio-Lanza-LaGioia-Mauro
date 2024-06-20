@@ -61,6 +61,7 @@ public abstract class InfoTranslator {
         HashMap<Point, CardCellInfo> cardCellInfoMap = new HashMap<>();
         HashMap<Point, AngleCellInfo> angleCellInfoMap = new HashMap<>();
         HashMap<Symbol, Integer> symbolCountersInfoMap = new HashMap<>();
+        List<Point> insertionOrder = new ArrayList<>(field.getInsertionOrder());
 
         for(Map.Entry<Point, CardCell> cardCell : field.getCardCells().entrySet()){
             cardCellInfoMap.put(cardCell.getKey(), convertToCardCellInfo(cardCell.getValue()));
@@ -74,7 +75,7 @@ public abstract class InfoTranslator {
             symbolCountersInfoMap.put(symbolCounter.getKey() , symbolCounter.getValue());
         }
 
-        return new GameFieldInfo(cardCellInfoMap, angleCellInfoMap, new ArrayList<>(field.getAvailablePositions()), symbolCountersInfoMap);
+        return new GameFieldInfo(cardCellInfoMap, angleCellInfoMap, new ArrayList<>(field.getAvailablePositions()), symbolCountersInfoMap,insertionOrder);
 
     }
 

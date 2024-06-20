@@ -71,15 +71,14 @@ public class OtherMapsPanel extends JFrame {
     }
 
     private void drawMap() {
-        for (Map.Entry<Point, CardCellInfo> entry : field.placedCards().entrySet()) {
-            Point currentPoint = entry.getKey();
-            CardCellInfo currentCard = entry.getValue();
+        for (Point p : field.insertionOrder()) {
+            CardCellInfo currentCard = field.placedCards().get(p);
 
-            if (entry.getKey().equals(new Point(0, 0))) {
+            if (p.equals(new Point(0, 0))) {
                 continue;
             }
             //placedCards are not sorted
-            addCardImage(currentPoint,currentCard,availablePlaces.get(currentPoint));
+            addCardImage(p,currentCard,availablePlaces.get(p));
         }
 
     }

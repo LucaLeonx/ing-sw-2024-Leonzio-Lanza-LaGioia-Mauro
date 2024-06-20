@@ -12,11 +12,13 @@ public class GameField{
     private final Map<Point, AngleCell> angles;
     private final Set<Point> availableCells;
     private final Map<Symbol, Integer> symbolCounters;
+    private List<Point> insertionOrder;
     public GameField(){
         this.cards = new HashMap<>();
         this.angles = new HashMap<>();
         this.symbolCounters = new HashMap<>();
         this.availableCells = new LinkedHashSet<>();
+        this.insertionOrder = new ArrayList<>();
         this.availableCells.add(new Point(0,0));
         // Add the position for initial card
 
@@ -32,6 +34,7 @@ public class GameField{
         this.angles = new HashMap<>(other.angles);
         this.availableCells = new LinkedHashSet<>(other.availableCells);
         this.symbolCounters = new HashMap<>(other.symbolCounters);
+        this.insertionOrder = new ArrayList<>(other.insertionOrder);
     }
 
     public synchronized Map<Symbol, Integer> getSymbolCounters(){
@@ -45,6 +48,12 @@ public class GameField{
     public synchronized Map<Point, CardCell> getCardCells() {
         return Map.copyOf(cards);
     }
+
+    /**
+     *
+     * @return a copy of the insertion card order
+     */
+    public synchronized List<Point> getInsertionOrder() { return List.copyOf(insertionOrder); }
 
     /**
      *
@@ -110,6 +119,7 @@ public class GameField{
         updateAngles(card, cardOrientation, position);
         updateCounters(card, cardOrientation, position);
         updateAvailableCells(card, cardOrientation, position);
+        insertionOrder.add(position);
     }
 
     /**

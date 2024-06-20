@@ -325,7 +325,7 @@ public class SocketClientController implements ClientController {
     @Override
     public List<ControlledPlayerInfo> getLeaderboard() throws RemoteException {
         synchronized (this) {
-            client.sendMessage(new Message(MessageType.HAS_GAME_ENDED, getCredentials(), null));
+            client.sendMessage(new Message(MessageType.GET_LEADERBOARD, getCredentials(), null));
             return (List<ControlledPlayerInfo>) client.receiveMessage().getObj();
         }
     }
