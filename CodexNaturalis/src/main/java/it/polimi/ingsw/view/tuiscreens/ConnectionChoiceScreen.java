@@ -35,6 +35,7 @@ public class ConnectionChoiceScreen extends TUIScreen {
             transitionState(new LoginScreen(tui, scanner, controller));
         } catch (CancelChoiceException e){
             System.out.println("Quitting...");
+            System.exit(0);
         }
 
     }

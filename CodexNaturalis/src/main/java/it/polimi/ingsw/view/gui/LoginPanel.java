@@ -12,6 +12,7 @@ import java.rmi.RemoteException;
  * This Panels permits players to access the game if they are already registered
  */
 public class LoginPanel extends StandardPanel {
+    public final Color beige = new Color(255,240,219); // RGB values
     private JTextField user;
     private JPasswordField password;
     public LoginPanel(){
@@ -28,6 +29,8 @@ public class LoginPanel extends StandardPanel {
 
         JLabel wrongPasswordWarning= new JLabel();
         wrongPasswordWarning.setForeground(Color.RED);
+        wrongPasswordWarning.setBackground(beige);
+        wrongPasswordWarning.setOpaque(true);
 
         JButton loginButton= new JButton("Login NOW");
         loginButton.addActionListener(new ActionListener() {

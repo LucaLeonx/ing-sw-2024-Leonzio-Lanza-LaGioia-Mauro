@@ -32,6 +32,8 @@ public class GameEndState extends TUIScreen {
             controller.exitGame();
             transitionState(new LobbyScreen(tui, scanner, controller));
         } catch (RemoteException e) {
+            System.out.println("There was an error in the final screen of the game");
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

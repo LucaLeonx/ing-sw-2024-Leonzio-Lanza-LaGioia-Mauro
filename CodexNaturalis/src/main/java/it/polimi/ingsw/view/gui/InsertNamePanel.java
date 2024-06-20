@@ -14,6 +14,7 @@ import java.rmi.RemoteException;
 public class InsertNamePanel extends StandardPanel {
     private JTextArea registerName;
     private int generatedPassword;
+    private final Color beige = new Color(255,240,219); // RGB values
 
     public InsertNamePanel(){
         buildPanel();
@@ -23,6 +24,8 @@ public class InsertNamePanel extends StandardPanel {
 
         JButton goBack = new JButton("Go Back");
         JLabel nameLabel = new JLabel("Register username: ");
+        nameLabel.setBackground(beige);
+        nameLabel.setOpaque(true);
         registerName = new JTextArea(1,6);
         JButton registerButton = new JButton("Register NOW");
 
@@ -39,6 +42,8 @@ public class InsertNamePanel extends StandardPanel {
 
         JLabel warningMessage = new JLabel ();
         warningMessage.setForeground(Color.RED);
+        warningMessage.setBackground(beige);
+        warningMessage.setOpaque(true);
 
 
         registerButton.addActionListener(new ActionListener() {
@@ -58,8 +63,13 @@ public class InsertNamePanel extends StandardPanel {
                 registerButton.setVisible(false);
                 incorrectNameMessage.setVisible(false);
 
-                password.setVisible(true);
+                password.setText("Password given: ");
+                password.setBackground(beige);
+                password.setOpaque(true);                password.setVisible(true);
+
+                warningMessage.setText(" Be Careful! Remember your password before Playing! ");
                 warningMessage.setText("Be Careful! Remember your password before Playing!");
+
                 readyButton.setVisible(true);
 
                 passwordValue.setText(String.valueOf(generatedPassword));

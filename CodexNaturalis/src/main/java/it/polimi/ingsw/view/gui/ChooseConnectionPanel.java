@@ -13,6 +13,8 @@ import java.util.Objects;
  */
 public class ChooseConnectionPanel extends StandardPanel {
 
+    public final Color beige = new Color(255,240,219); // RGB values
+
     public ChooseConnectionPanel() {
         buildPanel();
     }
@@ -29,18 +31,18 @@ public class ChooseConnectionPanel extends StandardPanel {
 
         JLabel nameTextArea = new JLabel("Welcome to Codex Naturalis");
         JLabel chooseTextArea = new JLabel("Choose your connection:");
-        nameTextArea.setBackground(Color.white);
+        nameTextArea.setBackground(beige);
         nameTextArea.setHorizontalAlignment(SwingConstants.CENTER);
         nameTextArea.setOpaque(true);
         nameTextArea.setFont(new Font("Arial", Font.BOLD, 20));  // Font enlarged
 
-        chooseTextArea.setBackground(Color.white);
+        chooseTextArea.setBackground(beige);
         chooseTextArea.setHorizontalAlignment(SwingConstants.CENTER);
         chooseTextArea.setOpaque(true);
         chooseTextArea.setFont(new Font("Arial", Font.BOLD, 20));  // Font enlarged
 
         JLabel wrongConnection = new JLabel();
-        wrongConnection.setBackground(Color.white);
+        wrongConnection.setBackground(beige);
         wrongConnection.setHorizontalAlignment(SwingConstants.CENTER);
         wrongConnection.setOpaque(true);
         wrongConnection.setForeground(Color.RED);

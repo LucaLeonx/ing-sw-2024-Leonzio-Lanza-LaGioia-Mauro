@@ -31,14 +31,20 @@ A questo punto, i client presenti sulla stessa rete potranno collegarsi per gioc
 Avendo a disposizione il JAR eseguibile corrispondente,
 1) settare la configurazione UTF-8:
 - Per MAC OS passaggio non necessario, skippare al punto 2
-- Per Windows 
+- Per Windows (se non si ha già impostato di default UTF-8)
   - Da command prompt digitare: chcp 65001 e premere invio
   - Da powershell digitare: [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 e premere invio
 - Per Linux andare alla fine del README. 
 
-digitare sul terminale il comando per aprire il programma facendo attenzione di specificare l'encoding in UTF-8:
+se si fa partire da intellij in automatico specifica l'encoding in UTF-8:
 
 \java.exe -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -jar client_tui.jar
+
+Non l'abbiamo trovato necessario da terminale. 
+Chiaramente se non si ha impostato nelle environment variable del pc java bisogna specificare il path completo assoulto per arrivare
+alla cartella bin contenente java.exe. esempio col mio con i path: 
+
+C:\Users\smaur\.jdks\openjdk-21.0.2\bin\java.exe -jar C:\Users\smaur\IdeaProjects\ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro\CodexNaturalis\out\artifacts\TUI\PSP9.jar
 
 ### Avvio del gioco - Interfaccia testuale
 

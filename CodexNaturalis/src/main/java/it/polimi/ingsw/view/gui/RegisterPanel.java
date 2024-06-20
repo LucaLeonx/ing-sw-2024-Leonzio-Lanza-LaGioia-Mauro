@@ -34,10 +34,7 @@ public class RegisterPanel extends StandardPanel {
 
         JLabel listOfLobbies = new JLabel("List of Lobbies: ");
         ImageIcon icon = new ImageIcon("src/main/resources/other_images/UpdateArrow.png");
-        Image resizedImage = icon.getImage().getScaledInstance(20, 20,Image.SCALE_DEFAULT);
-        ImageIcon resizedIcon = new ImageIcon(resizedImage);
-        JButton updateLobbylist = new JButton(resizedIcon);
-        updateLobbylist.setFont(new Font("Arial", Font.BOLD, 20));
+        JButton updateLobbylist = new JButton(icon);
 
         JList<String> jList = new JList<>(listModel);
         JScrollPane scrollPane = new JScrollPane(jList);
