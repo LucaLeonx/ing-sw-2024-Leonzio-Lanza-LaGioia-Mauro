@@ -12,11 +12,15 @@ import java.rmi.RemoteException;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class OtherMapsPanel extends JFrame {
+public class OtheMapsPanel extends StandardPanel{
+
     private GameFieldInfo field;
-    private JLayeredPane jLayeredPane = new JLayeredPane();
+    private JLayeredPane jLayeredPane;
     //private JScrollPane jScrollPane = new JScrollPane(jLayeredPane);
+    private ExecutorService executor;
 
     private final int CardWidth = DefaultCardSizeInfo.CardWidth;
     private final int CardHeight = DefaultCardSizeInfo.CardHeight;
@@ -24,18 +28,31 @@ public class OtherMapsPanel extends JFrame {
     private final int CenterCardY = 510;
     private final int offsetX = DefaultCardSizeInfo.offsetX;
     private final int offsetY = DefaultCardSizeInfo.offsetY;
-    private int layer = 0;
+    private int layer;
 
     private AbstractMap.SimpleEntry<Integer, Integer> coordinates;
     private Map<Point,AbstractMap.SimpleEntry<Integer, Integer>> availablePlaces = new HashMap<Point,AbstractMap.SimpleEntry<Integer, Integer>>();
+    private JScrollPane jScrollPane;
+    public OtheMapsPanel() {
 
-    public OtherMapsPanel(String oppName) throws RemoteException {
+    }
+
+    public void buildPanel(String oppName) throws RemoteException {
+        this.removeAll();
+        repaint();
+        revalidate();
+        jLayeredPane = new JLayeredPane();
+        jLayeredPane.setPreferredSize(new Dimension(2000, 1400));
+        jLayeredPane.setLayout(null);
+        layer=0;
+        executor = Executors.newSingleThreadExecutor();
         OpponentInfo player = MainWindow.getClientController().getOpponentInformation(oppName);
 
-        JLabel opponentName = new JLabel("Opponent Name: " + player.nickname());
+        JLabel opponentName = new JLabel("This is the map of: " + player.nickname());
 
-        this.setSize(1500, 800);
-        opponentName.setBounds(0, 0, 100, 30);
+        opponentName.setBounds(10, 10, 300, 30);
+        opponentName.setVisible(true);
+        jLayeredPane.add(opponentName);
 
         field = player.field();
         opponentName.setVisible(true);
@@ -43,11 +60,41 @@ public class OtherMapsPanel extends JFrame {
         insertInitialCard(field.placedCards().get(new Point(0, 0)).card().id(), field.placedCards().get(new Point(0, 0)).orientation());
         drawMap();
 
-        this.add(opponentName);
-        //this.add(jScrollPane, BorderLayout.CENTER);
+        //jScrollPane = new JScrollPane(jLayeredPane);
+        //jLayeredPane.add(jScrollPane);
+        jLayeredPane.setVisible(true);
+        //jScrollPane.setVisible(true);
         this.add(jLayeredPane);
         this.setVisible(true);
+
+        //sometimes it gets stucked, simpy revalidate the screen when everything is correctly built.
+        new Thread(() -> {
+            try {
+                // Wait for 5 seconds (5000 milliseconds)
+                Thread.sleep(500);
+            }
+            catch(InterruptedException IE){
+                System.out.println();
+            }
+
+            // Update the label text on the Event Dispatch Thread
+            SwingUtilities.invokeLater(() -> {
+                // Repaint and revalidate the frame
+                repaint();
+                revalidate();
+            });
+        }).start();
+
+        executor.submit(()-> {
+            while(true) {
+                MainWindow.getClientController().waitForTurnChange();
+                OtherMapsFrame.goToWindow("otherMapsPanel");
+                buildPanel(oppName);
+            }
+
+        });
     }
+
 
     public void insertInitialCard(int id, CardOrientation orientation) {
         ImagePanel img1 = new ImagePanel(id);
@@ -58,7 +105,7 @@ public class OtherMapsPanel extends JFrame {
         jLayeredPane.add(img1, Integer.valueOf(layer));
     }
 
-    private void addCardImage(Point p, CardCellInfo c,int x, int y) {
+    private void addCardImage(Point p, CardCellInfo c, int x, int y) {
         ImagePanel img = new ImagePanel(c.card().id());
         layer++;
         if (c.orientation().equals(CardOrientation.BACK)) {
@@ -100,5 +147,4 @@ public class OtherMapsPanel extends JFrame {
         coordinates = new AbstractMap.SimpleEntry<>(boundsX, boundsY);
         availablePlaces.put(p, coordinates);
     }
-
 }

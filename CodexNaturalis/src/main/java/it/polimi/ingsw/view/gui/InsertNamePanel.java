@@ -71,6 +71,7 @@ public class InsertNamePanel extends StandardPanel {
                 warningMessage.setText("Be Careful! Remember your password before Playing!");
 
                 readyButton.setVisible(true);
+                warningMessage.setVisible(true);
 
                 passwordValue.setText(String.valueOf(generatedPassword));
                 passwordValue.setVisible(true);

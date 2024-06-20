@@ -2,15 +2,11 @@ package it.polimi.ingsw.view.gui;
 
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
 import it.polimi.ingsw.dataobject.CardInfo;
 import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
-import it.polimi.ingsw.dataobject.DrawableCardsInfo;
 import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
-import it.polimi.ingsw.model.card.Symbol;
-import it.polimi.ingsw.view.tui.Symbol_String;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +17,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
@@ -388,7 +383,7 @@ public class GameFieldPanel extends StandardPanel {
                             try {
                                 //MainWindow.goToWindow("otherMapsPanel");
                                 //MainWindow.otherMapsPanel.buildPanel(playerName);
-                                JFrame otherMap = new OtherMapsPanel(playerName);
+                                JFrame otherMap = new OtherMapsFrame(playerName);
                             } catch (RemoteException ex) {
                                 throw new RuntimeException(ex);
                             }
@@ -407,8 +402,6 @@ public class GameFieldPanel extends StandardPanel {
             gbc.insets = new Insets(10, 0, 0, 10);
             otherPlayes.add(playerButtons.get(i), gbc);
         }
-
-        System.out.println("Total buttons added: " + playerButtons.size());
 
         return otherPlayes;
     }
