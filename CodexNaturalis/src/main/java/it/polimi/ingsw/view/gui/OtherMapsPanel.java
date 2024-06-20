@@ -8,15 +8,20 @@ import it.polimi.ingsw.model.map.Point;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class OtheMapsPanel extends StandardPanel{
+public class OtherMapsPanel extends StandardPanel{
 
+    private final Color bordeaux = new Color(133, 0, 0); // RGB values
     private GameFieldInfo field;
     private JLayeredPane jLayeredPane;
     //private JScrollPane jScrollPane = new JScrollPane(jLayeredPane);
@@ -33,7 +38,7 @@ public class OtheMapsPanel extends StandardPanel{
     private AbstractMap.SimpleEntry<Integer, Integer> coordinates;
     private Map<Point,AbstractMap.SimpleEntry<Integer, Integer>> availablePlaces = new HashMap<Point,AbstractMap.SimpleEntry<Integer, Integer>>();
     private JScrollPane jScrollPane;
-    public OtheMapsPanel() {
+    public OtherMapsPanel() {
 
     }
 
@@ -41,30 +46,27 @@ public class OtheMapsPanel extends StandardPanel{
         this.removeAll();
         repaint();
         revalidate();
+        this.setLayout(new BorderLayout());
         jLayeredPane = new JLayeredPane();
-        jLayeredPane.setPreferredSize(new Dimension(2000, 1400));
+        jLayeredPane.setPreferredSize(new Dimension(1500, 800));
         jLayeredPane.setLayout(null);
         layer=0;
         executor = Executors.newSingleThreadExecutor();
         OpponentInfo player = MainWindow.getClientController().getOpponentInformation(oppName);
 
-        JLabel opponentName = new JLabel("This is the map of: " + player.nickname());
+        //jLayeredPane.add(opponentName);
 
-        opponentName.setBounds(10, 10, 300, 30);
-        opponentName.setVisible(true);
-        jLayeredPane.add(opponentName);
 
         field = player.field();
-        opponentName.setVisible(true);
 
         insertInitialCard(field.placedCards().get(new Point(0, 0)).card().id(), field.placedCards().get(new Point(0, 0)).orientation());
         drawMap();
 
-        //jScrollPane = new JScrollPane(jLayeredPane);
-        //jLayeredPane.add(jScrollPane);
-        jLayeredPane.setVisible(true);
+        jScrollPane = new JScrollPane(jLayeredPane);
+        //jLayeredPane.setVisible(true);
         //jScrollPane.setVisible(true);
-        this.add(jLayeredPane);
+        this.add(jScrollPane, BorderLayout.CENTER);
+        this.add(Explanation(player.nickname()), BorderLayout.PAGE_START);
         this.setVisible(true);
 
         //sometimes it gets stucked, simpy revalidate the screen when everything is correctly built.
@@ -93,6 +95,7 @@ public class OtheMapsPanel extends StandardPanel{
             }
 
         });
+
     }
 
 
@@ -146,5 +149,18 @@ public class OtheMapsPanel extends StandardPanel{
     private void addSpace(Point p, int boundsX, int boundsY) {
         coordinates = new AbstractMap.SimpleEntry<>(boundsX, boundsY);
         availablePlaces.put(p, coordinates);
+    }
+
+    private JPanel Explanation(String player) {
+        JPanel explanation = new JPanel();
+        explanation.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        JLabel opponentName = new JLabel("This is the map of: " + player);
+        opponentName.setFont(new Font("Arial", Font.BOLD, 20));
+        opponentName.setForeground(bordeaux);
+        gbc.gridx=0;
+        gbc.gridy=0;
+        explanation.add(opponentName);
+        return explanation;
     }
 }
