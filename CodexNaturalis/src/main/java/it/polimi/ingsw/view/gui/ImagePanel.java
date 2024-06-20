@@ -49,7 +49,8 @@ public class ImagePanel extends JPanel {
 
         private FrontPanel(Image frontPanelImage) {
             this.frontPanelImage = frontPanelImage;
-            this.setPreferredSize(new Dimension(100, 80));
+            this.setPreferredSize(new Dimension(DefaultCardSizeInfo.CardWidth, DefaultCardSizeInfo.CardHeight));
+            this.setBackground(new Color(0,0,0,0));;
         }
 
         @Override
@@ -64,7 +65,8 @@ public class ImagePanel extends JPanel {
 
         private BackPanel(Image backPanelImage) {
             this.backPanelImage = backPanelImage;
-            this.setPreferredSize(new Dimension(100, 80));
+            this.setPreferredSize(new Dimension(DefaultCardSizeInfo.CardWidth, DefaultCardSizeInfo.CardHeight));
+            this.setBackground(new Color(0,0,0,0));
         }
 
         @Override

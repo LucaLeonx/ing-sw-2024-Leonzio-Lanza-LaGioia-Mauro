@@ -59,7 +59,6 @@ public class MapTest extends StandardPanel {
             }
         });
 
-
     }
 
     public void hideAvailableSpaces(){

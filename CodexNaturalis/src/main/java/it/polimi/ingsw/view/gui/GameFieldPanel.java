@@ -126,6 +126,7 @@ public class GameFieldPanel extends StandardPanel {
                             Thread.sleep(500);
                             continue;
                         }
+
                         DrawChoice dChoice = drawCardPhase();
 
                         controller.makeMove(
