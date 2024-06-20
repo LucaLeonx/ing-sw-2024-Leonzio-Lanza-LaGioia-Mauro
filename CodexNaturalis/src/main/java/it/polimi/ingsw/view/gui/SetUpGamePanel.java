@@ -63,7 +63,7 @@ public class SetUpGamePanel extends StandardPanel {
                 }
                 else {
                     try {
-                        sleep(1000);
+                        sleep(500);
                         revalidate();
                         repaint();
                     } catch (InterruptedException e) {
