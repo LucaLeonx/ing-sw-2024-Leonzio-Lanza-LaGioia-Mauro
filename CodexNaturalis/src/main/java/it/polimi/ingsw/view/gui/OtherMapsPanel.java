@@ -26,8 +26,8 @@ public class OtherMapsPanel extends JFrame {
     private final int offsetY = DefaultCardSizeInfo.offsetY;
     private int layer = 0;
 
-    private AbstractMap.SimpleEntry<Point, ImagePanel> lastPointPlaced;
-    private Map<Point,Rectangle> availablePlaces = new HashMap<Point,Rectangle>();
+    private AbstractMap.SimpleEntry<Integer, Integer> coordinates;
+    private Map<Point,AbstractMap.SimpleEntry<Integer, Integer>> availablePlaces = new HashMap<Point,AbstractMap.SimpleEntry<Integer, Integer>>();
 
     public OtherMapsPanel(String oppName) throws RemoteException {
         OpponentInfo player = MainWindow.getClientController().getOpponentInformation(oppName);
@@ -58,16 +58,16 @@ public class OtherMapsPanel extends JFrame {
         jLayeredPane.add(img1, Integer.valueOf(layer));
     }
 
-    private void addCardImage(Point p, CardCellInfo c,Rectangle r) {
+    private void addCardImage(Point p, CardCellInfo c,int x, int y) {
         ImagePanel img = new ImagePanel(c.card().id());
         layer++;
         if (c.orientation().equals(CardOrientation.BACK)) {
             img.changeSide();
         }
-        img.setBounds(r);
+        img.setBounds(x,y,CardWidth,CardHeight);
         img.setVisible(true);
         jLayeredPane.add(img, Integer.valueOf(layer));
-        addAvailablePlace(p, r.x, r.y);
+        addAvailablePlace(p,x,y);
     }
 
     private void drawMap() {
@@ -78,7 +78,7 @@ public class OtherMapsPanel extends JFrame {
                 continue;
             }
             //placedCards are not sorted
-            addCardImage(p,currentCard,availablePlaces.get(p));
+            addCardImage(p,currentCard,availablePlaces.get(p).getKey(),availablePlaces.get(p).getValue());
         }
 
     }
@@ -90,20 +90,15 @@ public class OtherMapsPanel extends JFrame {
         Point DRPoint = new Point(p.x() + 2, p.y() - 2);
 
         layer++;
-        if(field.availablePositions().contains(ULPoint))
-            addSpace(ULPoint, x - offsetX, y - offsetY);
-        if(field.availablePositions().contains(URPoint))
-            addSpace(URPoint, x + offsetX, y - offsetY);
-        if(field.availablePositions().contains(DLPoint))
-            addSpace(DLPoint, x - offsetX, y + offsetY);
-        if(field.availablePositions().contains(DRPoint))
-            addSpace(DRPoint, x + offsetX, y + offsetY);
-
+        addSpace(ULPoint, x - offsetX, y - offsetY);
+        addSpace(URPoint, x + offsetX, y - offsetY);
+        addSpace(DLPoint, x - offsetX, y + offsetY);
+        addSpace(DRPoint, x + offsetX, y + offsetY);
     }
 
     private void addSpace(Point p, int boundsX, int boundsY) {
-        if(!availablePlaces.containsKey(p))
-            availablePlaces.put(p,new Rectangle(boundsX,boundsY,CardWidth,CardHeight));
+        coordinates = new AbstractMap.SimpleEntry<>(boundsX, boundsY);
+        availablePlaces.put(p, coordinates);
     }
 
 }
