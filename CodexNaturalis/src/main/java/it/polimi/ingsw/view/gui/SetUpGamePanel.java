@@ -329,7 +329,7 @@ public class SetUpGamePanel extends StandardPanel {
         ImagePanel initialCardBack = new ImagePanel(initialCard.id());
         initialCardBack.changeSide();
 
-        JLabel chooseYourObjective= new JLabel("Choose your Objective card");
+        JLabel chooseYourObjective= new JLabel("Choose your Objective card and the orientation of your initial card");
         chooseYourObjective.setAlignmentX(CENTER_ALIGNMENT);
 
         JLabel objectiveChoosen = new JLabel( "Objective card choosen!");
