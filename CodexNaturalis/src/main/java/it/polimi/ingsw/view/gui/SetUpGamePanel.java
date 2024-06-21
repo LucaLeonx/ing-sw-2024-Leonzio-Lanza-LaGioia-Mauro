@@ -27,6 +27,7 @@ import static java.lang.Thread.sleep;
  */
 public class SetUpGamePanel extends StandardPanel {
     private final Color gray = new Color(220,220,220); // RGB values
+    private final Color bordeaux = new Color(133, 0, 0); // RGB values
     ExecutorService executor;
     ObjectiveInfo choosenObjective;
     CardOrientation choosenOrientation;
@@ -50,6 +51,7 @@ public class SetUpGamePanel extends StandardPanel {
         this.add(rightInfo, BorderLayout.LINE_END);
         this.add(chat, BorderLayout.LINE_START);
         this.add(setupGame, BorderLayout.CENTER);
+        this.add(Explanation(), BorderLayout.PAGE_START);
 
         executor.submit(() -> {
             while (true) {
@@ -329,8 +331,10 @@ public class SetUpGamePanel extends StandardPanel {
         ImagePanel initialCardBack = new ImagePanel(initialCard.id());
         initialCardBack.changeSide();
 
-        JLabel chooseYourObjective= new JLabel("Choose your Objective card and the orientation of your initial card");
-        chooseYourObjective.setAlignmentX(CENTER_ALIGNMENT);
+        JLabel chooseYourObjective= new JLabel("Choose your Objective card");
+        JLabel chooseOrientationOfInitialCard= new JLabel("Choose the orientation of your initial card");
+        //chooseYourObjective.setAlignmentX(LEFT_ALIGNMENT);
+        //chooseOrientationOfInitialCard.setAlignmentX(LEFT_ALIGNMENT);
 
         JLabel objectiveChoosen = new JLabel( "Objective card choosen!");
         JLabel initialChoosen = new JLabel( "Initial card choosen!");
@@ -390,6 +394,11 @@ public class SetUpGamePanel extends StandardPanel {
         gbc.weightx=2;
         setupGame.add(chooseYourObjective, gbc);
 
+        gbc.gridx=2;
+        gbc.gridy=0;
+        setupGame.add(chooseOrientationOfInitialCard, gbc);
+
+        gbc.gridx=0;
         gbc.gridy=1;
         gbc.gridwidth=1;
         setupGame.add(firstObjectiveImage, gbc);
@@ -425,6 +434,19 @@ public class SetUpGamePanel extends StandardPanel {
         setupGame.add(initialChoosen, gbc);
 
         return setupGame;
+    }
+
+    private JPanel Explanation() {
+        JPanel explanation = new JPanel();
+        explanation.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        JLabel chooseYourObjective= new JLabel("Setup phase");
+        chooseYourObjective.setFont(new Font("Arial", Font.BOLD, 20));
+        chooseYourObjective.setForeground(bordeaux);
+        gbc.gridx=0;
+        gbc.gridy=1;
+        explanation.add(chooseYourObjective);
+        return explanation;
     }
 
     private JPanel newChat(){
