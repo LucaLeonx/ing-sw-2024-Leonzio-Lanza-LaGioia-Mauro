@@ -9,6 +9,8 @@ import java.awt.*;
 
 import it.polimi.ingsw.model.map.Point;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.List;
@@ -157,15 +159,19 @@ public class MapPanel extends StandardPanel{
     private void addSpaceButton(Point p, int boundsX, int boundsY){
         JButton newButton = new JButton(p.toString());
         newButton.setVisible(false);
-        newButton.setBackground(new Color(112,112,112,50));
+        newButton.setBackground(Color.GRAY);
+        newButton.setOpaque(false);
         newButton.setBounds(boundsX, boundsY, CardWidth, CardHeight);
         availablePlaces.put(p,newButton);
         jLayeredPane.add(newButton, Integer.valueOf(layer));
-        newButton.addActionListener(e -> {
-            try {
-                addCardImage(newButton, p);
-            } catch (RemoteException ex) {
-                return;
+        newButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    addCardImage(newButton, p);
+                } catch (RemoteException ex) {
+                    return;
+                }
             }
         });
     }

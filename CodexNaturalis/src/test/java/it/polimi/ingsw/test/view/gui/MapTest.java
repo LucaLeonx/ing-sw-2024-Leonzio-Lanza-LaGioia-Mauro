@@ -6,6 +6,10 @@ import it.polimi.ingsw.view.gui.StandardPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,10 +56,32 @@ public class MapTest extends StandardPanel {
         frame.add(jLayeredPane);
         frame.setVisible(true);
 
-        placeMode.addActionListener(e -> {
-            //Here we save the chosen card to place
-            for(JButton b : availablePlaces){
-                b.setVisible(true);
+        placeMode.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                for(JButton b : availablePlaces) {
+                    b.setVisible(true);
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
             }
         });
 
@@ -76,6 +102,7 @@ public class MapTest extends StandardPanel {
             UpLSpace = new JButton("UL (" + ULPoint.x + ", " + ULPoint.y + ")");
             UpLSpace.setVisible(false);
             UpLSpace.setBackground(Color.GRAY);
+            UpLSpace.setOpaque(false);
             UpLSpace.setBounds(bounds.x - offsetX, bounds.y - offsetY, CardWidth, CardHeight);
             availablePlaces.add(UpLSpace);
             jLayeredPane.add(UpLSpace, Integer.valueOf(layer));
@@ -87,17 +114,22 @@ public class MapTest extends StandardPanel {
             UpRSpace = new JButton("UR (" + URPoint.x + ", " + URPoint.y + ")");
             UpRSpace.setVisible(false);
             UpRSpace.setBackground(Color.GRAY);
+            UpRSpace.setOpaque(false);
             UpRSpace.setBounds(bounds.x + offsetX, bounds.y - offsetY, CardWidth, CardHeight);
             availablePlaces.add(UpRSpace);
             jLayeredPane.add(UpRSpace, Integer.valueOf(layer));
-            UpRSpace.addActionListener(e -> {
-                addCardImage(UpRSpace, URPoint);
+            UpRSpace.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    addCardImage(UpRSpace, URPoint);
+                }
             });
         }
         if(availablePoints.contains(DLPoint)) {
             DownLSpace = new JButton("DL (" + DLPoint.x + ", " + DLPoint.y + ")");
             DownLSpace.setVisible(false);
             DownLSpace.setBackground(Color.GRAY);
+            DownLSpace.setOpaque(false);
             DownLSpace.setBounds(bounds.x - offsetX, bounds.y + offsetY, CardWidth, CardHeight);
             availablePlaces.add(DownLSpace);
             jLayeredPane.add(DownLSpace, Integer.valueOf(layer));
@@ -109,6 +141,7 @@ public class MapTest extends StandardPanel {
             DownRSpace = new JButton("DR (" + DRPoint.x + ", " + DRPoint.y + ")");
             DownRSpace.setVisible(false);
             DownRSpace.setBackground(Color.GRAY);
+            DownRSpace.setOpaque(false);
             DownRSpace.setBounds(bounds.x + offsetX, bounds.y + offsetY, CardWidth, CardHeight);
             availablePlaces.add(DownRSpace);
             jLayeredPane.add(DownRSpace, Integer.valueOf(layer));
