@@ -56,7 +56,6 @@ public class OtherMapsPanel extends StandardPanel{
 
         //jLayeredPane.add(opponentName);
 
-
         field = player.field();
 
         insertInitialCard(field.placedCards().get(new Point(0, 0)).card().id(), field.placedCards().get(new Point(0, 0)).orientation());

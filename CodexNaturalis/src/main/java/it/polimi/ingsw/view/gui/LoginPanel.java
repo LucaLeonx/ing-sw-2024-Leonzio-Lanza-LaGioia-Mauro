@@ -57,7 +57,7 @@ public class LoginPanel extends StandardPanel {
                             MainWindow.setUpGamePanel.buildPanel();
                         } else {
                             MainWindow.goToWindow("gameFieldPanel");
-                            MainWindow.gameFieldPanel.buildPanel();
+                            MainWindow.gameFieldPanel.buildPanel(true);
                         }
                     }
                     else {

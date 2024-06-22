@@ -76,8 +76,7 @@ public class SetUpGamePanel extends StandardPanel {
             MainWindow.getClientController().waitForSetupFinished();
             MainWindow.goToWindow("gameFieldPanel");
             try {
-                MainWindow.gameFieldPanel.buildPanel();
-                //MainWindow.gameFieldPanel.setInitialChoice(InitialCardId,choosenOrientation);
+                MainWindow.gameFieldPanel.buildPanel(false);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }

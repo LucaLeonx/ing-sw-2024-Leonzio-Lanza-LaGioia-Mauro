@@ -49,7 +49,7 @@ public class GameFieldPanel extends StandardPanel {
 
     }
 
-    public void buildPanel() throws RemoteException {
+    public void buildPanel(boolean alreadyLogged) throws RemoteException {
         removeAll();
         revalidate();
         repaint();
@@ -84,8 +84,13 @@ public class GameFieldPanel extends StandardPanel {
                 ControlledPlayerInfo controlledPlayer = controller.getControlledPlayerInformation();
                 String controlledPlayerName = controlledPlayer.nickname();
 
-                map.setAvailablePoints(controlledPlayer.field().availablePositions());
+                map.setAvailablePointsFromModel(controlledPlayer.field().availablePositions());
                 map.insertInitialCard(id,orientation);
+
+                if(alreadyLogged){
+                    map.setAvailablePointsFromModel(controlledPlayer.field().availablePositions());
+                    map.drawOldMap();
+                }
 
                 while(!controller.hasGameEnded()){
                     Thread.sleep(500);
@@ -104,7 +109,7 @@ public class GameFieldPanel extends StandardPanel {
                         placeCardButton.setVisible(true);
 
                         controlledPlayer = controller.getControlledPlayerInformation();
-                        map.setAvailablePoints(controlledPlayer.field().availablePositions());//work only the first time, why??
+                        map.setAvailablePointsFromModel(controlledPlayer.field().availablePositions());//work only the first time, why??
 
                         if(controller.isLastTurn()){
                             isLastTurn.setVisible(true);
@@ -131,7 +136,7 @@ public class GameFieldPanel extends StandardPanel {
                                 dChoice);
 
                         controlledPlayer = controller.getControlledPlayerInformation();
-                        map.setAvailablePoints(controlledPlayer.field().availablePositions());
+                        map.setAvailablePointsFromModel(controlledPlayer.field().availablePositions());
                         map.removeAllAvailablePlaces();
                         map.addAvailablePlace();
 
@@ -381,8 +386,6 @@ public class GameFieldPanel extends StandardPanel {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             try {
-                                //MainWindow.goToWindow("otherMapsPanel");
-                                //MainWindow.otherMapsPanel.buildPanel(playerName);
                                 JFrame otherMap = new OtherMapsFrame(playerName);
                             } catch (RemoteException ex) {
                                 throw new RuntimeException(ex);
