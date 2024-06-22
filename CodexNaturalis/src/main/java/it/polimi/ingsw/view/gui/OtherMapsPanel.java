@@ -38,14 +38,16 @@ public class OtherMapsPanel extends StandardPanel{
     private AbstractMap.SimpleEntry<Integer, Integer> coordinates;
     private Map<Point,AbstractMap.SimpleEntry<Integer, Integer>> availablePlaces = new HashMap<Point,AbstractMap.SimpleEntry<Integer, Integer>>();
     private JScrollPane jScrollPane;
+    private String opponentName;
     public OtherMapsPanel() {
 
     }
 
     public void buildPanel(String oppName) throws RemoteException {
         this.removeAll();
-        repaint();
-        revalidate();
+        opponentName=oppName;
+        //repaint();
+        //revalidate();
         this.setLayout(new BorderLayout());
         jLayeredPane = new JLayeredPane();
         jLayeredPane.setPreferredSize(new Dimension(1500, 800));
@@ -71,8 +73,7 @@ public class OtherMapsPanel extends StandardPanel{
         //sometimes it gets stucked, simpy revalidate the screen when everything is correctly built.
         new Thread(() -> {
             try {
-                // Wait for 5 seconds (5000 milliseconds)
-                Thread.sleep(500);
+                Thread.sleep(1000);
             }
             catch(InterruptedException IE){
                 System.out.println();
@@ -89,12 +90,35 @@ public class OtherMapsPanel extends StandardPanel{
         executor.submit(()-> {
             while(true) {
                 MainWindow.getClientController().waitForTurnChange();
-                OtherMapsFrame.goToWindow("otherMapsPanel");
-                buildPanel(oppName);
+                update();
             }
 
         });
 
+    }
+
+    public void update() throws RemoteException {
+        jLayeredPane.removeAll();
+        layer=0;
+        OpponentInfo player = MainWindow.getClientController().getOpponentInformation(opponentName);
+        field = player.field();
+        insertInitialCard(field.placedCards().get(new Point(0, 0)).card().id(), field.placedCards().get(new Point(0, 0)).orientation());
+        drawMap();
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+            }
+            catch(InterruptedException IE){
+                System.out.println();
+            }
+
+            // Update the label text on the Event Dispatch Thread
+            SwingUtilities.invokeLater(() -> {
+                // Repaint and revalidate the frame
+                repaint();
+                revalidate();
+            });
+        }).start();
     }
 
 
