@@ -46,8 +46,8 @@ public record Point(int x, int y) implements Serializable {
      * @param factor The factor to which scale the coordinates
      * @return A new Point whose coordinates are those of the caller, scaled by the specified factor
      */
-    public Point scale(int factor){
-        return new Point(this.x() * factor, this.y() * factor);
+    public Point scale(double factor){
+        return new Point((int) (this.x() * factor), (int) (this.y() * factor));
     }
 
     public Point inverse() {

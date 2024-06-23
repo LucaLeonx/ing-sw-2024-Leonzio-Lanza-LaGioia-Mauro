@@ -75,7 +75,6 @@ public class LoginScreen extends TUIScreen {
                         "Would you like to try again? ",
                         new DialogOption<>("Try again", 1))
                         .askForChoice(scanner);
-
             } catch (RemoteException e){
                 e.printStackTrace();
                 break;

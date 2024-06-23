@@ -449,6 +449,7 @@ public class SetUpGamePanel extends StandardPanel {
     }
 
     private JPanel newChat(){
+        //Future implementation of a chat
         JPanel chat= new JPanel();
         return chat;
     }

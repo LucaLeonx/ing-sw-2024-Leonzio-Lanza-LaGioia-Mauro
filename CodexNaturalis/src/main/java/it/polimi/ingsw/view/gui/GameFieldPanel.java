@@ -410,22 +410,9 @@ public class GameFieldPanel extends StandardPanel {
     }
 
     private JPanel newInfo(){
-        int j=0;
         JPanel info = new JPanel();
         info.setLayout(new GridBagLayout());
 
-        /*
-        HashMap<Symbol, Integer> symbolCounter= new HashMap<>();
-
-        JLabel insectPoints= new JLabel();
-        JLabel animalPoints= new JLabel();
-        JLabel fungiPoints= new JLabel();
-        JLabel plantPoints= new JLabel();
-        JLabel inkwellPoints = new JLabel();
-        JLabel manuscriptPoints = new JLabel();
-        JLabel quillPoints = new JLabel(); */
-
-        List<JLabel> playerPoints = new ArrayList<>();
         List<String> playerNames = new ArrayList<>();
 
         int resourceCardsDeckId;
@@ -434,8 +421,6 @@ public class GameFieldPanel extends StandardPanel {
         int goldCardsDeckId;
         int goldCard1Id;
         int goldCard2Id;
-        int commonObjective1Id;
-        int commonObjective2Id;
 
 
         try {
@@ -449,20 +434,11 @@ public class GameFieldPanel extends StandardPanel {
             goldCardsDeckId = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.DECK_GOLD).id();
             goldCard1Id = MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.GOLD_CARD_1).id();
             goldCard2Id= MainWindow.getClientController().getDrawableCards().drawableCards().get(DrawChoice.GOLD_CARD_2).id();
-            commonObjective1Id=MainWindow.getClientController().getCommonObjectives().get(0).id();
-            commonObjective2Id=MainWindow.getClientController().getCommonObjectives().get(1).id();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        /*insectPoints.setText(Symbol_String.INSECT_SYMBOL + symbolCounter.get(Symbol.INSECT).toString());
-        animalPoints.setText(Symbol_String.ANIMAL_SYMBOL +symbolCounter.get(Symbol.ANIMAL).toString());
-        fungiPoints.setText(Symbol_String.FUNGI_SYMBOL + symbolCounter.get(Symbol.FUNGI).toString());
-        plantPoints.setText(Symbol_String.PLANT_SYMBOL + symbolCounter.get(Symbol.PLANT).toString());
-        inkwellPoints.setText(Symbol_String.INKWELL_SYMBOL + symbolCounter.get(Symbol.INKWELL).toString());
-        manuscriptPoints.setText(Symbol_String.MANUSCRIPT_SYMBOL + symbolCounter.get(Symbol.MANUSCRIPT).toString());
-        quillPoints.setText(Symbol_String.QUILL_SYMBOL + symbolCounter.get(Symbol.QUILL).toString());*/
 
         ImagePanel resourceCardsDeck = new ImagePanel(resourceCardsDeckId);
         resourceCardsDeck.changeSide();
@@ -472,13 +448,11 @@ public class GameFieldPanel extends StandardPanel {
         goldCardsDeck.changeSide();
         ImagePanel goldCard1 = new ImagePanel(goldCard1Id);
         ImagePanel goldCard2 = new ImagePanel(goldCard2Id);
-        ImagePanel commonObjective1 = new ImagePanel(commonObjective1Id);
-        ImagePanel commonObjective2 = new ImagePanel(commonObjective2Id);
 
         JLabel deckLabel = new JLabel("Drawable Decks:\n");
         JLabel resourceLabel = new JLabel("Resource Cards:\n");
         JLabel goldLabel= new JLabel("Gold Cards: \n");
-        JLabel objectiveLabel= new JLabel("Objective Cards: \n");
+
 
         resourceCardsDeck.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -524,103 +498,46 @@ public class GameFieldPanel extends StandardPanel {
 
         GridBagConstraints gbc= new GridBagConstraints();
 
-        /*gbc.gridx=0;
-        gbc.gridy=0;
-        info.add(insectPoints, gbc);
-
-        gbc.gridx=1;
-        info.add(animalPoints, gbc);
-
-        gbc.gridx=2;
-        info.add(fungiPoints, gbc);
-
-        gbc.gridx=3;
-        info.add(plantPoints, gbc);
-
-        gbc.gridy=1;
-        gbc.gridx=0;
-        info.add(inkwellPoints, gbc);
-
-        gbc.gridx=1;
-        info.add(manuscriptPoints, gbc);
-
-        gbc.gridx=2;
-        info.add(quillPoints, gbc);*/
-
-        JLabel scoreboard = new JLabel("SCOREBOARD:");
-        scoreboard.setFont(new Font("Arial", Font.BOLD, 16));
-        scoreboard.setForeground(Color.gray);
-        scoreboard.setHorizontalAlignment(SwingConstants.CENTER);
-
-        gbc.gridwidth=4;
-
-        for(j=0;j<playerNames.size(); j++){
-            try {
-                JLabel player = new JLabel(playerNames.get(j) + " has " + MainWindow.getClientController().getOpponentInformation(playerNames.get(j)).score() + " points");
-                gbc.gridy=j+1;
-                player.setHorizontalAlignment(SwingConstants.CENTER);
-                player.setForeground(Color.gray);
-                info.add(player, gbc);
-            }
-            catch(RemoteException e){
-                System.out.println(e.getMessage());
-            }
-        }
-
-        gbc.gridy=0;
-        gbc.gridx=0;
-        info.add(scoreboard, gbc);
 
         gbc.gridwidth=2;
 
         gbc.insets = new Insets(5, 5, 5, 5); // Padding of 5 pixels on all sides
 
-        gbc.gridy=2+j;
+        gbc.gridy=0;
         gbc.gridx=0;
         info.add(deckLabel, gbc);
 
-        gbc.gridy=3+j;
+        gbc.gridy=1;
         gbc.gridx=0;
         info.add(resourceCardsDeck, gbc);
 
         gbc.gridx=2;
         info.add(goldCardsDeck, gbc);
 
-        gbc.gridy = 4+j;
+        gbc.gridy = 2;
         gbc.gridx = 0;
         info.add(resourceLabel, gbc);
 
-        gbc.gridy=5+j;
+        gbc.gridy=3;
         gbc.gridx=0;
         info.add(resourceCard1, gbc);
 
         gbc.gridx=2;
         info.add(resourceCard2, gbc);
 
-        gbc.gridy = 6+j;
+        gbc.gridy = 4;
         gbc.gridx = 0;
         info.add(goldLabel, gbc);
 
-        gbc.gridy = 7+j;
+        gbc.gridy = 5;
         gbc.gridx = 0;
         info.add(goldCard1, gbc);
 
         gbc.gridx=2;
         info.add(goldCard2, gbc);
 
-        gbc.gridy = 9+j;
         gbc.gridx = 0;
-        info.add(objectiveLabel, gbc);
-
-        gbc.gridy = 10+j;
-        gbc.gridx = 0;
-        info.add(commonObjective1, gbc);
-
-        gbc.gridx=2;
-        info.add(commonObjective2, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 11+j;
+        gbc.gridy = 6;
         gbc.gridwidth=5;
         info.add(chooseWhereDraw, gbc);
 
@@ -628,7 +545,7 @@ public class GameFieldPanel extends StandardPanel {
         choosenDrawLabel.setMinimumSize(new Dimension(200,20));
         choosenDrawLabel.setMaximumSize(new Dimension(200,20));*/
 
-        gbc.gridy = 12+j;
+        gbc.gridy = 7;
         info.add(choosenDrawLabel, gbc);
 
         choosenDrawLabel.setVisible(false);
@@ -691,8 +608,84 @@ public class GameFieldPanel extends StandardPanel {
     }
 
     private JPanel newChat(){
-        JPanel chat= new JPanel();
-        return chat;
+        int j=0;
+        JPanel info = new JPanel();
+        info.setLayout(new GridBagLayout());
+
+        List<JLabel> playerPoints = new ArrayList<>();
+        List<String> playerNames = new ArrayList<>();
+
+        int commonObjective1Id;
+        int commonObjective2Id;
+
+
+        try {
+            playerNames = MainWindow.getClientController().getPlayerNames();
+            commonObjective1Id=MainWindow.getClientController().getCommonObjectives().get(0).id();
+            commonObjective2Id=MainWindow.getClientController().getCommonObjectives().get(1).id();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        ImagePanel commonObjective1 = new ImagePanel(commonObjective1Id);
+        ImagePanel commonObjective2 = new ImagePanel(commonObjective2Id);
+
+        JLabel objectiveLabel= new JLabel("Objective Cards: \n");
+
+        GridBagConstraints gbc= new GridBagConstraints();
+
+
+        JLabel scoreboard = new JLabel("SCOREBOARD:");
+        JLabel splitter = new JLabel("\n\n");
+        scoreboard.setFont(new Font("Arial", Font.BOLD, 16));
+        scoreboard.setForeground(Color.gray);
+        scoreboard.setHorizontalAlignment(SwingConstants.CENTER);
+
+        gbc.gridwidth=4;
+
+        for(j=0;j<playerNames.size(); j++){
+            try {
+                JLabel player = new JLabel(playerNames.get(j) + " has " + MainWindow.getClientController().getOpponentInformation(playerNames.get(j)).score() + " points");
+                gbc.gridy=j+1;
+                player.setHorizontalAlignment(SwingConstants.CENTER);
+                player.setForeground(Color.gray);
+                info.add(player, gbc);
+            }
+            catch(RemoteException e){
+                System.out.println(e.getMessage());
+            }
+        }
+
+        gbc.gridy=0;
+        gbc.gridx=0;
+        info.add(scoreboard, gbc);
+
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.gridwidth=2;
+
+        gbc.gridy = 1+j;
+        gbc.gridx = 0;
+        info.add(splitter, gbc);
+
+        gbc.gridy = 2+j;
+        gbc.gridx = 0;
+        info.add(objectiveLabel, gbc);
+
+        gbc.gridy = 3+j;
+        gbc.gridx = 0;
+        info.add(commonObjective1, gbc);
+
+        gbc.gridx=2;
+        info.add(commonObjective2, gbc);
+
+        info.setBackground(gray);
+
+        // Make the frame visible
+        info.setVisible(true);
+
+        this.repaint();
+        this.revalidate();
+        return info;
     }
 
 

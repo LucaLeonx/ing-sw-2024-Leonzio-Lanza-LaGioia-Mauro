@@ -29,6 +29,7 @@ public class MapPanel extends StandardPanel{
     private final int offsetX = DefaultCardSizeInfo.offsetX;
     private final int offsetY = DefaultCardSizeInfo.offsetY;
     private int layer = 0;
+    private int numOfPos = 1;
 
     private AbstractMap.SimpleEntry<Integer,CardOrientation> cardToPlace;
     private JLayeredPane jLayeredPane = new JLayeredPane();
@@ -148,6 +149,7 @@ public class MapPanel extends StandardPanel{
     }
 
     public void removeAllAvailablePlaces(){
+        numOfPos=1;
         List<JButton> tempList = new ArrayList<>(availablePlaces.values());
         for(JButton b : tempList) {
             b.setVisible(false);
@@ -157,7 +159,8 @@ public class MapPanel extends StandardPanel{
     }
 
     private void addSpaceButton(Point p, int boundsX, int boundsY){
-        JButton newButton = new JButton(p.toString());
+        JButton newButton = new JButton(String.valueOf(numOfPos));
+        numOfPos++;
         newButton.setVisible(false);
         newButton.setBackground(Color.GRAY);
         newButton.setOpaque(false);

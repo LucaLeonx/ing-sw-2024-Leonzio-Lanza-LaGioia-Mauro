@@ -117,7 +117,7 @@ public class GamePlayScreen extends TUIScreen {
 
     private List<DialogOption<Point>> generatePositionOptions(ArrayList<Point> points) {
         return points.stream()
-                .map((point) -> new DialogOption<>(point.toString(), point))
+                .map((point) -> new DialogOption<>("position on the map, coordinates : " + point.scale(0.5), point))
                 .toList();
     }
 
