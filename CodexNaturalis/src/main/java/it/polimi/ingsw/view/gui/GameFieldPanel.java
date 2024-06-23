@@ -58,7 +58,6 @@ public class GameFieldPanel extends StandardPanel {
         this.setLayout(new BorderLayout());
         this.setSize(1600,1100);
         JPanel otherPlayers = newOtherPlayers();
-        JPanel chat = newChat();
         this.map = new MapPanel(placeCardButton);
         isYourTurn.setVisible(false);
         waitingForOther.setVisible(false);
@@ -69,7 +68,6 @@ public class GameFieldPanel extends StandardPanel {
         orientation = MainWindow.getClientController().getControlledPlayerInformation().field().placedCards().get(new Point(0,0)).orientation();
 
         this.add(otherPlayers, BorderLayout.PAGE_START);
-        this.add(chat, BorderLayout.LINE_START);
         this.add(map, BorderLayout.CENTER);
 
         controller = MainWindow.getClientController();
@@ -78,8 +76,11 @@ public class GameFieldPanel extends StandardPanel {
             try {
                 JPanel hostPlayer = newHostPanel();
                 JPanel rightInfo = newInfo();
+                JPanel leftInfo = newChat();
                 this.add(hostPlayer, BorderLayout.PAGE_END);
                 this.add(rightInfo, BorderLayout.LINE_END);
+                this.add(leftInfo, BorderLayout.LINE_START);
+
 
                 ControlledPlayerInfo controlledPlayer = controller.getControlledPlayerInformation();
                 String controlledPlayerName = controlledPlayer.nickname();
@@ -103,6 +104,11 @@ public class GameFieldPanel extends StandardPanel {
                         this.remove(rightInfo);
                         rightInfo = newInfo();
                         this.add(rightInfo, BorderLayout.LINE_END);
+
+
+                        this.remove(leftInfo);
+                        leftInfo= newChat();
+                        this.add(leftInfo, BorderLayout.LINE_START);
 
                         waitingForOther.setVisible(false);
                         isYourTurn.setVisible(true);
@@ -157,6 +163,11 @@ public class GameFieldPanel extends StandardPanel {
                         this.remove(hostPlayer);
                         hostPlayer = newHostPanel();
                         this.add(hostPlayer, BorderLayout.PAGE_END);
+
+
+                        this.remove(leftInfo);
+                        leftInfo= newChat();
+                        this.add(leftInfo, BorderLayout.LINE_START);
                     }
                 }
             } catch (RemoteException | InterruptedException e) {
@@ -647,6 +658,7 @@ public class GameFieldPanel extends StandardPanel {
             try {
                 JLabel player = new JLabel(playerNames.get(j) + " has " + MainWindow.getClientController().getOpponentInformation(playerNames.get(j)).score() + " points");
                 gbc.gridy=j+1;
+                System.out.println(player.getText());
                 player.setHorizontalAlignment(SwingConstants.CENTER);
                 player.setForeground(Color.gray);
                 info.add(player, gbc);
@@ -689,7 +701,5 @@ public class GameFieldPanel extends StandardPanel {
         this.revalidate();
         return info;
     }
-
-
 
 }
