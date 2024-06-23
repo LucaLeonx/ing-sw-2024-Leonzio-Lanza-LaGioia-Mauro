@@ -656,11 +656,12 @@ public class GameFieldPanel extends StandardPanel {
             }
         }
 
+        gbc.insets = new Insets(5, 5, 5, 5);
+
         gbc.gridy=0;
         gbc.gridx=0;
         info.add(scoreboard, gbc);
 
-        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.gridwidth=2;
 
         gbc.gridy = 1+j;
@@ -675,7 +676,8 @@ public class GameFieldPanel extends StandardPanel {
         gbc.gridx = 0;
         info.add(commonObjective1, gbc);
 
-        gbc.gridx=2;
+        gbc.gridy = 4+j;
+        gbc.gridx=0;
         info.add(commonObjective2, gbc);
 
         info.setBackground(gray);
