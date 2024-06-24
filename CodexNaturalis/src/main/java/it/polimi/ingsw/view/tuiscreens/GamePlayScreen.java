@@ -89,7 +89,8 @@ public class GamePlayScreen extends TUIScreen {
 
                 } else {
                     OpponentInfo currentPlayingOpponent = controller.getOpponentInformation(currentPlayerName);
-                    System.out.println("Waiting for " + currentPlayerName + " Score: " + currentPlayingOpponent.score() + " to make his move");
+                    System.out.println("Waiting for " + currentPlayerName + "'s move");
+                    System.out.println(currentPlayerName + " has " + currentPlayingOpponent.score() + " points");
                     controller.waitForTurnChange();
                     System.out.println(currentPlayingOpponent.nickname() + " has done its move, this is his final field: ");
                     TUIMethods.drawMap(currentPlayingOpponent.color(), controller.getOpponentInformation(currentPlayerName).field(), false);
