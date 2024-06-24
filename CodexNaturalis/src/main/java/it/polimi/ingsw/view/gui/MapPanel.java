@@ -11,6 +11,8 @@ import it.polimi.ingsw.model.map.Point;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.List;
@@ -51,7 +53,18 @@ public class MapPanel extends StandardPanel{
         jLayeredPane.setLayout(null);
         this.placeMode = placebutton;
         this.add(jScrollPane, BorderLayout.CENTER);
+
         this.setVisible(true);
+
+        jScrollPane.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                JScrollBar verticalBar = jScrollPane.getVerticalScrollBar();
+                JScrollBar horizontalBar = jScrollPane.getHorizontalScrollBar();
+                verticalBar.setValue(300);
+                horizontalBar.setValue(400);
+            }
+        });
 
 
         this.placeMode.addActionListener(e -> {

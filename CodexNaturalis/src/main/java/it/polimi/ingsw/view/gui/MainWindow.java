@@ -34,8 +34,8 @@ public class MainWindow extends JFrame {
     {
         setTitle("Codex Naturalis");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1300, 850);
-        setMinimumSize(new Dimension(1100, 850));
+        setSize(1300, 800);
+        setMinimumSize(new Dimension(1100, 800));
         setVisible(true);
 
         cardLayout = new CardLayout();

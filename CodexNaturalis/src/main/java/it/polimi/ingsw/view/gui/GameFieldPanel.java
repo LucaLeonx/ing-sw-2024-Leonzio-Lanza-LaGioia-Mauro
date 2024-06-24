@@ -81,7 +81,6 @@ public class GameFieldPanel extends StandardPanel {
                 this.add(rightInfo, BorderLayout.LINE_END);
                 this.add(leftInfo, BorderLayout.LINE_START);
 
-
                 ControlledPlayerInfo controlledPlayer = controller.getControlledPlayerInformation();
                 String controlledPlayerName = controlledPlayer.nickname();
 
