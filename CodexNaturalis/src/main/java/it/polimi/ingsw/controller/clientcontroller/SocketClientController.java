@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller.clientcontroller;
 import it.polimi.ingsw.controller.ConnectionSettings;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.controller.socket.SocketClient;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
@@ -332,8 +333,12 @@ public class SocketClientController implements ClientController {
         Tuple data = new Tuple(chosenObjective, initialCardSide);
         synchronized (this) {
             client.sendMessage(new Message(MessageType.SET_PLAYER_SETUP, getCredentials(), data));
-            client.receiveMessage();
-            System.out.println("Done 2");
+            Message response = client.receiveMessage();
+            if(response.getObj() != null){
+                if(response.getObj().getClass().equals(InvalidParameterException.class)) {
+                    throw new InvalidParameterException();
+                }
+            }
         }
     }
 
@@ -341,7 +346,12 @@ public class SocketClientController implements ClientController {
     public void makeMove(CardInfo card, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) throws RemoteException {
         synchronized (this) {
             client.sendMessage(new Message(MessageType.MAKE_MOVE, getCredentials(), new MoveInfo(card, placementPoint, chosenSide, drawChoice)));
-            client.receiveMessage();
+            Message response = client.receiveMessage();
+            if(response.getObj() != null){
+                if(response.getObj().getClass().equals(WrongPhaseException.class)){
+                    throw new WrongPhaseException();
+                }
+            }
         }
     }
 

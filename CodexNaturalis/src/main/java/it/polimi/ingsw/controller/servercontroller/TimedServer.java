@@ -24,7 +24,7 @@ public class TimedServer extends CoreServer {
     private final Map<User, ScheduledFuture<?>> userTimeouts = new HashMap<>();
 
     public static final int loginTimeout = 10; // in seconds
-    public static final int moveTimeout = 10;
+    public static final int moveTimeout = 20;
     public static final int setupTimeout = 10;
     public static final int endGameTimeout = 10;
 
