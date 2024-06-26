@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
 import it.polimi.ingsw.dataobject.CardInfo;
 import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.model.DrawChoice;
@@ -58,6 +59,10 @@ public class SetUpGamePanel extends StandardPanel {
                 if(choosenOrientation   != null && choosenObjective != null) {
                     try {
                         MainWindow.getClientController().setPlayerSetup(choosenObjective, choosenOrientation);
+                        break;
+                    } catch (InvalidParameterException e){
+                        JOptionPane.showMessageDialog(new JFrame(),
+                                "Setup setting skipped due to inactivity");
                         break;
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
