@@ -1,6 +1,6 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.controller.clientcontroller.ConnectionDefaultSettings;
+import it.polimi.ingsw.controller.ConnectionSettings;
 import it.polimi.ingsw.controller.servercontroller.*;
 import it.polimi.ingsw.controller.socket.SocketServer;
 
@@ -17,15 +17,24 @@ public class AppServer {
         LobbyList lobbyList = new LobbyList();
         GameList gameList = new GameList();
 
+        ConnectionSettings connectionSettings = ConnectionSettings.parseConnectionSettings(args);
+
+        System.out.println("Connection settings: ");
+        System.out.println("RMI server name: " + connectionSettings.getRMIServerName());
+        System.out.println("RMI port:        " + connectionSettings.getRMIPort());
+        System.out.println("Socket port:     " + connectionSettings.getSocketPort());
+
         CoreServer server = new CoreServer(userList, lobbyList, gameList);
 
-        LocateRegistry.createRegistry(ConnectionDefaultSettings.RMIRegistryPort);
+        LocateRegistry.createRegistry(connectionSettings.getRMIPort());
         Registry reg = LocateRegistry.getRegistry();
-        reg.rebind(ConnectionDefaultSettings.RMIServerName, (AuthenticationManager) server);
+        reg.rebind(connectionSettings.getRMIServerName(), (AuthenticationManager) server);
         System.out.println("Registry bound, ready to listen for clients from RMI");
 
-        SocketServer socketServer = new SocketServer(ConnectionDefaultSettings.SocketServerPort, server);
+        SocketServer socketServer = new SocketServer(connectionSettings.getSocketPort(), server);
         socketServer.startServer();
         System.out.println("Game server ready");
     }
+
+
 }

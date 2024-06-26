@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.rmi.NotBoundException;
-import java.util.Objects;
 
 /**
  * This Panel lets players choose which connection they prefer, it can be decided only once in a match.

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
+import it.polimi.ingsw.controller.ConnectionSettings;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidCredentialsException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
-import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.controller.socket.SocketClient;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
@@ -11,11 +11,8 @@ import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
 
 import java.io.IOException;
-import java.io.StreamCorruptedException;
 import java.rmi.RemoteException;
 import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class SocketClientController implements ClientController {

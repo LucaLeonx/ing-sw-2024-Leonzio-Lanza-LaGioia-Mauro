@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.tuiscreens;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
-import it.polimi.ingsw.controller.clientcontroller.ConnectionSettings;
+import it.polimi.ingsw.controller.ConnectionSettings;
 import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
 import it.polimi.ingsw.controller.clientcontroller.SocketClientController;
 import it.polimi.ingsw.view.tui.TUI;
@@ -82,6 +82,5 @@ public class ConnectionChoiceScreen extends TUIScreen {
         System.out.println("Server address: " + connectionSettings.getServerHost());
         System.out.println("RMI port:       " + connectionSettings.getRMIPort());
         System.out.println("Socket port:    " + connectionSettings.getSocketPort());
-
     }
 }

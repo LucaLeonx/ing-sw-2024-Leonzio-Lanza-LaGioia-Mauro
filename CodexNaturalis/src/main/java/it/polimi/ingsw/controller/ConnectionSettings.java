@@ -1,4 +1,6 @@
-package it.polimi.ingsw.controller.clientcontroller;
+package it.polimi.ingsw.controller;
+
+import it.polimi.ingsw.controller.clientcontroller.ConnectionDefaultSettings;
 
 public class ConnectionSettings {
     private String serverHost;
@@ -42,5 +44,19 @@ public class ConnectionSettings {
 
     public void setSocketPort(int socketPort){
         this.socketPort = socketPort;
+    }
+
+    public static ConnectionSettings parseConnectionSettings(String[] args) {
+        ConnectionSettings connectionSettings = new ConnectionSettings();
+
+        for(int i = 0; i < args.length; i++){
+            switch (args[i]) {
+                case "-H", "--host" -> connectionSettings.setServerHost(args[i + 1]);
+                case "-Rp", "--rmi-port" -> connectionSettings.setRMIPort(Integer.parseInt(args[i + 1]));
+                case "-Sp", "--socket-port" -> connectionSettings.setSocketPort(Integer.parseInt(args[i + 1]));
+            }
+        }
+
+        return connectionSettings;
     }
 }
