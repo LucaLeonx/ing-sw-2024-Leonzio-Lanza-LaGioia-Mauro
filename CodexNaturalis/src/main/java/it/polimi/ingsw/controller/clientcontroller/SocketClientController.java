@@ -20,13 +20,13 @@ import java.util.List;
 
 public class SocketClientController implements ClientController {
 
-    private  String username = null;
+    private String username = null;
     private int tempCode = 0;
-    private SocketClient client ;
-    private Object lock = new Object();
+    private SocketClient client;
 
-    public SocketClientController() throws IOException {
-        this.client = new SocketClient(ConnectionDefaultSettings.SocketServerPort);
+
+    public SocketClientController(ConnectionSettings connectionSettings) throws IOException {
+        this.client = new SocketClient(connectionSettings.getServerHost(), connectionSettings.getSocketPort());
         this.client.startClientConnection();
     }
 

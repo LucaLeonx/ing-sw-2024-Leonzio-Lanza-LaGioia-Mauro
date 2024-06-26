@@ -11,17 +11,20 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class SocketClient {
+
+    private String host;
     private int port;
     private Socket socket;
     private ObjectOutputStream socketOut;
     private ObjectInputStream socketIn;
 
-    public SocketClient(int port) {
+    public SocketClient(String host, int port) {
+        this.host = host;
         this.port = port;
     }
 
     public void startClientConnection() throws IOException {
-        this.socket = new Socket(ConnectionDefaultSettings.RMIRegistryHost, port);
+        this.socket = new Socket(host, port);
         System.out.println("connection established");
         socketOut = new ObjectOutputStream(socket.getOutputStream());
         socketIn = new ObjectInputStream(socket.getInputStream());

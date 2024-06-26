@@ -21,13 +21,13 @@ public class RMIClientController extends UnicastRemoteObject implements ClientCo
     private final AuthenticationManager authenticator;
     private ServerController session = null;
 
-    public RMIClientController(String host, int port, String serverName) throws RemoteException, NotBoundException {
-        Registry registry = LocateRegistry.getRegistry(host, port);
-        this.authenticator = (AuthenticationManager) registry.lookup(serverName);
+    public RMIClientController(ConnectionSettings connectionSettings) throws RemoteException, NotBoundException {
+        Registry registry = LocateRegistry.getRegistry(connectionSettings.getServerHost(), connectionSettings.getRMIPort());
+        this.authenticator = (AuthenticationManager) registry.lookup(connectionSettings.getRMIServerName());
     }
 
     public RMIClientController() throws RemoteException, NotBoundException {
-       this(ConnectionDefaultSettings.RMIRegistryHost, ConnectionDefaultSettings.RMIRegistryPort, ConnectionDefaultSettings.RMIServerName);
+       this(new ConnectionSettings());
     }
 
     private boolean isAuthenticated(){
