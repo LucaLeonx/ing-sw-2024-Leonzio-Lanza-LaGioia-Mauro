@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.controller.clientcontroller.ConnectionSettings;
 import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
 import it.polimi.ingsw.controller.clientcontroller.SocketClientController;
 
@@ -72,8 +73,8 @@ public class MainWindow extends JFrame {
         clientController = new RMIClientController();
     }
 
-    public static void setSocketController()throws IOException {
-        clientController = new SocketClientController();
+    public static void setSocketController() throws IOException {
+        clientController = new SocketClientController(new ConnectionSettings());
     }
     public static void goToWindow(String name) {
         cardLayout.show(cardPanel, name);
