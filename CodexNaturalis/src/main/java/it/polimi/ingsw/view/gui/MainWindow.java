@@ -29,7 +29,7 @@ public class MainWindow extends JFrame {
     public static GameFieldPanel gameFieldPanel = new GameFieldPanel();
     //public static OtherMapsPanel otherMapsPanel = new OtherMapsPanel();
     public static EndGamePanel endGamePanel = new EndGamePanel();
-    private static ConnectionSettings connectionSettings;
+    public static ConnectionSettings connectionSettings;
 
     public MainWindow(ConnectionSettings newConnectionSettings)
     {
@@ -55,7 +55,6 @@ public class MainWindow extends JFrame {
         cardPanel.add("endGamePanel", endGamePanel);
         //cardPanel.add("otherMapsPanel", otherMapsPanel);
         add(cardPanel);
-
     }
 
     public static CardLayout getCardLayout(){
@@ -82,6 +81,8 @@ public class MainWindow extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(MainWindow::new);
+        SwingUtilities.invokeLater(() ->{
+            new MainWindow(ConnectionSettings.parseConnectionSettings(args));
+        });
     }
 }
