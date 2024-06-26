@@ -47,9 +47,9 @@ public class ConnectionChoiceScreen extends TUIScreen {
 
     private void askForConnectionSettings(Scanner input){
         Boolean changeNeeded = new AssignmentDialog<>(
-                "Do you want to change connection settings?",
+                "Do you want to set connection settings?",
                 new DialogOption<>("Yes", true),
-                new DialogOption<>("No", false)).askForChoice(input);
+                new DialogOption<>("No, use default", false)).askForChoice(input);
 
 
         if(changeNeeded){
@@ -65,6 +65,7 @@ public class ConnectionChoiceScreen extends TUIScreen {
                     newSettings.setRMIPort(input.nextInt());
                     System.out.print("Enter new Socket connection port: ");
                     newSettings.setSocketPort(input.nextInt());
+                    input.nextLine();
 
                     System.out.print("Do you confirm the new settings? [y|N]: ");
                     String confirmation = input.nextLine().toLowerCase().trim();
