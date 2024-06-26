@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
-import it.polimi.ingsw.model.player.newplayer.Player;
+import it.polimi.ingsw.model.player.Player;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;
