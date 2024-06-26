@@ -24,7 +24,7 @@ public class AppServer {
         System.out.println("RMI port:        " + connectionSettings.getRMIPort());
         System.out.println("Socket port:     " + connectionSettings.getSocketPort());
 
-        CoreServer server = new CoreServer(userList, lobbyList, gameList);
+        TimedServer server = new TimedServer(userList, lobbyList, gameList);
 
         LocateRegistry.createRegistry(connectionSettings.getRMIPort());
         Registry reg = LocateRegistry.getRegistry();

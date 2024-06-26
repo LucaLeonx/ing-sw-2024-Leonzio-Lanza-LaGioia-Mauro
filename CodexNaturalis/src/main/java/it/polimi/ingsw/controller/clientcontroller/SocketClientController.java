@@ -333,6 +333,7 @@ public class SocketClientController implements ClientController {
         synchronized (this) {
             client.sendMessage(new Message(MessageType.SET_PLAYER_SETUP, getCredentials(), data));
             client.receiveMessage();
+            System.out.println("Done 2");
         }
     }
 
