@@ -1,6 +1,7 @@
 package it.polimi.ingsw.test.server.socket;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.controller.ConnectionSettings;
 import it.polimi.ingsw.controller.clientcontroller.SocketClientController;
 import it.polimi.ingsw.dataobject.LobbyInfo;
 import it.polimi.ingsw.dataobject.Message;
@@ -12,13 +13,14 @@ import java.util.Scanner;
 
 public class TestSocketClient {
     public static void main(String[] args) {
-        SocketClient client = new SocketClient(7000);
+        ConnectionSettings cs = new ConnectionSettings();
+        SocketClient client = new SocketClient(cs.getServerHost(),cs.getSocketPort() );
 
         try{
             Message msg = new Message(MessageType.LOGIN,null,"user");
             //client.startClientConnection();
 
-            ClientController skClientController = new SocketClientController();
+            ClientController skClientController = new SocketClientController(cs);
 
             System.out.println("Type 'send' for send an info, Type 'quit' for close the client ");
             Scanner scanner = new Scanner(System.in);

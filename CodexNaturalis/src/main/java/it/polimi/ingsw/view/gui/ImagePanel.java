@@ -19,8 +19,8 @@ public class ImagePanel extends JPanel {
         cardPanel = new JPanel(cardLayout);
         id = imageNumber;
 
-        FrontPanel frontPanel = new FrontPanel(Toolkit.getDefaultToolkit().getImage("src/main/resources/cropped_fronte/img_" + imageNumber + ".jpeg"));
-        BackPanel backPanel = new BackPanel(Toolkit.getDefaultToolkit().getImage("src/main/resources/cropped_retro/img_" + imageNumber + ".jpeg"));
+        FrontPanel frontPanel = new FrontPanel(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/cropped_fronte/img_" + imageNumber + ".jpeg")));
+        BackPanel backPanel = new BackPanel(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/cropped_retro/img_" + imageNumber + ".jpeg")));
 
         cardPanel.add(frontPanel, "FRONT");
         cardPanel.add(backPanel, "BACK");

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.test.server;
 
+import it.polimi.ingsw.controller.ConnectionSettings;
 import it.polimi.ingsw.controller.clientcontroller.SocketClientController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
 
@@ -12,7 +13,7 @@ public class TestSocketClient {
 
         System.out.println("Welcome to Codex Naturalis!!\n");
 
-        SocketClientController client = new SocketClientController();
+        SocketClientController client = new SocketClientController(new ConnectionSettings());
 
         try{
 

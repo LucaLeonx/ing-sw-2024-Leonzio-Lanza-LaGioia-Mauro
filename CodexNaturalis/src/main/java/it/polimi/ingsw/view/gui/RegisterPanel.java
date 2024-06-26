@@ -33,8 +33,9 @@ public class RegisterPanel extends StandardPanel {
         JButton goBack = new JButton("Go Back");
 
         JLabel listOfLobbies = new JLabel("List of Lobbies: ");
-        ImageIcon icon = new ImageIcon("src/main/resources/other_images/UpdateArrow.png");
+        ImageIcon icon = new ImageIcon(this.getClass().getResource("/other_images/UpdateArrow.jpg"));
         JButton updateLobbylist = new JButton(icon);
+        updateLobbylist.setBackground(Color.WHITE);
 
         JList<String> jList = new JList<>(listModel);
         JScrollPane scrollPane = new JScrollPane(jList);
@@ -127,7 +128,7 @@ public class RegisterPanel extends StandardPanel {
         super.paintComponent(g);
         Image image = null;
         try {
-            image = new ImageIcon("src/main/resources/other_images/codex_game.jpg").getImage();
+            image = new ImageIcon(this.getClass().getResource("/other_images/codex_game.jpg")).getImage();
         }
         catch (Exception e){
             System.out.println("Path non rilevato");
