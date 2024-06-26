@@ -2,25 +2,51 @@ package it.polimi.ingsw.controller.servercontroller;
 
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.card.CardOrientation;
 import it.polimi.ingsw.model.map.Point;
+import it.polimi.ingsw.model.player.newplayer.Player;
 
 import java.rmi.RemoteException;
-import java.rmi.server.RemoteRef;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 
-public class TimedServer extends CoreServer{
+import static java.util.concurrent.TimeUnit.SECONDS;
+
+public class TimedServer extends CoreServer {
+
+    private final ScheduledExecutorService scheduler =
+            Executors.newScheduledThreadPool(2);
+    private final Map<User, ScheduledFuture<?>> userTimeouts = new HashMap<>();
+
+    public static final int loginTimeout = 10; // in seconds
+    public static final int moveTimeout = 10;
+    public static final int setupTimeout = 10;
+    public static final int endGameTimeout = 10;
+
     public TimedServer(UserList userList, LobbyList lobbyList, GameList activeGames) throws RemoteException {
         super(userList, lobbyList, activeGames);
     }
 
     @Override
     public int register(String username) throws RemoteException {
-        return super.register(username);
+        int tempCode = super.register(username);
+        User newUser = this.userList.getUserByUsername(username);
+        ScheduledFuture<?> timeout = scheduler.schedule(removeUser(newUser, this.userList), loginTimeout, SECONDS);
+        userTimeouts.put(newUser, timeout);
+        return tempCode;
     }
 
     @Override
     public ServerController login(String username, int tempCode) throws RemoteException {
+        User user = this.userList.getUserByUsername(username);
+        if(user != null) {
+            userTimeouts.get(user).cancel(false);
+        }
         return super.login(username, tempCode);
     }
 
@@ -47,6 +73,13 @@ public class TimedServer extends CoreServer{
     @Override
     public void joinLobby(User user, int lobbyId) {
         super.joinLobby(user, lobbyId);
+        if(user.hasJoinedGameId()){
+            GameData data = activeGames.getGameData(user.getJoinedGameId());
+            for(User player: data.getPlayingUsers()){
+                ScheduledFuture<?> timeout = scheduler.schedule(makeUserChooseSetup(player, this), setupTimeout, SECONDS);
+                userTimeouts.put(player, timeout);
+            }
+        }
     }
 
     @Override
@@ -101,12 +134,35 @@ public class TimedServer extends CoreServer{
 
     @Override
     public void registerPlayerSetup(User user, int objectiveCardId, CardOrientation initialCardSide) {
+        ScheduledFuture<?> timeout = userTimeouts.get(user);
+        if (timeout != null){
+            timeout.cancel(false);
+        }
         super.registerPlayerSetup(user, objectiveCardId, initialCardSide);
+        Game game = activeGames.getJoinedGame(user);
+        if(game.allPlayersHaveSetup()){
+            User firstPlayer = this.userList.getUserByUsername(game.getCurrentPlayerNickname());
+            ScheduledFuture<?> gameTimeout = scheduler.schedule(makeUserSkipTurn(firstPlayer, this.activeGames, this.userTimeouts), moveTimeout, SECONDS);
+            userTimeouts.put(firstPlayer, timeout);
+        }
     }
 
     @Override
     public void registerPlayerMove(User user, int placedCardId, Point placementPoint, CardOrientation chosenSide, DrawChoice drawChoice) {
+        userTimeouts.get(user).cancel(false);
         super.registerPlayerMove(user, placedCardId, placementPoint, chosenSide, drawChoice);
+        Game joinedGame = activeGames.getJoinedGame(user);
+        if(joinedGame.isEnded()){
+            for(Player player : joinedGame.getPlayers()){
+                User nextUser = userList.getUserByUsername(player.getNickname());
+                ScheduledFuture<?> timeout = scheduler.schedule(makeUserExitGame(nextUser, this), endGameTimeout, SECONDS);
+                userTimeouts.put(nextUser, timeout);
+            }
+        } else {
+            User nextUser = userList.getUserByUsername(joinedGame.getCurrentPlayerNickname());
+            ScheduledFuture<?> timeout = scheduler.schedule(makeUserSkipTurn(nextUser, this.activeGames, this.userTimeouts), moveTimeout, SECONDS);
+            userTimeouts.put(nextUser, timeout);
+        }
     }
 
     @Override
@@ -128,4 +184,49 @@ public class TimedServer extends CoreServer{
     public String ping() {
         return super.ping();
     }
+
+    private Runnable removeUser(User user, UserList userList){
+        return new Runnable() {
+            @Override
+            public void run() {
+                userList.removeUser(user);
+            }
+        };
+    }
+
+    private Runnable makeUserChooseSetup(User user, TimedServer timedServer) {
+        return new Runnable() {
+            @Override
+            public void run() {
+                PlayerSetupInfo setup = timedServer.getPlayerSetupInfo(user);
+                timedServer.registerPlayerSetup(user, setup.objective1().id(), CardOrientation.FRONT);
+            }
+        };
+    }
+
+    private Runnable makeUserSkipTurn(User user, GameList gameList, Map<User, ScheduledFuture<?>> userTimeouts){
+        return new Runnable() {
+            @Override
+            public void run(){
+                Game game = gameList.getJoinedGame(user);
+                game.skipTurn();
+                User nextUser = userList.getUserByUsername(game.getCurrentPlayerNickname());
+                ScheduledFuture<?> timeout = scheduler.schedule(makeUserSkipTurn(nextUser, gameList, userTimeouts),moveTimeout, SECONDS);
+                userTimeouts.put(nextUser, timeout);
+            }
+        };
+    }
+
+    private Runnable makeUserExitGame(User user, TimedServer server){
+        return new Runnable() {
+            @Override
+            public void run() {
+                server.exitFromGame(user);
+            }
+        };
+    }
+
+
+
 }
+
