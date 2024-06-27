@@ -24,15 +24,17 @@ public class AppServer {
         System.out.println("RMI port:        " + connectionSettings.getRMIPort());
         System.out.println("Socket port:     " + connectionSettings.getSocketPort());
 
-
-
         CoreServer server = new CoreServer(userList, lobbyList, gameList);
 
         for(int i = 0; i < args.length; i++){
             if(args[i].equals("-Tshort") || args[i].equals("--timeout-short")){
-                server = new TimedServer(userList, lobbyList, gameList, new TimeoutSettings(60, 25, 25, 60));
+                TimeoutSettings timeoutSettings = new TimeoutSettings(60, 25, 25, 60);
+                server = new TimedServer(userList, lobbyList, gameList, timeoutSettings);
+                System.out.println("Using short timeouts settings: " + timeoutSettings);
             } else if(args[i].equals("-Tlong") || args[i].equals("--timeout-long")){
-                server = new TimedServer(userList, lobbyList, gameList, new TimeoutSettings(600, 180, 180, 300));
+                TimeoutSettings timeoutSettings = new TimeoutSettings(600, 180, 180, 300);
+                server = new TimedServer(userList, lobbyList, gameList, timeoutSettings);
+                System.out.println("Using long timeouts settings: " + timeoutSettings);
             }
         }
 
