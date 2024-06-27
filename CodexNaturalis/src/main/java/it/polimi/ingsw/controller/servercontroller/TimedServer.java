@@ -23,20 +23,18 @@ public class TimedServer extends CoreServer {
             Executors.newScheduledThreadPool(2);
     private final Map<User, ScheduledFuture<?>> userTimeouts = new HashMap<>();
 
-    public static final int loginTimeout = 10; // in seconds
-    public static final int moveTimeout = 20;
-    public static final int setupTimeout = 10;
-    public static final int endGameTimeout = 10;
+    private final TimeoutSettings timeouts;
 
-    public TimedServer(UserList userList, LobbyList lobbyList, GameList activeGames) throws RemoteException {
+    public TimedServer(UserList userList, LobbyList lobbyList, GameList activeGames, TimeoutSettings timeouts) throws RemoteException {
         super(userList, lobbyList, activeGames);
+        this.timeouts = timeouts;
     }
 
     @Override
     public int register(String username) throws RemoteException {
         int tempCode = super.register(username);
         User newUser = this.userList.getUserByUsername(username);
-        ScheduledFuture<?> timeout = scheduler.schedule(removeUser(newUser, this.userList), loginTimeout, SECONDS);
+        ScheduledFuture<?> timeout = scheduler.schedule(removeUser(newUser, this.userList), timeouts.loginTimeout(), SECONDS);
         userTimeouts.put(newUser, timeout);
         return tempCode;
     }
@@ -76,7 +74,7 @@ public class TimedServer extends CoreServer {
         if(user.hasJoinedGameId()){
             GameData data = activeGames.getGameData(user.getJoinedGameId());
             for(User player: data.getPlayingUsers()){
-                ScheduledFuture<?> timeout = scheduler.schedule(makeUserChooseSetup(player, this), setupTimeout, SECONDS);
+                ScheduledFuture<?> timeout = scheduler.schedule(makeUserChooseSetup(player, this), timeouts.setupTimeout(), SECONDS);
                 userTimeouts.put(player, timeout);
             }
         }
@@ -142,7 +140,7 @@ public class TimedServer extends CoreServer {
         Game game = activeGames.getJoinedGame(user);
         if(game.allPlayersHaveSetup()){
             User firstPlayer = this.userList.getUserByUsername(game.getCurrentPlayerNickname());
-            ScheduledFuture<?> gameTimeout = scheduler.schedule(makeUserSkipTurn(firstPlayer, this.activeGames, this.userTimeouts), moveTimeout, SECONDS);
+            ScheduledFuture<?> gameTimeout = scheduler.schedule(makeUserSkipTurn(firstPlayer, this.activeGames, this.userTimeouts), timeouts.moveTimeout(), SECONDS);
             userTimeouts.put(firstPlayer, timeout);
         }
     }
@@ -155,12 +153,12 @@ public class TimedServer extends CoreServer {
         if(joinedGame.isEnded()){
             for(Player player : joinedGame.getPlayers()){
                 User nextUser = userList.getUserByUsername(player.getNickname());
-                ScheduledFuture<?> timeout = scheduler.schedule(makeUserExitGame(nextUser, this), endGameTimeout, SECONDS);
+                ScheduledFuture<?> timeout = scheduler.schedule(makeUserExitGame(nextUser, this), timeouts.endGameTimeout(), SECONDS);
                 userTimeouts.put(nextUser, timeout);
             }
         } else {
             User nextUser = userList.getUserByUsername(joinedGame.getCurrentPlayerNickname());
-            ScheduledFuture<?> timeout = scheduler.schedule(makeUserSkipTurn(nextUser, this.activeGames, this.userTimeouts), moveTimeout, SECONDS);
+            ScheduledFuture<?> timeout = scheduler.schedule(makeUserSkipTurn(nextUser, this.activeGames, this.userTimeouts), timeouts.moveTimeout(), SECONDS);
             userTimeouts.put(nextUser, timeout);
         }
     }
@@ -211,7 +209,7 @@ public class TimedServer extends CoreServer {
                 Game game = gameList.getJoinedGame(user);
                 game.skipTurn();
                 User nextUser = userList.getUserByUsername(game.getCurrentPlayerNickname());
-                ScheduledFuture<?> timeout = scheduler.schedule(makeUserSkipTurn(nextUser, gameList, userTimeouts),moveTimeout, SECONDS);
+                ScheduledFuture<?> timeout = scheduler.schedule(makeUserSkipTurn(nextUser, gameList, userTimeouts), timeouts.moveTimeout(), SECONDS);
                 userTimeouts.put(nextUser, timeout);
             }
         };
