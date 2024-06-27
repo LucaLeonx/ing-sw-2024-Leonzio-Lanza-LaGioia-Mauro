@@ -55,7 +55,7 @@ public class LobbyScreen extends TUIScreen {
 
         } catch (CancelChoiceException e) {
             throw new CancelChoiceException();
-        } catch (ElementNotFoundException | InvalidParameterException e){
+        } catch (ElementNotFoundException | InvalidParameterException e) {
             System.out.println("Unable to join lobby - It might be already full");
             throw new CancelChoiceException();
         } catch (RemoteException e) {

@@ -75,7 +75,7 @@ public class WaitingPanel extends StandardPanel {
         super.paintComponent(g);
         Image image = null;
         try {
-            image = new ImageIcon("src/main/resources/other_images/lobbyScreen.jpg").getImage();
+            image = new ImageIcon(this.getClass().getResource("/other_images/lobbyScreen.jpg")).getImage();
         }
         catch (Exception e){
             System.out.println("Path non rilevato");

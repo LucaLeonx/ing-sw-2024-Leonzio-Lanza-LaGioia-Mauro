@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
-import it.polimi.ingsw.controller.clientcontroller.ConnectionSettings;
+import it.polimi.ingsw.controller.ConnectionSettings;
 import it.polimi.ingsw.controller.clientcontroller.RMIClientController;
 import it.polimi.ingsw.controller.clientcontroller.SocketClientController;
 
@@ -18,7 +18,6 @@ public class MainWindow extends JFrame {
     private static CardLayout cardLayout;
     private static JPanel cardPanel;
     private static ClientController clientController;
-
     public static ChooseConnectionPanel chooseConnectionPanel = new ChooseConnectionPanel();
     public static ChooseLoginPanel chooseLoginPanel= new ChooseLoginPanel();
     public static LoginPanel loginPanel = new LoginPanel();
@@ -30,8 +29,9 @@ public class MainWindow extends JFrame {
     public static GameFieldPanel gameFieldPanel = new GameFieldPanel();
     //public static OtherMapsPanel otherMapsPanel = new OtherMapsPanel();
     public static EndGamePanel endGamePanel = new EndGamePanel();
+    public static ConnectionSettings connectionSettings;
 
-    public MainWindow()
+    public MainWindow(ConnectionSettings newConnectionSettings)
     {
         setTitle("Codex Naturalis");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,6 +41,7 @@ public class MainWindow extends JFrame {
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
+        connectionSettings = newConnectionSettings;
 
         cardPanel.add("chooseConnectionPanel",chooseConnectionPanel);
         cardPanel.add("chooseLoginPanel",chooseLoginPanel);
@@ -54,7 +55,6 @@ public class MainWindow extends JFrame {
         cardPanel.add("endGamePanel", endGamePanel);
         //cardPanel.add("otherMapsPanel", otherMapsPanel);
         add(cardPanel);
-
     }
 
     public static CardLayout getCardLayout(){
@@ -70,17 +70,19 @@ public class MainWindow extends JFrame {
     }
 
     public static void setRMIController() throws NotBoundException, RemoteException {
-        clientController = new RMIClientController();
+        clientController = new RMIClientController(connectionSettings);
     }
 
     public static void setSocketController() throws IOException {
-        clientController = new SocketClientController(new ConnectionSettings());
+        clientController = new SocketClientController(connectionSettings);
     }
     public static void goToWindow(String name) {
         cardLayout.show(cardPanel, name);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(MainWindow::new);
+        SwingUtilities.invokeLater(() ->{
+            new MainWindow(ConnectionSettings.parseConnectionSettings(args));
+        });
     }
 }

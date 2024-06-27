@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller.clientcontroller;
 
+import it.polimi.ingsw.controller.ConnectionSettings;
 import it.polimi.ingsw.controller.servercontroller.AuthenticationManager;
 import it.polimi.ingsw.controller.servercontroller.ServerController;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;

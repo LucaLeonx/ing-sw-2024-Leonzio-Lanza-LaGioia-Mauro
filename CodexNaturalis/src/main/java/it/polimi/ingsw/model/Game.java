@@ -61,7 +61,7 @@ public class Game {
             objectivePicker = new RandomPicker<>(CardFactory.getObjectiveCards());
             colorPicker = new RandomPicker<>(List.of(PlayerColor.values()));
         } catch (FileNotFoundException e){
-            throw new RejectedExecutionException("Impossible to create game: cards missing");
+            throw new RejectedExecutionException("Impossible to create game: cards missing : " + e.getMessage());
         }
 
         // Create players

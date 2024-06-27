@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.tuiscreens;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
 import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
 import it.polimi.ingsw.dataobject.ObjectiveInfo;
 import it.polimi.ingsw.dataobject.PlayerSetupInfo;
@@ -55,8 +56,11 @@ public class GameSetupScreen extends TUIScreen {
                     confirmed = false;
                 }
             } while(!confirmed);
-
-            controller.setPlayerSetup(chosenObjective, initialCardOrientation);
+            try {
+                controller.setPlayerSetup(chosenObjective, initialCardOrientation);
+            } catch (InvalidParameterException e){
+                System.out.println("Setup phase skipped due to inactivity");
+            }
             System.out.println("Waiting for other players to finish their setup");
             controller.waitForSetupFinished();
             transitionState(new GamePlayScreen(tui, scanner, controller));

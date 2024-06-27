@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.tuiscreens;
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.model.DrawChoice;
 import it.polimi.ingsw.model.card.CardOrientation;
@@ -77,9 +78,11 @@ public class GamePlayScreen extends TUIScreen {
                                         generateDrawChoiceOptions(drawableCards))
                                         .askForChoice(scanner);
                             }
-
-                            controller.makeMove(chosenCard, position, chosenOrientation, cardToDraw);
-
+                            try {
+                                controller.makeMove(chosenCard, position, chosenOrientation, cardToDraw);
+                            } catch (WrongPhaseException e){
+                                System.out.println("Move not performed, turn skipped due to inactivity");
+                            }
 
                         } catch (CancelChoiceException e){
                             confirmed = false;
@@ -89,14 +92,12 @@ public class GamePlayScreen extends TUIScreen {
 
                 } else {
                     OpponentInfo currentPlayingOpponent = controller.getOpponentInformation(currentPlayerName);
-                    System.out.println("Waiting for " + currentPlayerName + "'s move");
-                    System.out.println(currentPlayerName + " has " + currentPlayingOpponent.score() + " points");
+                    System.out.println("Waiting for " + currentPlayerName + " Score: " + currentPlayingOpponent.score() + " to make his move");
                     controller.waitForTurnChange();
                     System.out.println(currentPlayingOpponent.nickname() + " has done its move, this is his final field: ");
                     TUIMethods.drawMap(currentPlayingOpponent.color(), controller.getOpponentInformation(currentPlayerName).field(), false);
                     System.out.println("And these the remaining cards on table: ");
                     TUIMethods.showCardsOnTable(objective1, objective2, controller.getDrawableCards());
-
                 }
             }
             transitionState(new GameEndState(tui, scanner, controller));
@@ -146,4 +147,5 @@ public class GamePlayScreen extends TUIScreen {
         return options;
 
     }
+
 }

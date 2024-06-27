@@ -19,9 +19,9 @@ import static it.polimi.ingsw.model.DrawChoice.DECK_RESOURCE;
 
 public class CoreServer extends UnicastRemoteObject implements AuthenticationManager {
 
-    private final UserList userList;
-    private final LobbyList lobbyList;
-    private final GameList activeGames;
+    protected final UserList userList;
+    protected final LobbyList lobbyList;
+    protected final GameList activeGames;
 
     public CoreServer(UserList userList, LobbyList lobbyList, GameList activeGames) throws RemoteException {
         super();

@@ -1,12 +1,16 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.AppClient;
+
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.rmi.NotBoundException;
-import java.util.Objects;
 
 /**
  * This Panel lets players choose which connection they prefer, it can be decided only once in a match.
@@ -103,11 +107,11 @@ public class ChooseConnectionPanel extends StandardPanel {
         super.paintComponent(g);
         Image image = null;
         try {
-          //  image = new ImageIcon(Objects.requireNonNull(getClass().getResource("codex_game.jpg"))).getImage();
-           image = new ImageIcon("src/main/resources/other_images/codex_game.jpg").getImage();
+            image = new ImageIcon(this.getClass().getResource("/other_images/codex_game.jpg")).getImage();
+            //image = new ImageIcon("src/main/resources/other_images/codex_game.jpg").getImage();
         }
         catch (Exception e){
-            System.out.println("Path non rilevato");
+            System.out.println("Path non rilevato : " + e.getMessage() );
         }
         g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
     }

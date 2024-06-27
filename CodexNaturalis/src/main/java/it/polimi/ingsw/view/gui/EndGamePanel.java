@@ -135,7 +135,8 @@ public class EndGamePanel extends StandardPanel {
         super.paintComponent(g);
         Image image = null;
         try {
-            image = new ImageIcon("src/main/resources/other_images/EndGame.jpg").getImage();
+
+            image = new ImageIcon(this.getClass().getResource("/other_images/EndGame.jpg")).getImage();
         }
         catch (Exception e){
             System.out.println("Path non rilevato");

@@ -1,0 +1,22 @@
+
+
+@startuml
+'https://plantuml.com/state-diagram
+skinparam dpi 300
+[*] --> Authentication
+Authentication --> LobbyChoice : Successful authentication
+Authentication --> Authentication : Error
+LobbyChoice --> WaitingForStart : joinGame(id)
+LobbyChoice --> WaitingForStart : createGame(info, etc...)
+WaitingForStart --> GameSetup : gameStarted()
+GameSetup --> WaitPhase : allPlayersHaveChosenSetup()
+WaitPhase --> WaitPhase : currentPlayerChangedAndItIsNotYourTurn()
+WaitPhase --> PlayPhase : isYourTurn()
+PlayPhase --> RegisterGamePhase : movePerformed()
+RegisterGamePhase --> WaitPhase : moveOnAfterSavingGameStatusToDisk()
+WaitPhase : inactivePlayerSkipsTurn()
+WaitPhase --> EndPhase : lastTurnPlayedByLastPlayer()
+EndPhase --> LobbyChoice : userWantsToPlayAnotherGame()
+LobbyChoice --> [*] : disconnect()
+
+@enduml

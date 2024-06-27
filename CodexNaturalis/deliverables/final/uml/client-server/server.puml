@@ -1,0 +1,97 @@
+@startuml
+
+class UserList {
+    - userList : List<User>
+    + UserList()
+    + getUsers() : List<String>
+    + getUserByUsername(username : String) : User
+    + addUser(user : User)
+    + removeUser(user : User)
+}
+
+class User {
+    - username: String
+    - temporaryPassword : Optional<Integer>
+    - joinedLobbyId : Optional<Integer>
+    - joinedGameId : Optional<Integer>
+    + User(nickname : String)
+    + getUsername() : String
+    + getStatus() : UserStatus
+    + generateNewPassword() : int
+    + checkPassword(password : int) : boolean
+    + getJoinedLobbyId() : int
+    + hasJoinedLobby() : boolean
+    + removeJoinedLobby()
+    + getJoinedGameId() : int
+    + hasJoinedGame() : boolean
+    + removeJoinedGame()
+}
+
+enum UserStatus {
+    LOBBY_CHOICE,
+    WAITING_TO_START,
+    IN_GAME,
+    DISCONNECTED
+}
+
+class Lobby {
+    - id : int
+    - name : String
+    - creatorUsername : String
+    - requiredNumberOfPlayers : int
+    - waitingPlayers : List<User>
+    + Lobby(id : int, name: String, creator : User, requiredPlayersNum : int)
+    + getId() : int
+    + getName() : String
+    + getCreatorName() : String
+    + getRequiredNumOfPlayers() : int
+    + addUser(user : User)
+    + removeUser(user : User)
+    + readyToStart() : int
+    + getConnectedUsers() : List<User>
+    + getNumOfWaitingPlayers() : int
+}
+
+class LobbyList {
+    - lobbies : Map<Integer, Lobby>
+    + LobbyList()
+    + getLobbies() : List<Lobby>
+    + createLobby() : Lobby
+    + removeLobby(lobbyId : int)
+}
+
+
+class GameData {
+    - id : int
+    - playingUsers : Set<User>
+    - game : Game
+    + GameData(id : int, playingUsers : Collection<User>, game : Game)
+    + getId() : int
+    + getGame() : Game
+    + getPlayingUsers() : List<User>
+    + removeUser(user : User)
+}
+
+class GameList {
+    - games : Map<Integer, GameData>
+    + createGameFromLobby(lobby : Lobby)
+    + removeGame(gameId : int)
+    + getGameById(id : int) : Game
+    + getJoinedGame(user : User) : Game
+    + makeExitFromGame(user : User)
+}
+
+User -u-o UserList
+User -u-o GameData
+Game -u-* GameData
+GameData -u-* GameList
+UserStatus -l-> User : - status
+User -u-o Lobby
+Lobby -u-* LobbyList
+LobbyList -u-> CoreServer
+GameList -u-> CoreServer
+UserList -u-> CoreServer
+CoreServer -u-|> ServerController
+
+
+@enduml
