@@ -35,8 +35,8 @@ Avendo a disposizione il JAR eseguibile corrispondente,
 1) Settare la configurazione UTF-8 del terminale:
 - Per MacOS, non è necessario fare nulla
 - Per Windows (se non si ha già impostato di default UTF-8)
-  - Da Command prompt digitare: <code>chcp 65001</code>
-  - Da Powershell digitare: <code>[Console]::OutputEncoding = [System.Text.Encoding]::UTF8</code>
+    - Da Command prompt digitare: <code>chcp 65001</code>
+    - Da Powershell digitare: <code>[Console]::OutputEncoding = [System.Text.Encoding]::UTF8</code>
 - Per Linux: Vedi sezione **"Impostare UTF-8 su Linux"** subito dopo, se è necessario
 
 Nota: Per Linux è consigliato di scaricare il package <code>noto-fonts-emoji</code> usando i comandi di download della vostra distro
@@ -65,6 +65,7 @@ NB: Potrebbe essere utile leggere la USER GUIDE [USER GUIDE TUI.md](deliverables
 per avere una migliore comprensione del modo in cui le carte sono state stilizzate tramite emoji supportate da jdk 11 che ha introdotto
 UNICODE 10.0.0 [Unicode docs](https://docs.oracle.com/en/java/javase/11/intl/internationalization-enhancements1.html#GUID-D0AF5316-F01C-4A3A-A3CA-7875C3D34601)
 
+
 ### Avvio del gioco - Interfaccia grafica
 
 Avendo a disposizione il JAR eseguibile corrispondente, usare il comando:
@@ -74,6 +75,7 @@ Avendo a disposizione il JAR eseguibile corrispondente, usare il comando:
 <code>java.exe -jar ./GUI-Client.jar</code> su Windows
 
 Avendo le stesse accortezze riguardo alle variabili d'ambiente
+
 # Opzioni da riga di comando
 
 Durante l'avvio degli eseguibili, è possibile utilizzare le seguenti opzioni da riga di comando:
@@ -84,36 +86,48 @@ Durante l'avvio degli eseguibili, è possibile utilizzare le seguenti opzioni da
 Impostazioni solo client (TUI, GUI)
 - <code>-H</code>, <code>--host</code> : permette di specificare l'indirizzo su cui si trova il server di gioco (default localhost)
 
-Impostazioni solo server
-- <code>-Tshort</code>, <code>--timeout-short</code> : Avvia il server impostando dei timeout molto brevi per le operazioni di gioco
-- <code>-Tlong</code> <code>--timeout-long</code> : Avvia il server impostando dei timeout ragionevolmente lunghi per le operazioni di gioco
+Impostazioni solo server:
 
+ <code>-Tshort</code>, <code>--timeout-short</code> : Avvia il server impostando dei timeout molto brevi per le operazioni di gioco
+- Timeout impostati (in secondi):
+- Cancellazione utente registrato in assenza di login: 60
+- Tempo per la scelta del setup: 25
+- Tempo per decisione sulla mossa: 25
+- Tempo per uscire da una partita al suo termine: 60
+
+<code>-Tlong</code> <code>--timeout-long</code> : Avvia il server impostando dei timeout ragionevolmente lunghi per le operazioni di gioco
+
+- Timeout impostati (in secondi):
+- Cancellazione utente registrato in assenza di login: 600
+- Tempo per la scelta del setup: 180
+- Tempo per decisione sulla mossa: 180
+- Tempo per uscire da una partita al suo termine: 300
 
 ## Impostare UTF 8 su Linux:
 Per impostare UTF-8 come standard sul terminale di Linux, puoi seguire questi passaggi:
 
 1. Verifica la configurazione locale attuale:
-Apri il terminale e digita:
-<code>locale</code>
+   Apri il terminale e digita:
+   <code>locale</code>
 
 Questo comando mostrerà le impostazioni locali attuali.
 Se le impostazioni non sono in UTF-8, continua con i passaggi successivi.
 
 2. Elenca tutte le locali disponibili:
-Digita: <code>locale -a</code>
+   Digita: <code>locale -a</code>
 
 Questo comando elencherà tutte le locali disponibili sul tuo sistema.
 Cerca una locale UTF-8, ad esempio en_US.UTF-8 o it_IT.UTF-8.
 
 3. Genera la locale UTF-8:
-Se la tua locale desiderata non è presente, puoi generarla. Ad esempio, per generare it_IT.UTF-8, digita:
-<code>sudo locale-gen it_IT.UTF-8</code>
+   Se la tua locale desiderata non è presente, puoi generarla. Ad esempio, per generare it_IT.UTF-8, digita:
+   <code>sudo locale-gen it_IT.UTF-8</code>
 
 Poi aggiorna l’elenco delle locali generate:
 <code>sudo dpkg-reconfigure locales</code>
 
 4. Imposta la locale predefinita:
-Modifica il file ´/etc/default/locale´ per impostare la locale predefinita.
+   Modifica il file ´/etc/default/locale´ per impostare la locale predefinita.
 
 Puoi usare un editor di testo come nano o vim. Ad esempio, con nano:
 <code>sudo nano /etc/default/locale</code>
