@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +49,7 @@ public class RegisterPanel extends StandardPanel {
         createLobby.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(lobbyName.getText());
+                //System.out.println(lobbyName.getText());
                 MainWindow.goToWindow("createNewLobbyPanel");
             }
         });
@@ -75,9 +76,17 @@ public class RegisterPanel extends StandardPanel {
                     MainWindow.getClientController().joinLobby(lobbyById.get(lobbyrow));
                     MainWindow.waitingPanel.buildPanel();
                     MainWindow.goToWindow("waitingPanel");
-                } catch (RemoteException | InvalidOperationException ex) {
-                    System.out.println(ex.getMessage());
-                }
+                } catch (RemoteException ex) {
+                    //System.out.println(ex.getMessage());
+                } /*catch (InvalidOperationException ex){
+                    JOptionPane.showMessageDialog(new JFrame(),
+                            "Error, the user has been removed from the game due to inactivity." +
+                                    "Close the application and login again","Inactivity Error",
+                            JOptionPane.ERROR_MESSAGE
+                            );
+                    JFrame mainWindow = (JFrame) SwingUtilities.getWindowAncestor(jList);
+                    mainWindow.dispose();
+                }*/
             }
         });
 
@@ -120,7 +129,7 @@ public class RegisterPanel extends StandardPanel {
                 }
 
             } catch (RemoteException ex) {
-                System.out.println(ex);
+                //System.out.println(ex);
             }
     }
 

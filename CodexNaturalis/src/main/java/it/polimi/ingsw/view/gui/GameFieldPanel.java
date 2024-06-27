@@ -141,9 +141,10 @@ public class GameFieldPanel extends StandardPanel {
                                     map.getLastOrientationPlaced(),
                                     dChoice);
                         } catch (WrongPhaseException e ){
-                            System.out.println("Exception raised");
                            JOptionPane.showMessageDialog(new JFrame(),
                                    "Move skipped due to inactivity");
+                            map.removeCardImage(p);
+                            map.resetLastValues();
                         }
                         controlledPlayer = controller.getControlledPlayerInformation();
                         map.setAvailablePointsFromModel(controlledPlayer.field().availablePositions());

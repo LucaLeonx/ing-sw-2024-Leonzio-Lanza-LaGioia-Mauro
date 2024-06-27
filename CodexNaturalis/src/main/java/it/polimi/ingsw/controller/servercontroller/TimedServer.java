@@ -41,15 +41,21 @@ public class TimedServer extends CoreServer {
 
     @Override
     public ServerController login(String username, int tempCode) throws RemoteException {
-        User user = this.userList.getUserByUsername(username);
-        if(user != null) {
-            userTimeouts.get(user).cancel(false);
+        User user = userList.getUserByUsername(username);
+        if(user != null){
+            if(userTimeouts.get(user) != null){
+                userTimeouts.get(user).cancel(false);
+            }
         }
         return super.login(username, tempCode);
     }
 
     @Override
     public void logout(User user) {
+        if(userTimeouts.get(user) != null){
+            userTimeouts.get(user).cancel(false);
+            userTimeouts.remove(user);
+        }
         super.logout(user);
     }
 
