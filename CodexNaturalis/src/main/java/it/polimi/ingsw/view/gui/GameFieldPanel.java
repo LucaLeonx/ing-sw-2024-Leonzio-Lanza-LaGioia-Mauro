@@ -633,7 +633,6 @@ public class GameFieldPanel extends StandardPanel {
             try {
                 JLabel player = new JLabel(playerNames.get(j) + " has " + MainWindow.getClientController().getOpponentInformation(playerNames.get(j)).score() + " points");
                 gbc.gridy=j+1;
-                System.out.println(player.getText());
                 player.setHorizontalAlignment(SwingConstants.CENTER);
                 player.setForeground(Color.gray);
                 info.add(player, gbc);
