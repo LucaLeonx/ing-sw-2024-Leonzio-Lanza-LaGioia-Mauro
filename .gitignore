@@ -14,7 +14,6 @@ CodexNaturalis/assets/**
 **/.DS_Store
 **/.idea
 **/resources
-CodexNaturalis/delivelables/final/jar/*
 CodexNaturalis/.gitignore
 CodexNaturalis/CodexNaturalis/.idea/**/workspace.xml
 CodexNaturalis/CodexNaturalis/.idea/**/tasks.xml
