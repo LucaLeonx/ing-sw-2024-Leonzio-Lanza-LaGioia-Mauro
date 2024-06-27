@@ -13,10 +13,6 @@ public class User {
 
     private static final int MAX_TEMPCODE_VAL = 1_000_000;
     private final String username;
-
-    // TODO: remove optional: we can give it immediately after connection
-    // TODO: use proper hashing for passwords (see https://www.baeldung.com/java-password-hashing)
-    // We can create a class for password
     private Optional<Integer> tempPassword;
     private UserStatus status;
     private Optional<Integer> joinedLobbyId;

@@ -1,74 +1,97 @@
 @startuml
 
-' Maybe just use a synchronized list
-class UserList <<synchronized>> {
-    - List<User> userList;
+class UserList {
+    - userList : List<User>
     + UserList()
-    + getUserList() : List<String>
-    + getConnectionStatus(username : String) : boolean
-    + getTemporaryCode(username : String) : Optional<Integer>
-    + addUser(username : String)
-    + removeUser(username : String)
-    + setConnectionStatus(String username, isConnected : boolean)
-    + initializeTemporaryPassword(username : String)
-    + addUserLobby(username : String, lobbyId : int)
-    + removeUserLobby(username : String)
+    + getUsers() : List<String>
+    + getUserByUsername(username : String) : User
+    + addUser(user : User)
+    + removeUser(user : User)
 }
 
-class User <<synchronized>> {
-    - String username;
-    - boolean isConnected;
-    ' May be changed to ENUM later
-    - Optional<Integer> temporaryPassword;
-    + getters()
-    // Used internally only by List
+class User {
+    - username: String
+    - temporaryPassword : Optional<Integer>
+    - joinedLobbyId : Optional<Integer>
+    - joinedGameId : Optional<Integer>
+    + User(nickname : String)
+    + getUsername() : String
+    + getStatus() : UserStatus
+    + generateNewPassword() : int
+    + checkPassword(password : int) : boolean
+    + getJoinedLobbyId() : int
+    + hasJoinedLobby() : boolean
+    + removeJoinedLobby()
+    + getJoinedGameId() : int
+    + hasJoinedGame() : boolean
+    + removeJoinedGame()
 }
 
-' Maybe add a LobbyList class, if necessary
-class Lobby <<synchronized>> {
+enum UserStatus {
+    LOBBY_CHOICE,
+    WAITING_TO_START,
+    IN_GAME,
+    DISCONNECTED
+}
+
+class Lobby {
     - id : int
     - name : String
     - creatorUsername : String
-    - List<String> waitingPlayers;
-    - requiredNumberOfPlayers : int;
-    Lobby(id : int, lobbyName : String, creatorUsername : String)
-    + getters()
-    + addUser(username : String)
-    + removeUser(username : String)
-    + getRequiredNumberOfPlayers() : int
-    + getWaitingPlayersNumber() : int
-    + readyToStart() : boolean
-    + startGame() : // reference to game
-    // If the game hasn't started yet, the communication
-    // thread with the client is put in wait()
-    // Otherwise, the thread calls notifyAll()
-    // And a reference to the started Game is returned
+    - requiredNumberOfPlayers : int
+    - waitingPlayers : List<User>
+    + Lobby(id : int, name: String, creator : User, requiredPlayersNum : int)
+    + getId() : int
+    + getName() : String
+    + getCreatorName() : String
+    + getRequiredNumOfPlayers() : int
+    + addUser(user : User)
+    + removeUser(user : User)
+    + readyToStart() : int
+    + getConnectedUsers() : List<User>
+    + getNumOfWaitingPlayers() : int
 }
 
-class GameRecord {
-    'List<String> users;
-    - GameId : int
-    - Game game;
+class LobbyList {
+    - lobbies : Map<Integer, Lobby>
+    + LobbyList()
+    + getLobbies() : List<Lobby>
+    + createLobby() : Lobby
+    + removeLobby(lobbyId : int)
 }
 
 
-class AcceptanceSocket {
-    + start(address : String){ // ip + port
-    + stop()
+class GameData {
+    - id : int
+    - playingUsers : Set<User>
+    - game : Game
+    + GameData(id : int, playingUsers : Collection<User>, game : Game)
+    + getId() : int
+    + getGame() : Game
+    + getPlayingUsers() : List<User>
+    + removeUser(user : User)
 }
 
-class ClientManagementThread extends Thread {
-    - socket : TCPSocket
-    - execute()
-    // Possible use of state pattern
+class GameList {
+    - games : Map<Integer, GameData>
+    + createGameFromLobby(lobby : Lobby)
+    + removeGame(gameId : int)
+    + getGameById(id : int) : Game
+    + getJoinedGame(user : User) : Game
+    + makeExitFromGame(user : User)
 }
-note top: For RMI, We export Lobby, User, Game classes (maybe controller?)
 
-class Server {
-    AcceptanceSocket
-    DisconnectedUserCleaner thread;
-    // Threads to manage other server-related stuff
-    // Other RMI related stuff
-}
+User -u-o UserList
+User -u-o GameData
+Game -u-* GameData
+GameData -u-* GameList
+UserStatus -l-> User : - status
+User -u-o Lobby
+Lobby -u-* LobbyList
+LobbyList -u-> CoreServer
+GameList -u-> CoreServer
+UserList -u-> CoreServer
+CoreServer -u-|> ServerController
+
 
 @enduml
