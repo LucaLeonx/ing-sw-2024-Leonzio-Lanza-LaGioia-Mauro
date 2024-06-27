@@ -47,7 +47,7 @@ public class EndGamePanel extends StandardPanel {
             }
             winnerName = winner;
         } catch (Exception e) {
-            System.out.println("error in GUI endstate: " + e);
+            // System.out.println("error in GUI endstate: " + e);
             e.printStackTrace();
         }
 

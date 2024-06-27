@@ -41,7 +41,7 @@ public class CreateNewLobbyPanel extends StandardPanel  {
                     Integer selected= (Integer) numberOption.getSelectedItem();
                     MainWindow.getClientController().createLobby(lobbyName.getText(),selected);
                 } catch (ElementNotFoundException | WrongPhaseException | RemoteException | NullPointerException ex) {
-                    System.out.println(ex.getMessage());
+                    // System.out.println(ex.getMessage());
                 }
 
                 try {

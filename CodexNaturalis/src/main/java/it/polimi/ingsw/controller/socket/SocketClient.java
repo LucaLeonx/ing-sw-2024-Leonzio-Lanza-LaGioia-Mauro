@@ -25,7 +25,7 @@ public class SocketClient {
 
     public void startClientConnection() throws IOException {
         this.socket = new Socket(host, port);
-        System.out.println("connection established");
+        // System.out.println("connection established");
         socketOut = new ObjectOutputStream(socket.getOutputStream());
         socketIn = new ObjectInputStream(socket.getInputStream());
     }
@@ -36,7 +36,7 @@ public class SocketClient {
             socketOut.flush();
             //System.out.println("message sent");
         }catch(NoSuchElementException | IOException e) {
-            System.out.println("Connection closed "+e.getMessage());
+            // System.out.println("Connection closed "+e.getMessage());
         }
     }
 

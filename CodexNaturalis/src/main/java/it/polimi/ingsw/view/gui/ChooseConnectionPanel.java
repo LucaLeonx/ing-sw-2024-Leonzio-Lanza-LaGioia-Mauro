@@ -58,7 +58,7 @@ public class ChooseConnectionPanel extends StandardPanel {
                 try {
                     MainWindow.setRMIController();
                 } catch (IOException | NotBoundException io) {
-                    System.out.println(io.getMessage());
+                    // System.out.println(io.getMessage());
                     wrongConnection.setText("Connection is not working properly");
                     return;
                 }
