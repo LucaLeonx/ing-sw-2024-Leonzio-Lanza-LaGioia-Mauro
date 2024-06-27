@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller.socket;
 
 import it.polimi.ingsw.controller.servercontroller.*;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidParameterException;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.dataobject.*;
 import it.polimi.ingsw.controller.servercontroller.operationexceptions.InvalidOperationException;
@@ -275,10 +276,14 @@ public class MessageTranslator {
                 Tuple data = (Tuple) message.getObj();
                 try {
                     user = checkLogin(message.getCredentials().getKey(),message.getCredentials().getValue());
-                }catch(InvalidOperationException e){
+                    server.registerPlayerSetup(user,((ObjectiveInfo) data.first()).id(),(CardOrientation) data.second() );
+                }
+                catch (InvalidParameterException e){
                     return new Message(null,null,e);
                 }
-                server.registerPlayerSetup(user,((ObjectiveInfo) data.first()).id(),(CardOrientation) data.second() );
+                catch(InvalidOperationException e){
+                    return new Message(null,null,e);
+                }
             }
             default -> { return new Message(MessageType.OK,null,new Exception("MessageTranslator didn't catch anything")); }
 

@@ -26,6 +26,18 @@ public class AppServer {
 
         CoreServer server = new CoreServer(userList, lobbyList, gameList);
 
+        for(int i = 0; i < args.length; i++){
+            if(args[i].equals("-Tshort") || args[i].equals("--timeout-short")){
+                TimeoutSettings timeoutSettings = new TimeoutSettings(60, 25, 25, 60);
+                server = new TimedServer(userList, lobbyList, gameList, timeoutSettings);
+                System.out.println("Using short timeouts settings: " + timeoutSettings);
+            } else if(args[i].equals("-Tlong") || args[i].equals("--timeout-long")){
+                TimeoutSettings timeoutSettings = new TimeoutSettings(600, 180, 180, 300);
+                server = new TimedServer(userList, lobbyList, gameList, timeoutSettings);
+                System.out.println("Using long timeouts settings: " + timeoutSettings);
+            }
+        }
+
         LocateRegistry.createRegistry(connectionSettings.getRMIPort());
         Registry reg = LocateRegistry.getRegistry();
         reg.rebind(connectionSettings.getRMIServerName(), (AuthenticationManager) server);

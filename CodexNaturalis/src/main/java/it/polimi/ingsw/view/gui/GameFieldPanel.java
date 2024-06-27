@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui;
 
 
 import it.polimi.ingsw.controller.clientcontroller.ClientController;
+import it.polimi.ingsw.controller.servercontroller.operationexceptions.WrongPhaseException;
 import it.polimi.ingsw.dataobject.CardInfo;
 import it.polimi.ingsw.dataobject.ControlledPlayerInfo;
 import it.polimi.ingsw.dataobject.ObjectiveInfo;
@@ -133,13 +134,17 @@ public class GameFieldPanel extends StandardPanel {
                         }
 
                         DrawChoice dChoice = drawCardPhase();
-
-                        controller.makeMove(
-                                cardInfo,
-                                p,
-                                map.getLastOrientationPlaced(),
-                                dChoice);
-
+                        try {
+                            controller.makeMove(
+                                    cardInfo,
+                                    p,
+                                    map.getLastOrientationPlaced(),
+                                    dChoice);
+                        } catch (WrongPhaseException e ){
+                            System.out.println("Exception raised");
+                           JOptionPane.showMessageDialog(new JFrame(),
+                                   "Move skipped due to inactivity");
+                        }
                         controlledPlayer = controller.getControlledPlayerInformation();
                         map.setAvailablePointsFromModel(controlledPlayer.field().availablePositions());
                         map.removeAllAvailablePlaces();
