@@ -19,6 +19,7 @@ Nella cartella out/artifacts sono disponibili i JAR eseguibili del progetto:
 - /client_tui_jar contiene l'eseguibile per il client, con interfaccia testuale
 - /client_gui_jar contiene l'eseguibile per il client, con interfaccia grafica
 
+
 Per prima cosa, è necessario avviare l'eseguibile del server
 
 ´java ./Server.jar´ su Linux e MacOS;
@@ -42,10 +43,15 @@ Si può però specificare manualmente con:
 \java.exe -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -jar client_tui.jar
 
 Non l'abbiamo trovato necessario da terminale. 
+Chiaramente se non si ha impostato nelle environment variable del pc java bisogna specificare il path completo assoulto per arrivare
+alla cartella bin contenente java.exe. esempio col mio con i path: 
 
 Sia per Windows che per Linux, se le opportune environment variables non sono impostate,
 potrebbe essere necessario specificare il path assoluto all'eseguibile java.exe (o java). 
 Ad esempio: 
+NB: Potrebbe essere utile leggere la USER GUIDE [USER GUIDE TUI.md](deliverables%2Ffinal%2Fuml%2Fview%2FUSER%20GUIDE%20TUI.md) posta in deliverables
+per avere una migliore comprensione del modo in cui le carte sono state stilizzate tramite emoji supportate da jdk 11 che ha introdotto 
+UNICODE 10.0.0 https://docs.oracle.com/en/java/javase/11/intl/internationalization-enhancements1.html#GUID-D0AF5316-F01C-4A3A-A3CA-7875C3D34601
 
 C:\Users\smaur\.jdks\openjdk-21.0.2\bin\java.exe -jar C:\Users\smaur\IdeaProjects\ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro\CodexNaturalis\out\artifacts\TUI\TUI-Client.jar
 
