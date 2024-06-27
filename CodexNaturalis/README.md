@@ -19,38 +19,57 @@ Nella cartella out/artifacts sono disponibili i JAR eseguibili del progetto:
 - /client_tui_jar contiene l'eseguibile per il client, con interfaccia testuale
 - /client_gui_jar contiene l'eseguibile per il client, con interfaccia grafica
 
-
 Per prima cosa, è necessario avviare l'eseguibile del server
 
-´java ./server.jar´
+´java ./Server.jar´ su Linux e MacOS;
+´java.exe ./Server.jar´ su Windows
 
 A questo punto, i client presenti sulla stessa rete potranno collegarsi per giocare
 
 ### Avvio del gioco - Interfaccia testuale
 
 Avendo a disposizione il JAR eseguibile corrispondente,
-1) settare la configurazione UTF-8:
-- Per MAC OS passaggio non necessario, skippare al punto 2
+1) Settare la configurazione UTF-8 del terminale:
+- Per MacOS, non è necessario fare nulla
 - Per Windows (se non si ha già impostato di default UTF-8)
-  - Da command prompt digitare: chcp 65001 e premere invio
-  - Da powershell digitare: [Console]::OutputEncoding = [System.Text.Encoding]::UTF8 e premere invio
-- Per Linux andare alla fine del README. 
+  - Da Command prompt digitare: chcp 65001
+  - Da Powershell digitare: [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+- Per Linux: 
 
-se si fa partire da intellij in automatico specifica l'encoding in UTF-8:
+Il terminale integrato di Intellij e molti altri utilizzano in automatico l'encoding UTF-8.
+Si può però specificare manualmente con:
 
 \java.exe -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -jar client_tui.jar
 
 Non l'abbiamo trovato necessario da terminale. 
-Chiaramente se non si ha impostato nelle environment variable del pc java bisogna specificare il path completo assoulto per arrivare
-alla cartella bin contenente java.exe. esempio col mio con i path: 
 
-C:\Users\smaur\.jdks\openjdk-21.0.2\bin\java.exe -jar C:\Users\smaur\IdeaProjects\ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro\CodexNaturalis\out\artifacts\TUI\PSP9.jar
+Sia per Windows che per Linux, se le opportune environment variables non sono impostate,
+potrebbe essere necessario specificare il path assoluto all'eseguibile java.exe (o java). 
+Ad esempio: 
 
-### Avvio del gioco - Interfaccia testuale
+C:\Users\smaur\.jdks\openjdk-21.0.2\bin\java.exe -jar C:\Users\smaur\IdeaProjects\ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro\CodexNaturalis\out\artifacts\TUI\TUI-Client.jar
+
+### Avvio del gioco - Interfaccia grafica
 
 Avendo a disposizione il JAR eseguibile corrispondente, usare il comando:
 
-...
+´java ./GUI-Client.jar´ su Linux e MacOS;
+´java.exe ./GUI-Client.jar´ su Windows
+
+# Opzioni da riga di comando
+
+Durante l'avvio degli eseguibili, è possibile utilizzare le seguenti opzioni da riga di comando:
+
+- ´-Rp´, ´--rmi-port´: permette di cambiare la porta utilizzata per il collegamento Java RMI (default 1099)
+- ´-Sp´, ´--socket-port´: permette di cambiare la porta utilizzata per il collegamento via Socket (default 20000)
+
+Impostazioni solo client (TUI, GUI)
+- ´-H´, ´--host´: permette di specificare l'indirizzo su cui si trova il server di gioco (default localhost)
+
+Impostazioni solo server
+- ´-Tshort´, ´--timeout-short´: Avvia il server impostando dei timeout molto brevi per le operazioni di gioco
+- ´-Tlong´, ´--timeout-long´: Avvia il server impostando dei timeout ragionevolmente lunghi per le operazioni di gioco
+
 
 
 ## Autori
