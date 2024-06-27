@@ -34,13 +34,14 @@ Avendo a disposizione il JAR eseguibile corrispondente,
 - Per MacOS, non è necessario fare nulla
 - Per Windows (se non si ha già impostato di default UTF-8)
   - Da Command prompt digitare: chcp 65001
-  - Da Powershell digitare: [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+  - Da Powershell digitare:
+  - [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 - Per Linux: Vedi sezione "Impostare UTF-8 su Linux" subito dopo, se è necessario
 
 Il terminale integrato di Intellij e molti altri utilizzano in automatico l'encoding UTF-8 per
 l'esecuzione dei jar. Si può però specificare manualmente con:
 
-\java.exe -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -jar client_tui.jar
+java.exe -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -jar TUI-Client.jar
 
 Chiaramente se non si ha impostato nelle environment variable del pc java bisogna specificare il path completo assoulto per arrivare
 alla cartella bin contenente java.exe. esempio col mio con i path: 
