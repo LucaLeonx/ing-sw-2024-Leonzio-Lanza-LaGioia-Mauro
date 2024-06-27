@@ -47,12 +47,12 @@ alla cartella bin contenente java.exe. esempio col mio con i path:
 
 Sia per Windows che per Linux, se le opportune environment variables non sono impostate,
 potrebbe essere necessario specificare il path assoluto all'eseguibile java.exe (o java). 
-Ad esempio: 
+Ad esempio: C:\Users\smaur\.jdks\openjdk-21.0.2\bin\java.exe -jar C:\Users\smaur\IdeaProjects\ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro\CodexNaturalis\out\artifacts\TUI\TUI-Client.jar
+
 NB: Potrebbe essere utile leggere la USER GUIDE [USER GUIDE TUI.md](deliverables%2Ffinal%2Fuml%2Fview%2FUSER%20GUIDE%20TUI.md) posta in deliverables
 per avere una migliore comprensione del modo in cui le carte sono state stilizzate tramite emoji supportate da jdk 11 che ha introdotto 
 UNICODE 10.0.0 https://docs.oracle.com/en/java/javase/11/intl/internationalization-enhancements1.html#GUID-D0AF5316-F01C-4A3A-A3CA-7875C3D34601
 
-C:\Users\smaur\.jdks\openjdk-21.0.2\bin\java.exe -jar C:\Users\smaur\IdeaProjects\ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro\CodexNaturalis\out\artifacts\TUI\TUI-Client.jar
 
 ### Avvio del gioco - Interfaccia grafica
 
