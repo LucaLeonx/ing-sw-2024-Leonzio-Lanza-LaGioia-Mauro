@@ -68,7 +68,7 @@ UNICODE 10.0.0 [Unicode docs](https://docs.oracle.com/en/java/javase/11/intl/int
 
 ### Avvio del gioco - Interfaccia grafica
 
-Avendo a disposizione il JAR eseguibile corrispondente, usare il comando:
+Avendo a disposizione il JAR eseguibile corrispondente, usare il comando(NOTA: Mettere le opzioni alla fine del comando dopo aver specificato la path del jar):
 
 <code>java -jar ./GUI-Client.jar</code> su Linux e MacOS;
 
@@ -86,7 +86,7 @@ Durante l'avvio degli eseguibili, è possibile utilizzare le seguenti opzioni da
 Impostazioni solo client (TUI, GUI)
 - <code>-H</code>, <code>--host</code> : permette di specificare l'indirizzo su cui si trova il server di gioco (default localhost)
 
-Impostazioni solo server(NOTA: Mettere le opzioni alla fine del comando dopo aver specificato la path del jar):
+Impostazioni solo server:
 
  <code>-Tshort</code>, <code>--timeout-short</code> : Avvia il server impostando dei timeout molto brevi per le operazioni di gioco
 - Timeout impostati (in secondi): 
