@@ -35,14 +35,13 @@ Avendo a disposizione il JAR eseguibile corrispondente,
 - Per Windows (se non si ha già impostato di default UTF-8)
   - Da Command prompt digitare: chcp 65001
   - Da Powershell digitare: [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-- Per Linux: 
+- Per Linux: Vedi sezione "Impostare UTF-8 su Linux" subito dopo, se è necessario
 
-Il terminale integrato di Intellij e molti altri utilizzano in automatico l'encoding UTF-8.
-Si può però specificare manualmente con:
+Il terminale integrato di Intellij e molti altri utilizzano in automatico l'encoding UTF-8 per
+l'esecuzione dei jar. Si può però specificare manualmente con:
 
 \java.exe -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -jar client_tui.jar
 
-Non l'abbiamo trovato necessario da terminale. 
 Chiaramente se non si ha impostato nelle environment variable del pc java bisogna specificare il path completo assoulto per arrivare
 alla cartella bin contenente java.exe. esempio col mio con i path: 
 
@@ -77,42 +76,36 @@ Impostazioni solo server
 - ´-Tlong´, ´--timeout-long´: Avvia il server impostando dei timeout ragionevolmente lunghi per le operazioni di gioco
 
 
-
-## Autori
-
-- Giovanni La Gioia
-- Stefano Lanza
-- Luca Leonzio
-- Simone Mauro
-
-## PASSAGGI PER IMPOSTARE UTF-8 su LINUX: 
+## Impostare UTF-8 su Linux: 
 Per impostare UTF-8 come standard sul terminale di Linux, puoi seguire questi passaggi:
 
-Verifica la configurazione locale attuale:
+1. Verifica la configurazione locale attuale:
 Apri il terminale e digita:
 
+´locale´
+Questo comando mostrerà le impostazioni locali attuali. 
+Se le impostazioni non sono in UTF-8, continua con i passaggi successivi.
 
-locale
-Questo comando mostrerà le impostazioni locali attuali. Se le impostazioni non sono in UTF-8, continua con i passaggi successivi.
-
-Elenca tutte le locali disponibili:
+2. Elenca tutte le locali disponibili:
 Digita:
 
+´locale -a´
+Questo comando elencherà tutte le locali disponibili sul tuo sistema. 
+Cerca una locale UTF-8, ad esempio en_US.UTF-8 o it_IT.UTF-8.
 
-locale -a
-Questo comando elencherà tutte le locali disponibili sul tuo sistema. Cerca una locale UTF-8, ad esempio en_US.UTF-8 o it_IT.UTF-8.
-
-Genera la locale UTF-8:
+3. Genera la locale UTF-8:
 Se la tua locale desiderata non è presente, puoi generarla. Ad esempio, per generare it_IT.UTF-8, digita:
 
+´sudo locale-gen it_IT.UTF-8´
 
-sudo locale-gen it_IT.UTF-8
 Poi aggiorna l’elenco delle locali generate:
 
+´sudo dpkg-reconfigure locales´
 
-sudo dpkg-reconfigure locales
-Imposta la locale predefinita:
-Modifica il file /etc/default/locale per impostare la locale predefinita. Puoi usare un editor di testo come nano o vim. Ad esempio, con nano:
+4. Imposta la locale predefinita:
+Modifica il file ´/etc/default/locale´ per impostare la locale predefinita. 
+
+Puoi usare un editor di testo come nano o vim. Ad esempio, con nano:
 
 bash
 Copy code
@@ -131,12 +124,17 @@ Verifica la nuova configurazione locale:
 Digita di nuovo:
 
 
-locale
+´locale´
 Ora dovresti vedere che tutte le impostazioni locali sono configurate su UTF-8.
 
 Facendo questi passaggi, dovresti aver impostato UTF-8 come standard sul tuo terminale Linux.
 
+## Autori
 
+- Giovanni La Gioia
+- Stefano Lanza
+- Luca Leonzio
+- Simone Mauro
 
 
 
