@@ -131,17 +131,6 @@ public class EndGamePanel extends StandardPanel {
     }
 
 
-//    public static void main(String[] args) {
-//        JFrame frame = new JFrame("Leaderboard");
-//        EndGamePanel panel = new EndGamePanel();
-//        panel.buildPanel();
-//        frame.add(panel);
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setSize(400, 400);
-//        frame.setVisible(true);
-//    }
-
-
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Image image = null;

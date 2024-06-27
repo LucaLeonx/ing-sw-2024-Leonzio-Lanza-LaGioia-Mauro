@@ -5,13 +5,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static java.awt.GridBagConstraints.CENTER;
 import static java.awt.GridBagConstraints.LINE_END;
@@ -49,7 +46,6 @@ public class RegisterPanel extends StandardPanel {
         createLobby.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //System.out.println(lobbyName.getText());
                 MainWindow.goToWindow("createNewLobbyPanel");
             }
         });
@@ -76,17 +72,9 @@ public class RegisterPanel extends StandardPanel {
                     MainWindow.getClientController().joinLobby(lobbyById.get(lobbyrow));
                     MainWindow.waitingPanel.buildPanel();
                     MainWindow.goToWindow("waitingPanel");
-                } catch (RemoteException ex) {
-                    //System.out.println(ex.getMessage());
-                } /*catch (InvalidOperationException ex){
-                    JOptionPane.showMessageDialog(new JFrame(),
-                            "Error, the user has been removed from the game due to inactivity." +
-                                    "Close the application and login again","Inactivity Error",
-                            JOptionPane.ERROR_MESSAGE
-                            );
-                    JFrame mainWindow = (JFrame) SwingUtilities.getWindowAncestor(jList);
-                    mainWindow.dispose();
-                }*/
+                } catch (RemoteException | InvalidOperationException ex) {
+                    System.out.println(ex.getMessage());
+                }
             }
         });
 
@@ -128,8 +116,7 @@ public class RegisterPanel extends StandardPanel {
                     lobbyById.put(lobby.toString(), lobby.id());
                 }
 
-            } catch (RemoteException ex) {
-                //System.out.println(ex);
+            } catch (RemoteException ignored) {
             }
     }
 
