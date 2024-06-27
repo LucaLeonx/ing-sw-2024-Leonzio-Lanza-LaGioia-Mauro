@@ -1,8 +1,8 @@
-skinparam dpi 300
+
 
 @startuml
 'https://plantuml.com/state-diagram
-
+skinparam dpi 300
 [*] --> Authentication
 Authentication --> LobbyChoice : Successful authentication
 Authentication --> Authentication : Error
@@ -20,20 +20,3 @@ EndPhase --> LobbyChoice : userWantsToPlayAnotherGame()
 LobbyChoice --> [*] : disconnect()
 
 @enduml
-
-## Events about which the controller and the player should be notified:
-
-### Lobby events
-- User joined created Lobby
-- Another User joined the lobby where the client is present
-- User disconnects
-- User is disconnected / inactive
-- Game ready to start / started
-
-### Game events
-- All players have chosen setup
-- Current player has changed / Player performed move
-- You are the current player
-- Your turn has been skipped because of inactivity
-- It is the last turn
-- The game has ended

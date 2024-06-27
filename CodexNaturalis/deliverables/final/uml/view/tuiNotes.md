@@ -1,56 +1,4 @@
-Benvenuto su CodexNaturalis!
-
-Scegli un'azione da fare
-1. Login
-2. Registrati
-
---- 
-1  
-Immetti nome utente: 
-Immetti Password:
-I
-
------
-
-2
-immetti nome utente:
-Immetti Password:
-Conferma Password: 
-
-------
-
-- Così è molto complicato
-ID      NOME       CREATORE   Partecipanti     GIOCATORI 
-000101  Partita1    smaur      3/4              gio, luca, steve
-
-- Meglio così
-
-ID: 000101
-NOME: Partita1
-CREATORE: smaur
-PARTECIPANTI: 3/4
-GIOCATORI: gio, luca, steve
-
-inserisci idPartita: 
-
-----
-
-CREA NUOVA PARTITA: 
-
-Inserire Nome: 
-Inserire Numero partecipanti richiesti: 
-
----
-
-Attendi giocatori... 
-Giocatori attuali 3/4:
-    -gio
-    -luca
-    -checco
-
-----
-
-Partita iniziata
+# Notes about TUI
 
 ------------------------------------------------------------------------------
 WE USED THE FOLLOWING EMOJI TO BUILD TUI: 
@@ -81,7 +29,7 @@ WE USED THE FOLLOWING EMOJI TO BUILD TUI:
 ◰ : \u25F0            SYMBOL TO SIGNAL THE FACT YOU ARE GETTING POINT BASED ON ANGLES COVERED
 ❕:\u2755            SYMBOL USED TO SAY FOR EACH " | " IN A GOLD CARD. 
 
-Every emoji alligned perfectly with the other. 
+Every emoji aligned perfectly with the other. 
 Test for correct alignment: 
 🍄   🍄   🍄   🍄   🍄   🍄   🍄   🍄   🍄   🍄   🍄   🍄   🍄   🍄   🍄   🍄
 🐺   🐺   🐺   🐺   🐺   🐺   🐺   🐺   🐺   🐺   🐺   🐺   🐺   🐺   🐺   🐺
@@ -121,39 +69,38 @@ An example of a map of green player:
 
 🟢: 🍄🦋🪴
 
-TODO: 
+
 For the hand and the decks we need to be a little bit more specific. In particular while when the card are played we are 
 only interested in the symbol that are displayed when they are in hand we would also need to know if that card gives point
-and which requirement it needs to satisfy. Of course it is impossible to display all this information in a 3*3 grid so we 
+and which requirement it needs to satisfy. Of course, it is impossible to display all this information in a 3*3 grid so we 
 opted to have a bigger image for the hand and the card that are played opting for a 5*3 grid. 
 
 Examples of a card in hand or to draw:
 
-normal example
+Normal example
 ⬜🟪3️⃣🟪📝
 🟪🟪🟪🟪🟪
 🟪🦋🦋🦋🟪
 
-example with max number of symbol as requirements
+Example with max number of symbol as requirements
 ⬜🟥5️⃣🟥⬜
 🟥🍄🍄🟥🟥
 🟥🍄🍄🍄🟥
 
-example with conditional points (1 points for every quill) 
+Example with conditional points (1 points for every quill) 
 ⬜1️⃣❕🪶🟦
 🟦🟦🟦🟦🟦
 🪶🐺🐺🍄⬜
 
 
 
-example with conditional point (2 points for every angle that was covered) {small problem of alignment}
+Example with conditional point (2 points for every angle that was covered) {small problem of alignment}
 ⬜2️⃣❕◰ 🟩
 🟩🟩🟩🟩🟩
 🪶🪴🪴🍄⬜
 
 
-
-example of back and front of a resource card
+Example of back and front of a resource card
 ⬜🟥🟥🟥⬜
 🟥🟥🟥🟥🟥
 🍄🟥🟥🟥🍄
@@ -163,7 +110,7 @@ example of back and front of a resource card
 🟥🟥🍄🟥🟥
 ⬜🟥🟥🟥⬜
 
-example of objective cards:
+Example of objective cards:
 ⬛⬛⬛⬛3️⃣
 ⬛🪶📝🫙⬛
 ⬛⬛⬛⬛⬛
@@ -184,9 +131,9 @@ example of objective cards:
 
 -----------------------------------------------------------------------------------------
 
-final TUI:
+Final TUI:
 
-your map:
+Your map:
 ⬜🟥⬜⬛⬜🟥📝
 🟥🍄🟥⬛🟥🟥🟥
 ⬜🟥⬜🟨🍄🟥🍄
@@ -197,13 +144,13 @@ your map:
 
 Card to draw:
 
-decks :
-resource            gold
+Decks :
+Resource            Gold
 ⬜🟥🟥🟥⬜         ⬜🟪🟨🟪⬜
 🟥🟥🍄🟥🟥         🟪🟨🦋🟨🟪
 ⬜🟥🟥🟥⬜         ⬜🟪🟨🟪⬜
 
-cards on the table:
+Cards on the table:
           
 ⬜🟥🟥🟥📝         ⬜🟪3️⃣🟪📝
 🟥🟥🟥🟥🟥         🟪🟪🟪🟪🟪  
@@ -213,13 +160,13 @@ cards on the table:
 🟦🟦🟦🟦🟦         🟦🟦🟦🟦🟦
 🫙🟦🟦🟦🟦         🪶🐺🐺🍄⬜
 
-common objectives:
+Common objectives:
 ⬛⬛🟥⬛3️⃣         ⬛🟪⬛⬛2️⃣
 ⬛⬛🟥⬛⬛         ⬛⬛🟪⬛⬛
 ⬛⬛⬛🟩⬛         ⬛⬛⬛🟪⬛
 
 
-your hand:
+Your hand:
 ⬜🟥5️⃣🟥⬜         ⬜🟩🟩🟩🟩         🟪🟪🟪🟪⬜         ⬛⬛⬛⬛3️⃣
 🟥🍄🍄🟥🟥         🟩🟩🟩🟩🟩         🟪🟪🟪🟪🟪         ⬛🪶📝🫙⬛
 🟥🍄🍄🍄🟥         🪴🟩🟩🟩🪴         🦋🟪🟪🟪🦋         ⬛⬛⬛⬛⬛
@@ -227,17 +174,17 @@ your hand:
 
 ------------------------------------------------------------------------------------
 
-Algorithm in a nutshell to build the map: 
-1) first count all the rows and column and create a matrix of strings with that many column and row 
-2) initialize the matrix with all black square 
+Outline of the algorithm to build the map: 
+1) Count all the rows and column and create a matrix of strings with that many column and row 
+2) Initialize the matrix with all black square 
 3) From the map of the card color the up down, left and right cells of the color of the card
-4) add the symbol in the corresponding coordinate in the matrix.
-   (in case we get an hidden angle we should get to the top card to color properly)
-5) We add the starting symbol in (0,0) of the color of the player. 
-6) we print out the Map Matrix
-7) We print out what's underneath the starting symbol. 
+4) Add the symbol in the corresponding coordinate in the matrix.
+   (in case we get a hidden angle we should get to the top card to color properly)
+5) Add the starting symbol in (0,0) of the color of the player. 
+6) Print out the Map Matrix
+7) Print out what's underneath the starting symbol. 
 
-PS: The cells in our model translate 1 to 1 to the cell in the TUI. 
+The cells in our model translate 1 to 1 to the cell in the TUI. 
 Obviously there is going to be a displacement because we need to keep track of the fact that we have to map the position minX 
 and minY to the (0,0) position of the matrix. in order to do that we simply add abs(minX) to the x of the map and abs(minY) to the Y 
 to get to corresponding position of the matrix.  (of course after having updated the min and the Max to the center of the card not the edge)
@@ -245,11 +192,8 @@ to get to corresponding position of the matrix.  (of course after having updated
 PS2: Position number (8,8) in our matrix should be up right while in a matrix of course would be  down right. to fix this we need to put a minus
 symbol each time we consider the y of the matrix. In order to fix this we start reading not from the top to the bottom but bottom up.  
 
-
-
-Side-note: 
-I've checked in my IDE and we don't have a max number of emoji before automatically changing line if we have a matrix.   
-(it simply opens a scrollbar below). However the normal length of 80/120 chars should be more than enough to display all maps. 
+While there isn't a line length limit for matrices of characters, their normal length should be between 80 and 120 chars.
+This should be more than enough to display all maps. 
 If some problems arise we can always reduce the char size in the terminal.  
 
 ---------------------------------------------------------------------------------------------

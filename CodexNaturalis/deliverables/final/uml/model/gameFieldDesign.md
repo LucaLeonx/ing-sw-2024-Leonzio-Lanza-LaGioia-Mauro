@@ -1,10 +1,8 @@
-# Proposta di design per la classe Gamefield
+# Design proposal for the Game Field
 
-Come aveva proposto Giovanni,
-è possibile rappresentare le carte come tasselli
-in una matrice. In questo modo, risulta semplice determinare la posizione
-di carte ed angoli e muoversi tra di essi.
-
+We decided to represent the GameField as a matrix,
+where the center of card occupies one specific cell,
+while its angles fill the remaining cells nearby.
 
 
 |   |    |   |    |   |
@@ -18,55 +16,49 @@ di carte ed angoli e muoversi tra di essi.
 |   |    |   |    |   |
 
 
-Memorizzare una matrice dinamica per contenere tutte le carte è 
-complicate e computazionalmente dispendioso. Si può però procedere
-in un altro modo: è sufficiente memorizzare solo gli
-elementi presenti nella matrice, identificandoli con la loro 
-posizione.
+Managing in memory a dynamic matrix is complex and may
+lead to an eccessive use of computational resources.
+A possible solution is to keep track only of the filled cells, 
+alongside their positions.
 
-## Le celle
+## Elements of the GameField
 
-Per definire la mappa, utilizziamo quindi le seguenti classi:
+The GameField is characterized by the following elements:
 
-__Cell__: rappresenta una cella della matrice. Ogni cella è
-contraddistinta dalle coordinate cartesiane (x,y), che sono 
-indicate da valori interi relativi.
+__Cell__: a generic cell of the matrix. Each of them is uniquely
+identified by its cartesian coordinates (x, y), with x and y integer values
+(even negative).
 
-Da questa classe ereditano due classi, che sono quelle che utilizzeremo
-principalmente:
+__CardCell__: It represents a cell filled by (the center of) a card.
+It should keep track of the following information:
+- The Card positioned on that cells
+- Its visible side (front, back)
 
-__CardCell__: rappresenta una cella occupata da una carta. 
-Le informazioni aggiuntive che contiene sono: 
-- Il riferimento alla Card che sta occupando tale cella
-- Il lato da cui è girata la carta (fronte/retro)
+__AngleCell__: It represents a cell occupied by an angle of a card.
+It should store:
+- The symbol visible on the top
+- The cards attached to that angle
+- The references about the card to which the angle belongs
 
-__AngleCell__: rappresenta una cella occupata da un angolo di una carta.
-Le informazioni aggiuntive che contiene sono:
-- Il simbolo visibile in quell'angolo
-- La carta a cui appartiene tale angolo. Si noti che, anche se ci sono
-  più carte attaccate a tale angolo, il riferimento è alla carta 
-  cui appartiene al simbolo
+The following invariants hold for the positions of CardCells and AngleCells:
 
-Valgono i seguenti vincoli sui valori della posizione per i CardCell e
-gli AngleCell:
-- La carta iniziale ha posizione (0,0)
-- Gli angoli della carta iniziale hanno posizione (1,-1), (1,1), (-1,-1), (1,1)
-- Gli angoli della carta iniziale hanno posizione (1,-1), (1,1), (-1,-1), (1,1)
-  (si tratta solo di una regola d'esempio)
+- The position of the initial card (CardCell) is (0,0)
+- The positions of the angles (AngleCells) of the initial
+  card are (1, -1), (1, 1), (-1, -1), (1, 1)
+
 
 |         |         |        |
 |---------|---------|--------|
-| (-1,1)  |         | (1,1)  |
+| (-1, 1) |         | (1, 1) |
 |         | IC(0,0) |        |
 | (-1,-1) |         | (1,-1) |
 
-- Tutte le CardCell possono avere solo coordinate pari, nella forma
-  (2i, 2j), i, j in Z
-- Tutte le AngleCell possono avere solo coordinate dispari, nella forma
-  (2i+1, 2j+1)
-- Data una CardCell, le posizioni degli angoli adiacenti, che possono
-contenere i suoi simboli o quelli delle altre carte attaccate ad essa,
-sono le seguenti:
+- All CardCell may have positions only of the form (2i, 2j), i, j in Z (integer set),
+  that is only even coordinates;
+- All AngleCell  may have positions only of the form (2i+1, 2j+1), i, j in Z, 
+  that is, only odd coordinates;
+- Given a CardCell, with its own position on the field, the positions
+  of the adjacent AngleCells are the following:
 
 |            |         |            |
 |------------|---------|------------|
@@ -74,92 +66,55 @@ sono le seguenti:
 |            | C(i, j) |            |
 | (i-1, j-1) |         | (i+1, j-1) |
 
-- Di conseguenza, è immediato muoversi tra le carte 
-  che si trovano ai diversi angoli (sommando/sottraendo 2 alle coordinate)
-- Dato un angolo in alto a destra libero, una nuova carta si può attaccare 
-  solo con l'angolo in basso a sinistra
+There are many other interesting properties as well:
+- Each AngleCell may display on top the symbol of the card to which it belongs
+ or the one of the card attached to it. Moreover, we know that, for instance, 
+ if the upper-right angle of a card is free, another card may cover it only
+ with its lower-left angle.
+- We can traverse adjacent cards by subsequently adding or subtracting 2 
+  from the coordinates of the initial card 
 
-## La mappa
+## Representing and using the GameField
 
-A questo punto, gli elementi principali della nostra classe saranno
-i seguenti 3 Set:
+Considering all these aspects, it is possible to
+represent the GameField using three sets:
 
-- Set<CardCell> cards: lista di tutte le carte nel campo di gioco
-- Set<AngleCell> angles: lista degli angoli delle carte, sia liberi,
-cioé a cui è possibile attaccare delle carte, sia già collegati da due carte
-- Set<Cell> availableCells: lista di tutte le celle in cui è possibile
-inserire una nuova carta (attaccandola a quelle già presenti sul campo).
-Avere le posizioni libere disponibili è comodo per poterle mostrare al giocatore.
+- Set<CardCell> cards: List of all CardCell on the field
+- Set<AngleCell> angles: List of all AngleCells on the field
+- Set<Point> availableCells: List of all positions where a free AngleCell is present -
+  that is, that can be covered with an additional card
 
-HashMap<(x, y), Card>
-HashMap<(x, y), Symbol>
+We will now analyze the (worst-case) computational complexity of
+different actions performed on the map. We will use as parameter
+the number of placed cards n; So, for each new added card, the number
+of angles will increase of 3. The total number of elements in the 
+three sets which represents the GameField is about 7n, that is
+the spatial complexity of this kind of representation is O(n).
 
+Other operations will have different temporal complexities:
 
-Tutte le celle sono contraddistinte (ai fini dei metodi equals() e hashCode())
-utilizzando le coordinate. Introduciamo quindi il vincolo che, 
-per ogni Cell nei tre insiemi, non ne esistono altre, con le stesse coordinate,
-all'interno dei 3 insiemi.
-
-## Implementazione metodi
-
-Per analizzare le implementazioni delle funzionalità e la loro complessità
-computazionale, indichiamo con n il numero di carte presenti sulla mappa.
-Sappiamo che, per ogni carta aggiunta, il numero di angoli complessivo
-(liberi e non) aumenta al più di 3 (dato che la nuova carta va a coprire
-un altro angolo libero già presente); lo stesso avviene per il numero di posizioni
-libere. Pertanto, il numero di celle
-complessive da gestire nella matrice è circa 7n. 
-Complessità spaziale della rappresentazione: O(n)
-
-Assumiamo che, inizialmente, l'unica carta in campo sia quella iniziale
-e che tutti i suoi angoli siano liberi.
-
-- Aggiungere una nuova carta: addCard(card : Card, position: (x,y), side: front/back)
-  Aggiunge una carta attaccandola nella posizione libera indicata
-
-  Le azioni da fare sono:
-  1. Controllare che la carta sia effettivamente inserita in una delle 
-     posizioni libere di availableCells. (oppure sfruttare le
-     proprietà della mappa per fare un controllo a runtime).
-     In realtà, il controllo può essere delegato al chiamante. 
-     Il controller farà scegliere solo posizioni valide. 
-     Questo richiede un metodo per restituire availableCells
-  2. Aggiungere i quattro angoli della carta ad angles.
-    Se un angolo è già presente nella stessa posizione (è di un'altra carta),
-    si aggiorna il simbolo mostrato e la carta cui si riferisce.
-  3. Si aggiungono in availableCells le nuove posizioni disponibili per attaccare le carte.
-    Si tratta delle posizioni nella forma (2i ± 2, 2j ± 2), che non sono già occupate
-    da altre carte e il cui angolo corrispondente non è nascosto. 
-
-
-  Complessità temporale: O(1)
-
-- Contare il numero di simboli presenti sul campo:
-  - Scorrere la lista delle carte ed estrarre i simboli al centro
-  - Scorrere la lista degli angoli ed estrarre i simboli
-  
-    Complessità temporale: O(n)
-    Si può rendere O(1) se si salvano in memoria dei contatori per ogni tipo di simbolo,
-    aggiornati ogni volta che si aggiungono delle carte
-  
-Soluzione preferita: contatori aggiornati all'aggiunta delle carte
-
-- Controllare i pattern formati da carte del colore:
-   - Si controlla il pattern a partire da una carta (es. quella più a sinistra) 
-   Basta cercare una carta del colore indicato e muoversi nelle posizioni corrispondenti
-   - Bisogna fare questo per ogni carta
-   - Bisogna evitare di contare carte più volte.
+- Adding a new card, knowing its position and orientation:
+    1. First of all, we can check that the supplied position is actually free,
+       that it is present in availableCells;
+    2. Add the card to a newly created CardCell
+    3. Create all the AngleCells associated with the adjacent angles or, if they are
+       already available, update their top symbol
+    4. Add the new availableCells created by the addition of the new card:
+       these are the cells with position in the form (2i ± 2, 2j ± 2), (i, j) position of the placed card,
+       where there isn't a card yet and which are not adjacent to a hidden angle
     
-   Complessità: O(n)
+    Temporal complexity: O(1)
 
-## Giudizio complessivo
+- Counting the number of visible symbols on the GameField, for each category:
+    1. Count the number of center symbols on the cards in CardCells
+    2. Count the visible top symbols of each AngleCell in angles
+    
+    Temporal complexity: O(n)
+    It can be made O(1) if counters with the occurrences of each symbol are saved
+    and updated after the addition of a new card. This is the preferred solution
 
-Pro:
-- L'implementazione dei metodi di analisi delle proprietà della mappa 
-  è semplice ed (abbastanza) efficiente.
-- Non ci sono particolari sprechi di memoria nella rappresentazione
+- Check the number of occurrences of a specific color pattern:
+   It should be possible in O(n), by analyzing groups of cards one by one in a specific order
+   (e.g. from the lower-left corner to the upper-right) and avoiding counting groups with
+   overlapping cards twice.
 
-Contro:
-- L'analisi della mappa richiede di conoscere diversi invarianti e
-  vincoli della rappresentazione interna. Si deve provare ad 
-  incapsularla opportortunamente per mitigare questo problema
