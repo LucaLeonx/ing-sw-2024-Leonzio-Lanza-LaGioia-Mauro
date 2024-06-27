@@ -78,7 +78,7 @@ Avendo le stesse accortezze riguardo alle variabili d'ambiente
 
 # Opzioni da riga di comando
 
-Durante l'avvio degli eseguibili, è possibile utilizzare le seguenti opzioni da riga di comando:
+Durante l'avvio degli eseguibili, è possibile utilizzare le seguenti opzioni da riga di comando(NOTA: Mettere le opzioni alla fine del comando dopo aver specificato la path del jar):
 
 - <code>-Rp</code>, <code>--rmi-port</code> : permettono di cambiare la porta utilizzata per il collegamento Java RMI (default 1099)
 - <code>-Sp</code>, <code>--socket-port</code> : permette di cambiare la porta utilizzata per il collegamento via Socket (default 20000)
@@ -86,7 +86,7 @@ Durante l'avvio degli eseguibili, è possibile utilizzare le seguenti opzioni da
 Impostazioni solo client (TUI, GUI)
 - <code>-H</code>, <code>--host</code> : permette di specificare l'indirizzo su cui si trova il server di gioco (default localhost)
 
-Impostazioni solo server(NOTA: Mettere le opzioni alla fine del comando dopo aver specificato la path del jar):
+Impostazioni solo server:
 
  <code>-Tshort</code>, <code>--timeout-short</code> : Avvia il server impostando dei timeout molto brevi per le operazioni di gioco
 - Timeout impostati (in secondi):
