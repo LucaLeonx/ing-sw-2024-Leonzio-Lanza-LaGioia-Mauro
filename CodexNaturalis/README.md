@@ -73,9 +73,18 @@ Impostazioni solo client (TUI, GUI)
 - ´-H´, ´--host´: permette di specificare l'indirizzo su cui si trova il server di gioco (default localhost)
 
 Impostazioni solo server
-- ´-Tshort´, ´--timeout-short´: Avvia il server impostando dei timeout molto brevi per le operazioni di gioco
+- ´-Tshort´, ´--timeout-short´: Avvia il server impostando dei timeout molto brevi per le operazioni di gioco 
+Timeout impostati (in secondi): 
+- Cancellazione utente registrato in assenza di login: 60
+- Tempo per la scelta del setup: 25
+- Tempo per decisione sulla mossa: 25
+- Tempo per uscire da una partita al suo termine: 60
 - ´-Tlong´, ´--timeout-long´: Avvia il server impostando dei timeout ragionevolmente lunghi per le operazioni di gioco
-
+Timeout impostati (in secondi):
+- Cancellazione utente registrato in assenza di login: 600
+- Tempo per la scelta del setup: 180
+- Tempo per decisione sulla mossa: 180
+- Tempo per uscire da una partita al suo termine: 300
 
 ## Impostare UTF-8 su Linux: 
 Per impostare UTF-8 come standard sul terminale di Linux, puoi seguire questi passaggi:
