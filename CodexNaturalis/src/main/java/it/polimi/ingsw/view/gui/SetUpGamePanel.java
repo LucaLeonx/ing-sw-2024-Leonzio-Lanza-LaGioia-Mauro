@@ -60,7 +60,7 @@ public class SetUpGamePanel extends StandardPanel {
                         MainWindow.getClientController().setPlayerSetup(choosenObjective, choosenOrientation);
                         break;
                     } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                        return;
                     }
                 }
                 else {
@@ -69,7 +69,7 @@ public class SetUpGamePanel extends StandardPanel {
                         revalidate();
                         repaint();
                     } catch (InterruptedException e) {
-                        System.out.println(e.getMessage());
+                        return;
                     }
                 }
             }
@@ -99,16 +99,6 @@ public class SetUpGamePanel extends StandardPanel {
         ImagePanel secondcard = new ImagePanel(cardsInHands.get(1).id());
         ImagePanel thirdcard = new ImagePanel(cardsInHands.get(2).id());
 
-        /*JButton logout= new JButton("Exit and logout");
-        JButton goBack= new JButton("Go Back");
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        logout.setAlignmentX(CENTER_ALIGNMENT);
-        goBack.setAlignmentX(CENTER_ALIGNMENT);
-        buttonPanel.add(logout);
-        buttonPanel.add(goBack);*/
-
         firstcard.addMouseListener( new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -132,38 +122,6 @@ public class SetUpGamePanel extends StandardPanel {
                 thirdcard.changeSide();
             }
         });
-
-
-        /*logout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executor.shutdownNow();
-                MainWindow.goToWindow("chooseLoginPanel");
-                resetPanel();
-                try {
-                    MainWindow.getClientController().exitFromLobby();
-                    MainWindow.getClientController().logout();
-                } catch (RemoteException ex) {
-                    System.out.println(ex.getMessage());
-                }
-                buildPanel();
-            }
-        });*/
-
-        /*goBack.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                executor.shutdownNow();
-                MainWindow.goToWindow("chooseLoginPanel");
-                resetPanel();
-                try{
-                    MainWindow.getClientController().exitGame();
-                } catch (RemoteException ex) {
-                    System.out.println(ex.getMessage());
-                }
-                buildPanel();
-            }
-        });*/
 
 
         GridBagConstraints gbc = new GridBagConstraints();

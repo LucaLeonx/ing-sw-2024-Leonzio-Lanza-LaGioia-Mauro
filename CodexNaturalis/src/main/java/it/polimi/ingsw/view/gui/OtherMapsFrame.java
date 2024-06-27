@@ -7,7 +7,6 @@ import java.rmi.RemoteException;
 public class OtherMapsFrame extends JFrame {
     private static OtherMapsPanel otherMapsPanel;
 
-
     public OtherMapsFrame(String oppName) throws RemoteException {
         otherMapsPanel = new OtherMapsPanel();
         otherMapsPanel.buildPanel(oppName);

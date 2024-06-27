@@ -47,7 +47,6 @@ public class RegisterPanel extends StandardPanel {
         createLobby.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(lobbyName.getText());
                 MainWindow.goToWindow("createNewLobbyPanel");
             }
         });

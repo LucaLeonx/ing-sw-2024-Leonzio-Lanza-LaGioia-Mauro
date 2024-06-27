@@ -292,36 +292,6 @@ public class GameFieldPanel extends StandardPanel {
             }
         });
 
-        /*
-        logout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainWindow.goToWindow("chooseLoginPanel");
-                resetPanel();
-                try {
-                    MainWindow.getClientController().exitFromLobby();
-                    MainWindow.getClientController().logout();
-                } catch (RemoteException ex) {
-                    System.out.println(ex.getMessage());
-                }
-                buildPanel();
-            }
-        });
-
-        goBack.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainWindow.goToWindow("chooseLoginPanel");
-                resetPanel();
-                try{
-                    MainWindow.getClientController().exitGame();
-                } catch (RemoteException ex) {
-                    System.out.println(ex.getMessage());
-                }
-                buildPanel();
-            }
-        });*/
-
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.weightx = 1.0;
@@ -406,7 +376,7 @@ public class GameFieldPanel extends StandardPanel {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e + " button error");
+            System.out.println(e);
         }
 
         for (int i = 0; i < playerButtons.size(); i++) {
