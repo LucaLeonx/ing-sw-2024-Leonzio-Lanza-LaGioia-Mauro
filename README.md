@@ -1,6 +1,6 @@
 # Codex Naturalis
 
-  <img src="CodexNaturalis/assets/logo.png" alt="CodexNaturalis" width="150" align="right"/>
+  <img src="https://github.com/LucaLeonx/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/blob/main/CodexNaturalis/readmeAssets/logo.png" alt="CodexNaturalis" width="150" align="right"/>
 <br>
 
 Digital implementation of the [original Board Game](https://boardgamegeek.com/boardgame/314503/codex-naturalis)
@@ -18,7 +18,7 @@ For starting the game using the .jar files follow the instructions [here](/Codex
 ## The game
    After entering one of the available lobbies (every lobby has to be created by another player) the game evolves in turns, each player have to place a card given the field contraints, and then choose from which deck draw a card. 
 
-   <img src="CodexNaturalis/assets/game.png" alt="lobby" width="500" />
+   <img src="https://github.com/LucaLeonx/ing-sw-2024-Leonzio-Lanza-LaGioia-Mauro/blob/main/CodexNaturalis/readmeAssets/game.png" alt="lobby" width="500" />
 
 
 
